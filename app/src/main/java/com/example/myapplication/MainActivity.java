@@ -9,11 +9,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+//Added -Bonny
+import android.bluetooth.BluetoothDevice;
+import java.util.Set;
+
+
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
+    //TODO: This number defined could also be shown in the dialog see the official example -Bonny
+    //Currently it is set to be 0 so the bluetooth would be enabled automatically -Bonny
+    private final static int REQUEST_ENABLE_BT = 1;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -50,14 +59,29 @@ public class MainActivity extends AppCompatActivity {
         //test whether device support bluetooth
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
+            Log.d("bluetooth", "onCreate: Device does not have bluetooth");
             // Device doesn't support Bluetooth
-            //need to add notification to remind user to -Bonny -Unfinished
+            //TODO: need to add notification to remind user to -Bonny
         }
 
         //enable bluetooth if it is not turned on
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            //startActivityForResult(enableBtIntent, REQUEST);
+            startActivity(enableBtIntent);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        //Query paired devices -Bonny
+        //query all paired devices and get the name and MAC address of each device -Bonny
+        //TODO:this is just an example of query paired device, do we need it? -Bonny
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+        if (pairedDevices.size() > 0) {
+            // There are paired devices. Get the name and address of each paired device.
+            for (BluetoothDevice device : pairedDevices) {
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+            }
         }
 
     }
