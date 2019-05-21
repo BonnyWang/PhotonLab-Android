@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         //enable bluetooth if it is not turned on
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enableBtIntent);
+            //startActivity(enableBtIntent);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
 
