@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,10 +17,10 @@ import android.widget.TextView;
 //Added -Bonny
 import android.bluetooth.BluetoothDevice;
 import java.util.Set;
-//fuck you
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
+    private CardView mCardView;
     //TODO: This number defined could also be shown in the dialog see the official example -Bonny
     //Currently it is set to be 0 so the bluetooth would be enabled automatically -Bonny
     private final static int REQUEST_ENABLE_BT = 1;
