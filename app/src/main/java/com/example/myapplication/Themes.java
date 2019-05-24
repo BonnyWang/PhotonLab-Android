@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 ;
-
+//hello motto
 public class Themes extends AppCompatActivity {
     private TextView mTextMessage;
     private static TextView text_view;
