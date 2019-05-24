@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -17,6 +18,8 @@ import android.widget.TextView;
 //Added -Bonny
 import android.bluetooth.BluetoothDevice;
 import java.util.Set;
+import android.content.IntentFilter;
+
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
@@ -85,12 +88,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        Intent discoverableIntent = new Intent(
+                BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(
+                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        startActivity(discoverableIntent);
+//
+//        if (bluetoothAdapter.isDiscovering()) {
+//            bluetoothAdapter.cancelDiscovery();
+//        }
+//        bluetoothAdapter.startDiscovery();
+
     }
 
     public void to_Themes(){
         Intent it_Themes = new Intent();
         it_Themes.setClass(this, Themes.class);
         startActivity(it_Themes);
+    }
+
+    public class AcceptThread extends Thread{
+
+
+
     }
 
 }

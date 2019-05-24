@@ -18,9 +18,11 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.Toast;
-;
+import java.lang.String;
+
+
 //hello motto
-public class Themes extends AppCompatActivity {
+public class Themes extends MainActivity implements View.OnClickListener {
     private TextView mTextMessage;
     private static TextView text_view;
     private static SeekBar seek_bar;
@@ -50,6 +52,7 @@ public class Themes extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int a;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_themes);
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -57,13 +60,13 @@ public class Themes extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         seekbar();
         Button Button1= (Button)findViewById(R.id.yellow_button);
-        Button1.setOnClickListener((View.OnClickListener) this);
+        Button1.setOnClickListener(this);
         Button Button2= (Button)findViewById(R.id.yellow_button);
-        Button2.setOnClickListener((View.OnClickListener) this);
+        Button2.setOnClickListener(this);
         Button Button3= (Button)findViewById(R.id.yellow_button);
-        Button3.setOnClickListener((View.OnClickListener) this);
+        Button3.setOnClickListener(this);
         Button Button4= (Button)findViewById(R.id.yellow_button);
-        Button4.setOnClickListener((View.OnClickListener) this);
+        Button4.setOnClickListener(this);
 
     }
 
@@ -81,6 +84,8 @@ public class Themes extends AppCompatActivity {
     public void to_Main(){
         finish();
     }
+
+
     public void onClick(View v){
         switch (v.getId()){
             case R.id.yellow_button:{
