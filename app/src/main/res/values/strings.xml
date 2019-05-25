@@ -7,4 +7,5 @@
     <string name="title_notifications2">Notifications2</string>
     <string name="title_activity_themes">Themes</string>
     <string name = "demo_card_text">DemoCard</string>
+    <string name = "Progress">Progress</string>>
 </resources>
