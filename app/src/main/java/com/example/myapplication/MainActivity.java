@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,10 +18,12 @@ import android.widget.TextView;
 //Added -Bonny
 import android.bluetooth.BluetoothDevice;
 import java.util.Set;
+import android.content.IntentFilter;
 
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
+    private CardView mCardView;
     //TODO: This number defined could also be shown in the dialog see the official example -Bonny
     //Currently it is set to be 0 so the bluetooth would be enabled automatically -Bonny
     private final static int REQUEST_ENABLE_BT = 1;
@@ -84,12 +88,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        Intent discoverableIntent = new Intent(
+                BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(
+                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        startActivity(discoverableIntent);
+//
+//        if (bluetoothAdapter.isDiscovering()) {
+//            bluetoothAdapter.cancelDiscovery();
+//        }
+//        bluetoothAdapter.startDiscovery();
+
     }
 
     public void to_Themes(){
         Intent it_Themes = new Intent();
         it_Themes.setClass(this, Themes.class);
         startActivity(it_Themes);
+    }
+
+    public class AcceptThread extends Thread{
+
+
+
     }
 
 }
