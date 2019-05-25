@@ -1,33 +1,35 @@
 package com.example.myapplication;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothServerSocket;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
+import android.widget.SeekBar;
+import android.widget.Toast;
+import java.lang.String;
 
-//Added -Bonny
-import android.bluetooth.BluetoothDevice;
-import java.util.Set;
-import android.content.IntentFilter;
-
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView mTextMessage;
-    private CardView mCardView;
-    //TODO: This number defined could also be shown in the dialog see the official example -Bonny
-    //Currently it is set to be 0 so the bluetooth would be enabled automatically -Bonny
-    private final static int REQUEST_ENABLE_BT = 1;
-
+    private static TextView text_view;
+    private static SeekBar seek_bar;
+    private int progressValue;
+    String colorOfChoice;
+    Drawable button_of_choice;
+    Button button;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -35,16 +37,14 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    mTextMessage.setText("Main");
                     return true;
                 case R.id.navigation_dashboard:
                     to_Themes();
+                    mTextMessage.setText("OKay");
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
-                    return true;
-                case R.id.navigation_notifications2:
-                    mTextMessage.setText(R.string.title_notifications2);
                     return true;
             }
             return false;
@@ -53,66 +53,91 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int a;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        //Added for bluetooth function -Bonny
-        //test whether device support bluetooth
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
-            Log.d("bluetooth", "onCreate: Device does not have bluetooth");
-            // Device doesn't support Bluetooth
-            //TODO: need to add notification to remind user to -Bonny
-        }
-
-        //enable bluetooth if it is not turned on
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            //startActivity(enableBtIntent);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-
-        //Query paired devices -Bonny
-        //query all paired devices and get the name and MAC address of each device -Bonny
-        //TODO:this is just an example of query paired device, do we need it? -Bonny
-        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-
-        if (pairedDevices.size() > 0) {
-            // There are paired devices. Get the name and address of each paired device.
-            for (BluetoothDevice device : pairedDevices) {
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-            }
-        }
-
-        Intent discoverableIntent = new Intent(
-                BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(
-                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-        startActivity(discoverableIntent);
-//
-//        if (bluetoothAdapter.isDiscovering()) {
-//            bluetoothAdapter.cancelDiscovery();
-//        }
-//        bluetoothAdapter.startDiscovery();
+        seekbar();
+        Button Button1= (Button)findViewById(R.id.yellow_button);
+        Button1.setOnClickListener(this);
+        Button Button2= (Button)findViewById(R.id.yellow_button);
+        Button2.setOnClickListener(this);
+        Button Button3= (Button)findViewById(R.id.yellow_button);
+        Button3.setOnClickListener(this);
+        Button Button4= (Button)findViewById(R.id.yellow_button);
+        Button4.setOnClickListener(this);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void createButton(){
+
+        button_of_choice = (Drawable) getResources().getDrawable(R.drawable.button_of_choice);
+        button = new Button(this);
+        button.setBackground(button_of_choice);
+        LinearLayout ll = (LinearLayout)findViewById(R.id.coloroptions);
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ll.addView(button, lp);
+    }
+    //根据选的颜色变，但要一开始先搞四个
     public void to_Themes(){
         Intent it_Themes = new Intent();
         it_Themes.setClass(this, Themes.class);
         startActivity(it_Themes);
     }
 
-    public class AcceptThread extends Thread{
 
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.yellow_button:{
+                break;
+            }
+            case R.id.blue_button:{
+                break;
+            }
+            case R.id.purple_button:{
+                break;
+            }
+            case R.id.orange_button:{
+                break;
+            }
 
+        }
 
     }
 
+    public void seekbar(){
+        seek_bar=(SeekBar)findViewById(R.id.seekBar5);
+        text_view=(TextView)findViewById(R.id.textView2);
+        progressValue=seek_bar.getProgress();
+        text_view.setText(progressValue+"%");
+
+        seek_bar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progressValue = progress;
+                        text_view.setText(progressValue+"%");
+                        Toast.makeText(MainActivity.this,"Seekbar is in progress", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        Toast.makeText(MainActivity.this,"Seekbar is starttracking", Toast.LENGTH_LONG).show();
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        text_view.setText(progressValue+"%");
+                        Toast.makeText(MainActivity.this,"Seekbar is stoptracking", Toast.LENGTH_LONG).show();
+
+                    }
+                }
+        );
+    }
 }
 
 
