@@ -6,7 +6,7 @@ android:id="@+id/container"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".MainActivity">
-//TODO: circle button,
+
 <TextView
     android:id="@+id/message"
     android:layout_width="wrap_content"
@@ -90,7 +90,7 @@ tools:context=".MainActivity">
                     android:background="#008F0F0F"
                     android:contentDescription="@string/title_Theme"
                     android:scaleType="centerInside"
-                    app:srcCompat="@color/colorAccent" />
+                    app:srcCompat="@drawable/gradientcolor1" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
