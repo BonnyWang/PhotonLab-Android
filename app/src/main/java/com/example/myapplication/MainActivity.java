@@ -23,10 +23,10 @@ import android.widget.Toast;
 import java.lang.String;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView mTextMessage;
-    private static TextView text_view;
-    private static SeekBar seek_bar;
-    private int progressValue;
+    TextView mTextMessage;
+    TextView text_view;
+    SeekBar seek_bar;
+    int progressValue;
     String colorOfChoice;
     Drawable button_of_choice;
     Button button;
@@ -62,11 +62,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seekbar();
         Button Button1= (Button)findViewById(R.id.yellow_button);
         Button1.setOnClickListener(this);
-        Button Button2= (Button)findViewById(R.id.yellow_button);
+        Button Button2= (Button)findViewById(R.id.blue_button);
         Button2.setOnClickListener(this);
-        Button Button3= (Button)findViewById(R.id.yellow_button);
+        Button Button3= (Button)findViewById(R.id.orange_button);
         Button3.setOnClickListener(this);
-        Button Button4= (Button)findViewById(R.id.yellow_button);
+        Button Button4= (Button)findViewById(R.id.purple_button);
         Button4.setOnClickListener(this);
 
     }
