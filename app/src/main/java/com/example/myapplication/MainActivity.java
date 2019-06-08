@@ -1,6 +1,12 @@
 package com.example.myapplication;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,18 +17,27 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 
+import android.os.ParcelUuid;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.Toast;
+
+import java.io.IOException;
 import java.lang.String;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private final String TAG = "Mainactivity";
     TextView mTextMessage;
     TextView text_view;
     SeekBar seek_bar;
@@ -30,6 +45,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String colorOfChoice;
     Drawable button_of_choice;
     Button button;
+
+    BluetoothAdapter mbluetoothAdapter;
+    //TODO:Delete this later -Bonny
+    // BluetoothConnection mbluetoothConnection;
+    BluetoothSocket mbluetoothSocket;
+
+    BluetoothDevice mbluetoothDevice;
+    BluetoothDevice target;
+
+    public ListAdapter mListAdapter;
+
+    private static final UUID my_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    ParcelUuid[] target_UUID;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -53,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int a;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -69,6 +98,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button Button4= (Button)findViewById(R.id.purple_button);
         Button4.setOnClickListener(this);
 
+        mbluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mbluetoothAdapter == null) {
+            Log.d("bluetooth", "onCreate: Device does not have bluetooth");
+            // Device doesn't support BluetoothConnection
+            //TODO: need to add notification to remind user to -Bonny
+        }
+
+        //enable bluetooth if it is not turned on -Bonny
+        if (!mbluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBtIntent);
+            Log.d("BT", "onCreate: BT enabled");
+            //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        //making the phone discoverable for 300s -Bonny
+        Intent discoverableIntent = new Intent(
+                BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(
+                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        startActivity(discoverableIntent);
+
+        Set<BluetoothDevice> mBTdevices = mbluetoothAdapter.getBondedDevices();
+
+
+        //May not need this if using bonded device-Bonny
+        /*if(mbluetoothAdapter.isDiscovering()){
+            Log.d("BT", "onCreate:1 ");
+            mbluetoothAdapter.cancelDiscovery();
+
+            mbluetoothAdapter.startDiscovery();
+        }
+
+        if(!mbluetoothAdapter.isDiscovering()){
+            Log.d("BT", "onCreate: 2");
+            mbluetoothAdapter.startDiscovery();
+        }*/
+
+        for(BluetoothDevice bt:mBTdevices){
+            String name = "LE_WH-1000XM3";
+            Log.d("BT", "onCreate: " + bt.getName()+bt.getAddress());
+            Log.d("waht", name);
+            if(bt.getName().equals(name)){
+                target = bt;
+                Log.d("O", "This one! ");
+                target_UUID = target.getUuids();
+            }
+        }
+
+
+        //TODO:Do I need this? -Bonny
+        mbluetoothDevice = mbluetoothAdapter.getRemoteDevice(target.getAddress());
+
+        try{
+            mbluetoothSocket =mbluetoothDevice.createInsecureRfcommSocketToServiceRecord(target_UUID[0].getUuid());
+            Log.d(TAG, "Did I?");
+        }catch (IOException e){
+            Log.d(TAG, "This one I'm Testing ");
+        }
+
+        try {
+            mbluetoothSocket.connect();
+            Log.d(TAG, "onCreate: ??????");
+        } catch (IOException e) {
+            try {
+                mbluetoothSocket.close();
+            } catch (IOException e2) {
+                //insert code to deal with this
+                Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
+            }
+            //mbluetoothConnection.startClient(target, my_UUID);
+            //mbluetoothConnection.test();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -138,6 +240,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
         );
     }
+
+    //TODO:Unfinished
+    //this UUID will be myUUID
+    public void startBT(BluetoothDevice device, UUID uuid){
+        //mbluetoothConnection.startClient(device, uuid);
+    }
+
+
 }
 
 

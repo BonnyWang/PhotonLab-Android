@@ -30,6 +30,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.android.support:cardview-v7:28.0.0'
 
+    //compile 'com.android.support:recyclerview-v7:21.0.+'
     //added for material design
 //    implementation 'com.google.android.material:material:1.1.0-alpha06'
 
