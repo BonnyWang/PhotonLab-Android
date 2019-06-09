@@ -23,9 +23,9 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
         }
     }
 
-    List<theme_Class.theme> mthemes;
+    List<theme_Class> mthemes;
 
-    public RvAdapter(List<theme_Class.theme> mthemes){
+    public RvAdapter(List<theme_Class> mthemes){
         this.mthemes = mthemes;
     }
 

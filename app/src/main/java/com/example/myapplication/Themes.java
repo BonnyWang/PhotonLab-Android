@@ -30,6 +30,7 @@ import android.widget.TextView;
 //Added -Bonny
 import android.bluetooth.BluetoothDevice;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import android.content.IntentFilter;
@@ -42,7 +43,7 @@ public class Themes extends AppCompatActivity {
     //added for Recycler -Bonny
 
     Context context;
-    private List<theme_Class.theme> mtheme;
+    List<theme_Class> mtheme;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -83,6 +84,8 @@ public class Themes extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
 
+        initializeData();
+
         RvAdapter adapter = new RvAdapter(mtheme);
         rv.setAdapter(adapter);
 
@@ -91,6 +94,15 @@ public class Themes extends AppCompatActivity {
 
     public void to_Main(){
         finish();
+    }
+
+
+
+    private void initializeData(){
+        mtheme = new ArrayList<>();
+        mtheme.add(new theme_Class("Spring"));
+        mtheme.add(new theme_Class("Summer"));
+
     }
 
 
