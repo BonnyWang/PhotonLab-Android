@@ -102,6 +102,11 @@ public class Themes extends AppCompatActivity {
         mtheme = new ArrayList<>();
         mtheme.add(new theme_Class("Spring"));
         mtheme.add(new theme_Class("Summer"));
+        mtheme.add(new theme_Class("Summer"));
+        mtheme.add(new theme_Class("Summer"));
+        mtheme.add(new theme_Class("Summer"));
+        mtheme.add(new theme_Class("Summer"));
+
 
     }
 

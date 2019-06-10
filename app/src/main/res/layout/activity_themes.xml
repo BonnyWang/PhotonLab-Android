@@ -8,6 +8,7 @@ android:layout_height="match_parent"
 tools:context=".MainActivity">
 
     <RelativeLayout
+        android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,8 +16,10 @@ tools:context=".MainActivity">
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/nav_view"
             android:layout_below="@+id/message"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
             android:scrollbars="vertical" />
 
         <TextView
@@ -33,7 +36,7 @@ tools:context=".MainActivity">
             android:id="@+id/nav_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/rv"
+            android:layout_alignParentBottom = "true"
             android:layout_marginBottom="0dp"
             android:background="?android:attr/windowBackground"
             app:menu="@menu/bottom_nav_menu" />
