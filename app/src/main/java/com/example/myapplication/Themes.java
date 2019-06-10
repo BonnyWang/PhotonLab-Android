@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -40,10 +42,14 @@ import android.widget.Toast;
 public class Themes extends AppCompatActivity {
     private TextView mTextMessage;
     private CardView mCardView;
-    //added for Recycler -Bonny
 
+    //added for Recycler -Bonny
     Context context;
     List<theme_Class> mtheme;
+
+    //added for setting different color for the gradient -Bonny
+    ImageView imageView_Card;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -84,6 +90,8 @@ public class Themes extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
 
+        imageView_Card = (ImageView)findViewById(R.id.imageView_Card);
+
         initializeData();
 
         RvAdapter adapter = new RvAdapter(mtheme);
@@ -100,14 +108,12 @@ public class Themes extends AppCompatActivity {
 
     private void initializeData(){
         mtheme = new ArrayList<>();
-        mtheme.add(new theme_Class("Spring"));
-        mtheme.add(new theme_Class("Summer"));
-        mtheme.add(new theme_Class("Summer"));
-        mtheme.add(new theme_Class("Summer"));
-        mtheme.add(new theme_Class("Summer"));
-        mtheme.add(new theme_Class("Summer"));
-
-
+        mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}));
+        mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d}));
+        mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee}));
+        mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}));
+        mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d}));
+        mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee}));
     }
 
 

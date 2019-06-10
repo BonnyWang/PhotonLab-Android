@@ -35,7 +35,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/imageView_Card"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="#008F0F0F"
