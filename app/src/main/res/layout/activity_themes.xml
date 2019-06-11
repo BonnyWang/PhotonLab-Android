@@ -25,8 +25,8 @@ tools:context=".MainActivity">
             android:layout_height="match_parent"
             android:layout_above="@+id/nav_view">
 
-            <fragment
-                android:name = "com.example.myapplication.Fragment_Control"
+            <FrameLayout
+
                 android:id="@+id/fgm_Theme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

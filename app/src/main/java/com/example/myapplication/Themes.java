@@ -26,6 +26,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +57,10 @@ public class Themes extends AppCompatActivity {
 
     //Fragment Test - Bonny
     Fragment fragment;
+    Fragment fragment_Theme;
+    Button buttontest;
+
+
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -65,15 +71,20 @@ public class Themes extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     //to_Main();
-                    fragment = new Fragment_Theme();
-                    FragmentManager fm = getSupportFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.fgm_Theme, fragment);
-                    ft.commit();
+                    fragment_Theme = new Fragment_Theme();
+                    FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+                    ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    ft1.replace(R.id.fgm_Theme, fragment_Theme);
+                    ft1.commit();
                     mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText("KKK");
+                    fragment = new Fragment_Control();
+                    FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
+                    ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                    ft2.replace(R.id.fgm_Theme, fragment);
+                    ft2.commit();
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
