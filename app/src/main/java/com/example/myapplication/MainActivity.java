@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
+//added for Fragment -Bonny
+import androidx.fragment.app.Fragment;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private final String TAG = "Mainactivity";
     TextView mTextMessage;
@@ -54,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     BluetoothDevice mbluetoothDevice;
     BluetoothDevice target;
 
-    public ListAdapter mListAdapter;
+    //Added for Fragment -Bonny
+    Fragment fragment;
 
     private static final UUID my_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
     ParcelUuid[] target_UUID;
@@ -70,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return true;
                 case R.id.navigation_dashboard:
                     to_Themes();
+                    //added for fragment - Bonny
+                    //fragment = new Fragment_Theme();
                     mTextMessage.setText("OKay");
                     return true;
                 case R.id.navigation_notifications:
@@ -241,10 +247,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         );
     }
 
-    //TODO:Unfinished
-    //this UUID will be myUUID
-    public void startBT(BluetoothDevice device, UUID uuid){
-        //mbluetoothConnection.startClient(device, uuid);
+
+    //TODO:Sample code for fragment may need to delete -Bonny
+    public void change_Fragment(View view){
+        Fragment fragment;
+
     }
 
 

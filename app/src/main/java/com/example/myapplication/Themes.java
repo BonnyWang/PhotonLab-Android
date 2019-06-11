@@ -15,6 +15,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +53,9 @@ public class Themes extends AppCompatActivity {
     //added for setting different color for the gradient -Bonny
     ImageView imageView_Card;
 
+    //Fragment Test - Bonny
+    Fragment fragment;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,7 +64,12 @@ public class Themes extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    to_Main();
+                    //to_Main();
+                    fragment = new Fragment_Theme();
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.fgm_Theme, fragment);
+                    ft.commit();
                     mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
@@ -81,21 +92,22 @@ public class Themes extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_themes);
-        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
+        //RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //added for recycler view -Bonny
-        LinearLayoutManager llm = new LinearLayoutManager(context);
-        rv.setLayoutManager(llm);
-
-        imageView_Card = (ImageView)findViewById(R.id.imageView_Card);
-
-        initializeData();
-
-        RvAdapter adapter = new RvAdapter(mtheme);
-        rv.setAdapter(adapter);
+//        //added for recycler view -Bonny
+//
+//        LinearLayoutManager llm = new LinearLayoutManager(context);
+//        rv.setLayoutManager(llm);
+//
+//        imageView_Card = (ImageView)findViewById(R.id.imageView_Card);
+//
+//        initializeData();
+//
+//        RvAdapter adapter = new RvAdapter(mtheme);
+//        rv.setAdapter(adapter);
 
 
     }
@@ -106,15 +118,15 @@ public class Themes extends AppCompatActivity {
 
 
 
-    private void initializeData(){
-        mtheme = new ArrayList<>();
-        mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}));
-        mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d}));
-        mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee}));
-        mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}));
-        mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d}));
-        mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee}));
-    }
+//    private void initializeData(){
+//        mtheme = new ArrayList<>();
+//        mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}));
+//        mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d}));
+//        mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee}));
+//        mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}));
+//        mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d}));
+//        mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee}));
+//    }
 
 
 }
