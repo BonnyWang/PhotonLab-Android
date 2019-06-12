@@ -13,7 +13,10 @@
             android:name=".Themes"
             android:label="@string/title_activity_themes"
             ></activity>
-
+        <activity
+            android:name=".nimadetiaoseban"
+            android:label="@string/title_activity_themes"
+            ></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
