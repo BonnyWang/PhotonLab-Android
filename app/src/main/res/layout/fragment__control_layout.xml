@@ -5,17 +5,113 @@
     android:layout_height="match_parent"
     tools:context=".Fragment_Control">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/Theme_Button"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_Theme" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="175dp"
+            android:layout_marginLeft="175dp"
+            android:layout_marginEnd="177dp"
+            android:layout_marginRight="177dp"
+            android:text="TextView" />
+
+        <LinearLayout
+            android:id="@+id/coloroptions"
+            android:layout_width="395dp"
+            android:layout_height="143dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_below="@id/seekBar5"
+            android:gravity="center|center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/yellow_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/oval"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/blue_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/ovalblue" />
+
+            <Button
+                android:id="@+id/orange_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/ovalorange" />
+
+            <Button
+                android:id="@+id/purple_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/ovalpurple" />
+
+            <Button
+                android:id="@+id/buttonOfChoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/Progress"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp" />
+
+        <SeekBar
+            android:id="@+id/seekBar5"
+            android:layout_width="293dp"
+            android:layout_height="131dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:rotation="-90"
+            android:progressDrawable="@drawable/seekbar_drawable_progress"
+            android:thumb="@drawable/seekbar_drawable_thumb" />
+    </RelativeLayout>
+
 
 </FrameLayout>
