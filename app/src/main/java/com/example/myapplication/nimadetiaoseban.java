@@ -22,7 +22,7 @@ public class nimadetiaoseban extends AppCompatActivity {
         setContentView(R.layout.nimadelayout);
         fucklayout=(ConstraintLayout) findViewById(R.id.layout);
         DefaultColor = ContextCompat.getColor(nimadetiaoseban.this,R.color.colorPrimary);
-        button=(Button)findViewById(R.id.button);
+        button=(Button)findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
