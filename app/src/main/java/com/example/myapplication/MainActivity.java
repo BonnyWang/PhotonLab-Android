@@ -103,6 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button3.setOnClickListener(this);
         Button Button4= (Button)findViewById(R.id.purple_button);
         Button4.setOnClickListener(this);
+        Button Button5= findViewById(R.id.fucktheworld);
+        Button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                to_Fuck();      //method to turn on
+            }
+        });
 
 //        mbluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //        if (mbluetoothAdapter == null) {
@@ -193,6 +200,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void to_Themes(){
         Intent it_Themes = new Intent();
         it_Themes.setClass(this, Themes.class);
+        startActivity(it_Themes);
+    }
+
+    public void to_Fuck(){
+        Intent it_Themes = new Intent();
+        it_Themes.setClass(this, nimadetiaoseban.class);
         startActivity(it_Themes);
     }
 
