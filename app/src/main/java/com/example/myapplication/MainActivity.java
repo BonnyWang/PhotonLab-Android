@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity  {
                     ft2.commit();
                     return true;
                 case R.id.navigation_notifications:
-
+                    to_Themes();
                     return true;
 
                 case R.id.navigation_notifications2:
@@ -257,7 +257,11 @@ public class MainActivity extends AppCompatActivity  {
 //                }
 //        );
 //   }
-
+public void to_Themes(){
+    Intent it_Themes = new Intent();
+    it_Themes.setClass(this, nimadetiaoseban.class);
+    startActivity(it_Themes);
+}
 
 }
 

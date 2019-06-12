@@ -8,6 +8,7 @@
     <string name="title_activity_themes">Themes</string>
     <string name="demo_card_text">DemoCard</string>
     <string name="Progress">Progress</string>
+    <string name="Brightness">Brightness</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>>

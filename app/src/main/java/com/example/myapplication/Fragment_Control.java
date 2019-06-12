@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -38,7 +36,7 @@ public class Fragment_Control extends Fragment {
 
     public void seekbar(View view) {
         seek_bar = (SeekBar)view.findViewById(R.id.seekBar5);
-        text_view = (TextView)view.findViewById(R.id.textView2);
+        text_view = (TextView)view.findViewById(R.id.bright_Value);
         progressValue = seek_bar.getProgress();
         text_view.setText(progressValue + "%");
 
