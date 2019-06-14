@@ -17,28 +17,28 @@
     <!--app:layout_constraintRight_toRightOf="parent"-->
     <!--app:menu="@menu/bottom_nav_menu" />-->
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/fgm"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/nav_view"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/nav_view"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_alignParentBottom="true"
-            app:menu="@menu/bottom_nav_menu">
+            app:menu="@menu/bottom_nav_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:itemIconTint="@drawable/bottom_nav_selector"
+            app:labelVisibilityMode="unlabeled"
+            app:itemIconSize="30dp">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

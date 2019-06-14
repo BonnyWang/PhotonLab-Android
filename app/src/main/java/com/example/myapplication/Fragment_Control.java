@@ -1,12 +1,16 @@
 package com.example.myapplication;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,6 +20,8 @@ public class Fragment_Control extends Fragment {
     SeekBar seek_bar;
     TextView text_view;
     int progressValue;
+    CardView cardView;
+    Button power;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,8 +33,27 @@ public class Fragment_Control extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment__control_layout, container, false);
+
+//        seek_bar= view.findViewById(R.id.seekBar5);
+//        seek_bar.getParent().bringChildToFront(seek_bar);
         seekbar(view);
+//        power = view.findViewById(R.id.PowerBackground);
+//        power.setClipToOutline(true);
+//        power.setElevation(10f);
+        power = view.findViewById(R.id.Power);
+        final SeekBar seekBar = view.findViewById(R.id.seekBar5);
+        //TODO:Need to be pressed instead of click -Bonny
+        power.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    seekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.seekBar_On), PorterDuff.Mode.MULTIPLY);
+
+            }
+        });
+
         return view;
+
 
     }
 

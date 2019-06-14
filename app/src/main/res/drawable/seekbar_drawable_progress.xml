@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@android:id/background">
-        <shape android:shape="rectangle">
-            <solid android:color="#ededed"/>
-            <corners android:radius="33dp"/>
-            <size android:height="131dp" android:width="293dp"/>
-        </shape>
-    </item>
-    <item android:id="@android:id/progress">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
         <clip android:clipOrientation="horizontal" android:gravity="left">
+
             <shape android:shape="rectangle">
-                <solid android:color="#d1d1d1"/>
+                <solid android:color="@color/seekBar_Default"/>
                 <corners android:radius="33dp"/>
+                <size android:height="131dp" android:width="293dp"/>
             </shape>
         </clip>
+
     </item>
-</layer-list>
+</selector>

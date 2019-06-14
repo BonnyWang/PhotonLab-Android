@@ -110,6 +110,12 @@ public class MainActivity extends AppCompatActivity  {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        //Set the fragment to be control by default -Bonny
+        fragment_Control = new Fragment_Control();
+        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+        ft1.replace(R.id.fgm, fragment_Control);
+        ft1.commit();
+
 //        seekbar();
 //        Button Button1= (Button)findViewById(R.id.yellow_button);
 //        Button1.setOnClickListener(this);
