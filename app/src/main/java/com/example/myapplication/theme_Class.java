@@ -23,6 +23,15 @@ public class theme_Class {
         gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
     }
 
+    public String getThemeName(){
+        return name;
+    }
+
+    public int[] getColorCode(){
+        return colors;
+    }
+
+
 
 }
 

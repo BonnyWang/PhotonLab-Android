@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.myapplication.data.Theme_Info;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.RequiresApi;
@@ -43,7 +44,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity{
     //implements View.OnClickListener
     private final String TAG = "Mainactivity";
 
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity  {
     //Fragments
     Fragment fragment_Theme;
     Fragment fragment_Control;
+//    Fragment fragment_Useless;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -263,6 +265,18 @@ public void to_Themes(){
     startActivity(it_Themes);
 }
 
+//    @Override
+//    public void onNoteClick(int position) {
+//        List<theme_Class> mtheme = new Theme_Info().classlist();
+//        theme_Class theme_class = mtheme.get(position);
+//        String a=theme_class.getThemeName();
+//        int[] b = theme_class.getColorCode();
+//        fragment_Useless = new Fragment_Useless(b,a);
+//        FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
+//        ft3.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//        ft3.replace(R.id.fgm, fragment_Useless);
+//        ft3.commit();
+//    }
 }
 
 
