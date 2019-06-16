@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 
+import android.os.Handler;
 import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.MenuItem;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity  {
     //Fragments
     Fragment fragment_Theme;
     Fragment fragment_Control;
+    Fragment start_anim;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -110,11 +113,29 @@ public class MainActivity extends AppCompatActivity  {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        start_anim = new fragment_start_anim();
+        FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
+        ft0.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,android.R.anim.fade_in,android.R.anim.fade_out);
+        ft0.replace(R.id.container,start_anim).addToBackStack(null);
+        ft0.commit();
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                //Second fragment after 5 seconds appears
+                getSupportFragmentManager().popBackStack();
+                fragment_Control = new Fragment_Control();
+                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+                ft1.replace(R.id.fgm, fragment_Control);
+                ft1.commit();
+            }
+        };
+
+        handler.postDelayed(runnable, 3000);
+
+
         //Set the fragment to be control by default -Bonny
-        fragment_Control = new Fragment_Control();
-        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-        ft1.replace(R.id.fgm, fragment_Control);
-        ft1.commit();
+
 
 //        seekbar();
 //        Button Button1= (Button)findViewById(R.id.yellow_button);

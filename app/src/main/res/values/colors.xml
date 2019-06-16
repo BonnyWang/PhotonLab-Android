@@ -7,4 +7,8 @@
     <color name="bottomNavDefault">#8d8d8d</color>
     <color name="seekBar_Default">#d1d1d1</color>
     <color name="seekBar_On">#ffa3a3</color>
+    <color name="yellow">#FFFDE427</color>
+    <color name="blue">#FF29FDF7</color>
+    <color name="orange">#FFFD6A2A</color>
+    <color name="purple">#FFCC7EFD</color>
 </resources>

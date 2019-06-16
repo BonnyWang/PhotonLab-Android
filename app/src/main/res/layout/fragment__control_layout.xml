@@ -67,79 +67,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
             android:gravity="center|center_horizontal"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/seekBarCard">
 
-            <Button
-                android:id="@+id/yellow_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/oval"
-                android:clipToPadding="false"
-                android:elevation="5dp"
-                android:gravity="center"
-                android:stateListAnimator="@null"
-                android:translationZ="5dp" />
-
-            <Button
-                android:id="@+id/blue_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/ovalblue" />
-
-            <Button
-                android:id="@+id/orange_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/ovalorange" />
-
-            <Button
-                android:id="@+id/purple_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/ovalpurple" />
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/rButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/oval"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked"/>
+                <RadioButton
+                    android:id="@+id/rButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/ovalblue"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked_blue"/>
+                <RadioButton
+                    android:id="@+id/rButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/ovalorange"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked_orange"/>
+                <RadioButton
+                    android:id="@+id/rButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/ovalpurple"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked_purple"/>
+            </RadioGroup>
 
             <Button
                 android:id="@+id/AddColor"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
                 android:background="@drawable/add_color_24dp"
-                android:elevation="8dp" />
+                />
 
 
         </LinearLayout>
@@ -193,11 +173,13 @@
             app:layout_constraintTop_toBottomOf="@id/coloroptions"
             app:cardElevation="10dp">
 
-            <Button
+            <ToggleButton
                 android:id="@+id/Power"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:background="@drawable/power_button" />
+                android:background="@drawable/power_button"
+                android:textOn=""
+                android:textOff=""/>
         </androidx.cardview.widget.CardView>
 
 
