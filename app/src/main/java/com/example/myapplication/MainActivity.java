@@ -67,10 +67,13 @@ public class MainActivity extends AppCompatActivity  {
     ParcelUuid[] target_UUID;
 
     //Fragments
-    Fragment fragment_Theme;
-    Fragment fragment_Control;
+    static final Fragment fragment_Theme = new Fragment_Theme();
+    static final Fragment fragment_Control = new Fragment_Control();
     Fragment start_anim;
 
+
+
+    int BonnyinMain;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity  {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    fragment_Control = new Fragment_Control();
                     FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
                     ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     ft1.replace(R.id.fgm, fragment_Control);
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 case R.id.navigation_dashboard:
 
-                    fragment_Theme = new Fragment_Theme();
+                    //ragment_Theme = new Fragment_Theme();
                     FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
                     ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                     ft2.replace(R.id.fgm, fragment_Theme);
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity  {
             public void run() {
                 //Second fragment after 5 seconds appears
                 getSupportFragmentManager().popBackStack();
-                fragment_Control = new Fragment_Control();
+                //fragment_Control = new Fragment_Control();
                 FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
                 ft1.replace(R.id.fgm, fragment_Control);
                 ft1.commit();

@@ -13,6 +13,10 @@
     <string name="Single">Single</string>
     <string name="PhotonLab">PhotonLab</string>
     <string name="Set">Set</string>
+    <string name="Add_to_Favorite">Add to Favorite</string>
+    <string name="R">R</string>
+    <string name="G">G</string>
+    <string name="B">B</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>>
