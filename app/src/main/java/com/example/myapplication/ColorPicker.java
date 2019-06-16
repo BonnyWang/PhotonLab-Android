@@ -56,7 +56,7 @@ public class ColorPicker extends View {
         mRightPaint.setStrokeWidth(1);
         mBitmapPaint = new Paint();
         //TODO:Need to change -Bonny
-        mLeftBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.cursor);
+        mLeftBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.cursor0);
         mLeftBitmapRadius = mLeftBitmap.getWidth() / 2;
 
         //获取圆心

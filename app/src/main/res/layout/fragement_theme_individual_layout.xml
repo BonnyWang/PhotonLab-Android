@@ -48,7 +48,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="30dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"/>
 
         <ListView
             android:id="@+id/info_list"

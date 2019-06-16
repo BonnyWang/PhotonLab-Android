@@ -47,7 +47,8 @@
             android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/setColorButton" />
+            app:layout_constraintTop_toBottomOf="@+id/setColorButton"
+            android:textColor="#FFFFFFFF"/>
 
         <Button
             android:id="@+id/setColorButton"
@@ -59,7 +60,8 @@
             app:layout_constraintTop_toBottomOf="@id/colorDisk"
             android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="#FFFFFFFF"/>
 
         <LinearLayout
             android:layout_width="395dp"

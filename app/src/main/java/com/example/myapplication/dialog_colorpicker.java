@@ -2,26 +2,24 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.textfield.TextInputEditText;
-
-public class fragment_colorpicker extends Fragment {
+public class dialog_colorpicker extends DialogFragment {
     private ColorPicker colorDisk=null;
     private TextView tv;
     private Button closeBt;
@@ -34,38 +32,30 @@ public class fragment_colorpicker extends Fragment {
     EditText bValue;
 
     int rgbValue;
-    colorPick_Listener mlistener;
+    dialog_colorpicker.colorPick_Listener mlistener;
 
 
+    static dialog_colorpicker newInstance() {
 
-    public fragment_colorpicker() {
+        return new dialog_colorpicker();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_colorpicker_layout,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_colorpicker_layout, container, false);
         rValue = view.findViewById(R.id.editTextR);
         gValue = view.findViewById(R.id.editTextG);
         bValue = view.findViewById(R.id.editTextB);
 
-        setListener(mlistener);
+
         //tv=(TextView)view.findViewById(R.id.tv_info);
         closeBt = (Button)view.findViewById(R.id.close);
 
         closeBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rgbValue = colorDisk.getColorcode();
-                mlistener.getRGB(rgbValue);
-
+             dismiss();
                 //getParentFragment().getChildFragmentManager().popBackStack();
             }
         });
@@ -92,6 +82,8 @@ public class fragment_colorpicker extends Fragment {
 //                ft1.commit();
                 rgbValue = colorDisk.getColorcode();
                 mlistener.getRGB(rgbValue);
+
+                dismiss();
 
             }
         });
@@ -128,25 +120,25 @@ public class fragment_colorpicker extends Fragment {
             }
         });
 
-
-
-
-
-
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = FrameLayout.LayoutParams.MATCH_PARENT;
+        params.height = FrameLayout.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+    }
 
     public interface colorPick_Listener {
         // TODO: Update argument type and name
         public int getRGB(int rgbValue);
     }
 
-    public void setListener(colorPick_Listener mlistener){
+    public void setListener(dialog_colorpicker.colorPick_Listener mlistener){
         this.mlistener = mlistener;
 
     }
-
-
-
 }

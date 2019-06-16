@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.solver.widgets.Rectangle;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -35,7 +36,7 @@ import java.util.Stack;
 
 
 
-public class Fragment_Control extends Fragment implements fragment_colorpicker.colorPick_Listener{
+public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener{
 
     SeekBar seek_bar;
     TextView text_view;
@@ -164,15 +165,19 @@ public class Fragment_Control extends Fragment implements fragment_colorpicker.c
             @Override
             public void onClick(View v) {
 
-                fragment_ColorPicker = new fragment_colorpicker();
-                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.anim.pop_enter, R.anim.slide_down,
-                        R.anim.pop_enter, R.anim.slide_down);
-                fl = view.findViewById(R.id.control_Container);
-                fl.bringToFront();
-                fl.setVisibility(View.VISIBLE);
-                ft.replace(R.id.control_Container, fragment_ColorPicker).addToBackStack(null);
-                ft.commit();
+//                fragment_ColorPicker = new fragment_colorpicker();
+//                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+//                ft.setCustomAnimations(R.anim.pop_enter, R.anim.slide_down,
+//                        R.anim.pop_enter, R.anim.slide_down);
+//                fl = view.findViewById(R.id.control_Container);
+//                fl.bringToFront();
+//                fl.setVisibility(View.VISIBLE);
+//                ft.replace(R.id.control_Container, fragment_ColorPicker).addToBackStack(null);
+//                ft.commit();
+                DialogFragment newFragment = dialog_colorpicker.newInstance();
+                //newFragment.setTargetFragment(Fragment_Control.this,0);
+                ((dialog_colorpicker) newFragment).setListener(Fragment_Control.this);
+                newFragment.show(getChildFragmentManager(), "dialog");
             }
         });
 
@@ -264,21 +269,24 @@ public class Fragment_Control extends Fragment implements fragment_colorpicker.c
 
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        if (fragment instanceof fragment_colorpicker) {
-            fragment_colorpicker fragmentColorpicker = (fragment_colorpicker) fragment;
-            fragmentColorpicker.setListener(this);
-        }
-    }
-
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if( resultCode != Activity.RESULT_OK ) {
+//            return;
+//        }
+//        if( requestCode == TARGET_FRAGMENT_REQUEST_CODE ) {
+//            String greeting = data.getStringExtra(EXTRA_GREETING_MESSAGE);
+//            showGreetingsTextView.setText(greeting);
+//        }
+//    }
     @Override
     public int getRGB(int rgbValue){
-        fl.setVisibility(View.INVISIBLE);
+        //fl.setVisibility(View.INVISIBLE);
         colorOptions.remove();
         colorOptions.add(rgbValue);
         initialize_Rbuttons();
-        rbuttons[0].setChecked(true);
+        rbuttons[3].setChecked(false);
+        rbuttons[3].setChecked(true);
         return  rgbValue;
     }
 

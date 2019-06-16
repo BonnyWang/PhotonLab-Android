@@ -42,6 +42,7 @@ import java.util.UUID;
 
 //added for Fragment -Bonny
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity  {
     String colorOfChoice;
     Drawable button_of_choice;
     Button button;
+    int whichanim = 0;
 
     BluetoothAdapter mbluetoothAdapter;
     //TODO:Delete this later -Bonny
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity  {
     //Fragments
     static final Fragment fragment_Theme = new Fragment_Theme();
     static final Fragment fragment_Control = new Fragment_Control();
+    static final Fragment fragment_Setting = new fragment_setting();
+    static final Fragment fragment_music = new Fragment_Theme();
     Fragment start_anim;
 
 
@@ -85,22 +89,44 @@ public class MainActivity extends AppCompatActivity  {
                     ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     ft1.replace(R.id.fgm, fragment_Control);
                     ft1.commit();
+                    whichanim = 0;
                     return true;
 
                 case R.id.navigation_dashboard:
 
                     //ragment_Theme = new Fragment_Theme();
                     FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-                    ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                    if( whichanim < 2) {
+                        ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                    }else {
+                        ft2.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    }
+
+                    whichanim = 2;
                     ft2.replace(R.id.fgm, fragment_Theme);
                     ft2.commit();
                     return true;
                 case R.id.navigation_notifications:
-                    to_Themes();
+                    FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
+                    if( whichanim < 3) {
+                        ft3.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                    }else {
+                        ft3.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    }
+                    whichanim = 3;
+                    ft3.replace(R.id.fgm, fragment_music);
+                    ft3.commit();
                     return true;
 
                 case R.id.navigation_notifications2:
-
+                    // Create the fragment and show it as a dialog.
+                    //DialogFragment newFragment = dialog_colorpicker.newInstance();
+                    //newFragment.show(getSupportFragmentManager(), "dialog");
+                    FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
+                    ft4.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                    ft4.replace(R.id.fgm, fragment_Setting);
+                    ft4.commit();
+                    whichanim = 4;
                     return true;
             }
             return false;
