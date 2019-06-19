@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -75,9 +76,8 @@ public class MainActivity extends AppCompatActivity  {
     static final Fragment fragment_music = new Fragment_Theme();
     Fragment start_anim;
 
+    Context context = this;
 
-
-    int BonnyinMain;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity  {
                 ft1.commit();
             }
         };
-
         handler.postDelayed(runnable, 3000);
 
 

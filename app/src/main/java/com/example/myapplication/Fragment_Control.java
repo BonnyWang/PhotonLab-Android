@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -19,6 +20,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -30,6 +32,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -47,7 +50,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     int checkedOrder;
     RadioGroup radioGroup;
     RadioButton[] rbuttons;
-    Queue<Integer> colorOptions;
+    static Queue<Integer> colorOptions;
     GradientDrawable checked;
     RadioButton checkedButton;
 
@@ -55,6 +58,9 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     Fragment fragment_ColorPicker;
     static final String TAG = "fragment_Control";
     FrameLayout fl;
+
+    //TODO:Need to later write it in main activity instead, use interface to call the function in main
+    WebView webView;
 
 
 
@@ -68,12 +74,17 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment__control_layout, container, false);
 
+        // Inflate the layout for this fragment
+
+        final View view = inflater.inflate(R.layout.fragment__control_layout, container, false);
+        webView = view.findViewById(R.id.webView);
 //        seek_bar= view.findViewById(R.id.seekBar5);
 //        seek_bar.getParent().bringChildToFront(seek_bar);
         seekbar(view);
+        //TODO:webview
+        webView = view.findViewById(R.id.webView);
+
 //        power = view.findViewById(R.id.PowerBackground);
 //        power.setClipToOutline(true);
 //        power.setElevation(10f);
@@ -90,9 +101,12 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                     checkedButton = view.findViewById(radioGroup.getCheckedRadioButtonId());
                     checkedButton.setChecked(false);
                     checkedButton.setChecked(true);
+                    webView.loadUrl("http://192.168.50.48/H");
+
                 } else {
                     seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
                     power.getBackground().setTint(0xffffffff);
+                    webView.loadUrl("http://192.168.50.48/L");
                 }
 
             }
@@ -180,6 +194,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 newFragment.show(getChildFragmentManager(), "dialog");
             }
         });
+
 
 
         return view;
