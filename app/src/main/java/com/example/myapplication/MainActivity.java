@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     //implements View.OnClickListener
     private final String TAG = "Mainactivity";
 
@@ -76,7 +77,9 @@ public class MainActivity extends AppCompatActivity  {
     static final Fragment fragment_music = new Fragment_Theme();
     Fragment start_anim;
 
-    Context context = this;
+
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -96,9 +99,9 @@ public class MainActivity extends AppCompatActivity  {
 
                     //ragment_Theme = new Fragment_Theme();
                     FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-                    if( whichanim < 2) {
+                    if (whichanim < 2) {
                         ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                    }else {
+                    } else {
                         ft2.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     }
 
@@ -108,9 +111,9 @@ public class MainActivity extends AppCompatActivity  {
                     return true;
                 case R.id.navigation_notifications:
                     FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
-                    if( whichanim < 3) {
+                    if (whichanim < 3) {
                         ft3.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                    }else {
+                    } else {
                         ft3.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     }
                     whichanim = 3;
@@ -141,10 +144,11 @@ public class MainActivity extends AppCompatActivity  {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
         start_anim = new fragment_start_anim();
         FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
-        ft0.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,android.R.anim.fade_in,android.R.anim.fade_out);
-        ft0.replace(R.id.container,start_anim).addToBackStack(null);
+        ft0.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft0.replace(R.id.container, start_anim).addToBackStack(null);
         ft0.commit();
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -161,6 +165,63 @@ public class MainActivity extends AppCompatActivity  {
         handler.postDelayed(runnable, 3000);
 
 
+
+
+
+    }
+
+//    @Override
+//    public void scan_Wifi() {
+//        Context context = getApplicationContext();
+//        final WifiManager wifiManager = (WifiManager)context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+//        List<ScanResult> results;
+//
+//        BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context c, Intent intent) {
+//                boolean success = intent.getBooleanExtra(
+//                        WifiManager.EXTRA_RESULTS_UPDATED, false);
+//                if (success) {
+//                     results = wifiManager.getScanResults();
+//                } else {
+//                    // scan failure handling
+//                    results = wifiManager.getScanResults();
+//                }
+//            }
+//        };
+//
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);\
+//        context.registerReceiver(wifiScanReceiver, intentFilter);
+//
+//        boolean success = wifiManager.startScan();
+//        if (!success) {
+//            // scan failure handling
+//            List<ScanResult> results = wifiManager.getScanResults();
+//        }
+//
+//
+//
+//    }
+//
+//    private void scanSuccess() {
+//        List<ScanResult> results = wifiManager.getScanResults();
+//        fragment_Pair fragment_pair = new fragment_Pair(results);
+//        FragmentTransaction ftPair = getSupportFragmentManager().beginTransaction();
+//        ftPair.replace(R.id.fgm,fragment_pair).addToBackStack(null);
+//        ftPair.commit();
+//
+//    }
+//
+//    private void scanFailure() {
+//        // handle failure: new scan did NOT succeed
+//        // consider using old scan results: these are the OLD results!
+//        List<ScanResult> results = wifiManager.getScanResults();
+//
+//    }
+}
+
+
         //Set the fragment to be control by default -Bonny
 
 
@@ -174,20 +235,20 @@ public class MainActivity extends AppCompatActivity  {
 //        Button Button4= (Button)findViewById(R.id.purple_button);
 //        Button4.setOnClickListener(this);
 
-        mbluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mbluetoothAdapter == null) {
-            Log.d("bluetooth", "onCreate: Device does not have bluetooth");
-            // Device doesn't support BluetoothConnection
-            //TODO: need to add notification to remind user to -Bonny
-        }
-
-        //enable bluetooth if it is not turned on -Bonny
-        if (!mbluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enableBtIntent);
-            Log.d("BT", "onCreate: BT enabled");
-            //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
+//        mbluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        if (mbluetoothAdapter == null) {
+//            Log.d("bluetooth", "onCreate: Device does not have bluetooth");
+//            // Device doesn't support BluetoothConnection
+//            //TODO: need to add notification to remind user to -Bonny
+//        }
+//
+//        //enable bluetooth if it is not turned on -Bonny
+//        if (!mbluetoothAdapter.isEnabled()) {
+//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivity(enableBtIntent);
+//            Log.d("BT", "onCreate: BT enabled");
+//            //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//        }
 
         //making the phone discoverable for 300s -Bonny
 //        Intent discoverableIntent = new Intent(
@@ -247,7 +308,6 @@ public class MainActivity extends AppCompatActivity  {
 //            //mbluetoothConnection.startClient(target, my_UUID);
 //            //mbluetoothConnection.test();
 //        }
-    }
 
 //    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 //    public void createButton(){
@@ -311,13 +371,12 @@ public class MainActivity extends AppCompatActivity  {
 //                }
 //        );
 //   }
-public void to_Themes(){
-    Intent it_Themes = new Intent();
-    it_Themes.setClass(this, nimadetiaoseban.class);
-    startActivity(it_Themes);
-}
+//public void to_Themes(){
+//    Intent it_Themes = new Intent();
+//    it_Themes.setClass(this, nimadetiaoseban.class);
+//    startActivity(it_Themes);
+//}
 
-}
 
 
 
