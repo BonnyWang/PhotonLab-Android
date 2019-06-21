@@ -48,8 +48,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity {
-    //implements View.OnClickListener
+public class MainActivity extends AppCompatActivity implements fragment_Pair.pairing_Listener {
+
     private final String TAG = "Mainactivity";
 
     TextView text_view;
@@ -119,9 +119,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_notifications2:
-                    // Create the fragment and show it as a dialog.
-                    //DialogFragment newFragment = dialog_colorpicker.newInstance();
-                    //newFragment.show(getSupportFragmentManager(), "dialog");
                     FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
                     ft4.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                     ft4.replace(R.id.fgm, fragment_Setting);
@@ -161,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
         };
         handler.postDelayed(runnable, 3000);
 
+
+    }
+
+    @Override
+    public void mainControl(String Tag, int Value){
 
     }
 }

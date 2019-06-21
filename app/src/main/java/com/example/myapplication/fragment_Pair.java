@@ -39,8 +39,9 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     
     static final String TAG = "fragment_Pair";
 
+    pairing_Listener mlistener;
+
     List<ScanResult> results;
-    //pairing_Listener mlistener;
     wifiRvAdapter.OnNoteListener onNoteListener = this;
     String[] PERMS_INITIAL= {Manifest.permission.ACCESS_FINE_LOCATION};
 
@@ -116,28 +117,31 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                         getActivity().getSupportFragmentManager().popBackStack();
                         return;
                     case 50:
-                        Blayout_Gone(step2_Layout);
-                        Blayout_Show(step1_layout);
                         progressBar.setProgress(25);
                         rv.setFocusable(false);
                         rv.setClickable(false);
                         yes_Connected.setClickable(true);
+                        Blayout_Gone(step2_Layout, View.INVISIBLE);
+                        Blayout_Show(step1_layout);
                         return;
                     case 75:
-                        Blayout_Gone(step3_Layout);
-                        Blayout_Show(step2_Layout);
                         progressBar.setProgress(50);
+                        rv.setVisibility(View.VISIBLE);
                         rv.setVisibility(View.VISIBLE);
                         password_Input.setVisibility(View.GONE);
                         password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                        Blayout_Gone(step3_Layout, View.INVISIBLE);
+                        Blayout_Show(step2_Layout);
                         return;
                     case 100:
-                        Blayout_Gone(step4_Layout);
-                        Blayout_Show(step3_Layout);
                         progressBar.setProgress(75);
                         password_Input.setVisibility(View.VISIBLE);
                         connect.setVisibility(View.VISIBLE);
+                        connect.setClickable(true);
                         done.setVisibility(View.INVISIBLE);
+                        Blayout_Gone(step4_Layout, View.INVISIBLE);
+                        Blayout_Show(step3_Layout);
+                        return;
 
 
                 }
@@ -147,7 +151,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         yes_Connected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layout_Gone(step1_layout);
+                layout_Gone(step1_layout, View.INVISIBLE);
                 layout_Show(step2_Layout);
 //                step2_Layout.setVisibility(View.VISIBLE);
 //                step1_layout.setVisibility(View.GONE);
@@ -160,9 +164,10 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
             @Override
             public void onClick(View v) {
                 layout_Show(step4_Layout);
-                layout_Gone(step3_Layout);
+                layout_Gone(step3_Layout,View.INVISIBLE);
                 progressBar.setProgress(100);
                 connect.setVisibility(View.GONE);
+                connect.setClickable(false);
                 password_Input.setVisibility(View.GONE);
                 password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 done.setVisibility(View.VISIBLE);
@@ -243,10 +248,11 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
         layout_Show(step3_Layout);
-        layout_Gone(step2_Layout);
+        layout_Gone(step2_Layout, View.INVISIBLE);
         progressBar.setProgress(75);
         TargetSSID = results.get(position).SSID;
         rv.setVisibility(View.GONE);
+        rv.setClickable(false);
         password_Input.setVisibility(View.VISIBLE);
 
 
@@ -263,20 +269,20 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     }
 
     // To animate view slide out from right to left
-    public void layout_Gone(View view){
+    public void layout_Gone(View view, int visibility){
         TranslateAnimation animate = new TranslateAnimation(0,-view.getWidth(),0,0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
-        view.setVisibility(View.INVISIBLE);
+        view.setVisibility(visibility);
     }
 
-    public void Blayout_Gone(View view){
+    public void Blayout_Gone(View view, int visibility){
         TranslateAnimation animate = new TranslateAnimation(0,view.getWidth(),0,0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
-        view.setVisibility(View.INVISIBLE);
+        view.setVisibility(visibility);
     }
 
     public void Blayout_Show(View view){
@@ -289,14 +295,14 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
 
-//    public interface pairing_Listener {
-//        // TODO: Update argument type and name
-//        public void scan_Wifi();
-//    }
-//
-//    public void setListener(pairing_Listener mlistener){
-//        this.mlistener = mlistener;
-//
-//    }
+    public interface pairing_Listener {
+        // TODO: Update argument type and name
+        public void mainControl(String Tag, int value);
+    }
+
+    public void setListener(pairing_Listener mlistener){
+        this.mlistener = mlistener;
+
+    }
 
 }
