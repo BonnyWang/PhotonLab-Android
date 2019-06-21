@@ -78,9 +78,6 @@ public class MainActivity extends AppCompatActivity {
     Fragment start_anim;
 
 
-
-
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -165,61 +162,10 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(runnable, 3000);
 
 
-
-
-
     }
-
-//    @Override
-//    public void scan_Wifi() {
-//        Context context = getApplicationContext();
-//        final WifiManager wifiManager = (WifiManager)context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-//        List<ScanResult> results;
-//
-//        BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context c, Intent intent) {
-//                boolean success = intent.getBooleanExtra(
-//                        WifiManager.EXTRA_RESULTS_UPDATED, false);
-//                if (success) {
-//                     results = wifiManager.getScanResults();
-//                } else {
-//                    // scan failure handling
-//                    results = wifiManager.getScanResults();
-//                }
-//            }
-//        };
-//
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);\
-//        context.registerReceiver(wifiScanReceiver, intentFilter);
-//
-//        boolean success = wifiManager.startScan();
-//        if (!success) {
-//            // scan failure handling
-//            List<ScanResult> results = wifiManager.getScanResults();
-//        }
-//
-//
-//
-//    }
-//
-//    private void scanSuccess() {
-//        List<ScanResult> results = wifiManager.getScanResults();
-//        fragment_Pair fragment_pair = new fragment_Pair(results);
-//        FragmentTransaction ftPair = getSupportFragmentManager().beginTransaction();
-//        ftPair.replace(R.id.fgm,fragment_pair).addToBackStack(null);
-//        ftPair.commit();
-//
-//    }
-//
-//    private void scanFailure() {
-//        // handle failure: new scan did NOT succeed
-//        // consider using old scan results: these are the OLD results!
-//        List<ScanResult> results = wifiManager.getScanResults();
-//
-//    }
 }
+
+
 
 
         //Set the fragment to be control by default -Bonny

@@ -20,6 +20,8 @@
     <string name="Settings">Settings</string>
     <string name="PhotonLab_V">PhotonLab V0.0.0</string>
     <string name="Pairing">Pairing Devices</string>
+    <string name="Pair_Instruction1">Go to your setting\n\n Connect to the WiFi\n "PhotonLab_Element"</string>
+    <string name="Yes_Connected">Yes, I connected!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>>
