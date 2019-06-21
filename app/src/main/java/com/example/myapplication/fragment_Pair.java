@@ -25,7 +25,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
@@ -42,15 +44,25 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     wifiRvAdapter.OnNoteListener onNoteListener = this;
     String[] PERMS_INITIAL= {Manifest.permission.ACCESS_FINE_LOCATION};
 
-    ProgressBar progressBar;
+
     ScrollView step2_Layout;
     ConstraintLayout step1_layout;
     ConstraintLayout step3_Layout;
+    ConstraintLayout step4_Layout;
+
     Button yes_Connected;
     Button back;
+    Button connect;
+    Button done;
+    RecyclerView rv;
+    EditText password_Input;
+    ProgressBar progressBar;
+
+
 
 
     String TargetSSID;
+    String TargetPassword;
 
 
 
@@ -77,20 +89,58 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         requestPermissions(PERMS_INITIAL,127);
        // setListener(mlistener);
        // mlistener.scan_Wifi();
-        final RecyclerView rv = (RecyclerView)view.findViewById(R.id.wifiRV);
+        rv = (RecyclerView)view.findViewById(R.id.wifiRV);
         progressBar = view.findViewById(R.id.progressBar);
         yes_Connected = view.findViewById(R.id.YesConnected);
         back = view.findViewById(R.id.backButton_Pairing);
+        done = view.findViewById(R.id.done);
+        connect = view.findViewById(R.id.connect_Button);
         step1_layout = view.findViewById(R.id.step1);
         step2_Layout = view.findViewById(R.id.step2);
+        step3_Layout = view.findViewById(R.id.step3);
+        step4_Layout = view.findViewById(R.id.step4);
+        password_Input = view.findViewById(R.id.edit_Password);
 
 
+        step2_Layout.setVisibility(View.INVISIBLE);
+        step3_Layout.setVisibility(View.INVISIBLE);
+        step4_Layout.setVisibility(View.INVISIBLE);
         progressBar.setProgress(25);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                int progress = progressBar.getProgress();
+                switch (progress){
+                    case 25:
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        return;
+                    case 50:
+                        Blayout_Gone(step2_Layout);
+                        Blayout_Show(step1_layout);
+                        progressBar.setProgress(25);
+                        rv.setFocusable(false);
+                        rv.setClickable(false);
+                        yes_Connected.setClickable(true);
+                        return;
+                    case 75:
+                        Blayout_Gone(step3_Layout);
+                        Blayout_Show(step2_Layout);
+                        progressBar.setProgress(50);
+                        rv.setVisibility(View.VISIBLE);
+                        password_Input.setVisibility(View.GONE);
+                        password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                        return;
+                    case 100:
+                        Blayout_Gone(step4_Layout);
+                        Blayout_Show(step3_Layout);
+                        progressBar.setProgress(75);
+                        password_Input.setVisibility(View.VISIBLE);
+                        connect.setVisibility(View.VISIBLE);
+                        done.setVisibility(View.INVISIBLE);
+
+
+                }
             }
         });
 
@@ -102,6 +152,27 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 //                step2_Layout.setVisibility(View.VISIBLE);
 //                step1_layout.setVisibility(View.GONE);
                 progressBar.setProgress(50);
+                yes_Connected.setClickable(false);
+            }
+        });
+
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layout_Show(step4_Layout);
+                layout_Gone(step3_Layout);
+                progressBar.setProgress(100);
+                connect.setVisibility(View.GONE);
+                password_Input.setVisibility(View.GONE);
+                password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                done.setVisibility(View.VISIBLE);
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -170,19 +241,25 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     @Override
     public void onNoteClick(int position) {
 
-        layout_Gone(step2_Layout);
+
         layout_Show(step3_Layout);
-//        TargetSSID = results.get(position).SSID;
+        layout_Gone(step2_Layout);
+        progressBar.setProgress(75);
+        TargetSSID = results.get(position).SSID;
+        rv.setVisibility(View.GONE);
+        password_Input.setVisibility(View.VISIBLE);
+
 
     }
 
 
     public void layout_Show(View view){
-        TranslateAnimation animate = new TranslateAnimation(0,view.getWidth(),0,0);
+        TranslateAnimation animate = new TranslateAnimation(view.getWidth(),0,0,0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
         view.setVisibility(View.VISIBLE);
+
     }
 
     // To animate view slide out from right to left
@@ -193,6 +270,24 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         view.startAnimation(animate);
         view.setVisibility(View.INVISIBLE);
     }
+
+    public void Blayout_Gone(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,view.getWidth(),0,0);
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.INVISIBLE);
+    }
+
+    public void Blayout_Show(View view){
+        TranslateAnimation animate = new TranslateAnimation(-view.getWidth(),0,0,0);
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.VISIBLE);
+    }
+
+
 
 //    public interface pairing_Listener {
 //        // TODO: Update argument type and name

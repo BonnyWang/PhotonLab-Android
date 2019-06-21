@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#5c57b3</color>
     <color name="colorPrimaryDark">#5c57b3</color>
+    <color name="backGround">#FAFAFA</color>
     <color name="colorAccent">#D81B60</color>
     <color name="bottomNavPressed">#5c57b3</color>
     <color name="bottomNavDefault">#8d8d8d</color>

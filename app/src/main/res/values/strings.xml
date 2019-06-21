@@ -25,7 +25,8 @@
     <string name="Wifi_Password">Wifi Password</string>
     <string name="Connect">Connect</string>
     <string name="Instruction_3">Please make sure your WiFi network\n is correctly configurated.</string>
-
+    <string name="Good_To_Go">You are good to go!</string>
+    <string name="Done">Done</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>>
 </resources>
