@@ -45,8 +45,12 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     ProgressBar progressBar;
     ScrollView step2_Layout;
     ConstraintLayout step1_layout;
+    ConstraintLayout step3_Layout;
     Button yes_Connected;
     Button back;
+
+
+    String TargetSSID;
 
 
 
@@ -165,7 +169,10 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
     @Override
     public void onNoteClick(int position) {
-        //TODO:Add later
+
+        layout_Gone(step2_Layout);
+        layout_Show(step3_Layout);
+//        TargetSSID = results.get(position).SSID;
 
     }
 
@@ -184,7 +191,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
-        view.setVisibility(View.GONE);
+        view.setVisibility(View.INVISIBLE);
     }
 
 //    public interface pairing_Listener {

@@ -124,4 +124,53 @@
             android:background="@color/colorPrimary"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/step3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/progressBar"
+        app:layout_constraintTop_toBottomOf="@id/pairingDevice"
+        android:animateLayoutChanges="true">
+
+        <EditText
+            android:id="@+id/edit_Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="14"
+            android:inputType="textPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.2"
+            android:hint="@string/Wifi_Password"
+            android:gravity="center_horizontal"/>
+
+        <Button
+            android:id="@+id/connect_Button"
+            android:layout_width="@dimen/Set_Button_Width"
+            android:layout_height="@dimen/Set_Button_Height"
+            android:text="@string/Connect"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_Password"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/instruction3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Instruction_3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/connect_Button"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:gravity="center_horizontal" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
