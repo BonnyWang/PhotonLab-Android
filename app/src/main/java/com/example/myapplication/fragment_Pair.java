@@ -61,7 +61,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
 
-
+    int apIpAddress;
     String TargetSSID;
     String TargetPassword;
 
@@ -101,6 +101,9 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         step3_Layout = view.findViewById(R.id.step3);
         step4_Layout = view.findViewById(R.id.step4);
         password_Input = view.findViewById(R.id.edit_Password);
+
+        final WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+
 
 
         step2_Layout.setVisibility(View.INVISIBLE);
@@ -157,6 +160,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 //                step1_layout.setVisibility(View.GONE);
                 progressBar.setProgress(50);
                 yes_Connected.setClickable(false);
+                apIpAddress = wifiManager.getConnectionInfo().getIpAddress();
+
             }
         });
 
@@ -184,7 +189,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
 //
-        final WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+
 
         BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
             @Override
@@ -197,6 +202,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                     LinearLayoutManager llm = new LinearLayoutManager(context);
                     rv.setLayoutManager(llm);
                     wifiRvAdapter adapter = new wifiRvAdapter(results, onNoteListener);
+
 
                     rv.setAdapter(adapter);
                 } else {
@@ -213,6 +219,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
         Log.d(TAG, "onCreateView: Does it start scan?");
         wifiManager.setWifiEnabled(true);
+
         boolean success = wifiManager.startScan();
         if (!success) {
             // scan failure handling
@@ -230,6 +237,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
         // Inflate the layout for this fragment
+
         return view ;
     }
 
@@ -296,8 +304,9 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
     public interface pairing_Listener {
-        // TODO: Update argument type and name
+        //TODO: return back the ip address of the device -Bonny
         public void mainControl(String Tag, int value);
+        public int apIpAddress(int address);
     }
 
     public void setListener(pairing_Listener mlistener){

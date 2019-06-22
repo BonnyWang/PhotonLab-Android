@@ -165,6 +165,14 @@ public class MainActivity extends AppCompatActivity implements fragment_Pair.pai
     public void mainControl(String Tag, int Value){
 
     }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof fragment_Pair) {
+            fragment_Pair fragment_pair = (fragment_Pair) fragment;
+            fragment_pair.setListener(this);
+        }
+    }
 }
 
 
