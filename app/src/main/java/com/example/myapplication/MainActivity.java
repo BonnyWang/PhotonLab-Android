@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,23 +53,8 @@ public class MainActivity extends AppCompatActivity implements fragment_Pair.pai
 
     private final String TAG = "Mainactivity";
 
-    TextView text_view;
-    SeekBar seek_bar;
-    int progressValue;
-    String colorOfChoice;
-    Drawable button_of_choice;
-    Button button;
     int whichanim = 0;
-
-    BluetoothAdapter mbluetoothAdapter;
-    //TODO:Delete this later -Bonny
-    // BluetoothConnection mbluetoothConnection;
-    BluetoothSocket mbluetoothSocket;
-    BluetoothDevice mbluetoothDevice;
-    BluetoothDevice target;
-
-    private static final UUID my_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-    ParcelUuid[] target_UUID;
+    int rounterIP;
 
     //Fragments
     static final Fragment fragment_Theme = new Fragment_Theme();
@@ -76,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements fragment_Pair.pai
     static final Fragment fragment_Setting = new fragment_setting();
     static final Fragment fragment_music = new Fragment_Theme();
     Fragment start_anim;
+
+    WebView webViewMain;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -135,8 +123,10 @@ public class MainActivity extends AppCompatActivity implements fragment_Pair.pai
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        webViewMain = findViewById(R.id.webViewMain);
 
 
         start_anim = new fragment_start_anim();
@@ -163,7 +153,13 @@ public class MainActivity extends AppCompatActivity implements fragment_Pair.pai
 
     @Override
     public void mainControl(String Tag, int Value){
+        String tempCommand;
 
+    }
+
+    @Override
+    public int rounterIpAddress(int address){
+        return address;
     }
 
     @Override
