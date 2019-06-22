@@ -175,6 +175,9 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                 yes_Connected.setClickable(false);
                 int tempIP = wifiManager.getDhcpInfo().gateway;
                 apIpAddress = ipToString(tempIP);
+                rv.setVisibility(View.VISIBLE);
+                rv.setClickable(true);
+                rv.setFocusable(true);
 
             }
         });
