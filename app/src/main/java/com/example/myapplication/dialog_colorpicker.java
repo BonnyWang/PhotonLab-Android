@@ -28,7 +28,7 @@ import static java.lang.System.out;
 
 
 public class dialog_colorpicker extends DialogFragment {
-    private ColorPicker colorDisk=null;
+    private ColorPicker colorDisk = null;
     private TextView tv;
     private Button closeBt;
     private Button setBt;
@@ -147,13 +147,7 @@ public class dialog_colorpicker extends DialogFragment {
         setBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //constructer of fragment moumou
 
-//                fragment_Control = new Fragment_Control(colorDisk.getColorStr());
-//                FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
-//                ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//                ft1.replace(R.id.fgm, fragment_Control).addToBackStack(null);
-//                ft1.commit();
                 mlistener.getRGB(colorcode);
                 dismiss();
 
@@ -226,7 +220,7 @@ public class dialog_colorpicker extends DialogFragment {
                 + colorDisk.toBrowserHexValue(g)
                 + colorDisk.toBrowserHexValue(b);
         setButton_Color(colorStr);
-        colorcode = (1 & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+        colorcode = (255 & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
         Log.d("yes", "rgb_reading: "+colorcode);
     }
 

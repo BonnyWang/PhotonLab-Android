@@ -171,8 +171,8 @@ public class fragment_colorpicker extends Fragment {
 //                ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 //                ft1.replace(R.id.fgm, fragment_Control).addToBackStack(null);
 //                ft1.commit();
-                rgbValue = colorDisk.getColorcode();
-                mlistener.getRGB(rgbValue);
+
+                mlistener.getRGB(Color.parseColor(colorStr));
 
             }
         });

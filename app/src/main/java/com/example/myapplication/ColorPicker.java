@@ -122,7 +122,7 @@ public class ColorPicker extends View {
         colorStr = "#" + toBrowserHexValue(r) + toBrowserHexValue(g)
                 + toBrowserHexValue(b);
         //十六进制的颜色字符串。
-        colorcode= (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+        colorcode= ( a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
 
         if (onColorBackListener != null) {
             onColorBackListener.onColorBack(a, r, g, b);

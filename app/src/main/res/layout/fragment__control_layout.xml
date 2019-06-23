@@ -191,12 +191,9 @@
             android:id="@+id/All"
             android:layout_width="132dp"
             android:layout_height="47dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="10dp"
             app:cardElevation="20dp"
-            app:contentPadding="10dp"
+            app:contentPadding="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -204,22 +201,24 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.1">
 
-            <TextView
+            <ToggleButton
+                android:id="@+id/AllButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/All"
+                android:textOff="@string/All"
+                android:textOn="@string/All"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/DeepText"
+                android:background="@android:color/transparent"
+                android:textAllCaps="false"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/Single"
             android:layout_width="132dp"
             android:layout_height="47dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="10dp"
             app:cardElevation="20dp"
             app:contentPadding="10dp"
@@ -230,13 +229,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.1">
 
-            <TextView
+            <ToggleButton
+                android:id="@+id/SingleButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/Single"
+                android:textOff="@string/Single"
+                android:textOn="@string/Single"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/DeepText"
+                android:background="@android:color/transparent"
+                android:textAllCaps="false"/>
         </androidx.cardview.widget.CardView>
 
         <WebView

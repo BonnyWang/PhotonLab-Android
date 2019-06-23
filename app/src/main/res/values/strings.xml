@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">PhotonLab</string>
     <string name="title_home">Home</string>
     <string name="title_Theme">Theme</string>
     <string name="title_dashboard">Dashboard</string>
