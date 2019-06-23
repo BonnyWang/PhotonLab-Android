@@ -37,6 +37,7 @@ public class fragment_colorpicker extends Fragment {
     EditText rValue;
     EditText gValue;
     EditText bValue;
+    static String colorStr;
 
     int rgbValue;
     colorPick_Listener mlistener;
@@ -68,7 +69,7 @@ public class fragment_colorpicker extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -77,7 +78,7 @@ public class fragment_colorpicker extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -95,7 +96,7 @@ public class fragment_colorpicker extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -103,7 +104,7 @@ public class fragment_colorpicker extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -120,7 +121,7 @@ public class fragment_colorpicker extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -128,7 +129,7 @@ public class fragment_colorpicker extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -162,7 +163,9 @@ public class fragment_colorpicker extends Fragment {
             @Override
             public void onClick(View v) {
                 //constructer of fragment moumou
-
+                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                        + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
+                        + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
 //                fragment_Control = new Fragment_Control(colorDisk.getColorStr());
 //                FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
 //                ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -185,7 +188,7 @@ public class fragment_colorpicker extends Fragment {
                 gValue.setText(String.valueOf(g));
                 bValue.setText(String.valueOf(b));
                 setButton_Color(colorDisk.getColorStr());
-
+                colorStr=colorDisk.getColorStr();
             }
         });
 

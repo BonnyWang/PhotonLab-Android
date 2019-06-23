@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import static android.graphics.Color.HSVToColor;
 import static java.lang.System.out;
 
@@ -32,13 +34,13 @@ public class dialog_colorpicker extends DialogFragment {
     private Button setBt;
     private Button addFavBt;
     private TextView tv_rgb;
+    static String colorStr;
+    static int colorcode;
     Fragment fragment_Control;
     EditText rValue;
     EditText gValue;
     EditText bValue;
-    int red;
-    int blue;
-    int green;
+
 
     int rgbValue;
     dialog_colorpicker.colorPick_Listener mlistener;
@@ -69,10 +71,7 @@ public class dialog_colorpicker extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 try{
-                    String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
-                            + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
-                            + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
-                    setButton_Color(colorStr);
+                    rgb_reading();
                 }
 
                 catch(NumberFormatException ex){}
@@ -95,10 +94,7 @@ public class dialog_colorpicker extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 try{
-                    String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
-                            + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
-                            + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
-                    setButton_Color(colorStr);
+                    rgb_reading();
                 }
                 catch(NumberFormatException ex){}
             }
@@ -120,10 +116,7 @@ public class dialog_colorpicker extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 try{
-                    String colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
-                            + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
-                            + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
-                    setButton_Color(colorStr);
+                    rgb_reading();
                 }
                 catch(NumberFormatException ex){}
             }
@@ -161,9 +154,7 @@ public class dialog_colorpicker extends DialogFragment {
 //                ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 //                ft1.replace(R.id.fgm, fragment_Control).addToBackStack(null);
 //                ft1.commit();
-                rgbValue = colorDisk.getColorcode();
-                mlistener.getRGB(rgbValue);
-
+                mlistener.getRGB(colorcode);
                 dismiss();
 
             }
@@ -180,6 +171,8 @@ public class dialog_colorpicker extends DialogFragment {
                 bValue.setText(String.valueOf(b));
 
                 setButton_Color(colorDisk.getColorStr());
+                colorStr=colorDisk.getColorStr();
+                colorcode=colorDisk.getColorcode();
             }
         });
 
@@ -224,6 +217,17 @@ public class dialog_colorpicker extends DialogFragment {
         int height = (int) px1;
         setButton_Background.setSize(width,height);
         setBt.setBackground(setButton_Background);
+    }
+    public void rgb_reading(){
+        int r= Integer.parseInt(rValue.getText().toString());
+        int g= Integer.parseInt(gValue.getText().toString());
+        int b= Integer.parseInt(bValue.getText().toString());
+        colorStr=  "#" + colorDisk.toBrowserHexValue(r)
+                + colorDisk.toBrowserHexValue(g)
+                + colorDisk.toBrowserHexValue(b);
+        setButton_Color(colorStr);
+        colorcode = (1 & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+        Log.d("yes", "rgb_reading: "+colorcode);
     }
 
 }
