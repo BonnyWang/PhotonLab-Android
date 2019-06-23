@@ -48,8 +48,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity implements fragment_Pair.pairing_Listener {
-
+public class MainActivity extends AppCompatActivity  {
+    //implements fragment_Pair.pairing_Listener
     private final String TAG = "Mainactivity";
 
     TextView text_view;
@@ -161,18 +161,18 @@ public class MainActivity extends AppCompatActivity implements fragment_Pair.pai
 
     }
 
-    @Override
-    public void mainControl(String Tag, int Value){
-
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        if (fragment instanceof fragment_Pair) {
-            fragment_Pair fragment_pair = (fragment_Pair) fragment;
-            fragment_pair.setListener(this);
-        }
-    }
+//    @Override
+//    public void mainControl(String Tag, int Value){
+//
+//    }
+//
+//    @Override
+//    public void onAttachFragment(Fragment fragment) {
+//        if (fragment instanceof fragment_Pair) {
+//            fragment_Pair fragment_pair = (fragment_Pair) fragment;
+//            fragment_pair.setListener(this);
+//        }
+//    }
 }
 
 

@@ -102,7 +102,7 @@ public class ColorPicker extends View {
         return true;
     }
 
-    private String toBrowserHexValue(int number) {
+    public String toBrowserHexValue(int number) {
         StringBuilder builder = new StringBuilder(
                 Integer.toHexString(number & 0xff));
         while (builder.length() < 2) {
@@ -231,5 +231,7 @@ public class ColorPicker extends View {
         return colorcode;
     }
 
-
+    public boolean movecursor(){
+        return true;
+    }
 }
