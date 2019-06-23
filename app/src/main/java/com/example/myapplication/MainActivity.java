@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.ScanResult;
@@ -26,6 +28,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,30 +55,20 @@ public class MainActivity extends AppCompatActivity  {
     //implements fragment_Pair.pairing_Listener
     private final String TAG = "Mainactivity";
 
-    TextView text_view;
-    SeekBar seek_bar;
-    int progressValue;
-    String colorOfChoice;
-    Drawable button_of_choice;
-    Button button;
     int whichanim = 0;
-
-    BluetoothAdapter mbluetoothAdapter;
-    //TODO:Delete this later -Bonny
-    // BluetoothConnection mbluetoothConnection;
-    BluetoothSocket mbluetoothSocket;
-    BluetoothDevice mbluetoothDevice;
-    BluetoothDevice target;
-
-    private static final UUID my_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-    ParcelUuid[] target_UUID;
+    int rounterIP;
 
     //Fragments
     static final Fragment fragment_Theme = new Fragment_Theme();
     static final Fragment fragment_Control = new Fragment_Control();
     static final Fragment fragment_Setting = new fragment_setting();
     static final Fragment fragment_music = new Fragment_Theme();
-    Fragment start_anim;
+    static final Fragment start_anim = new fragment_start_anim();
+
+    WebView webViewMain;
+
+    static Handler handler = new Handler();
+    static Runnable runnable;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -134,45 +127,78 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         setContentView(R.layout.activity_main);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        webViewMain = findViewById(R.id.webViewMain);
 
 
-        start_anim = new fragment_start_anim();
+
+
         FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
         ft0.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
         ft0.replace(R.id.container, start_anim).addToBackStack(null);
         ft0.commit();
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
+
+        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+        ft1.replace(R.id.fgm, fragment_Control);
+        ft1.commit();
+
+        runnable = new Runnable() {
             @Override
             public void run() {
                 //Second fragment after 5 seconds appears
-                getSupportFragmentManager().popBackStack();
+
+                FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+                ft.remove(start_anim);
+                ft.commitAllowingStateLoss();
                 //fragment_Control = new Fragment_Control();
-                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                ft1.replace(R.id.fgm, fragment_Control);
-                ft1.commit();
+//                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+//                ft1.replace(R.id.fgm, fragment_Control);
+//                ft1.commit();
             }
         };
+
         handler.postDelayed(runnable, 3000);
+
+
 
 
     }
 
-//    @Override
-//    public void mainControl(String Tag, int Value){
-//
-//    }
-//
-//    @Override
-//    public void onAttachFragment(Fragment fragment) {
-//        if (fragment instanceof fragment_Pair) {
-//            fragment_Pair fragment_pair = (fragment_Pair) fragment;
-//            fragment_pair.setListener(this);
+
+    @Override
+    public void mainControl(String Tag, int Value){
+        String tempCommand;
+
+    }
+
+    @Override
+    public int rounterIpAddress(int address){
+        return address;
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof fragment_Pair) {
+            fragment_Pair fragment_pair = (fragment_Pair) fragment;
+            fragment_pair.setListener(this);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+//        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 //        }
-//    }
+        super.onSaveInstanceState(outState);
+    }
 }
 
 

@@ -26,12 +26,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.util.List;
+import java.util.logging.Formatter;
 
 
 public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListener{
@@ -58,14 +64,14 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     RecyclerView rv;
     EditText password_Input;
     ProgressBar progressBar;
+    WebView webViewPair;
+    EditText editText_Password;
 
 
 
-    int apIpAddress;
+    String apIpAddress;
     String TargetSSID;
     String TargetPassword;
-
-
 
     public fragment_Pair(){
 
@@ -96,11 +102,15 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         back = view.findViewById(R.id.backButton_Pairing);
         done = view.findViewById(R.id.done);
         connect = view.findViewById(R.id.connect_Button);
+
         step1_layout = view.findViewById(R.id.step1);
         step2_Layout = view.findViewById(R.id.step2);
         step3_Layout = view.findViewById(R.id.step3);
         step4_Layout = view.findViewById(R.id.step4);
+
         password_Input = view.findViewById(R.id.edit_Password);
+        webViewPair = view.findViewById(R.id.webViewPair);
+
 
         final WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
 
@@ -121,6 +131,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                         return;
                     case 50:
                         progressBar.setProgress(25);
+                        rv.setVisibility(View.GONE);
                         rv.setFocusable(false);
                         rv.setClickable(false);
                         yes_Connected.setClickable(true);
@@ -133,6 +144,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                         rv.setVisibility(View.VISIBLE);
                         password_Input.setVisibility(View.GONE);
                         password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                        connect.setClickable(false);
+                        connect.setVisibility(View.GONE);
                         Blayout_Gone(step3_Layout, View.INVISIBLE);
                         Blayout_Show(step2_Layout);
                         return;
@@ -160,7 +173,11 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 //                step1_layout.setVisibility(View.GONE);
                 progressBar.setProgress(50);
                 yes_Connected.setClickable(false);
-                apIpAddress = wifiManager.getConnectionInfo().getIpAddress();
+                int tempIP = wifiManager.getDhcpInfo().gateway;
+                apIpAddress = ipToString(tempIP);
+                rv.setVisibility(View.VISIBLE);
+                rv.setClickable(true);
+                rv.setFocusable(true);
 
             }
         });
@@ -176,6 +193,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                 password_Input.setVisibility(View.GONE);
                 password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 done.setVisibility(View.VISIBLE);
+                webViewPair.loadUrl("http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
+                Log.d(TAG, "onClickConnect: "+"http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
             }
         });
 
@@ -185,11 +204,6 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
-
-
-//
-
 
         BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
             @Override
@@ -228,16 +242,6 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         }
 
 
-//
-//
-//
-//        wifiRvAdapter adapter = new wifiRvAdapter(results, this);
-//
-//        rv.setAdapter(adapter);
-
-
-        // Inflate the layout for this fragment
-
         return view ;
     }
 
@@ -262,6 +266,11 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         rv.setVisibility(View.GONE);
         rv.setClickable(false);
         password_Input.setVisibility(View.VISIBLE);
+        connect.setVisibility(View.VISIBLE);
+
+        webViewPair.loadUrl("http://"+ apIpAddress+"/"+"wifiName"+"/"+TargetSSID);
+
+        Log.d(TAG, "onNoteClick: "+apIpAddress+"/"+TargetSSID);
 
 
     }
@@ -301,12 +310,30 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         view.setVisibility(View.VISIBLE);
     }
 
+    public String ipToString(int tempIP){
+        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+            tempIP = Integer.reverseBytes(tempIP);
+        }
+
+        byte[] ipByteArray = BigInteger.valueOf(tempIP).toByteArray();
+
+        String ipAddressString;
+        try {
+            ipAddressString = InetAddress.getByAddress(ipByteArray).getHostAddress();
+        } catch (UnknownHostException ex) {
+            Log.e("WIFIIP", "Unable to get host address.");
+            ipAddressString = null;
+        }
+
+        return ipAddressString;
+    }
+
 
 
     public interface pairing_Listener {
         //TODO: return back the ip address of the device -Bonny
         public void mainControl(String Tag, int value);
-        public int apIpAddress(int address);
+        public int rounterIpAddress(int address);
     }
 
     public void setListener(pairing_Listener mlistener){
