@@ -51,8 +51,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity implements fragment_Pair.pairing_Listener {
-
+public class MainActivity extends AppCompatActivity  {
+    //implements fragment_Pair.pairing_Listener
     private final String TAG = "Mainactivity";
 
     int whichanim = 0;
@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements fragment_Pair.pai
 
 
     }
+
 
     @Override
     public void mainControl(String Tag, int Value){

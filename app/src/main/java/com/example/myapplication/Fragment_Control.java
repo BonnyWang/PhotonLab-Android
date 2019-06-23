@@ -46,7 +46,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     int progressValue;
     CardView cardView;
     ToggleButton power;
-
+    ImageView sun;
     int checkedOrder;
     RadioGroup radioGroup;
     RadioButton[] rbuttons;
@@ -89,6 +89,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 //        power.setClipToOutline(true);
 //        power.setElevation(10f);
         power = view.findViewById(R.id.Power);
+        sun = view.findViewById(R.id.sun);
         final SeekBar seekBar = view.findViewById(R.id.seekBar5);
         //TODO:Need to be pressed instead of click -Bonny
         power.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -97,14 +98,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 if (isChecked) {
                     //seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_On, null));
                     power.getBackground().setTint(getResources().getColor(R.color.colorPrimary,null));
-
                     checkedButton = view.findViewById(radioGroup.getCheckedRadioButtonId());
+                    sun.setColorFilter(getResources().getColor(R.color.yellow,null));
                     checkedButton.setChecked(false);
                     checkedButton.setChecked(true);
                     webView.loadUrl("http://192.168.50.48/H");
 
                 } else {
                     seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
+                    sun.setColorFilter(getResources().getColor(R.color.seekBar_Default,null));                    //hello my friend
                     power.getBackground().setTint(0xffffffff);
                     webView.loadUrl("http://192.168.50.48/L");
                 }
@@ -133,44 +135,20 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId == R.id.rButton1){
-                    checkedOrder = 0;
-                        if(power.isChecked()){
-                            seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
-                        }
-
-                        checked.setStroke(5, setCheckedColor(0));
-                        rbuttons[0].setBackground(checked);
-
+                        setColor(0);
                     }
 
                     if(checkedId == R.id.rButton2){
-                        checkedOrder = 1;
-                        if(power.isChecked()){
-                            seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
-                        }
-                        checked.setStroke(5, setCheckedColor(1));
-                        rbuttons[1].setBackground(checked);
-
+                        setColor(1);
                     }
-                    if(checkedId == R.id.rButton3){
-                        checkedOrder = 2;
-                        if(power.isChecked()){
-                            seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
-                        }
-                        checked.setStroke(5, setCheckedColor(2));
-                        rbuttons[2].setBackground(checked);
 
+                    if(checkedId == R.id.rButton3){
+                        setColor(2);
                     }
 
                     if(checkedId == R.id.rButton4){
-                        checkedOrder = 3;
-                        if(power.isChecked()){
-                            seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
-                        }
-                        checked.setStroke(5, setCheckedColor(3));
-                        rbuttons[3].setBackground(checked);
-
-                }
+                        setColor(3);
+                    }
             }
         });
 
@@ -202,6 +180,13 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
+    public void setColor(int checkedOrder){
+        if(power.isChecked()){
+            seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
+        }
+        checked.setStroke(5, setCheckedColor(checkedOrder));
+        rbuttons[checkedOrder].setBackground(checked);
+    }
 
     public void seekbar(View view) {
         seek_bar = (SeekBar) view.findViewById(R.id.seekBar5);

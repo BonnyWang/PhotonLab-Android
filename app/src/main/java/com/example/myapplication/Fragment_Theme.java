@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,14 +69,19 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
 
     @Override
     public void onNoteClick(int position) {
-        theme_Class current = mtheme.get(position);
-        String name = current.getName();
-        int[] gradient = current.getColors();
-        theme_Individual = new fragement_theme_individual(current);
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-        ft.commit();
+        if (position == mtheme.size()){
+            //do something
+            Log.d("yes", "onNoteClick: success");
+        }
+        else{
+            theme_Class current = mtheme.get(position);
+            String name = current.getName();
+            int[] gradient = current.getColors();
+            theme_Individual = new fragement_theme_individual(current);
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            ft.replace(R.id.container, theme_Individual).addToBackStack(null);
+            ft.commit();}
     }
 
 
