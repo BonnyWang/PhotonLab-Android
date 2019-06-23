@@ -229,8 +229,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     public void initialize_Colors(){
         TinyDB tinydb = new TinyDB(this.getContext());
-        tinydb.remove("bonny2");//need to be comment
-        if (tinydb.getListInt("bonny").size()==0){
+        tinydb.remove("bonny");//need to be comment
+        if (tinydb.getListInt("bonny2").size()==0){
             Log.d("kan", "initialize_Colors: 0");
             colormmp.add(0,getResources().getColor(R.color.yellow,null));
             colormmp.add(1,getResources().getColor(R.color.blue,null));
@@ -238,13 +238,13 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             colormmp.add(3,getResources().getColor(R.color.purple,null));
             Log.d(TAG, "initialize_Colors: "+colormmp.size());
             Log.d("kan", "initialize_Colors: 1");
-            tinydb.putListInt("bonny",colormmp);
-            Log.d("kan", "ohhh"+tinydb.getListInt("bonny").size());
+            tinydb.putListInt("bonny2",colormmp);
+            Log.d("kan", "ohhh"+tinydb.getListInt("bonny2").size());
         }
 
         for (int p =0; p <colormmp.size();p++){
             Log.d("kan", "initialize_Colors: -1");
-            colorOptions.add(tinydb.getListInt("bonny").get(p));
+            colorOptions.add(tinydb.getListInt("bonny2").get(p));
         }
 
 
@@ -305,18 +305,21 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     public int getRGB(int rgbValue){
         //fl.setVisibility(View.INVISIBLE);
         TinyDB tinydb = new TinyDB(getContext());
-        Log.d("yes", "read or not"+ tinydb.getListInt("bonny").size());
-        ArrayList<Integer> colormmp2 =tinydb.getListInt("bonny");
+        Log.d("yes", "read or not"+ tinydb.getListInt("bonny2").size());
+        ArrayList<Integer> colormmp2 =tinydb.getListInt("bonny2");
         for (int j=0; j<3;j++){
             colormmp2.set(j,colormmp2.get(j+1));
         }
         colormmp2.set(3,rgbValue);
-        tinydb.remove("bonny");
-        tinydb.putListInt("bonny",colormmp2);
-        Log.d("yes", "getRGB: "+tinydb.getListInt("bonny").get(3));
+        tinydb.remove("bonny2");
+        tinydb.putListInt("bonny2",colormmp2);
+        Log.d("yes", "getRGB: "+tinydb.getListInt("bonny2").get(3));
+        for (int  p =0; p <4;p++){
+            colorOptions.remove();
+        }
         for (int p =0; p <4;p++){
             Log.d("kan", "yesnono");
-            colorOptions.add(tinydb.getListInt("bonny").get(p));}
+            colorOptions.add(tinydb.getListInt("bonny2").get(p));}
 
         initialize_Rbuttons();
         rbuttons[3].setChecked(false);
