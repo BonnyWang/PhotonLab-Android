@@ -99,7 +99,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                     //seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_On, null));
                     power.getBackground().setTint(getResources().getColor(R.color.colorPrimary,null));
                     checkedButton = view.findViewById(radioGroup.getCheckedRadioButtonId());
-                    sun.setColorFilter(getResources().getColor(R.color.yellow,null));
+                    sun.setColorFilter(0xffffd41f);
                     checkedButton.setChecked(false);
                     checkedButton.setChecked(true);
                     webView.loadUrl("http://192.168.50.48/H");

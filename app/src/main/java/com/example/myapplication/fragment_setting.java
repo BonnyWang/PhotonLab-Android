@@ -58,6 +58,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         mSettings.add(new setting_Content("Layout Manager"));
         mSettings.add(new setting_Content("Update Firmware"));
 
+
     }
 
     @Override

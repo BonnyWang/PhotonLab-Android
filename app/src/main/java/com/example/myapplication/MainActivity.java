@@ -173,24 +173,24 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    @Override
-    public void mainControl(String Tag, int Value){
-        String tempCommand;
+//    @Override
+//    public void mainControl(String Tag, int Value){
+//        String tempCommand;
+//
+//    }
+//
+//    @Override
+//    public int rounterIpAddress(int address){
+//        return address;
+//    }
 
-    }
-
-    @Override
-    public int rounterIpAddress(int address){
-        return address;
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        if (fragment instanceof fragment_Pair) {
-            fragment_Pair fragment_pair = (fragment_Pair) fragment;
-            fragment_pair.setListener(this);
-        }
-    }
+//    @Override
+//    public void onAttachFragment(Fragment fragment) {
+//        if (fragment instanceof fragment_Pair) {
+//            fragment_Pair fragment_pair = (fragment_Pair) fragment;
+//            fragment_pair.setListener(this);
+//        }
+//    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
