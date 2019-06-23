@@ -5,106 +5,76 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Fragment_Music.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Fragment_Music#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Fragment_Music extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class Fragment_Music extends Fragment implements RvAdapter.OnNoteListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    public Fragment_Music() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_Music.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Fragment_Music newInstance(String param1, String param2) {
-        Fragment_Music fragment = new Fragment_Music();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    Context context;
+    List<theme_Class> mMusic;
+    ImageView imageView_Card;
+    Fragment theme_Individual;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__music_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment__music_layout, container, false);
+        final RecyclerView rv = (RecyclerView)view.findViewById(R.id.rvMusic);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        rv.setLayoutManager(llm);
+        imageView_Card = (ImageView)view.findViewById(R.id.imageView_Card);
+
+        initializeData();
+
+        RvAdapter adapter = new RvAdapter(mMusic, this);
+
+        rv.setAdapter(adapter);
+        return view;
+
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void initializeData() {
+        mMusic = new ArrayList<>();
+
+        mMusic.add(new theme_Class("Sky", new int[]{0xff00b7ff, 0xff00ffee}, "Photonlab", "Blue Blue"));
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onNoteClick(int position) {
+        if (position == mMusic.size()){
+            //do something
+            Log.d("yes", "onNoteClick: success");
         }
+        else{
+            theme_Class current = mMusic.get(position);
+            String name = current.getName();
+            int[] gradient = current.getColors();
+            theme_Individual = new fragement_theme_individual(current);
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            ft.replace(R.id.container, theme_Individual).addToBackStack(null);
+            ft.commit();}
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
+
+
+

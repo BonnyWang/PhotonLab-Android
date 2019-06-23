@@ -139,7 +139,8 @@ public class dialog_colorpicker extends DialogFragment {
         addFavBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //do something my friend
+                mlistener.getRGB(colorcode);
+                dismiss();
             }
         });
 
@@ -148,8 +149,6 @@ public class dialog_colorpicker extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                mlistener.getRGB(colorcode);
-                dismiss();
 
             }
         });

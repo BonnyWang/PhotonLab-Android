@@ -2,6 +2,7 @@
     <string name="app_name">PhotonLab</string>
     <string name="title_home">Home</string>
     <string name="title_Theme">Theme</string>
+    <string name="title_Music">Music</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_notifications2">Notifications2</string>
@@ -27,6 +28,7 @@
     <string name="Instruction_3">Please make sure your WiFi network\n is correctly configurated.</string>
     <string name="Good_To_Go">You are good to go!</string>
     <string name="Done">Done</string>
+    <string name="Coming_Soon">Coming Soon!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>>
 </resources>

@@ -229,8 +229,7 @@ public class fragment_colorpicker extends Fragment {
 
     public void setListener(colorPick_Listener mlistener){
         this.mlistener = mlistener;
-
-    }
+   }
 
 
 

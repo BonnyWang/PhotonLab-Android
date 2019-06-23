@@ -47,6 +47,7 @@ import java.util.UUID;
 
 //added for Fragment -Bonny
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -62,13 +63,15 @@ public class MainActivity extends AppCompatActivity  {
     static final Fragment fragment_Theme = new Fragment_Theme();
     static final Fragment fragment_Control = new Fragment_Control();
     static final Fragment fragment_Setting = new fragment_setting();
-    static final Fragment fragment_music = new Fragment_Theme();
+    static final Fragment fragment_music = new Fragment_Music();
     static final Fragment start_anim = new fragment_start_anim();
 
     WebView webViewMain;
 
     static Handler handler = new Handler();
     static Runnable runnable;
+
+    ConstraintLayout container;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -134,10 +137,12 @@ public class MainActivity extends AppCompatActivity  {
 
         setContentView(R.layout.activity_main);
 
+        container = findViewById(R.id.MainContainer);
+        container.setVisibility(View.GONE);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         webViewMain = findViewById(R.id.webViewMain);
-
 
 
 
@@ -146,9 +151,7 @@ public class MainActivity extends AppCompatActivity  {
         ft0.replace(R.id.container, start_anim).addToBackStack(null);
         ft0.commit();
 
-        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-        ft1.replace(R.id.fgm, fragment_Control);
-        ft1.commit();
+
 
         runnable = new Runnable() {
             @Override
@@ -162,10 +165,15 @@ public class MainActivity extends AppCompatActivity  {
 //                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
 //                ft1.replace(R.id.fgm, fragment_Control);
 //                ft1.commit();
+                container.setVisibility(View.VISIBLE);
             }
         };
 
         handler.postDelayed(runnable, 3000);
+
+        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+        ft1.replace(R.id.fgm, fragment_Control);
+        ft1.commit();
 
 
 
@@ -199,6 +207,9 @@ public class MainActivity extends AppCompatActivity  {
 //        }
         super.onSaveInstanceState(outState);
     }
+
+//    https://blog.csdn.net/a10615/article/details/52427047
+
 }
 
 
