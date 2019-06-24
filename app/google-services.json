@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1050050038436",
+    "firebase_url": "https://phlproto.firebaseio.com",
+    "project_id": "phlproto",
+    "storage_bucket": "phlproto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050050038436:android:13c3c6a65bcbec53",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050050038436-8ldn8ktvksjpso64fj28kf29lui3b2j6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3kMbceQkCLyMyjysfdv3IkEtYyd6gSf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050050038436-8ldn8ktvksjpso64fj28kf29lui3b2j6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

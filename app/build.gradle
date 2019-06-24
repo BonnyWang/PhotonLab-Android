@@ -34,9 +34,13 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
 
     //compile 'com.android.support:recyclerview-v7:21.0.+'
     //added for material design
 //    implementation 'com.google.android.material:material:1.1.0-alpha06'
 
 }
+
+//Added for Firebase
+apply plugin: 'com.google.gms.google-services'
