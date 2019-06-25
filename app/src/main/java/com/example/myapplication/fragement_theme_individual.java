@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class fragement_theme_individual extends Fragment {
     Button setButton;
     theme_Class mtheme;
     Button backButton;
+    ToggleButton favorite;
 
     public fragement_theme_individual(theme_Class mtheme){
         this.gradient = mtheme.getColors();
@@ -71,6 +74,7 @@ public class fragement_theme_individual extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO: Data Transfer Back-End -Bonny
+
             }
         });
 
@@ -85,6 +89,18 @@ public class fragement_theme_individual extends Fragment {
             }
         });
 
+
+        favorite = view.findViewById(R.id.favorite);
+        favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite,null));
+                }else {
+                    favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border,null));
+                }
+            }
+        });
         return view;
     }
 

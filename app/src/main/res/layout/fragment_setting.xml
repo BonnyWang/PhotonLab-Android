@@ -27,7 +27,6 @@
                 android:gravity="center">
 
 
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/setRV"
                     android:layout_width="match_parent"
@@ -45,7 +44,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/PhotonLab_V"
                     android:textSize="17sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textColor="#e2e2e2"/>
 
 
             </LinearLayout>
@@ -60,7 +60,7 @@
             android:padding="10dp"
             android:layout_marginStart="15dp"
             android:text="@string/Settings"
-            android:textSize="36sp"
+            android:textSize="45dp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
