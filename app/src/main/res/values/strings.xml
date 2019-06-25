@@ -29,6 +29,8 @@
     <string name="Good_To_Go">You are good to go!</string>
     <string name="Done">Done</string>
     <string name="Coming_Soon">Coming Soon!</string>
+    <string name="No_Layout">No Layout</string>
+    <string name="Go_to_setup"><u>Go to setup</u></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>>
 </resources>

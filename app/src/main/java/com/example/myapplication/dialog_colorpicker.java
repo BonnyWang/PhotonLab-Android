@@ -41,13 +41,15 @@ public class dialog_colorpicker extends DialogFragment {
     EditText gValue;
     EditText bValue;
 
+    static int whichOne;
+
 
     int rgbValue;
     dialog_colorpicker.colorPick_Listener mlistener;
 
 
-    static dialog_colorpicker newInstance() {
-
+    static dialog_colorpicker newInstance(int which) {
+        whichOne = which;
         return new dialog_colorpicker();
     }
 
@@ -139,7 +141,7 @@ public class dialog_colorpicker extends DialogFragment {
         addFavBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mlistener.getRGB(colorcode);
+                mlistener.getRGB(colorcode, whichOne);
                 dismiss();
             }
         });
@@ -183,7 +185,7 @@ public class dialog_colorpicker extends DialogFragment {
 
     public interface colorPick_Listener {
         // TODO: Update argument type and name
-        public int getRGB(int rgbValue);
+        public int getRGB(int rgbValue, int which);
     }
 
     public void setListener(dialog_colorpicker.colorPick_Listener mlistener){
