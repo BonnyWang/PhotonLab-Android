@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity  {
     int rounterIP;
 
     //Fragments
-    static final Fragment fragment_Theme = new Fragment_Theme();
+    Fragment_Theme fragment_Theme = Fragment_Theme.getInstance();
     static final Fragment fragment_Control = new Fragment_Control();
     static final Fragment fragment_Setting = new fragment_setting();
     static final Fragment fragment_music = new Fragment_Music();

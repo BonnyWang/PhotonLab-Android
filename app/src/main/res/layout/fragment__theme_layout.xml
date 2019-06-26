@@ -35,11 +35,12 @@
             android:padding="3dp" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinnerThemes"
             android:layout_width="32dp"
             android:layout_height="32dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/rv"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="45dp"
             android:layout_marginBottom="18dp"
             android:layout_marginEnd="28dp"
             android:background="@drawable/menu"/>

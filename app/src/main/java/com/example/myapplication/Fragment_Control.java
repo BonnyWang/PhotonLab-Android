@@ -177,11 +177,13 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     AllButton.setTextColor(getResources().getColor(R.color.backGround, null));
-                    All.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
+                    //All.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
+                    All.setBackground(getResources().getDrawable(R.drawable.button1, null));
                     SingleButton.setChecked(false);
                     setAllLayout();
                 }else {
-                    All.setCardBackgroundColor(getResources().getColor(R.color.backGround, null) );
+                    //All.setCardBackgroundColor(getResources().getColor(R.color.backGround, null) );
+                    All.setBackground(getResources().getDrawable(R.drawable.button, null));
                     AllButton.setTextColor(getResources().getColor(R.color.DeepText, null));
                     setSingleLayout();
                 }
@@ -193,16 +195,21 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     SingleButton.setTextColor(getResources().getColor(R.color.backGround, null));
-                    Single.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
+                    //Single.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
+                    Single.setBackground(getResources().getDrawable(R.drawable.button1, null));
                     AllButton.setChecked(false);
                     setSingleLayout();
                 }else {
                     Single.setCardBackgroundColor(getResources().getColor(R.color.backGround, null) );
+                    Single.setBackground(getResources().getDrawable(R.drawable.button, null));
                     SingleButton.setTextColor(getResources().getColor(R.color.DeepText, null));
                     setSingleLayout();
                 }
             }
         });
+
+        SingleButton.setChecked(true);
+        SingleButton.setChecked(false);
 
         AllButton.setChecked(true);
 

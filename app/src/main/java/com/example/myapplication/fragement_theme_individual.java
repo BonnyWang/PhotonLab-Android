@@ -35,10 +35,15 @@ public class fragement_theme_individual extends Fragment {
     Button backButton;
     ToggleButton favorite;
 
-    public fragement_theme_individual(theme_Class mtheme){
+    themeIndivListener mlistener;
+
+    boolean isFavorite;
+
+    public fragement_theme_individual(theme_Class mtheme, boolean isFavorite){
         this.gradient = mtheme.getColors();
         this.themeName = mtheme.getName();
         this.mtheme = mtheme;
+        this.isFavorite = isFavorite;
     }
 
     @Override
@@ -91,13 +96,23 @@ public class fragement_theme_individual extends Fragment {
 
 
         favorite = view.findViewById(R.id.favorite);
+        if(isFavorite){
+            favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite,null));
+        }else{
+            favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border,null));
+        }
+
         favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+                    isFavorite = true;
                     favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite,null));
+                    mlistener.Addavorite(mtheme);
                 }else {
                     favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border,null));
+                    mlistener.RemoveFavorite(mtheme);
+                    isFavorite = false;
                 }
             }
         });
@@ -108,6 +123,15 @@ public class fragement_theme_individual extends Fragment {
         items = new ArrayList<>();
         items.add(new theme_Content_Class("Creator",mtheme.getCreater()));
         items.add(new theme_Content_Class("Mood",mtheme.getMood()));
+    }
+
+    public interface themeIndivListener{
+        public theme_Class Addavorite (theme_Class current);
+        public theme_Class RemoveFavorite(theme_Class currrent);
+    }
+
+    public void setListener(themeIndivListener mlistener){
+        this.mlistener = mlistener;
     }
 
 

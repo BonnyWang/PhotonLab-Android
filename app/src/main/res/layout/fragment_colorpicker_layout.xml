@@ -17,6 +17,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/ic_close_black_24dp"
+            android:backgroundTint="#aaaaaa"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
@@ -32,23 +33,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linput" />
-
+            app:layout_constraintTop_toBottomOf="@+id/close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.15"/>
 
 
         <Button
             android:id="@+id/AddFavColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
             android:background="@drawable/set_background"
             android:text="@string/Add_to_Favorite"
+            android:textAllCaps="false"
+            android:textColor="#bdbdbd"
             android:textSize="20sp"
-            android:layout_marginTop="30dp"
+            android:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/setColorButton"
-            android:textColor="#FFFFFFFF"
-            android:textAllCaps="false"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="50dp"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:id="@+id/setColorButton"
@@ -57,12 +62,15 @@
             android:background="@drawable/set_background"
             android:text="@string/Set"
             android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/colorDisk"
+            app:layout_constraintBottom_toTopOf="@+id/AddFavColor"
+            android:layout_marginBottom="30dp"
             android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="#FFFFFFFF"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:elevation="0dp"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <LinearLayout
             android:id="@+id/linput"
@@ -72,7 +80,8 @@
             app:layout_constraintTop_toBottomOf="@+id/close"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textView4"
