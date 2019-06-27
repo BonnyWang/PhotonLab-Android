@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1050050038436:android:13c3c6a65bcbec53",
         "android_client_info": {
-          "package_name": "com.example.myapplication"
+          "package_name": "xyz.photonlab.photonlabandroid"
         }
       },
       "oauth_client": [
