@@ -121,62 +121,71 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
 
     @Override
     public void onNoteClick(int position) {
-        boolean isFavorite = false;
+//        boolean isFavorite = false;
 
-        if (position == mtheme.size()){
-            //do something
-            Log.d("yes", "onNoteClick: success");
-        }else{
 
-            if (spinnerMenu.getSelectedItemPosition() == 0){
-                theme_Class current = mtheme.get(position);
-                for(int i = 0; i < mfavoriteTheme.size(); i++){
-                    if (current.equals(mfavoriteTheme.get(i))){
-                        isFavorite = true;
-                    }
-                }
-
-                String name = current.getName();
-                int[] gradient = current.getColors();
-                theme_Individual = new fragement_theme_individual(current, isFavorite);
-                ((fragement_theme_individual) theme_Individual).setListener(this);
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-                ft.commit();
-            }
-
-            if (spinnerMenu.getSelectedItemPosition() == 1){
-                theme_Class current = mfavoriteTheme.get(position);
-                String name = current.getName();
-                int[] gradient = current.getColors();
-                theme_Individual = new fragement_theme_individual(current, true);
-                ((fragement_theme_individual) theme_Individual).setListener(this);
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-                ft.commit();
-            }
-
-            if (spinnerMenu.getSelectedItemPosition() == 2) {
-                theme_Class current = sweetTheme.get(position);
-
-                if (mfavoriteTheme.contains(current)) {
-                    isFavorite = true;
-                }
-
-                String name = current.getName();
-                int[] gradient = current.getColors();
-                theme_Individual = new fragement_theme_individual(current, isFavorite);
-                ((fragement_theme_individual) theme_Individual).setListener(this);
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-                ft.commit();
-            }
+        if (spinnerMenu.getSelectedItemPosition() == 0) {
+            gotoIndiv(mtheme, position);
+//            if (position == mtheme.size()) {
+//                //do something
+//                Log.d("yes", "onNoteClick: success");
+//            } else {
+//                theme_Class current = mtheme.get(position);
+//                if (mfavoriteTheme.contains(current)) {
+//                    isFavorite = true;
+//                }
+//
+//                String name = current.getName();
+//                int[] gradient = current.getColors();
+//                theme_Individual = new fragement_theme_individual(current, isFavorite);
+//                ((fragement_theme_individual) theme_Individual).setListener(this);
+//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
+//                ft.commit();
+//            }
         }
 
+        if (spinnerMenu.getSelectedItemPosition() == 1){
+            gotoIndiv(mfavoriteTheme,position);
+//            if(position == mfavoriteTheme.size()){
+//                //the add button
+//            }else {
+//                theme_Class current = mfavoriteTheme.get(position);
+//                String name = current.getName();
+//                int[] gradient = current.getColors();
+//                theme_Individual = new fragement_theme_individual(current, true);
+//                ((fragement_theme_individual) theme_Individual).setListener(this);
+//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
+//                ft.commit();
+//            }
+        }
+
+        if (spinnerMenu.getSelectedItemPosition() == 2) {
+            gotoIndiv(sweetTheme , position);
+//            if(position == sweetTheme.size()){
+//                // the add button
+//            }else {
+//                theme_Class current = sweetTheme.get(position);
+//
+//                if (mfavoriteTheme.contains(current)) {
+//                    isFavorite = true;
+//                }
+//
+//                String name = current.getName();
+//                int[] gradient = current.getColors();
+//                theme_Individual = new fragement_theme_individual(current, isFavorite);
+//                ((fragement_theme_individual) theme_Individual).setListener(this);
+//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
+//                ft.commit();
+//            }
+        }
     }
+
 
     @Override
     public theme_Class Addavorite (theme_Class current){
@@ -201,6 +210,29 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
         }
 
         return current;
+    }
+
+    private  void gotoIndiv(ArrayList<theme_Class> themeList, int position) {
+        boolean isFavorite = false;
+
+        if (position == themeList.size()) {
+            // the add button
+        } else {
+            theme_Class current = themeList.get(position);
+
+            if (mfavoriteTheme.contains(current)) {
+                isFavorite = true;
+            }
+
+            String name = current.getName();
+            int[] gradient = current.getColors();
+            theme_Individual = new fragement_theme_individual(current, isFavorite);
+            ((fragement_theme_individual) theme_Individual).setListener(this);
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            ft.replace(R.id.container, theme_Individual).addToBackStack(null);
+            ft.commit();
+        }
     }
 
 

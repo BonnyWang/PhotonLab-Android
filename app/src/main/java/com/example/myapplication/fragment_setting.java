@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -52,11 +53,11 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         mSettings = new ArrayList<>();
         mSettings.add(new setting_Content("Pairing"));
         mSettings.add(new setting_Content("Feedback"));
-        mSettings.add(new setting_Content("Night Light"));
+        mSettings.add(new setting_Content("Motion Detect"));
         mSettings.add(new setting_Content("Clock"));
-        mSettings.add(new setting_Content("IoT API"));
+        mSettings.add(new setting_Content("IoT"));
         mSettings.add(new setting_Content("Layout Manager"));
-        mSettings.add(new setting_Content("Update Firmware"));
+        mSettings.add(new setting_Content("System"));
 
 
     }
@@ -72,12 +73,18 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 ft0.commit();
                 break;
 
+            case 1:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/gMS8dfWuBtd58TEM7"));
+                startActivity(browserIntent);
+                break;
+
             default:
                 fragment_Comming fragment_comming = new fragment_Comming(mSettings.get(position).subtitle);
                 FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
                 ft1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 ft1.replace(R.id.fgm, fragment_comming).addToBackStack(null);
                 ft1.commit();
+
 
         }
 

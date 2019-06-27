@@ -558,41 +558,53 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             initialize_Rbuttons();
             rbuttons[3].setChecked(false);
             rbuttons[3].setChecked(true);
+            seek_bar.setProgress(100);
             return rgbValue;
         }else{
             TinyDB tinydb = new TinyDB(getContext());
             colorOptions0.remove();
             colorOptions0.add(rgbValue);
             int a =1;
-            tinydb.remove("color00");
-            tinydb.remove("color01");
-            tinydb.remove("color02");
-            tinydb.remove("color03");
-            tinydb.remove("color04");
-            tinydb.remove("color05");
-            tinydb.remove("color06");
-            tinydb.remove("color07");
-            tinydb.remove("color08");
+
+            for(int i = 0; i < 9; i++){
+                tinydb.remove("color0" + i);
+                Log.d(TAG, "getRGB: rmoveLoop");
+            }
+//            tinydb.remove("color00");
+//            tinydb.remove("color01");
+//            tinydb.remove("color02");
+//            tinydb.remove("color03");
+//            tinydb.remove("color04");
+//            tinydb.remove("color05");
+//            tinydb.remove("color06");
+//            tinydb.remove("color07");
+//            tinydb.remove("color08");
 
             //should be using a loop int to string for this -Bonny
-            tinydb.putInt("color00", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color01", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color02", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color03", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color04", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color05", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color06", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color07", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
-            tinydb.putInt("color08", colorOptions0.peek());
-            colorOptions0.add(colorOptions0.remove());
+
+            for(int i = 0; i < 9; i++){
+                String key = "color0" + i;
+                tinydb.putInt(key, colorOptions0.peek());
+                colorOptions0.add(colorOptions0.remove());
+                Log.d(TAG, "getRGB: loop Sucess");
+            }
+
+//            tinydb.putInt("color01", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
+//            tinydb.putInt("color02", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
+//            tinydb.putInt("color03", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
+//            tinydb.putInt("color04", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
+//            tinydb.putInt("color05", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
+//            tinydb.putInt("color06", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
+//            tinydb.putInt("color07", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
+//            tinydb.putInt("color08", colorOptions0.peek());
+//            colorOptions0.add(colorOptions0.remove());
 
             initialize_Rbuttons();
             rbuttons0[8].setChecked(false);
