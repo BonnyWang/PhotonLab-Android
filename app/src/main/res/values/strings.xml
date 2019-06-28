@@ -43,4 +43,9 @@
         <item>ALL</item>
         <item>Favorite</item>
     </string-array>
+    <string name="Motion_Detect">Motion Detect</string>
+    <string name="Time_Delay">Time Delay</string>
+    <string name="timeDialog">00:00:00</string>
+    <string name="Themes_Trigger">Themes Trigger</string>
+    <string name="Trigger_Name">Sky</string>
 </resources>

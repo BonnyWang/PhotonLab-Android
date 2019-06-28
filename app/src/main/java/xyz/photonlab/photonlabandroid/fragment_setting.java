@@ -77,6 +77,15 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 startActivity(browserIntent);
                 break;
 
+            //Motion Detect;
+            case 2:
+                fragment_motion_detect mfragment_motion_detect = fragment_motion_detect.getInstance();
+                FragmentTransaction ft2 = getActivity().getSupportFragmentManager().beginTransaction();
+                ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft2.replace(R.id.fgm,mfragment_motion_detect).addToBackStack(null);
+                ft2.commit();
+                break;
+
             default:
                 fragment_Comming fragment_comming = new fragment_Comming(mSettings.get(position).subtitle);
                 FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
@@ -88,6 +97,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         }
 
     }
+
 
 
 
