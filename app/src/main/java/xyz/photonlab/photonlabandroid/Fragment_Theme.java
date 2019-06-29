@@ -110,6 +110,7 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
         mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}, "Photonlab", "Home Happy Sunset"));
         mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d},"Photonlab", "Sweet sweet"));
         mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee},"Photonlab", "Blue Blue"));
+        mtheme.add(new theme_Class("Neon Glow", new int[] {0xff00ffa1, 0xff00ffff},"Photonlab", "High"));
 
         sweetTheme = new ArrayList<>();
         sweetTheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d},"Photonlab", "Sweet sweet"));

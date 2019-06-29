@@ -34,6 +34,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:padding="3dp" />
 
+
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:src="@drawable/cover_e"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginEnd="28dp"/>
+
         <Spinner
             android:id="@+id/spinnerThemes"
             android:layout_width="32dp"
@@ -43,8 +56,11 @@
             android:layout_marginTop="45dp"
             android:layout_marginBottom="18dp"
             android:layout_marginEnd="28dp"
+            android:foreground="@drawable/menu"
             android:background="@drawable/menu"
+            android:spinnerMode="dropdown"
             android:dropDownVerticalOffset = "40dp" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

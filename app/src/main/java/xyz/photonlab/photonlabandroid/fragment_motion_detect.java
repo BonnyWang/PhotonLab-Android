@@ -78,11 +78,11 @@ public class fragment_motion_detect extends Fragment {
             }
         }).setType(new boolean[]{false, false, false, true, true, true})
                 .setLabel("Year","Monty","Day","h","min","s")
-                .isDialog(true)
                 .setCancelText("Cancle")
                 .setCancelColor(getResources().getColor(R.color.design_default_color_primary,null))
                 .setSubmitText("Confirm")
                 .setSubmitColor(getResources().getColor(R.color.design_default_color_primary,null))
+                .isDialog(true)
                 .setDate(initialdate)
                 .build();
 

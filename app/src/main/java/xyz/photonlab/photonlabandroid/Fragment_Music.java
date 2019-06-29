@@ -99,7 +99,8 @@ public class Fragment_Music extends Fragment implements RvAdapter.OnNoteListener
     private void initializeData() {
         mMusic = new ArrayList<>();
 
-        mMusic.add(new theme_Class("Sky", new int[]{0xff00b7ff, 0xff00ffee}, "Photonlab", "Blue Blue"));
+        mMusic.add(new theme_Class("Pixie Dust", new int[]{0xffd585ff, 0xff00ffee}, "Photonlab", "Relax"));
+        mMusic.add(new theme_Class("Firebrick", new int[]{0xff45145a, 0xffff5300}, "Photonlab", "Passion"));
     }
 
     @Override
