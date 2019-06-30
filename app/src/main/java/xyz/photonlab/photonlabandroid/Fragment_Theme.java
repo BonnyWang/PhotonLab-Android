@@ -201,6 +201,7 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
     @Override
     public theme_Class RemoveFavorite(theme_Class current){
         mfavoriteTheme.remove(current);
+        favOrder.remove(mtheme.indexOf(current));
         if(spinnerMenu.getSelectedItemPosition() == 1){
             RvAdapter adapterInRemF = new RvAdapter(mfavoriteTheme, this);
             rv.setAdapter(adapterInRemF);
