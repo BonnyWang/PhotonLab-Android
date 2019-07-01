@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,10 +34,13 @@ public class fragment_motion_detect extends Fragment {
     final Context context = getContext();
     TextView tvCallDial;
     Button backButton;
+    Switch swMotion;
 
     Calendar initialdate = Calendar.getInstance();
 
     TimePickerView pvTime;
+    int swCheck;
+    ArrayList<Integer> timeDelay;
 
     static Date settedDate = null;
 
@@ -61,16 +67,40 @@ public class fragment_motion_detect extends Fragment {
         View view = inflater.inflate(R.layout.fragment_motion_detect, container, false);
         tvCallDial = view.findViewById(R.id.tvCallDialog);
         backButton = view.findViewById(R.id.backButton_Motion);
+        swMotion = view.findViewById(R.id.swMotion);
+        final TinyDB tinyDB = new TinyDB(getContext());
 
         initialdate.set(0,0,0,0,0,0);
 
 
         initialize();
 
+        swMotion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    swCheck = 1;
+                    tinyDB.putInt("swCheck", swCheck);
+
+                }else {
+                    swCheck = 0;
+                    tinyDB.putInt("swCheck", swCheck);
+                }
+            }
+        });
+
         pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 tvCallDial.setText(getTime(date));
+
+                timeDelay.clear();
+                timeDelay.add(date.getHours());
+                timeDelay.add(date.getMinutes());
+                timeDelay.add(date.getSeconds());
+                TinyDB tinyDB = new TinyDB(getContext());
+                tinyDB.putListInt("delayTime", timeDelay);
+
                 settedDate = date;
                 initialdate.setTime(settedDate);
                 Log.i("pvTime", "onTimeSelect");
@@ -108,13 +138,41 @@ public class fragment_motion_detect extends Fragment {
     private String getTime(Date date) {//可根据需要自行截取数据显示
         Log.d("getTime()", "choice date millis: " + date.getTime());
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+
         return format.format(date);
     }
 
     private void initialize(){
+        TinyDB tinyDB = new TinyDB(this.getContext());
+        timeDelay = new ArrayList<>();
+
+        if(tinyDB.getInt("swCheck") == 0){
+            swCheck = 0;
+        }else {
+            swCheck = tinyDB.getInt("swCheck");
+        }
+
+        if(tinyDB.getListInt("delayTime").size() == 0){
+            initialdate.set(0,0,0,0,0,0);
+        }else {
+            timeDelay = tinyDB.getListInt("delayTime");
+            initialdate.set(0,0,0,timeDelay.get(0),timeDelay.get(1),timeDelay.get(2));
+            settedDate = new Date();
+            settedDate.setHours(timeDelay.get(0));
+            settedDate.setMinutes(timeDelay.get(1));
+            settedDate.setSeconds(timeDelay.get(2));
+            tvCallDial.setText(getTime(settedDate));
+        }
+
         if(settedDate != null){
             tvCallDial.setText(getTime(settedDate));
             initialdate.setTime(settedDate);
+        }
+
+        if(swCheck == 1){
+            swMotion.setChecked(true);
+        }else {
+            swMotion.setChecked(false);
         }
     }
 

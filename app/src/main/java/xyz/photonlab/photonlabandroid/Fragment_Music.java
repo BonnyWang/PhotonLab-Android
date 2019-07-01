@@ -105,40 +105,16 @@ public class Fragment_Music extends Fragment implements RvAdapter.OnNoteListener
 
     @Override
     public void onNoteClick(int position) {
-//        boolean isFavorite = false;
-//        if (position == mMusic.size()) {
-//            //do something
-//            Log.d("yes", "onNoteClick: success");
-//        } else {
 
 
     if (spinnerMenu.getSelectedItemPosition() == 0) {
         gotoIndiv(mMusic,position);
-//        theme_Class current = mMusic.get(position);
-//        if (mfavoriteMusic.contains(current)) {
-//            isFavorite = true;
-//        }
-//        String name = current.getName();
-//        int[] gradient = current.getColors();
-//        theme_Individual = new fragement_theme_individual(current, isFavorite);
-//        ((fragement_theme_individual) theme_Individual).setListener(this);
-//        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//        ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-//        ft.commit();
+
     }
 
     if (spinnerMenu.getSelectedItemPosition() == 1) {
         gotoIndiv(mfavoriteMusic,position);
-//        theme_Class current = mfavoriteMusic.get(position);
-//        String name = current.getName();
-//        int[] gradient = current.getColors();
-//        theme_Individual = new fragement_theme_individual(current, true);
-//        ((fragement_theme_individual) theme_Individual).setListener(this);
-//        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//        ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-//        ft.commit();
+
     }
 
 

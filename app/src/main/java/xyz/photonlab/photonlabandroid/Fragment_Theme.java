@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,14 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
     private final static String TAG = "Fragment_Theme";
     Context context;
     ArrayList<theme_Class> mtheme;
-    static ArrayList<theme_Class> mfavoriteTheme = new ArrayList<>();
+    ArrayList<theme_Class> mfavoriteTheme;
     ArrayList<theme_Class> sweetTheme;
     ImageView imageView_Card;
     Fragment theme_Individual;
     Spinner spinnerMenu;
     RvAdapter.OnNoteListener mOnNoteListener = this;
+
+    ArrayList<Integer> favOrder = new ArrayList<>();
 
     private static Fragment_Theme single_instance = null;
     RecyclerView rv;
@@ -106,11 +109,26 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
     }
 
     private void initializeData(){
+
         mtheme = new ArrayList<>();
         mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}, "Photonlab", "Home Happy Sunset"));
         mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d},"Photonlab", "Sweet sweet"));
         mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee},"Photonlab", "Blue Blue"));
         mtheme.add(new theme_Class("Neon Glow", new int[] {0xff00ffa1, 0xff00ffff},"Photonlab", "High"));
+
+
+        mfavoriteTheme = new ArrayList<>();
+        favOrder = new ArrayList<>();
+        TinyDB tinyDB = new TinyDB(this.getContext());
+        if(tinyDB.getListInt("favOrder").size() != 0){
+            favOrder = tinyDB.getListInt("favOrder");
+            for(int i = 0; i < favOrder.size(); i++){
+                mfavoriteTheme.add(mtheme.get(favOrder.get(i)));
+                Log.d(TAG, "initializeData: tinydb");
+            }
+        }
+
+
 
         sweetTheme = new ArrayList<>();
         sweetTheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d},"Photonlab", "Sweet sweet"));
@@ -118,68 +136,20 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
 
     @Override
     public void onNoteClick(int position) {
-//        boolean isFavorite = false;
+
 
 
         if (spinnerMenu.getSelectedItemPosition() == 0) {
             gotoIndiv(mtheme, position);
-//            if (position == mtheme.size()) {
-//                //do something
-//                Log.d("yes", "onNoteClick: success");
-//            } else {
-//                theme_Class current = mtheme.get(position);
-//                if (mfavoriteTheme.contains(current)) {
-//                    isFavorite = true;
-//                }
-//
-//                String name = current.getName();
-//                int[] gradient = current.getColors();
-//                theme_Individual = new fragement_theme_individual(current, isFavorite);
-//                ((fragement_theme_individual) theme_Individual).setListener(this);
-//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-//                ft.commit();
-//            }
+
         }
 
         if (spinnerMenu.getSelectedItemPosition() == 1){
             gotoIndiv(mfavoriteTheme,position);
-//            if(position == mfavoriteTheme.size()){
-//                //the add button
-//            }else {
-//                theme_Class current = mfavoriteTheme.get(position);
-//                String name = current.getName();
-//                int[] gradient = current.getColors();
-//                theme_Individual = new fragement_theme_individual(current, true);
-//                ((fragement_theme_individual) theme_Individual).setListener(this);
-//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-//                ft.commit();
-//            }
         }
 
         if (spinnerMenu.getSelectedItemPosition() == 2) {
             gotoIndiv(sweetTheme , position);
-//            if(position == sweetTheme.size()){
-//                // the add button
-//            }else {
-//                theme_Class current = sweetTheme.get(position);
-//
-//                if (mfavoriteTheme.contains(current)) {
-//                    isFavorite = true;
-//                }
-//
-//                String name = current.getName();
-//                int[] gradient = current.getColors();
-//                theme_Individual = new fragement_theme_individual(current, isFavorite);
-//                ((fragement_theme_individual) theme_Individual).setListener(this);
-//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//                ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-//                ft.commit();
-//            }
         }
     }
 
@@ -188,7 +158,11 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
     public theme_Class Addavorite (theme_Class current){
         if(!mfavoriteTheme.contains(current)) {
             mfavoriteTheme.add(current);
+            TinyDB tinyDB = new TinyDB(getContext());
+            tinyDB.putListInt("favOrder", favOrder);
         }
+
+
 
         if(spinnerMenu.getSelectedItemPosition() == 1){
             RvAdapter adapterInAddF = new RvAdapter(mfavoriteTheme, this);
