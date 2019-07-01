@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,13 @@ public class Fragment_Music extends Fragment implements RvAdapter.OnNoteListener
 
     Context context;
     ArrayList<theme_Class> mMusic;
-    static  ArrayList<theme_Class> mfavoriteMusic = new ArrayList<>();
+    ArrayList<theme_Class> mfavoriteMusic;
     ImageView imageView_Card;
     Fragment theme_Individual;
     Spinner spinnerMenu;
     RvAdapter.OnNoteListener mOnNoteListner = this;
 
+    ArrayList<Integer> favOrder = new ArrayList<>();
 
     private static Fragment_Music single_instance = null;
     RecyclerView rv;
@@ -101,6 +103,17 @@ public class Fragment_Music extends Fragment implements RvAdapter.OnNoteListener
 
         mMusic.add(new theme_Class("Pixie Dust", new int[]{0xffd585ff, 0xff00ffee}, "Photonlab", "Relax"));
         mMusic.add(new theme_Class("Firebrick", new int[]{0xff45145a, 0xffff5300}, "Photonlab", "Passion"));
+
+        mfavoriteMusic = new ArrayList<>();
+        favOrder = new ArrayList<>();
+        TinyDB tinyDB = new TinyDB(this.getContext());
+        if(tinyDB.getListInt("favOrderMusic").size() != 0){
+            favOrder = tinyDB.getListInt("favOrderMusic");
+            for(int i = 0; i < favOrder.size(); i++){
+                mfavoriteMusic.add(mMusic.get(favOrder.get(i)));
+            }
+        }
+
     }
 
     @Override
@@ -148,6 +161,9 @@ public class Fragment_Music extends Fragment implements RvAdapter.OnNoteListener
     public theme_Class Addavorite (theme_Class current){
         if(!mfavoriteMusic.contains(current)) {
             mfavoriteMusic.add(current);
+            TinyDB tinyDB = new TinyDB(getContext());
+            favOrder.add(mMusic.indexOf(current));
+            tinyDB.putListInt("favOrderMusic", favOrder);
         }
 
         if(spinnerMenu.getSelectedItemPosition() == 1){
@@ -161,6 +177,11 @@ public class Fragment_Music extends Fragment implements RvAdapter.OnNoteListener
     @Override
     public theme_Class RemoveFavorite(theme_Class current){
         mfavoriteMusic.remove(current);
+
+        favOrder.remove((Object)mMusic.indexOf(current));
+        TinyDB tinyDB = new TinyDB(getContext());
+        tinyDB.putListInt("favOrderMusic", favOrder);
+
         if(spinnerMenu.getSelectedItemPosition() == 1){
             RvAdapter adapterInRemF = new RvAdapter(mfavoriteMusic, this);
             rv.setAdapter(adapterInRemF);

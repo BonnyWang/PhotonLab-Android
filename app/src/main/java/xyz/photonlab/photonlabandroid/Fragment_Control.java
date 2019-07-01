@@ -46,6 +46,10 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     RadioButton checkedButton;
 
     Button add;
+
+    int setMode;
+    int seekBarColor;
+
     //TODO:Need to later write it in main activity instead, use interface to call the function in main
     WebView webView;
 
@@ -89,6 +93,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         power = view.findViewById(R.id.Power);
         sun = view.findViewById(R.id.sun);
         final SeekBar seekBar = view.findViewById(R.id.seekBar5);
+
         brightness = view.findViewById(R.id.tvBrightness);
 
         Single = view.findViewById(R.id.Single);
@@ -127,6 +132,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
         colorOptions = new LinkedList<>();
         colorOptions0 = new LinkedList<>();
+
+        seekBar.setProgress(100);
         initialize_Colors();
 
         checked = new GradientDrawable();
@@ -140,15 +147,24 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 if (isChecked) {
                     //seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_On, null));
                     power.getBackground().setTint(getResources().getColor(R.color.colorPrimary,null));
-                    checkedButton = view.findViewById(radioGroup.getCheckedRadioButtonId());
-                    sun.setColorFilter(0xffffd41f);
-                    checkedButton.setChecked(false);
-                    checkedButton.setChecked(true);
-                    webView.loadUrl("http://192.168.50.48/H");
+
+
+                    if(setMode == 0){
+                        checkedButton = view.findViewById(radioGroup.getCheckedRadioButtonId());
+                        sun.setColorFilter(0xffffd41f);
+                        checkedButton.setChecked(false);
+                        checkedButton.setChecked(true);
+                        webView.loadUrl("http://192.168.50.48/H");
+                    }else {
+                        sun.setColorFilter(0xffffd41f);
+                        seekBar.getProgressDrawable().setTint(seekBarColor);
+                        webView.loadUrl("http://192.168.50.48/H");
+                    }
+
 
                 } else {
                     seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
-                    sun.setColorFilter(getResources().getColor(R.color.seekBar_Default,null));                    //hello my friend
+                    sun.setColorFilter(getResources().getColor(R.color.seekBar_Default,null));
                     power.getBackground().setTint(0xffffffff);
                     webView.loadUrl("http://192.168.50.48/L");
                 }
@@ -312,6 +328,9 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     }
 
     public void setColor(int checkedOrder){
+
+        setMode = 0;
+
         if(power.isChecked()){
             seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
         }
@@ -507,16 +526,9 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     public int getRGB(int rgbValue, int which){
 
         if(which == 0) {
-            //fl.setVisibility(View.INVISIBLE);
+
             TinyDB tinydb = new TinyDB(getContext());
-//        Log.d("yes", "read or not"+ tinydb.getListInt("bonny2").size());
-//        ArrayList<Integer> colormmp2 =tinydb.getListInt("bonny2");
-//        for (int j=0; j<3;j++){
-//            colormmp2.set(j,colormmp2.get(j+1));
-//        }
-//        colormmp2.set(3,rgbValue);
-//        tinydb.remove("bonny2");
-//        tinydb.putListInt("bonny2",colormmp2);
+
             colorOptions.remove();
             colorOptions.add(rgbValue);
             tinydb.remove("color0");
@@ -531,13 +543,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             colorOptions.add(colorOptions.remove());
             tinydb.putInt("color3", colorOptions.peek());
             colorOptions.add(colorOptions.remove());
-//        Log.d("yes", "getRGB: "+tinydb.getListInt("bonny2").get(3));
-//        for (int  p =0; p <4;p++){
-//            colorOptions.remove();
-//        }
-//        for (int p =0; p <4;p++){
-//            Log.d("kan", "yesnono");
-//            colorOptions.add(tinydb.getListInt("bonny2").get(p));}
+
 
             initialize_Rbuttons();
             rbuttons[3].setChecked(false);
@@ -554,17 +560,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 tinydb.remove("color0" + i);
                 Log.d(TAG, "getRGB: rmoveLoop");
             }
-//            tinydb.remove("color00");
-//            tinydb.remove("color01");
-//            tinydb.remove("color02");
-//            tinydb.remove("color03");
-//            tinydb.remove("color04");
-//            tinydb.remove("color05");
-//            tinydb.remove("color06");
-//            tinydb.remove("color07");
-//            tinydb.remove("color08");
 
-            //should be using a loop int to string for this -Bonny
+
 
             for(int i = 0; i < 9; i++){
                 String key = "color0" + i;
@@ -573,28 +570,31 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 Log.d(TAG, "getRGB: loop Sucess");
             }
 
-//            tinydb.putInt("color01", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
-//            tinydb.putInt("color02", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
-//            tinydb.putInt("color03", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
-//            tinydb.putInt("color04", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
-//            tinydb.putInt("color05", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
-//            tinydb.putInt("color06", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
-//            tinydb.putInt("color07", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
-//            tinydb.putInt("color08", colorOptions0.peek());
-//            colorOptions0.add(colorOptions0.remove());
 
             initialize_Rbuttons();
             rbuttons0[8].setChecked(false);
             rbuttons0[8].setChecked(true);
             return rgbValue;
         }
+    }
+
+
+    @Override
+    public void beSet(int rgbValue, int which){
+
+        power.setChecked(true);
+
+        //clear selection
+        radioGroup.clearCheck();
+        for (int i = 0; i < 4 ; i++){
+            rbuttons[i].setBackground(null);
+        }
+
+        seek_bar.setProgress(100);
+        seek_bar.getProgressDrawable().setTint(rgbValue);
+        seekBarColor = rgbValue;
+        setMode = 1;
+
     }
 
     private void setAllLayout(){

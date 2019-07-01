@@ -144,7 +144,8 @@ public class dialog_colorpicker extends DialogFragment {
         setBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mlistener.beSet(colorcode, whichOne);
+                dismiss();
 
             }
         });
@@ -180,6 +181,7 @@ public class dialog_colorpicker extends DialogFragment {
     public interface colorPick_Listener {
         // TODO: Update argument type and name
         public int getRGB(int rgbValue, int which);
+        public void beSet(int rgbValue, int which);
     }
 
     public void setListener(dialog_colorpicker.colorPick_Listener mlistener){

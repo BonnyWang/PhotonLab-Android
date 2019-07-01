@@ -219,14 +219,12 @@ public class fragment_colorpicker extends Fragment {
     public interface colorPick_Listener {
         // TODO: Update argument type and name
         public int getRGB(int rgbValue);
+        public void setColor(int rgbValue);
     }
 
     public void setListener(colorPick_Listener mlistener){
         this.mlistener = mlistener;
    }
-
-
-
 
 
 }

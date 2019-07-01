@@ -159,6 +159,7 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
         if(!mfavoriteTheme.contains(current)) {
             mfavoriteTheme.add(current);
             TinyDB tinyDB = new TinyDB(getContext());
+            favOrder.add(mtheme.indexOf(current));
             tinyDB.putListInt("favOrder", favOrder);
         }
 
@@ -175,7 +176,9 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
     @Override
     public theme_Class RemoveFavorite(theme_Class current){
         mfavoriteTheme.remove(current);
-        favOrder.remove(mtheme.indexOf(current));
+        favOrder.remove((Object)mtheme.indexOf(current));
+        TinyDB tinyDB = new TinyDB(getContext());
+        tinyDB.putListInt("favOrder", favOrder);
         if(spinnerMenu.getSelectedItemPosition() == 1){
             RvAdapter adapterInRemF = new RvAdapter(mfavoriteTheme, this);
             rv.setAdapter(adapterInRemF);
