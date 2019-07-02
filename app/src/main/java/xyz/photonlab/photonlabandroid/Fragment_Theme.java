@@ -16,6 +16,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import xyz.photonlab.photonlabandroid.R;
 
 import java.util.ArrayList;
@@ -104,6 +107,15 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
 
             }
         });
+
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        User user = new User("Bonny", "Bonny.y.gardy@gmail.com");
+
+        database.child("users").child("0").setValue(user);
+
+        theme_Class thistheme = mtheme.get(1);
+        database.child("mtheme").setValue(thistheme);
         return view;
 
     }
@@ -111,10 +123,10 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
     private void initializeData(){
 
         mtheme = new ArrayList<>();
-        mtheme.add(new theme_Class("Spring", new int[] {0xff009e00, 0xfffcee21}, "Photonlab", "Home Happy Sunset"));
-        mtheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d},"Photonlab", "Sweet sweet"));
-        mtheme.add(new theme_Class("Sky", new int[] {0xff00b7ff, 0xff00ffee},"Photonlab", "Blue Blue"));
-        mtheme.add(new theme_Class("Neon Glow", new int[] {0xff00ffa1, 0xff00ffff},"Photonlab", "High"));
+        mtheme.add(new theme_Class("Spring", 0xff009e00, 0xfffcee21, "Photonlab", "Home Happy Sunset"));
+        mtheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d,"Photonlab", "Sweet sweet"));
+        mtheme.add(new theme_Class("Sky", 0xff00b7ff, 0xff00ffee,"Photonlab", "Blue Blue"));
+        mtheme.add(new theme_Class("Neon Glow", 0xff00ffa1, 0xff00ffff,"Photonlab", "High"));
 
 
         mfavoriteTheme = new ArrayList<>();
@@ -131,7 +143,7 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
 
 
         sweetTheme = new ArrayList<>();
-        sweetTheme.add(new theme_Class("Fizzy Peach", new int[] {0xfff24645, 0xffebc08d},"Photonlab", "Sweet sweet"));
+        sweetTheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d,"Photonlab", "Sweet sweet"));
     }
 
     @Override
@@ -191,7 +203,11 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
         boolean isFavorite = false;
 
         if (position == themeList.size()) {
-            // the add button
+            fragment_theme_Download mfragment_theme_download = new fragment_theme_Download();
+            FragmentTransaction fttd = getActivity().getSupportFragmentManager().beginTransaction();
+            fttd.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            fttd.replace(R.id.container, mfragment_theme_download).addToBackStack(null);
+            fttd.commit();
         } else {
             theme_Class current = themeList.get(position);
 

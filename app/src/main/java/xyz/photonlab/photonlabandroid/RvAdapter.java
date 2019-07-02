@@ -74,16 +74,16 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(MyViewHolder holder, int i) {
         if(i == mthemes.size()) {
-            holder.add_Theme.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("yes", "onClick: yes");
-                }
-            });
+//            holder.add_Theme.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.d("yes", "onClick: yes");
+//                }
+//            });
         }
         else{
             holder.textView.setText(mthemes.get(i).name);
-            holder.imageView_Card.setImageDrawable(mthemes.get(i).gradientDrawable);}
+            holder.imageView_Card.setImageDrawable(mthemes.get(i).getGradientDrawablt());}
     }
 
     @Override

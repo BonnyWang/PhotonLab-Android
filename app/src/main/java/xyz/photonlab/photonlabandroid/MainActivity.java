@@ -16,6 +16,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import xyz.photonlab.photonlabandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 //added for Fragment -Bonny
 
@@ -141,6 +143,13 @@ public class MainActivity extends AppCompatActivity  {
         FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
         ft1.replace(R.id.fgm, fragment_Control);
         ft1.commit();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
+        myRef.setValue("Hello, World!");
+
+
 
 
 
