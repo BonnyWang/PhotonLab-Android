@@ -1,12 +1,16 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Layout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -16,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.cardview.widget.CardView;
@@ -25,6 +30,8 @@ import androidx.fragment.app.Fragment;
 import xyz.photonlab.photonlabandroid.R;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import static android.content.Context.WINDOW_SERVICE;
 
 
 public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener{
@@ -84,6 +91,11 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
 
         // Inflate the layout for this fragment
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(dm);
+
+
 
         final View view = inflater.inflate(R.layout.fragment__control_layout, container, false);
         webView = view.findViewById(R.id.webView);
@@ -93,7 +105,23 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         power = view.findViewById(R.id.Power);
         sun = view.findViewById(R.id.sun);
         final SeekBar seekBar = view.findViewById(R.id.seekBar5);
-
+        int heightInDP = Math.round(dm.heightPixels / dm.density);
+        Log.d("fuck", "onCreateView: "+heightInDP);
+        if (heightInDP<570) {
+            Toast.makeText( getContext(), "Please change a phone", Toast.LENGTH_SHORT).show();
+        }
+        else if (heightInDP<650) {
+            CardView cv=view.findViewById(R.id.cv);
+            ViewGroup.LayoutParams a=cv.getLayoutParams();
+            int b=(int) (250* (getResources().getDisplayMetrics().density));
+            a.width=b;
+            cv.setLayoutParams(a);
+            ViewGroup.MarginLayoutParams c = (ViewGroup.MarginLayoutParams)cv.getLayoutParams();
+            int d=(int) -(30* (getResources().getDisplayMetrics().density));
+            Log.d("hello", "onCreateView: "+d);
+            c.leftMargin=d;
+            cv.setLayoutParams(c);
+        }
         brightness = view.findViewById(R.id.tvBrightness);
 
         Single = view.findViewById(R.id.Single);
