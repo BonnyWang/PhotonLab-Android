@@ -386,19 +386,18 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         progressValue = progress;
                         text_view.setText(progressValue + "%");
-                        //Toast.makeText(MainActivity.this, "Seekbar is in progress", Toast.LENGTH_LONG).show();
+
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                        //Toast.makeText(MainActivity.this, "Seekbar is starttracking", Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         text_view.setText(progressValue + "%");
-                        //Toast.makeText(MainActivity.this, "Seekbar is stoptracking", Toast.LENGTH_LONG).show();
+
 
                     }
                 }
@@ -409,21 +408,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     public void initialize_Colors(){
         TinyDB tinydb = new TinyDB(this.getContext());
-//        tinydb.remove("bonny");//need to be comment
+
         if (tinydb.getInt("color0") == 0 ){
             Log.d("kan", "initialize_Colors: 0");
-//            colormmp.add(0,getResources().getColor(R.color.yellow,null));
-//            colormmp.add(1,getResources().getColor(R.color.blue,null));
-//            colormmp.add(2,getResources().getColor(R.color.orange,null));
-//            colormmp.add(3,getResources().getColor(R.color.purple,null));
+
             colorOptions.add(getResources().getColor(R.color.yellow,null));
             colorOptions.add(getResources().getColor(R.color.blue,null));
             colorOptions.add(getResources().getColor(R.color.orange,null));
             colorOptions.add(getResources().getColor(R.color.purple,null));
-//            Log.d(TAG, "initialize_Colors: "+colormmp.size());
-//            Log.d("kan", "initialize_Colors: 1");
-//            tinydb.putListInt("bonny2",colormmp);
-//            Log.d("kan", "ohhh"+tinydb.getListInt("bonny2").size());
+
         }else{
             colorOptions.add(tinydb.getInt("color0"));
             colorOptions.add(tinydb.getInt("color1"));
@@ -433,10 +426,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
         if (tinydb.getInt("color00") == 0 ){
             Log.d("kan", "initialize_Colors: 0");
-//            colormmp.add(0,getResources().getColor(R.color.yellow,null));
-//            colormmp.add(1,getResources().getColor(R.color.blue,null));
-//            colormmp.add(2,getResources().getColor(R.color.orange,null));
-//            colormmp.add(3,getResources().getColor(R.color.purple,null));
+
             colorOptions0.add(getResources().getColor(R.color.yellow,null));
             colorOptions0.add(getResources().getColor(R.color.blue,null));
             colorOptions0.add(getResources().getColor(R.color.orange,null));
@@ -447,11 +437,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             colorOptions0.add(getResources().getColor(R.color.orange,null));
             colorOptions0.add(getResources().getColor(R.color.purple,null));
 
-//            Log.d(TAG, "initialize_Colors: "+colormmp.size());
-//            Log.d("kan", "initialize_Colors: 1");
-//            tinydb.putListInt("bonny2",colormmp);
-//            Log.d("kan", "ohhh"+tinydb.getListInt("bonny2").size());
         }else{
+
             colorOptions0.add(tinydb.getInt("color00"));
             colorOptions0.add(tinydb.getInt("color01"));
             colorOptions0.add(tinydb.getInt("color02"));
@@ -462,13 +449,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             colorOptions0.add(tinydb.getInt("color07"));
             colorOptions0.add(tinydb.getInt("color08"));
         }
-
-//        for (int p =0; p <4;p++){
-//            Log.d("kan", "initialize_Colors: -1");
-//            colorOptions.add(tinydb.getListInt("bonny2").get(p));
-//        }
-
-
 
     }
 
@@ -540,16 +520,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if( resultCode != Activity.RESULT_OK ) {
-//            return;
-//        }
-//        if( requestCode == TARGET_FRAGMENT_REQUEST_CODE ) {
-//            String greeting = data.getStringExtra(EXTRA_GREETING_MESSAGE);
-//            showGreetingsTextView.setText(greeting);
-//        }
-//    }
+
     @Override
     public int getRGB(int rgbValue, int which){
 
@@ -686,38 +657,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         add0.setClickable(true);
     }
 
-
-
 }
-//    public void onClick(View view){
-//        switch (view.getId()){
-//            case R.id.yellow_button:{
-//                break;
-//            }
-//            case R.id.blue_button:{
-//                break;
-//            }
-//            case R.id.purple_button:{
-//                break;
-//            }
-//            case R.id.orange_button:{
-//                break;
-//            }
-//
-//        }
-//
-//    }
-
-    //  @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-//    public void createButton(){
-//
-//        button_of_choice = (Drawable) getResources().getDrawable(R.drawable.button_of_choice);
-//        button = new Button(this);
-//        button.setBackground(button_of_choice);
-//        LinearLayout ll = (LinearLayout)findViewById(R.id.coloroptions);
-//        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        ll.addView(button, lp);
-//    }
-//    //根据选的颜色变，但要一开始先搞四个
 
 

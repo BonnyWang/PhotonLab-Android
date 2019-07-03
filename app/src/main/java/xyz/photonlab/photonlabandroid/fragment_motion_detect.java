@@ -108,7 +108,7 @@ public class fragment_motion_detect extends Fragment {
             }
         }).setType(new boolean[]{false, false, false, true, true, true})
                 .setLabel("Year","Monty","Day","h","min","s")
-                .setCancelText("Cancle")
+                .setCancelText("Cancel")
                 .setCancelColor(getResources().getColor(R.color.design_default_color_primary,null))
                 .setSubmitText("Confirm")
                 .setSubmitColor(getResources().getColor(R.color.design_default_color_primary,null))

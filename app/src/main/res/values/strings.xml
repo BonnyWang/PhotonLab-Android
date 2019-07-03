@@ -48,4 +48,5 @@
     <string name="timeDialog">00:00:00</string>
     <string name="Themes_Trigger">Themes Trigger</string>
     <string name="Trigger_Name">Sky</string>
+    <string name="Download_Theme">Download Themes</string>
 </resources>

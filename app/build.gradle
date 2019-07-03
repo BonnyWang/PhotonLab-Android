@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.contrarywind:Android-PickerView:4.1.8'
+    implementation 'com.google.firebase:firebase-database:18.0.0'
 
     //compile 'com.android.support:recyclerview-v7:21.0.+'
     //added for material design
