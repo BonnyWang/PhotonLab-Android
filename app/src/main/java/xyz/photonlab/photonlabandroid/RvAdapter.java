@@ -33,7 +33,9 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
             cv = (CardView)itemView.findViewById(R.id.cv);
             textView = (TextView) itemView.findViewById(R.id.add_Theme);
             imageView_Card = (ImageView)itemView.findViewById(R.id.imageView_Card);
-            add_Theme=(Button)itemView.findViewById(R.id.plus_Theme);
+//            add_Theme=(Button)itemView.findViewById(R.id.plus_Theme);
+
+
             this.onNoteListener = onNoteListener;
             v.setOnClickListener(this);
         }

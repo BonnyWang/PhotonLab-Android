@@ -161,7 +161,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         colorOptions = new LinkedList<>();
         colorOptions0 = new LinkedList<>();
 
-        seekBar.setProgress(100);
+        final TinyDB tinyDB = new TinyDB(getContext());
+        if(tinyDB.getInt("Brightness") != -1){
+            seekBar.setProgress(tinyDB.getInt("Brightness"));
+        }else{
+            seekBar.setProgress(100);
+        }
+
+
+
         initialize_Colors();
 
         checked = new GradientDrawable();
@@ -189,12 +197,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                         webView.loadUrl("http://192.168.50.48/H");
                     }
 
+                    tinyDB.putInt("Power",1);
 
                 } else {
                     seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
                     sun.setColorFilter(getResources().getColor(R.color.seekBar_Default,null));
                     power.getBackground().setTint(0xffffffff);
                     webView.loadUrl("http://192.168.50.48/L");
+
+                    tinyDB.putInt("Power",0);
                 }
 
             }
@@ -250,18 +261,22 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId == R.id.rButton1){
                         setColor(0);
+                        tinyDB.putInt("rbutton", 0);
                 }
 
                 if(checkedId == R.id.rButton2){
                     setColor(1);
+                    tinyDB.putInt("rbutton", 1);
                 }
 
                 if(checkedId == R.id.rButton3){
                     setColor(2);
+                    tinyDB.putInt("rbutton", 2);
                 }
 
                 if(checkedId == R.id.rButton4){
                     setColor(3);
+                    tinyDB.putInt("rbutton", 3);
                 }
             }
         });
@@ -348,8 +363,23 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         });
 
 
-        rbuttons[0].setChecked(false);
-        rbuttons[0].setChecked(true);
+        if(tinyDB.getInt("rbutton") != -1){
+            rbuttons[tinyDB.getInt("rbutton")].setChecked(true);
+            rbuttons[tinyDB.getInt("rbutton")].setChecked(true);
+        }else{
+            rbuttons[0].setChecked(false);
+            rbuttons[0].setChecked(true);
+        }
+
+        if(tinyDB.getInt("Power") != -1){
+            if(tinyDB.getInt("Power") == 1){
+                power.setChecked(true);
+            }else {
+                power.setChecked(false);
+            }
+        }else{
+            power.setChecked(false);
+        }
         return view;
 
 
@@ -397,7 +427,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         text_view.setText(progressValue + "%");
-
+                        TinyDB tinyDB = new TinyDB(getContext());
+                        tinyDB.putInt("Brightness", progressValue);
 
                     }
                 }
@@ -409,7 +440,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     public void initialize_Colors(){
         TinyDB tinydb = new TinyDB(this.getContext());
 
-        if (tinydb.getInt("color0") == 0 ){
+        if (tinydb.getInt("color0") == -1 ){
             Log.d("kan", "initialize_Colors: 0");
 
             colorOptions.add(getResources().getColor(R.color.yellow,null));
@@ -424,7 +455,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             colorOptions.add(tinydb.getInt("color3"));
         }
 
-        if (tinydb.getInt("color00") == 0 ){
+        if (tinydb.getInt("color00") == -1 ){
             Log.d("kan", "initialize_Colors: 0");
 
             colorOptions0.add(getResources().getColor(R.color.yellow,null));

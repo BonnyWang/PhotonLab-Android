@@ -12,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -30,16 +32,26 @@ import java.util.ArrayList;
  * Use the {@link fragment_theme_Download#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_theme_Download extends Fragment {
+public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlListener {
 
 
     static final String TAG = "fTheme_DownLoad";
     ArrayList<theme_Class> themeDownload;
+    ArrayList<theme_Class> mtheme;
     RecyclerView rv;
+    Button btdlDone;
 
-    RvAdapter adapter;
+    dlRvAdapter adapter;
+    dlRvAdapter.dlListener mlistener = this;
 
-    RvAdapter.OnNoteListener onNoteListener;
+    fdlListener mfdlListener;
+
+
+    public fragment_theme_Download(fdlListener mfdlListener, ArrayList<theme_Class> mtheme)
+    {
+        this.mfdlListener = mfdlListener;
+        this.mtheme = mtheme;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,12 +67,14 @@ public class fragment_theme_Download extends Fragment {
         rv = (RecyclerView)view.findViewById(R.id.rvDownloadTheme);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
-        onNoteListener = new RvAdapter.OnNoteListener() {
-            @Override
-            public void onNoteClick(int position) {
 
+        btdlDone = view.findViewById(R.id.btdldone);
+        btdlDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
             }
-        };
+        });
 
         themeDownload = new ArrayList<>();
 
@@ -72,9 +86,9 @@ public class fragment_theme_Download extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                theme_Class value = dataSnapshot.getValue(theme_Class.class);
-                themeDownload.add(value);
-                adapter = new RvAdapter(themeDownload, onNoteListener);
+                GenericTypeIndicator<ArrayList<theme_Class>> t = new GenericTypeIndicator<ArrayList<theme_Class>>() {};
+                themeDownload = dataSnapshot.getValue(t);
+                adapter = new dlRvAdapter(themeDownload, mlistener, mtheme);
                 rv.setAdapter(adapter);
                 Log.d(TAG, "Value is: " );
             }
@@ -87,8 +101,20 @@ public class fragment_theme_Download extends Fragment {
         });
 
 
+
+
         return view;
     }
 
+    @Override
+    public int dlPosition(int position){
+        Log.d(TAG, "dlPosition: "+ position);
+        mfdlListener.dlTheme(themeDownload.get(position));
+        return position;
+    }
+
+    interface fdlListener{
+        public theme_Class dlTheme(theme_Class theme);
+    }
 
 }

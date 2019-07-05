@@ -18,13 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 
 import xyz.photonlab.photonlabandroid.R;
 
 import java.util.ArrayList;
 
 
-public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener, fragement_theme_individual.themeIndivListener {
+public class Fragment_Theme extends Fragment
+        implements RvAdapter.OnNoteListener,
+                   fragement_theme_individual.themeIndivListener,
+                   fragment_theme_Download.fdlListener{
 
     private final static String TAG = "Fragment_Theme";
     Context context;
@@ -36,10 +40,14 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
     Spinner spinnerMenu;
     RvAdapter.OnNoteListener mOnNoteListener = this;
 
+    fragment_theme_Download.fdlListener mfdlListener = this;
+
     ArrayList<Integer> favOrder = new ArrayList<>();
 
     private static Fragment_Theme single_instance = null;
     RecyclerView rv;
+
+    int dlThemeNo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,18 +117,20 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
         });
 
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        User user = new User("Bonny", "Bonny.y.gardy@gmail.com");
-
-        database.child("users").child("0").setValue(user);
-
-        theme_Class thistheme = mtheme.get(1);
-        database.child("mtheme").setValue(thistheme);
+//        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+//        User user = new User("Bonny", "Bonny.y.gardy@gmail.com");
+//
+//        database.child("users").child("0").setValue(user);
+//
+//        theme_Class thistheme = mtheme.get(1);
+//        database.child("mtheme").setValue(thistheme);
         return view;
 
     }
 
     private void initializeData(){
+
+        TinyDB tinyDB = new TinyDB(getContext());
 
         mtheme = new ArrayList<>();
         mtheme.add(new theme_Class("Spring", 0xff009e00, 0xfffcee21, "Photonlab", "Home Happy Sunset"));
@@ -129,9 +139,29 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
         mtheme.add(new theme_Class("Neon Glow", 0xff00ffa1, 0xff00ffff,"Photonlab", "High"));
 
 
+        //Use for clear the database
+//        for(int i = 0; i <= dlThemeNo; i++ ) {
+//           tinyDB.remove("dlTheme" + i);
+//            Log.d(TAG, "initializeData: Hi");
+//
+//        }
+//
+//        tinyDB.remove("dlThemeNo");
+        //
+
+        dlThemeNo = tinyDB.getInt("dlThemeNo");
+        if(tinyDB.getInt("dlThemeNo")!= -1){
+            for(int i = 0; i <= dlThemeNo; i++ ){
+                mtheme.add(tinyDB.getObject("dlTheme" + i, theme_Class.class ));
+            }
+            Log.d(TAG, "initializeData: Hi");
+        }
+
         mfavoriteTheme = new ArrayList<>();
         favOrder = new ArrayList<>();
-        TinyDB tinyDB = new TinyDB(this.getContext());
+
+
+
         if(tinyDB.getListInt("favOrder").size() != 0){
             favOrder = tinyDB.getListInt("favOrder");
             for(int i = 0; i < favOrder.size(); i++){
@@ -203,9 +233,9 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
         boolean isFavorite = false;
 
         if (position == themeList.size()) {
-            fragment_theme_Download mfragment_theme_download = new fragment_theme_Download();
+            fragment_theme_Download mfragment_theme_download = new fragment_theme_Download(mfdlListener, mtheme);
             FragmentTransaction fttd = getActivity().getSupportFragmentManager().beginTransaction();
-            fttd.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            fttd.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
             fttd.replace(R.id.container, mfragment_theme_download).addToBackStack(null);
             fttd.commit();
         } else {
@@ -224,6 +254,28 @@ public class Fragment_Theme extends Fragment implements RvAdapter.OnNoteListener
             ft.replace(R.id.container, theme_Individual).addToBackStack(null);
             ft.commit();
         }
+    }
+
+    //add the downloaded theme
+    @Override
+    public theme_Class dlTheme(theme_Class theme){
+        TinyDB tinyDB = new TinyDB(getContext());
+
+        //add to the number each time
+        dlThemeNo = tinyDB.getInt("dlThemeNo") + 1;
+
+        tinyDB.putInt("dlThemeNo", dlThemeNo);
+        tinyDB.putObject("dlTheme"+dlThemeNo, theme);
+
+
+        mtheme.add(theme);
+
+        //write a function for update the adapter
+        //TODO: need to consider the menu selction
+        RvAdapter rvAdapter = new RvAdapter(mtheme, mOnNoteListener);
+        rv.setAdapter(rvAdapter);
+
+        return theme;
     }
 
 

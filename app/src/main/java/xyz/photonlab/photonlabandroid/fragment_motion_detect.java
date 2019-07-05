@@ -146,7 +146,7 @@ public class fragment_motion_detect extends Fragment {
         TinyDB tinyDB = new TinyDB(this.getContext());
         timeDelay = new ArrayList<>();
 
-        if(tinyDB.getInt("swCheck") == 0){
+        if(tinyDB.getInt("swCheck") == -1){
             swCheck = 0;
         }else {
             swCheck = tinyDB.getInt("swCheck");
