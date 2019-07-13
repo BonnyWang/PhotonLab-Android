@@ -20,10 +20,14 @@ public class setLayoutView extends View {
     private final static String TAG = "setLayoutView";
 
     Paint paint = new Paint();
-    Path hex;
+    Path[] hex = new Path[20];
+    float length = 100f;
+
+    int hexNumber;
 
 
-    private float hexX1, hexY1;
+    private float[] hexX1 = new float[20];
+    private float[] hexY1 = new float[20];
 
     public setLayoutView(Context context) {
         super(context);
@@ -49,6 +53,12 @@ public class setLayoutView extends View {
     //Initialize for all the constructor being called -Bonny
     private void init(@Nullable AttributeSet set){
 
+        hexNumber = 0;
+
+        for(int i = 1; i < 20; i++){
+           hexX1[i] = 500;
+           hexY1[i] = 500;
+        }
     }
 
     @Override
@@ -57,12 +67,17 @@ public class setLayoutView extends View {
         paint.setColor(Color.RED);
         paint.setAntiAlias(true);
 
-        if(hexX1 == 0f || hexY1 == 0f){
-            hexX1 = getWidth()/2f;
-            hexY1 = getHeight()/2f;
+        if(hexX1[0] == 0f || hexY1[0] == 0f){
+            hexX1[0] = getWidth()/2f;
+            hexY1[0] = getHeight()/2f;
         }
-        drawHex(hexX1,hexY1);
-        canvas.drawPath(hex, paint);
+
+        for(int i = 0; i <= hexNumber; i++){
+            drawHex(hexX1[i],hexY1[i], i);
+            canvas.drawPath(hex[i], paint);
+            Log.d(TAG, "onDraw: " + i);
+        }
+
         //canvas.drawLine(0,0,100,0,paint);
         //canvas.drawLine(100,100,500,500,paint);
     }
@@ -83,16 +98,16 @@ public class setLayoutView extends View {
                 Log.d(TAG, "onTouchEvent: " +x);
                 Log.d(TAG, "onTouchEvent: " +y);
 
-                //if(x > hexX1 && x < hexX1 + 200 && y > hexY1 && y < hexY1 + 300){
-                    //touched the hex
-                    hexX1 = x;
-                    hexY1 = y;
-                    Log.d(TAG, "onTouchEvent: " +x);
-                    Log.d(TAG, "onTouchEvent: " +y);
-                    postInvalidate();
-                //}
-
-
+                for(int i = 0; i <= hexNumber; i++){
+                    if(x > hexX1[i]-length && x < hexX1[i] + length && y > hexY1[i] -length && y < hexY1[i] + length){
+                        //touched the hex
+                        hexX1[i] = x;
+                        hexY1[i] = y;
+                        Log.d(TAG, "onTouchEvent: " +x);
+                        Log.d(TAG, "onTouchEvent: " +y);
+                        postInvalidate();
+                    }
+                }
 
                 return true;
             }
@@ -102,15 +117,51 @@ public class setLayoutView extends View {
     }
 
 
-    private void drawHex(float x1, float y1){
-        hex = new Path();
-        hex.moveTo(x1, y1);
-        hex.lineTo(x1 + 200,y1);
-        hex.lineTo(x1 + 200 + 100,y1 -173.2050f);
-        hex.lineTo(x1+ 200, y1 - 173.2050f - 173.2050f);
-        hex.lineTo(x1, y1 - 173.2050f - 173.2050f);
-        hex.lineTo(x1-100, y1 - 173.2050f);
-        hex.lineTo(x1,y1);
-        hex.close();
+    private void drawHex(float cX, float cY, int hexNumber){
+
+        float[] x = new float[6];
+        float[] y = new float[6];
+
+
+
+        x[0] = cX - length/2f;
+        y[0] = cY - (float)(Math.sqrt(3f))*(length/2f);
+
+        x[1] = cX + length/2f;
+        y[1] = cY - (float)(Math.sqrt(3f))*(length/2f);
+
+        x[2] = cX + length;
+        y[2] = cY;
+
+        x[3] = cX + length/2;
+        y[3] = cY + (float)(Math.sqrt(3f))*(length/2f);
+
+        x[4] = cX - length/2;
+        y[4] = cY + (float)(Math.sqrt(3f))*(length/2f);
+
+        x[5] = cX - length;
+        y[5] = cY;
+
+        hex[hexNumber] = new Path();
+        hex[hexNumber].moveTo(x[0],y[0]);
+
+        for(int i = 1; i < 6; i++){
+            hex[hexNumber].lineTo(x[i],y[i]);
+        }
+
+        hex[hexNumber].lineTo(x[0],y[0]);
+        hex[hexNumber].close();
+    }
+
+    public void addHex(){
+
+        if(hexNumber < 20){
+            hexNumber++;
+        }
+
+
+        Log.d(TAG, "addHex: ");
+
+        postInvalidate();
     }
 }
