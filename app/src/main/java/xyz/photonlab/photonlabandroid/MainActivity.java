@@ -18,6 +18,7 @@ import xyz.photonlab.photonlabandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.overlook.android.fingkit.FingScanner;
 
 //added for Fragment -Bonny
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity  {
 
     int whichanim = 0;
     int rounterIP;
+
 
     //Fragments
     Fragment_Theme fragment_Theme = Fragment_Theme.getInstance();
@@ -157,6 +159,10 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+
+    private void fing(){
+
+    }
 //    @Override
 //    public void mainControl(String Tag, int Value){
 //        String tempCommand;

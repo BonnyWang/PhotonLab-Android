@@ -26,6 +26,7 @@ import android.widget.ToggleButton;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import xyz.photonlab.photonlabandroid.R;
 import java.util.LinkedList;
@@ -359,6 +360,11 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             public void onClick(View v) {
                 Log.d(TAG, "onClick: go to Setup");
                 //TODO: need to add sth -Bonny
+
+                fragment_layout mfragment_layout = new fragment_layout();
+                FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
+                ftl.replace(R.id.fgm, mfragment_layout);
+                ftl.commit();
             }
         });
 
