@@ -86,6 +86,14 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 ft2.commit();
                 break;
 
+            case 6:
+                fragment_system mfragment_system = new fragment_system();
+                FragmentTransaction ft6 = getActivity().getSupportFragmentManager().beginTransaction();
+                ft6.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft6.replace(R.id.fgm,mfragment_system).addToBackStack(null);
+                ft6.commit();
+                break;
+
             default:
                 fragment_Comming fragment_comming = new fragment_Comming(mSettings.get(position).subtitle);
                 FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
