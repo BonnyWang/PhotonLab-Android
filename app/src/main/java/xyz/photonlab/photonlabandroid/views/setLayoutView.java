@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
@@ -17,25 +18,39 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+import xyz.photonlab.photonlabandroid.R;
+
 public class setLayoutView extends View {
 
     private final static String TAG = "setLayoutView";
 
     Paint paint = new Paint();
+    Paint paintStroke = new Paint();
+    Paint paintSelected = new Paint();
     Path[] hex = new Path[20];
     float length = 100f;
-    float dividerLength = 10f;
+    float dividerLength = 15f;
 
     int hexNumber;
 
-    int whichHex = 0;
 
+    float initPosX = 300f;
+    float initPosY = 300f;
+
+    int whichHex = 0;
+    boolean findPotential;
+
+    int hexColor;
+    int hexChosenColor;
 
     private float[] hexX1 = new float[20];
     private float[] hexY1 = new float[20];
 
     private float[][] potentialPosi = new float[999][];
     int potentialNumber;
+
+    Matrix matrix = new Matrix();
+
 
     public setLayoutView(Context context) {
         super(context);
@@ -65,10 +80,14 @@ public class setLayoutView extends View {
         potentialNumber = 0;
 
 
+        hexColor = getResources().getColor(R.color.Light_Grey, null);
+        hexChosenColor = getResources().getColor(R.color.Deep_Grey, null);
+
+
         //initalize the position where the added hex will appear
         for(int i = 1; i < 20; i++){
-           hexX1[i] = 500;
-           hexY1[i] = 500;
+           hexX1[i] = initPosX;
+           hexY1[i] = initPosY;
         }
 
 //        hexX1[0] = getWidth()/2f;
@@ -102,8 +121,21 @@ public class setLayoutView extends View {
     @Override
     protected void onDraw(Canvas canvas){
 
-        paint.setColor(Color.RED);
+        //TODO:Scale the canvas
+//        if(hexNumber > 10){
+//            length = 50f;
+//        }
+
+        paint.setColor(hexColor);
         paint.setAntiAlias(true);
+
+        paintStroke.setColor(getResources().getColor(R.color.backGround,null));
+        paintStroke.setStyle(Paint.Style.STROKE);
+        paintStroke.setStrokeWidth(dividerLength);
+        paintStroke.setAntiAlias(true);
+
+        paintSelected.setColor(hexChosenColor);
+        paintSelected.setAntiAlias(true);
 
         if(hexX1[0] == 0f || hexY1[0] == 0f){
             hexX1[0] = getWidth()/2f;
@@ -116,17 +148,30 @@ public class setLayoutView extends View {
         for(int i = 0; i <= hexNumber; i++){
             drawHex(hexX1[i],hexY1[i], i);
             canvas.drawPath(hex[i], paint);
+            canvas.drawPath(hex[i],paintStroke);
             Log.d(TAG, "onDraw: " + i);
         }
 
-        for(int i = 0; i <= potentialNumber; i++){
-
-            canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
+        if(whichHex != 0){
+            canvas.drawPath(hex[whichHex], paintSelected);
+            canvas.drawPath(hex[whichHex],paintStroke);
         }
 
-        //canvas.drawLine(0,0,100,0,paint);
-        //canvas.drawLine(100,100,500,500,paint);
+
+
+
+        for(int i = 0; i < potentialNumber; i++){
+            //For debug purpose-Bonny
+            //canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
+        }
+
+        if(hexNumber > 10){
+            canvas.scale(0.5f,0.5f);
+        }
+
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
@@ -136,6 +181,20 @@ public class setLayoutView extends View {
 
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:{
+
+                float x = event.getX();
+                float y = event.getY();
+                Log.d(TAG, "onTouchEvent: " +x);
+                Log.d(TAG, "onTouchEvent: " +y);
+
+
+                for(int i = 1; i <= hexNumber; i++){
+                    if(x > hexX1[i]-length && x < hexX1[i] + length && y > hexY1[i] -length && y < hexY1[i] + length) {
+                        whichHex = i;
+                        postInvalidate();
+
+                    }
+                }
                 return true;
             }
 
@@ -146,8 +205,7 @@ public class setLayoutView extends View {
                 Log.d(TAG, "onTouchEvent: " +x);
                 Log.d(TAG, "onTouchEvent: " +y);
 
-                //TODO:Problem need to solve if overlay, hex will become one
-                for(int i = 0; i <= hexNumber; i++){
+                for(int i = 1; i <= hexNumber; i++){
                     if(x > hexX1[i]-length && x < hexX1[i] + length && y > hexY1[i] -length && y < hexY1[i] + length){
                         //touched the hex
                         hexX1[i] = x;
@@ -166,7 +224,7 @@ public class setLayoutView extends View {
 
             case MotionEvent.ACTION_UP:{
 
-                for(int i = 0; i <=  potentialNumber; i++){
+                for(int i = 0; i <  potentialNumber; i++){
                     float dx = hexX1[whichHex] - potentialPosi[i][0];
                     float dy = hexY1[whichHex] - potentialPosi[i][1];
 
@@ -175,13 +233,22 @@ public class setLayoutView extends View {
                     if (Math.abs(dx) < 100 && Math.abs(dy) < 100){
                         hexX1[whichHex] = potentialPosi[i][0];
                         hexY1[whichHex] = potentialPosi[i][1];
-                        addPotentialPosi(hexX1[whichHex],hexY1[whichHex]);
+
+                        findPotential = true;
+
                         postInvalidate();
                         Log.d(TAG, "onTouchEvent: find potential");
-                        break;
                     }
 
                 }
+
+                if(findPotential){
+                    addPotentialPosi(hexX1[whichHex],hexY1[whichHex]);
+                    postInvalidate();
+                }
+
+                findPotential = false;
+                //whichHex = 0;
                 return true;
             }
         }
@@ -240,42 +307,79 @@ public class setLayoutView extends View {
 
     public void addPotentialPosi(float cX, float cY){
 
-        potentialPosi[potentialNumber] = new float[]{cX , (cY
-                - 2 * (float) (Math.sqrt(3f)) * (length / 2f))-dividerLength};
-        
-        potentialNumber++;
-        potentialPosi[potentialNumber] = new float[]{dividerLength+cX
-                + 3f*length/2f,(cY
-                - (float)(Math.sqrt(3f))*(length/2f))-dividerLength};
+        if(potentialNumber < 999) {
 
-        potentialNumber++;
-        potentialPosi[potentialNumber] = new float[]{dividerLength+cX
-                + 3f*length/2f,dividerLength+cY
-                + (float)(Math.sqrt(3f))*(length/2f)};
+            potentialPosi[potentialNumber] = new float[]{cX, cY
+                    - 2 * (float) (Math.sqrt(3f)) * (length / 2f)};
 
-        potentialNumber++;
-        potentialPosi[potentialNumber] = new float[]{cX,dividerLength+cY
-                + 2*(float)(Math.sqrt(3f))*(length/2f)};
+            potentialNumber++;
+            potentialPosi[potentialNumber] = new float[]{cX
+                    + 3f * length / 2f, (cY
+                    - (float) (Math.sqrt(3f)) * (length / 2f))};
 
-        potentialNumber++;
-        potentialPosi[potentialNumber] = new float[]{cX - dividerLength
-                - 3f*length/2f,dividerLength+cY
-                + (float)(Math.sqrt(3f))*(length/2f)};
+            potentialNumber++;
+            potentialPosi[potentialNumber] = new float[]{cX
+                    + 3f * length / 2f, cY
+                    + (float) (Math.sqrt(3f)) * (length / 2f)};
 
-        potentialNumber++;
-        potentialPosi[potentialNumber] = new float[]{cX - dividerLength
-                - 3f*length/2f,(cY
-                - (float)(Math.sqrt(3f))*(length/2f))-dividerLength};
+            potentialNumber++;
+            potentialPosi[potentialNumber] = new float[]{cX, cY
+                    + 2 * (float) (Math.sqrt(3f)) * (length / 2f)};
 
+            potentialNumber++;
+            potentialPosi[potentialNumber] = new float[]{cX
+                    - 3f * length / 2f, cY
+                    + (float) (Math.sqrt(3f)) * (length / 2f)};
 
-        for(int i = 0; i <= potentialNumber; i++){
-            for(int j = 0; j <= hexNumber; j++){
-//                if(potentialPosi[i][0] == hexX1[j] && potentialPosi[i][1] == hexY1[j]){
-//                    //delete this position if already ocupied by an existing hex - Bonny
-//                    potentialPosi[i] = new float[]{0,0};
-//                }
-            }
+            potentialNumber++;
+            potentialPosi[potentialNumber] = new float[]{cX
+                    - 3f * length / 2f, (cY
+                    - (float) (Math.sqrt(3f)) * (length / 2f))};
+
+            potentialNumber++;
 
         }
+
+
+//        for(int i = 0; i < potentialNumber; i++){
+////            for(int j = 0; j <= hexNumber; j++){
+////                if(potentialPosi[i][0] == hexX1[j] && potentialPosi[i][1] == hexY1[j]){
+////                    //delete this position if already ocupied by an existing hex - Bonny
+////                    potentialPosi[i] = new float[]{-1,-1};
+////                }
+////            }
+////
+////        }
+    }
+
+    public void deleteHex(){
+        if(hexNumber > 0 && whichHex !=0){
+            for(int i = whichHex; i < hexNumber; i++){
+                hexX1[i] = hexX1[i+1];
+                hexY1[i] = hexY1[i+1];
+            }
+
+            hexX1[hexNumber] = initPosX;
+            hexY1[hexNumber] = initPosY;
+
+
+            whichHex = 0;
+            hexNumber--;
+            postInvalidate();
+        }
+
+
+//        if(hexNumber > 0){
+//            hexX1[hexNumber] = initPosX;
+//            hexY1[hexNumber] = initPosY;
+//            hexNumber--;
+//        }
+
+
+    }
+
+    public void rotateHex(){
+
+        postInvalidate();
     }
 }

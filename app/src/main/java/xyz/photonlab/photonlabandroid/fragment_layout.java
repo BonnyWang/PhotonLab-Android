@@ -16,7 +16,12 @@ import xyz.photonlab.photonlabandroid.views.setLayoutView;
 public class fragment_layout extends Fragment {
 
     Button btAddHex;
+    Button btDelete;
+    Button btRotate;
+    Button btBack;
     setLayoutView msetLayoutView;
+
+    float rotation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,33 @@ public class fragment_layout extends Fragment {
             @Override
             public void onClick(View v) {
                 msetLayoutView.addHex();
+            }
+        });
+
+        btDelete = view.findViewById(R.id.btDelete);
+
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                msetLayoutView.deleteHex();
+            }
+        });
+
+        btRotate = view.findViewById(R.id.btRotate);
+        btRotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                msetLayoutView.setRotation(rotation+90);
+                rotation = rotation + 90;
+            }
+        });
+
+        btBack = view.findViewById(R.id.btBackLayout);
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 

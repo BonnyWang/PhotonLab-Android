@@ -38,15 +38,7 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="15dp"
                     android:scrollbars="vertical" />
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/PhotonLab_V"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:textColor="#e2e2e2"/>
+                
 
 
             </LinearLayout>

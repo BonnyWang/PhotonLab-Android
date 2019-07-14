@@ -363,7 +363,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
                 fragment_layout mfragment_layout = new fragment_layout();
                 FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
-                ftl.replace(R.id.fgm, mfragment_layout);
+                ftl.setCustomAnimations(R.anim.pop_enter,R.anim.pop_out,R.anim.pop_enter,R.anim.pop_out);
+                ftl.replace(R.id.container, mfragment_layout).addToBackStack(null);
                 ftl.commit();
             }
         });
