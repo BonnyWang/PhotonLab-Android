@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment_Music">
+    tools:context=".Fragment_Explore">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,30 +12,30 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tvMusic"
+            android:id="@+id/tvExplore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_marginTop="15dp"
             android:padding="10dp"
-            android:layout_marginLeft="15dp"
-            android:text="@string/title_Music"
-            android:textSize="45dp"
+            android:layout_marginStart="15dp"
+            android:text="@string/Explore"
+            android:textSize="45sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMusic"
+            android:id="@+id/rvExplore"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@id/tvMusic"
+            app:layout_constraintTop_toBottomOf="@id/tvExplore"
             app:layout_constraintBottom_toBottomOf="parent"
             android:padding="3dp"/>
 
         <Spinner
-            android:id="@+id/spinnerMusic"
+            android:id="@+id/spinnerExplore"
             android:layout_width="32dp"
             android:layout_height="32dp"
             app:layout_constraintEnd_toEndOf="parent"

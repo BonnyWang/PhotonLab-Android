@@ -39,9 +39,9 @@
         <item>Sweet sweet</item>
     </string-array>
 
-    <string-array name="Music_Menu">
+    <string-array name="Explore_Menu">
         <item>ALL</item>
-        <item>Favorite</item>
+
     </string-array>
     <string name="Motion_Detect">Motion Detect</string>
     <string name="Time_Delay">Time Delay</string>
@@ -55,4 +55,5 @@
     <string name="Reset">Reset</string>
     <string name="Privacy_Policy">Privacy Policy</string>
     <string name="App_Software">App Software</string>
+    <string name="Explore">Expore</string>
 </resources>

@@ -14,11 +14,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import xyz.photonlab.photonlabandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.overlook.android.fingkit.FingScanner;
 
 //added for Fragment -Bonny
 
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity  {
     Fragment_Theme fragment_Theme = Fragment_Theme.getInstance();
     static final Fragment fragment_Control = new Fragment_Control();
     static final Fragment fragment_Setting = new fragment_setting();
-    static final Fragment fragment_music = new Fragment_Music();
+    static final Fragment fragment_Explore = new Fragment_Explore();
     static final Fragment start_anim = new fragment_start_anim();
 
     WebView webViewMain;
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity  {
                         ft3.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     }
                     whichanim = 3;
-                    ft3.replace(R.id.fgm, fragment_music);
+                    ft3.replace(R.id.fgm, fragment_Explore);
                     ft3.commit();
                     return true;
 
