@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 
@@ -25,8 +33,11 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
 
     Spinner spinnerMenu;
     RecyclerView rv;
+    explore_RvAdapter adapter;
 
     explore_RvAdapter.OnNoteListener mOnNoteListner = this;
+
+    private static final String TAG = "Fragment_Explore";
 
 
 
@@ -102,10 +113,26 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
     private void initializeData() {
         bexplores = new ArrayList<>();
 
-        bexplores.add(new explore_item_Class("https://drive.google.com/uc?export=download&id=1zvrsVpOss_5Qc9fn17pHk6yKAJ5RrJyK",
-                                             "https://photonlab.xyz"));
-        bexplores.add(new explore_item_Class("https://drive.google.com/uc?export=download&id=12J_qCdmnVDHiKFV_UZ4126E6Pq9vtjbM",
-                                             " https://store.photonlab.xyz/"));
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("mexplore");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                GenericTypeIndicator<ArrayList<explore_item_Class>> t = new GenericTypeIndicator<ArrayList<explore_item_Class>>() {};
+                bexplores = dataSnapshot.getValue(t);
+                adapter = new explore_RvAdapter(bexplores, mOnNoteListner, thisone);
+                rv.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
 
 //        mfavoriteMusic = new ArrayList<>();
 //        favOrder = new ArrayList<>();
@@ -126,7 +153,8 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         if (spinnerMenu.getSelectedItemPosition() == 0) {
             //TODO:
 
-            fragment_explore_indiv bfgExplore = new fragment_explore_indiv(bexplores.get(position).getLink());
+            fragment_explore_indiv bfgExplore = new fragment_explore_indiv(bexplores.get(position).getLink(),
+                                                                            bexplores.get(position).getTitle());
             FragmentTransaction ftindiv = getActivity().getSupportFragmentManager().beginTransaction();
             ftindiv.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
             ftindiv.replace(R.id.container, bfgExplore).addToBackStack(null);

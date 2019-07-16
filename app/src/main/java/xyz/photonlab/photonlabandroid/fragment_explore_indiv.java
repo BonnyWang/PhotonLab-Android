@@ -6,22 +6,29 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class fragment_explore_indiv extends Fragment {
 
     String link;
+    String title;
 
     WebView wvexplore;
     Button btBack;
+    TextView tvTitle;
 
-    public fragment_explore_indiv(String link) {
+    public fragment_explore_indiv(String link, String title) {
+
         this.link = link;
+        this.title = title;
     }
 
 
@@ -48,6 +55,10 @@ public class fragment_explore_indiv extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+        tvTitle = view.findViewById(R.id.tvExIndivTitle);
+        tvTitle.setText(title);
+
         return view;
     }
 

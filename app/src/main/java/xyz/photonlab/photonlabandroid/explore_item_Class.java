@@ -12,10 +12,16 @@ public class explore_item_Class {
 
     private String link;
     private String imageLink;
+    private String title;
 
-    explore_item_Class(String imageLink, String link){
+    explore_item_Class(){
+
+    }
+
+    explore_item_Class(String imageLink, String link, String title){
         this.imageLink = imageLink;
         this.link = link;
+        this.title = title;
     }
 
     public String getLink(){
@@ -25,5 +31,7 @@ public class explore_item_Class {
     public String getImageLink(){
         return imageLink;
     }
+
+    public String getTitle(){return title;}
 
 }

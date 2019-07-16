@@ -1,12 +1,14 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,8 +29,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import xyz.photonlab.photonlabandroid.R;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.List;
@@ -187,8 +196,11 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                 password_Input.setVisibility(View.GONE);
                 password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 done.setVisibility(View.VISIBLE);
-                webViewPair.loadUrl("http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
+                webViewPair.loadUrl("http://"+ apIpAddress+"/join?ssid="+ TargetSSID
+                                    +"&password="+password_Input.getText().toString());
                 Log.d(TAG, "onClickConnect: "+"http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
+
+                new JsonTask().execute("http://192.168.50.51/ip");
             }
         });
 
@@ -262,7 +274,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         password_Input.setVisibility(View.VISIBLE);
         connect.setVisibility(View.VISIBLE);
 
-        webViewPair.loadUrl("http://"+ apIpAddress+"/"+"wifiName"+"/"+TargetSSID);
+        //webViewPair.loadUrl("http://"+ apIpAddress+"/"+"wifiName"+"/"+TargetSSID);
 
         Log.d(TAG, "onNoteClick: "+apIpAddress+"/"+TargetSSID);
 
@@ -333,6 +345,84 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     public void setListener(pairing_Listener mlistener){
         this.mlistener = mlistener;
 
+    }
+
+    private class JsonTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.d(TAG, "onPreExecute: ");
+
+//            pd = new ProgressDialog(MainActivity.this);
+//            pd.setMessage("Please wait");
+//            pd.setCancelable(false);
+//            pd.show();
+        }
+
+        protected String doInBackground(String... params) {
+
+
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+
+                InputStream stream = connection.getInputStream();
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+
+                }
+
+                return buffer.toString();
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Log.d(TAG, "onPostExecute: "+result);
+            if(result!=null) {
+                String temp = result.replaceAll("\\{", " ");
+                temp = temp.replaceAll("\"", " ");
+                Log.d(TAG, "onPostExecute:place " + temp);
+                String[] a = result.split(",");
+                for(int i = 0; i< a.length;i++){
+                    Log.d(TAG, "onPostExecute: "+a[i]);
+                }
+            }
+
+        }
     }
 
 }
