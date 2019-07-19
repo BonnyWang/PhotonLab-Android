@@ -30,17 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.druk.dnssd.BrowseListener;
-import com.github.druk.dnssd.DNSSD;
-import com.github.druk.dnssd.DNSSDBindable;
-import com.github.druk.dnssd.DNSSDException;
-import com.github.druk.dnssd.DNSSDService;
-import com.github.druk.rx2dnssd.Rx2Dnssd;
-import com.github.druk.rx2dnssd.Rx2DnssdEmbedded;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import xyz.photonlab.photonlabandroid.R;
 
 import java.io.BufferedReader;
@@ -93,13 +83,6 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     nsdFinder mnsdFinder;
 
 
-    DNSSD dnssd;
-
-    DNSSDService browseService;
-
-    private Rx2Dnssd rxDnssd;
-    @Nullable
-    private Disposable browseDisposable;
 
 
 //    NsdManager nsdManager;
@@ -114,8 +97,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dnssd = new DNSSDBindable(this.getContext());
-        rxDnssd = new Rx2DnssdEmbedded(this.getContext());
+
 
 
     }
@@ -466,56 +448,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         }
     }
 
-    public void startDNNS(){
 
-        Log.d(TAG, "startDNNS: ");
-
-        try {
-            browseService = dnssd.browse("_rxdnssd._tcp", new BrowseListener() {
-
-
-                @Override
-                public void serviceFound(DNSSDService browser, int flags, int ifIndex,
-                                         final String serviceName, String regType, String domain) {
-                    Log.i("TAG", "Found " + serviceName);
-                }
-
-                @Override
-                public void serviceLost(DNSSDService browser, int flags, int ifIndex,
-                                        String serviceName, String regType, String domain) {
-                    Log.i("TAG", "Lost " + serviceName);
-                }
-
-                @Override
-                public void operationFailed(DNSSDService service, int errorCode) {
-                    Log.e("TAG", "error: " + errorCode);
-                }
-            });
-        } catch (Exception e) {
-            Log.e("TAG", "error!!!!!!!!!!!!!!", e);
-        }
-    }
-
-    private void startBrowse() {
-        Log.i("TAG", "start browse");
-        browseDisposable = rxDnssd.browse("", "local.")
-                .compose(rxDnssd.resolve())
-                .compose(rxDnssd.queryRecords())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bonjourService -> {
-                    Log.d("TAG", bonjourService.toString());
-
-                }, throwable -> Log.e("TAG", "error", throwable));
-    }
-
-    private void stopBrowse() {
-        Log.d("TAG", "Stop browsing");
-        if (browseDisposable != null) {
-            browseDisposable.dispose();
-        }
-        browseDisposable = null;
-    }
 
 //    public void initializeDiscoveryListener() {
 //

@@ -23,8 +23,7 @@ public class nsdFinder {
     Context context;
 
 
-
-    nsdFinder(Context context){
+    nsdFinder(Context context) {
         this.context = context;
     }
 
@@ -35,7 +34,7 @@ public class nsdFinder {
 
             // Store the chosen port.
             localPort = serverSocket.getLocalPort();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "initializeServerSocket: ");
         }
 
@@ -101,10 +100,10 @@ public class nsdFinder {
                 initializeResolveListener();
 //                nsdManager.resolveService(service,resolveListener);
 
-                if (service.getServiceType().equals("_udp.local.")){
-                    nsdManager.stopServiceDiscovery(this);
-                    nsdManager.resolveService(service,resolveListener);
-                }
+//                if (service.getServiceType().equals("_udp.local.")) {
+//                    nsdManager.stopServiceDiscovery(this);
+                    nsdManager.resolveService(service, resolveListener);
+//                }
 //                if (!service.getServiceType().equals(SERVICE_TYPE)) {
 //                    // Service type is the string containing the protocol and
 //                    // transport layer for this service.
@@ -169,11 +168,13 @@ public class nsdFinder {
         };
     }
 
-    public void start(){
+    public void start() {
         initializeServerSocket();
         initializeRegistrationListener();
-        registerService(23);
+        registerService(10);
         initializeDiscoveryListener();
-        nsdManager.discoverServices("_services._dns-sd._udp", NsdManager.PROTOCOL_DNS_SD, discoveryListener);
+        nsdManager.discoverServices("_services._dns-sd", NsdManager.PROTOCOL_DNS_SD, discoveryListener);
     }
+
 }
+
