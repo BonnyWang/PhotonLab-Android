@@ -12,12 +12,12 @@
 
     <xyz.photonlab.photonlabandroid.views.setLayoutView
         android:id="@+id/msetLayoutView"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btBackLayout"
+        app:layout_constraintBottom_toTopOf="@id/btAddHex"
         app:layout_constraintVertical_bias="0.4"/>
 
     <Button
@@ -84,6 +84,21 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"/>
+
+
+    <TextView
+        android:id="@+id/tvLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/Layout_Manager"
+        android:textColor="#555555"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"  />
 
 
 

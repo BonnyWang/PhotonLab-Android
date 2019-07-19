@@ -29,7 +29,7 @@ public class setLayoutView extends View {
     Paint paintSelected = new Paint();
     Path[] hex = new Path[20];
     float length = 100f;
-    float dividerLength = 15f;
+    float dividerLength = 8f;
 
     int hexNumber;
 
@@ -37,7 +37,7 @@ public class setLayoutView extends View {
     float initPosX = 300f;
     float initPosY = 300f;
 
-    int whichHex = 0;
+    int whichHex = -1;
     boolean findPotential;
 
     int hexColor;
@@ -90,30 +90,11 @@ public class setLayoutView extends View {
            hexY1[i] = initPosY;
         }
 
-//        hexX1[0] = getWidth()/2f;
-//        hexY1[0] = getHeight()/2f;
-//        Log.d(TAG, "onDraw: "+ hexX1[0]+hexY1[0]);
-//
-//        potentialPosi[0] = new float[]{hexX1[0],hexY1[0]
-//                - 2*(float)(Math.sqrt(3f))*(length/2f)};
-//
-//        potentialPosi[1] = new float[]{hexX1[0]
-//                + 3f*length/2f,hexY1[0]
-//                - (float)(Math.sqrt(3f))*(length/2f)};
-//
-//        potentialPosi[2] = new float[]{hexX1[0]
-//                + 3f*length/2f,hexY1[0]
-//                + (float)(Math.sqrt(3f))*(length/2f)};
-//
-//        potentialPosi[3] = new float[]{hexX1[0],hexY1[0]
-//                + 2*(float)(Math.sqrt(3f))*(length/2f)};
-//        potentialPosi[4] = new float[]{hexX1[0]
-//                - 3f*length/2f,hexY1[0]
-//                + (float)(Math.sqrt(3f))*(length/2f)};
-//
-//        potentialPosi[5] = new float[]{hexX1[0]
-//                - 3f*length/2f,hexY1[0]
-//                - (float)(Math.sqrt(3f))*(length/2f)};
+
+//        potentialPosi[0] = new float[]{50f,50f};
+//        for(int i = 0; i < 100; i++){
+//            addPotentialPosi(potentialPosi[i][0],potentialPosi[i][1]);
+//        }
 
 
     }
@@ -141,7 +122,7 @@ public class setLayoutView extends View {
             hexX1[0] = getWidth()/2f;
             hexY1[0] = getHeight()/2f;
             addPotentialPosi(hexX1[0],hexY1[0]);
-           
+
         }
 
         Log.d(TAG, "onDraw: "+ hexX1[0]+hexY1[0]);
@@ -152,7 +133,9 @@ public class setLayoutView extends View {
             Log.d(TAG, "onDraw: " + i);
         }
 
-        if(whichHex != 0){
+
+        Log.d(TAG, "onDraw: whichHex"+whichHex);
+        if(whichHex != -1){
             canvas.drawPath(hex[whichHex], paintSelected);
             canvas.drawPath(hex[whichHex],paintStroke);
         }
@@ -162,7 +145,7 @@ public class setLayoutView extends View {
 
         for(int i = 0; i < potentialNumber; i++){
             //For debug purpose-Bonny
-            //canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
+            canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
         }
 
         if(hexNumber > 10){
@@ -184,70 +167,102 @@ public class setLayoutView extends View {
 
                 float x = event.getX();
                 float y = event.getY();
-                Log.d(TAG, "onTouchEvent: " +x);
-                Log.d(TAG, "onTouchEvent: " +y);
+//                Log.d(TAG, "onTouchEvent: " +x);
+//                Log.d(TAG, "onTouchEvent: " +y);
 
 
-                for(int i = 1; i <= hexNumber; i++){
+                for(int i = 0; i <= hexNumber; i++){
                     if(x > hexX1[i]-length && x < hexX1[i] + length && y > hexY1[i] -length && y < hexY1[i] + length) {
+                        //touched the hex
                         whichHex = i;
+                        postInvalidate();
+                        Log.d(TAG, "onTouchEvent: Found!" + whichHex);
+                        return true;
+
+                    }else {
+                        whichHex = -1;
+                        Log.d(TAG, "onTouchEvent: ????");
                         postInvalidate();
 
                     }
+
                 }
                 return true;
+
             }
 
             case MotionEvent.ACTION_MOVE:{
 
                 float x = event.getX();
                 float y = event.getY();
-                Log.d(TAG, "onTouchEvent: " +x);
-                Log.d(TAG, "onTouchEvent: " +y);
-
-                for(int i = 1; i <= hexNumber; i++){
-                    if(x > hexX1[i]-length && x < hexX1[i] + length && y > hexY1[i] -length && y < hexY1[i] + length){
+//                Log.d(TAG, "onTouchEvent: " +x);
+//                Log.d(TAG, "onTouchEvent: " +y);
                         //touched the hex
-                        hexX1[i] = x;
-                        hexY1[i] = y;
-                        Log.d(TAG, "onTouchEvent: " +x);
-                        Log.d(TAG, "onTouchEvent: " +y);
-                        whichHex = i;
-                        postInvalidate();
+                if(whichHex!=-1) {
+                    hexX1[whichHex] = x;
+                    hexY1[whichHex] = y;
+//                        Log.d(TAG, "onTouchEvent: " +x);
+//                        Log.d(TAG, "onTouchEvent: " +y);
+//                        whichHex = i;
+                    postInvalidate();
+                }
 
                         return true;
-                    }
-                }
+//                    }
+//                }
 
 
             }
 
             case MotionEvent.ACTION_UP:{
 
-                for(int i = 0; i <  potentialNumber; i++){
-                    float dx = hexX1[whichHex] - potentialPosi[i][0];
-                    float dy = hexY1[whichHex] - potentialPosi[i][1];
+                if(whichHex!=-1) {
 
-                    Log.d(TAG, "onTouchEvent: " + dx + dy + event.getX()+event.getY());
-                    
-                    if (Math.abs(dx) < 100 && Math.abs(dy) < 100){
-                        hexX1[whichHex] = potentialPosi[i][0];
-                        hexY1[whichHex] = potentialPosi[i][1];
+                    for (int i = 0; i < potentialNumber; i++) {
+                        float dx = hexX1[whichHex] - potentialPosi[i][0];
+                        float dy = hexY1[whichHex] - potentialPosi[i][1];
 
-                        findPotential = true;
+//                        Log.d(TAG, "onTouchEvent: " + dx + dy + event.getX() + event.getY());
 
-                        postInvalidate();
-                        Log.d(TAG, "onTouchEvent: find potential");
+                        if (Math.abs(dx) < 100 && Math.abs(dy) < 100) {
+
+                            boolean isOverlay = false;
+
+                            for(int j = 0; j <= hexNumber; j++){
+                                if(potentialPosi[i][0] == hexX1[j] && potentialPosi[i][1] == hexY1[j]){
+                                    isOverlay = true;
+                                }
+
+                            }
+
+                            if(!isOverlay) {
+                                hexX1[whichHex] = potentialPosi[i][0];
+                                hexY1[whichHex] = potentialPosi[i][1];
+                                findPotential = true;
+
+                                postInvalidate();
+                                Log.d(TAG, "onTouchEvent: find potential");
+                            }
+
+
+                        }
+
                     }
 
-                }
+                    if (findPotential) {
 
-                if(findPotential){
-                    addPotentialPosi(hexX1[whichHex],hexY1[whichHex]);
-                    postInvalidate();
-                }
+//                        for(int i = 0; i <= potentialNumber; i++){
+//                            potentialPosi[i] = new float[];
+//                        }
+//                        for (int i = 0; i <= hexNumber;i++){
+//                           addPotentialPosi(hexX1[i],hexY1[i]);
+//                        }
+                        addPotentialPosi(hexX1[whichHex], hexY1[whichHex]);
+                        postInvalidate();
+                    }
 
-                findPotential = false;
+                    findPotential = false;
+                }
                 //whichHex = 0;
                 return true;
             }
@@ -353,7 +368,7 @@ public class setLayoutView extends View {
     }
 
     public void deleteHex(){
-        if(hexNumber > 0 && whichHex !=0){
+        if(hexNumber > 0 && whichHex !=-1){
             for(int i = whichHex; i < hexNumber; i++){
                 hexX1[i] = hexX1[i+1];
                 hexY1[i] = hexY1[i+1];
@@ -363,7 +378,7 @@ public class setLayoutView extends View {
             hexY1[hexNumber] = initPosY;
 
 
-            whichHex = 0;
+            whichHex = -1;
             hexNumber--;
             postInvalidate();
         }

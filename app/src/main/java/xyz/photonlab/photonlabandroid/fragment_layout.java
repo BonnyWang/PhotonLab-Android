@@ -60,8 +60,8 @@ public class fragment_layout extends Fragment {
             @Override
             public void onClick(View v) {
 
-                msetLayoutView.setRotation(rotation+90);
-                rotation = rotation + 90;
+//                msetLayoutView.setRotation(rotation+90);
+//                rotation = rotation + 90;
             }
         });
 

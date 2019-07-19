@@ -60,6 +60,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
 
+
     //compile 'com.android.support:recyclerview-v7:21.0.+'
     //added for material design
 //    implementation 'com.google.android.material:material:1.1.0-alpha06'

@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -22,11 +24,23 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.druk.dnssd.BrowseListener;
+import com.github.druk.dnssd.DNSSD;
+import com.github.druk.dnssd.DNSSDBindable;
+import com.github.druk.dnssd.DNSSDException;
+import com.github.druk.dnssd.DNSSDService;
+import com.github.druk.rx2dnssd.Rx2Dnssd;
+import com.github.druk.rx2dnssd.Rx2DnssdEmbedded;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import xyz.photonlab.photonlabandroid.R;
 
 import java.io.BufferedReader;
@@ -76,6 +90,21 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     String TargetSSID;
     String TargetPassword;
 
+    nsdFinder mnsdFinder;
+
+
+    DNSSD dnssd;
+
+    DNSSDService browseService;
+
+    private Rx2Dnssd rxDnssd;
+    @Nullable
+    private Disposable browseDisposable;
+
+
+//    NsdManager nsdManager;
+//    NsdManager.DiscoveryListener discoveryListener;
+
     public fragment_Pair(){
 
     }
@@ -85,6 +114,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dnssd = new DNSSDBindable(this.getContext());
+        rxDnssd = new Rx2DnssdEmbedded(this.getContext());
 
 
     }
@@ -200,7 +231,17 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                                     +"&password="+password_Input.getText().toString());
                 Log.d(TAG, "onClickConnect: "+"http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
 
-                new JsonTask().execute("http://192.168.50.51/ip");
+//                new JsonTask().execute("http://elementlight.local/ip");
+                Log.d(TAG, "onClick: start discovery");
+
+
+                mnsdFinder = new nsdFinder(getContext());
+//
+                mnsdFinder.start();
+
+
+
+
             }
         });
 
@@ -424,5 +465,114 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
         }
     }
+
+    public void startDNNS(){
+
+        Log.d(TAG, "startDNNS: ");
+
+        try {
+            browseService = dnssd.browse("_rxdnssd._tcp", new BrowseListener() {
+
+
+                @Override
+                public void serviceFound(DNSSDService browser, int flags, int ifIndex,
+                                         final String serviceName, String regType, String domain) {
+                    Log.i("TAG", "Found " + serviceName);
+                }
+
+                @Override
+                public void serviceLost(DNSSDService browser, int flags, int ifIndex,
+                                        String serviceName, String regType, String domain) {
+                    Log.i("TAG", "Lost " + serviceName);
+                }
+
+                @Override
+                public void operationFailed(DNSSDService service, int errorCode) {
+                    Log.e("TAG", "error: " + errorCode);
+                }
+            });
+        } catch (Exception e) {
+            Log.e("TAG", "error!!!!!!!!!!!!!!", e);
+        }
+    }
+
+    private void startBrowse() {
+        Log.i("TAG", "start browse");
+        browseDisposable = rxDnssd.browse("", "local.")
+                .compose(rxDnssd.resolve())
+                .compose(rxDnssd.queryRecords())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bonjourService -> {
+                    Log.d("TAG", bonjourService.toString());
+
+                }, throwable -> Log.e("TAG", "error", throwable));
+    }
+
+    private void stopBrowse() {
+        Log.d("TAG", "Stop browsing");
+        if (browseDisposable != null) {
+            browseDisposable.dispose();
+        }
+        browseDisposable = null;
+    }
+
+//    public void initializeDiscoveryListener() {
+//
+//        // Instantiate a new DiscoveryListener
+//        discoveryListener = new NsdManager.DiscoveryListener() {
+//
+//
+//            // Called as soon as service discovery begins.
+//            @Override
+//            public void onDiscoveryStarted(String regType) {
+//                Log.d(TAG, "Service discovery started");
+//            }
+//
+//
+//            @Override
+//            public void onServiceFound(NsdServiceInfo service) {
+//                // A service was found! Do something with it.
+//
+//                Log.d(TAG, "Service discovery success" + service);
+////                if (!service.getServiceType().equals(SERVICE_TYPE)) {
+////                    // Service type is the string containing the protocol and
+////                    // transport layer for this service.
+////                    Log.d(TAG, "Unknown Service Type: " + service.getServiceType());
+////                } else if (service.getServiceName().equals(serviceName)) {
+////                    // The name of the service tells the user what they'd be
+////                    // connecting to. It could be "Bob's Chat App".
+////                    Log.d(TAG, "Same machine: " + serviceName);
+////                } else if (service.getServiceName().contains("NsdChat")){
+////                    nsdManager.resolveService(service, resolveListener);
+////                }
+//            }
+//
+//            @Override
+//            public void onServiceLost(NsdServiceInfo service) {
+//                // When the network service is no longer available.
+//                // Internal bookkeeping code goes here.
+//                Log.e(TAG, "service lost: " + service);
+//            }
+//
+//            @Override
+//            public void onDiscoveryStopped(String serviceType) {
+//                Log.i(TAG, "Discovery stopped: " + serviceType);
+//            }
+//
+//            @Override
+//            public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+//                Log.e(TAG, "Discovery failed: Error code:" + errorCode);
+//                nsdManager.stopServiceDiscovery(this);
+//            }
+//
+//            @Override
+//            public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+//                Log.e(TAG, "Discovery failed: Error code:" + errorCode);
+//                nsdManager.stopServiceDiscovery(this);
+//            }
+//        };
+//    }
+
 
 }
