@@ -70,6 +70,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     ConstraintLayout step1_layout;
     ConstraintLayout step3_Layout;
     ConstraintLayout step4_Layout;
+    ConstraintLayout pbStep3;
 
     Button yes_Connected;
     Button back;
@@ -92,6 +93,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     Rx2Dnssd rxDnssd;
     Disposable browseDisposable;
 
+    TinyDB tinyDB;
+
 
 
 
@@ -109,6 +112,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         super.onCreate(savedInstanceState);
 
         rxDnssd = new Rx2DnssdEmbedded(getContext());
+        tinyDB = new TinyDB(getContext());
 
 
     }
@@ -134,6 +138,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         step2_Layout = view.findViewById(R.id.step2);
         step3_Layout = view.findViewById(R.id.step3);
         step4_Layout = view.findViewById(R.id.step4);
+        pbStep3 = view.findViewById(R.id.pbStep3);
 
         password_Input = view.findViewById(R.id.edit_Password);
         webViewPair = view.findViewById(R.id.webViewPair);
@@ -182,6 +187,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                         connect.setVisibility(View.VISIBLE);
                         connect.setClickable(true);
                         done.setVisibility(View.INVISIBLE);
+                        pbStep3.setVisibility(View.GONE);
                         Blayout_Gone(step4_Layout, View.INVISIBLE);
                         Blayout_Show(step3_Layout);
                         return;
@@ -212,14 +218,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layout_Show(step4_Layout);
-                layout_Gone(step3_Layout,View.INVISIBLE);
-                progressBar.setProgress(100);
-                connect.setVisibility(View.GONE);
-                connect.setClickable(false);
-                password_Input.setVisibility(View.GONE);
-                password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                done.setVisibility(View.VISIBLE);
+
                 webViewPair.loadUrl("http://"+ apIpAddress+"/join?ssid="+ TargetSSID
                                     +"&password="+password_Input.getText().toString());
                 Log.d(TAG, "onClickConnect: "+"http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
@@ -228,8 +227,11 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                 Log.d(TAG, "onClick: start discovery");
 
 
+
                 mnsdFinder = new nsdFinder(getContext());
                 mnsdFinder.start();
+
+                pbStep3.setVisibility(View.VISIBLE);
 
                 browseDisposable = rxDnssd.browse("_elementlight._udp", "local.")
                         .compose(rxDnssd.resolve())
@@ -238,6 +240,17 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bonjourService -> {
                             Log.d("TAG",  bonjourService.getInet4Address().toString());
+
+                            tinyDB.putString("LocalIP", bonjourService.getInet4Address().toString());
+
+                            layout_Show(step4_Layout);
+                            layout_Gone(step3_Layout,View.INVISIBLE);
+                            progressBar.setProgress(100);
+                            connect.setVisibility(View.GONE);
+                            connect.setClickable(false);
+                            password_Input.setVisibility(View.GONE);
+                            password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                            done.setVisibility(View.VISIBLE);
 //            if (bonjourService.isLost()) {
 //                mServiceAdapter.remove(bonjourService);
 //            } else {

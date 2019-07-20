@@ -143,47 +143,87 @@
         android:animateLayoutChanges="true"
         android:background="@color/backGround">
 
-        <EditText
-            android:id="@+id/edit_Password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.2"
-            android:hint="@string/Wifi_Password"
-            android:gravity="center_horizontal"
-            android:foregroundTint="@color/colorPrimary"
-            android:backgroundTint="@color/colorPrimary"
-            android:textCursorDrawable="@color/colorPrimary"
-            android:imeOptions="actionDone"/>
 
-        <Button
-            android:id="@+id/connect_Button"
-            android:layout_width="@dimen/Set_Button_Width"
-            android:layout_height="@dimen/Set_Button_Height"
-            android:text="@string/Connect"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_Password"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/instruction3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Instruction_3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/connect_Button"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:gravity="center_horizontal" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Button
+                    android:id="@+id/connect_Button"
+                    android:layout_width="@dimen/Set_Button_Width"
+                    android:layout_height="@dimen/Set_Button_Height"
+                    android:text="@string/Connect"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_Password"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    android:textAllCaps="false"/>
+
+                <EditText
+                    android:id="@+id/edit_Password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_bias="0.2"
+                    android:hint="@string/Wifi_Password"
+                    android:gravity="center_horizontal"
+                    android:foregroundTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textCursorDrawable="@color/colorPrimary"
+                    android:imeOptions="actionDone"/>
+
+
+
+                <TextView
+                    android:id="@+id/instruction3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Instruction_3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/connect_Button"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:gravity="center_horizontal" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </FrameLayout>
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pbStep3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#90FAFAFA"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progressBar3"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:indeterminateTint="@color/colorPrimary"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
