@@ -35,7 +35,7 @@ public class setLayoutView extends View {
 
 
     float initPosX = 300f;
-    float initPosY = 300f;
+    float initPosY = 500f;
 
     int whichHex = -1;
     boolean findPotential;
@@ -49,7 +49,11 @@ public class setLayoutView extends View {
     private float[][] potentialPosi = new float[999][];
     int potentialNumber;
 
-    Matrix matrix = new Matrix();
+    float initX;
+    float initY;
+
+    Boolean isScaled;
+    float scaleFactor;
 
 
     public setLayoutView(Context context) {
@@ -79,6 +83,9 @@ public class setLayoutView extends View {
         hexNumber = 0;
         potentialNumber = 0;
 
+        isScaled = false;
+        scaleFactor = 0.8f;
+
 
         hexColor = getResources().getColor(R.color.Light_Grey, null);
         hexChosenColor = getResources().getColor(R.color.Deep_Grey, null);
@@ -101,6 +108,21 @@ public class setLayoutView extends View {
 
     @Override
     protected void onDraw(Canvas canvas){
+
+        if(hexNumber == 10 && !isScaled){
+            length = length*scaleFactor;
+            for(int i =0; i< 10; i++){
+                hexX1[i] *= scaleFactor;
+                hexY1[i] *= scaleFactor;
+            }
+
+            for (int i =0; i < potentialNumber; i++){
+                potentialPosi[i][0] *= scaleFactor;
+                potentialPosi[i][1] *= scaleFactor;
+            }
+
+            isScaled = true;
+        }
 
         //TODO:Scale the canvas
 //        if(hexNumber > 10){
@@ -145,12 +167,10 @@ public class setLayoutView extends View {
 
         for(int i = 0; i < potentialNumber; i++){
             //For debug purpose-Bonny
-            canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
+//            canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
         }
 
-        if(hexNumber > 10){
-            canvas.scale(0.5f,0.5f);
-        }
+
 
     }
 
@@ -162,11 +182,14 @@ public class setLayoutView extends View {
         
 
 
+
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:{
 
                 float x = event.getX();
                 float y = event.getY();
+
+
 //                Log.d(TAG, "onTouchEvent: " +x);
 //                Log.d(TAG, "onTouchEvent: " +y);
 
@@ -182,6 +205,8 @@ public class setLayoutView extends View {
                     }else {
                         whichHex = -1;
                         Log.d(TAG, "onTouchEvent: ????");
+                        initX = event.getX();
+                        initY = event.getY();
                         postInvalidate();
 
                     }
@@ -205,11 +230,30 @@ public class setLayoutView extends View {
 //                        Log.d(TAG, "onTouchEvent: " +y);
 //                        whichHex = i;
                     postInvalidate();
+                }else {
+
+                    float dx = event.getX() - initX;
+                    float dy = event.getY() - initY;
+                    Log.d(TAG, "onTouchEvent:Dx "+ dx);
+                    Log.d(TAG, "onTouchEvent: Dy"+dy);
+
+                    for(int i = 0; i <= hexNumber; i++){
+
+                        hexX1[i] += dx/30;
+                        hexY1[i] += dy/30;
+                    }
+
+                    for(int i = 0; i < potentialNumber; i++){
+
+                        potentialPosi[i][0] += dx/30;
+                        potentialPosi[i][1] += dy/30;
+                    }
+
+                    postInvalidate();
                 }
 
-                        return true;
-//                    }
-//                }
+
+                return true;
 
 
             }
@@ -393,8 +437,8 @@ public class setLayoutView extends View {
 
     }
 
-    public void rotateHex(){
 
-        postInvalidate();
-    }
+
+
+
 }

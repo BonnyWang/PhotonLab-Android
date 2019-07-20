@@ -81,9 +81,27 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     Button add0;
     GradientDrawable checked0;
 
+    TinyDB tinyDB;
+    String ipAddr;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        tinyDB = new TinyDB(getContext());
+
+
+        if(tinyDB.getString("LocalIP").equals("")){
+
+            Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
+
+        }else {
+
+            ipAddr = tinyDB.getString("LocalIP");
+
+        }
+
+
     }
 
     @Override
@@ -192,6 +210,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                         checkedButton.setChecked(false);
                         checkedButton.setChecked(true);
                         webView.loadUrl("http://192.168.50.48/H");
+                        webLoad("pir?status=on");
                     }else {
                         sun.setColorFilter(0xffffd41f);
                         seekBar.getProgressDrawable().setTint(seekBarColor);
@@ -695,6 +714,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         add0.setClickable(true);
     }
 
+
+    private void webLoad(String command){
+
+        String commandline = "http:/"+ipAddr+"/"+command;
+        Log.d(TAG, "webControl: "+ commandline);
+
+        webView.loadUrl(commandline);
+
+    }
 }
 
 

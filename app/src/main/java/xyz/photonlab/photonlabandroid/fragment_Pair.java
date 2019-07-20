@@ -180,6 +180,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                         connect.setVisibility(View.GONE);
                         Blayout_Gone(step3_Layout, View.INVISIBLE);
                         Blayout_Show(step2_Layout);
+                        pbStep3.setVisibility(View.GONE);
                         return;
                     case 100:
                         progressBar.setProgress(75);
