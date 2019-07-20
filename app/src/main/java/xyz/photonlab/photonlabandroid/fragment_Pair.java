@@ -31,6 +31,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.github.druk.rx2dnssd.Rx2Dnssd;
+import com.github.druk.rx2dnssd.Rx2DnssdBindable;
+import com.github.druk.rx2dnssd.Rx2DnssdEmbedded;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import xyz.photonlab.photonlabandroid.R;
 
 import java.io.BufferedReader;
@@ -82,6 +89,9 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
     nsdFinder mnsdFinder;
 
+    Rx2Dnssd rxDnssd;
+    Disposable browseDisposable;
+
 
 
 
@@ -98,6 +108,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        rxDnssd = new Rx2DnssdEmbedded(getContext());
 
 
     }
@@ -218,8 +229,21 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
                 mnsdFinder = new nsdFinder(getContext());
-//
                 mnsdFinder.start();
+
+                browseDisposable = rxDnssd.browse("_elementlight._udp", "local.")
+                        .compose(rxDnssd.resolve())
+                        .compose(rxDnssd.queryRecords())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(bonjourService -> {
+                            Log.d("TAG",  bonjourService.getInet4Address().toString());
+//            if (bonjourService.isLost()) {
+//                mServiceAdapter.remove(bonjourService);
+//            } else {
+//                mServiceAdapter.add(bonjourService);
+//            }
+                        }, throwable -> Log.e("TAG", "error", throwable));
 
 
 

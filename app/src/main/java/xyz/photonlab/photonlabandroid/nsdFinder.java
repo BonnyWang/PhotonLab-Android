@@ -101,7 +101,7 @@ public class nsdFinder {
 //                nsdManager.resolveService(service,resolveListener);
 
 //                if (service.getServiceType().equals("_udp.local.")) {
-//                    nsdManager.stopServiceDiscovery(this);
+                    nsdManager.stopServiceDiscovery(this);
                     nsdManager.resolveService(service, resolveListener);
 //                }
 //                if (!service.getServiceType().equals(SERVICE_TYPE)) {
@@ -173,7 +173,7 @@ public class nsdFinder {
         initializeRegistrationListener();
         registerService(10);
         initializeDiscoveryListener();
-        nsdManager.discoverServices("_services._dns-sd", NsdManager.PROTOCOL_DNS_SD, discoveryListener);
+        nsdManager.discoverServices("_elementlight._udp", NsdManager.PROTOCOL_DNS_SD, discoveryListener);
     }
 
 }

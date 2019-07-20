@@ -32,7 +32,6 @@ dependencies {
 //    implementation(name:'fing-kit', ext:'aar') {
 //        transitive=true
 //    }
-    implementation project(":fing-kit")
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
@@ -59,7 +58,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
-
+    implementation 'com.github.andriydruk:rx2dnssd:0.9.13'
 
     //compile 'com.android.support:recyclerview-v7:21.0.+'
     //added for material design
