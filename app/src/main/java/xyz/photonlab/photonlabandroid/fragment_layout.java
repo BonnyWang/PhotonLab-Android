@@ -19,6 +19,7 @@ public class fragment_layout extends Fragment {
     Button btDelete;
     Button btRotate;
     Button btBack;
+    Button btNext;
     setLayoutView msetLayoutView;
 
     float rotation;
@@ -72,6 +73,8 @@ public class fragment_layout extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+        btNext = view.findViewById(R.id.btNext);
 
         return view;
     }

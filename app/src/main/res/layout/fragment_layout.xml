@@ -13,7 +13,7 @@
     <xyz.photonlab.photonlabandroid.views.setLayoutView
         android:id="@+id/msetLayoutView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btBackLayout"
@@ -44,8 +44,9 @@
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@android:color/white"
-        android:background="@color/colorPrimary"
-        android:textAllCaps="false"/>
+        android:background="@drawable/set_background"
+        android:backgroundTint="@color/colorPrimary"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/btDelete"

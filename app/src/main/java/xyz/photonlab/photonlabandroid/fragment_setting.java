@@ -92,6 +92,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 ft5.replace(R.id.fgm, mfragment_layout).addToBackStack(null);
                 ft5.commit();
+                break;
 
             case 6:
                 fragment_system mfragment_system = new fragment_system();

@@ -215,6 +215,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                         sun.setColorFilter(0xffffd41f);
                         seekBar.getProgressDrawable().setTint(seekBarColor);
                         webView.loadUrl("http://192.168.50.48/H");
+                        webLoad("pir?status=on");
                     }
 
                     tinyDB.putInt("Power",1);

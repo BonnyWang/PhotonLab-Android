@@ -49,11 +49,13 @@ public class setLayoutView extends View {
     private float[][] potentialPosi = new float[999][];
     int potentialNumber;
 
-    float initX;
-    float initY;
+    float tempX;
+    float tempY;
 
     Boolean isScaled;
+    Boolean touchBound;
     float scaleFactor;
+    float sensitivity;
 
 
     public setLayoutView(Context context) {
@@ -84,7 +86,9 @@ public class setLayoutView extends View {
         potentialNumber = 0;
 
         isScaled = false;
+        touchBound = false;
         scaleFactor = 0.8f;
+        sensitivity = 1.3f;
 
 
         hexColor = getResources().getColor(R.color.Light_Grey, null);
@@ -97,6 +101,17 @@ public class setLayoutView extends View {
            hexY1[i] = initPosY;
         }
 
+        paint.setColor(hexColor);
+        paint.setAntiAlias(true);
+
+        paintStroke.setColor(getResources().getColor(R.color.backGround,null));
+        paintStroke.setStyle(Paint.Style.STROKE);
+        paintStroke.setStrokeWidth(dividerLength);
+        paintStroke.setAntiAlias(true);
+
+        paintSelected.setColor(hexChosenColor);
+        paintSelected.setAntiAlias(true);
+
 
 //        potentialPosi[0] = new float[]{50f,50f};
 //        for(int i = 0; i < 100; i++){
@@ -108,37 +123,6 @@ public class setLayoutView extends View {
 
     @Override
     protected void onDraw(Canvas canvas){
-
-        if(hexNumber == 10 && !isScaled){
-            length = length*scaleFactor;
-            for(int i =0; i< 10; i++){
-                hexX1[i] *= scaleFactor;
-                hexY1[i] *= scaleFactor;
-            }
-
-            for (int i =0; i < potentialNumber; i++){
-                potentialPosi[i][0] *= scaleFactor;
-                potentialPosi[i][1] *= scaleFactor;
-            }
-
-            isScaled = true;
-        }
-
-        //TODO:Scale the canvas
-//        if(hexNumber > 10){
-//            length = 50f;
-//        }
-
-        paint.setColor(hexColor);
-        paint.setAntiAlias(true);
-
-        paintStroke.setColor(getResources().getColor(R.color.backGround,null));
-        paintStroke.setStyle(Paint.Style.STROKE);
-        paintStroke.setStrokeWidth(dividerLength);
-        paintStroke.setAntiAlias(true);
-
-        paintSelected.setColor(hexChosenColor);
-        paintSelected.setAntiAlias(true);
 
         if(hexX1[0] == 0f || hexY1[0] == 0f){
             hexX1[0] = getWidth()/2f;
@@ -205,8 +189,8 @@ public class setLayoutView extends View {
                     }else {
                         whichHex = -1;
                         Log.d(TAG, "onTouchEvent: ????");
-                        initX = event.getX();
-                        initY = event.getY();
+                        tempX = event.getX();
+                        tempY = event.getY();
                         postInvalidate();
 
                     }
@@ -217,6 +201,8 @@ public class setLayoutView extends View {
             }
 
             case MotionEvent.ACTION_MOVE:{
+
+                touchBound = false;
 
                 float x = event.getX();
                 float y = event.getY();
@@ -232,22 +218,39 @@ public class setLayoutView extends View {
                     postInvalidate();
                 }else {
 
-                    float dx = event.getX() - initX;
-                    float dy = event.getY() - initY;
+                    float dx = event.getX() - tempX;
+                    float dy = event.getY() - tempY;
+
+                    tempX = event.getX();
+                    tempY = event.getY();
+
                     Log.d(TAG, "onTouchEvent:Dx "+ dx);
                     Log.d(TAG, "onTouchEvent: Dy"+dy);
 
+
                     for(int i = 0; i <= hexNumber; i++){
 
-                        hexX1[i] += dx/30;
-                        hexY1[i] += dy/30;
+                        if((dx > 0 && hexX1[i] >= getWidth()) || (dx < 0 && hexX1[i] <= 0) ||
+                                (dy > 0 && hexY1[i] >= getHeight()) || dy < 0 && hexY1[i] <= 0){
+                            touchBound = true;
+                        }
+
                     }
 
-                    for(int i = 0; i < potentialNumber; i++){
+                    if (!touchBound){
+                        for(int i = 0; i <= hexNumber; i++){
+                            hexX1[i] += dx/sensitivity;
+                            hexY1[i] += dy/sensitivity;
+                        }
 
-                        potentialPosi[i][0] += dx/30;
-                        potentialPosi[i][1] += dy/30;
+                        for(int i = 0; i < potentialNumber; i++){
+
+                            potentialPosi[i][0] += dx/sensitivity;
+                            potentialPosi[i][1] += dy/sensitivity;
+                        }
                     }
+
+
 
                     postInvalidate();
                 }
@@ -358,6 +361,20 @@ public class setLayoutView extends View {
             hexNumber++;
         }
 
+        if(hexNumber == 10) {
+            length = length * scaleFactor;
+            for (int i = 0; i < 10; i++) {
+                hexX1[i] *= scaleFactor;
+                hexY1[i] *= scaleFactor;
+            }
+
+            for (int i = 0; i < potentialNumber; i++) {
+                potentialPosi[i][0] *= scaleFactor;
+                potentialPosi[i][1] *= scaleFactor;
+            }
+        }
+
+
         Log.d(TAG, "addHex: ");
 
         postInvalidate();
@@ -412,6 +429,7 @@ public class setLayoutView extends View {
     }
 
     public void deleteHex(){
+
         if(hexNumber > 0 && whichHex !=-1){
             for(int i = whichHex; i < hexNumber; i++){
                 hexX1[i] = hexX1[i+1];
@@ -421,11 +439,24 @@ public class setLayoutView extends View {
             hexX1[hexNumber] = initPosX;
             hexY1[hexNumber] = initPosY;
 
-
-            whichHex = -1;
             hexNumber--;
-            postInvalidate();
+            whichHex = -1;
         }
+
+        if(hexNumber == 9){
+            length = length / scaleFactor;
+            for (int i = 0; i < 10; i++) {
+                hexX1[i] /= scaleFactor;
+                hexY1[i] /= scaleFactor;
+            }
+
+            for (int i = 0; i < potentialNumber; i++) {
+                potentialPosi[i][0] /= scaleFactor;
+                potentialPosi[i][1] /= scaleFactor;
+            }
+        }
+
+        postInvalidate();
 
 
 //        if(hexNumber > 0){
