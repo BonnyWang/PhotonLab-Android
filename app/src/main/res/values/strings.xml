@@ -51,10 +51,11 @@
     <string name="Download_Theme">Download Themes</string>
     <string name="Next">Next</string>
     <string name="System">System</string>
-    <string name="Device_Name">Device Name</string>
+    <string name="Device_Name">Device</string>
     <string name="Reset">Reset</string>
     <string name="Privacy_Policy">Privacy Policy</string>
     <string name="App_Software">App Software</string>
     <string name="Explore">Expore</string>
     <string name="Layout_Manager">Layout Manager</string>
+    <string name="No_Device">No Device</string>
 </resources>

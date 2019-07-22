@@ -144,8 +144,11 @@ public class dialog_colorpicker extends DialogFragment {
         setBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mlistener.beSet(colorcode, whichOne);
-                dismiss();
+
+                if (whichOne == 0) {
+                    mlistener.beSet(colorcode, whichOne);
+                    dismiss();
+                }
 
             }
         });

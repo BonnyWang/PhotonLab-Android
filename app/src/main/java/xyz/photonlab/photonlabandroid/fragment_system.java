@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,17 +13,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 public class fragment_system extends Fragment {
 
     Button btBack;
 
-    ImageView ivPrivacyArrow;
+    ConstraintLayout clPrivacy;
+    TextView tvMacAddr;
+
+    TinyDB tinyDB;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        tinyDB = new TinyDB(getContext());
 
     }
 
@@ -40,14 +47,26 @@ public class fragment_system extends Fragment {
             }
         });
 
-        ivPrivacyArrow = view.findViewById(R.id.ivPrivacyArrow);
-        ivPrivacyArrow.setOnClickListener(new View.OnClickListener() {
+        clPrivacy = view.findViewById(R.id.clPrivacy);
+        clPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.photonlab.xyz/privacypolicy.html"));
                 startActivity(browserIntent);
             }
         });
+
+        tvMacAddr = view.findViewById(R.id.tvDeviceMac);
+        if(tinyDB.getString("macAddr").equals("")){
+            // No change
+            // No device -B
+        }else{
+            String mac = tinyDB.getString("macAddr").substring(8,10) + "-"+
+                    tinyDB.getString("macAddr").substring(10);
+            tvMacAddr.setText(mac.trim(), TextView.BufferType.SPANNABLE);
+////            tvMacAddr.setText();
+        }
+
         return view;
     }
 

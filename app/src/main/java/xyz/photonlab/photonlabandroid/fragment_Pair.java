@@ -224,7 +224,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                                     +"&password="+password_Input.getText().toString());
                 Log.d(TAG, "onClickConnect: "+"http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
 
-//                new JsonTask().execute("http://elementlight.local/ip");
+
                 Log.d(TAG, "onClick: start discovery");
 
 
@@ -243,6 +243,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                             Log.d("TAG",  bonjourService.getInet4Address().toString());
 
                             tinyDB.putString("LocalIP", bonjourService.getInet4Address().toString());
+                            new JsonTask().execute("http:/" + bonjourService.getInet4Address().toString() + "/mac" );
 
                             layout_Show(step4_Layout);
                             layout_Gone(step3_Layout,View.INVISIBLE);
@@ -306,6 +307,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
             // scan failure handling
             Log.d(TAG, "onCreateView: scan not success");
             scanFailure(wifiManager);
+            wifiManager.startScan();
         }
 
 
@@ -474,13 +476,18 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
             Log.d(TAG, "onPostExecute: "+result);
             if(result!=null) {
-                String temp = result.replaceAll("\\{", " ");
-                temp = temp.replaceAll("\"", " ");
+                String temp = result.replaceAll("\\{", "");
+                temp = temp.replaceAll("\\}", "");
+                temp = temp.replaceAll("\"", "");
                 Log.d(TAG, "onPostExecute:place " + temp);
-                String[] a = result.split(",");
-                for(int i = 0; i< a.length;i++){
-                    Log.d(TAG, "onPostExecute: "+a[i]);
+                String[] message = temp.split(",");
+                for(int i = 0; i< message.length;i++){
+                    Log.d(TAG, "onPostExecute: "+message[i]);
                 }
+
+                String macAddr = message[1].split(":")[1];
+                Log.d(TAG, "onPostExecute: macAddr : "+ macAddr);
+                tinyDB.putString("macAddr", macAddr);
             }
 
         }
