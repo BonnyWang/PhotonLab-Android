@@ -35,6 +35,8 @@ public class dialog_colorpicker extends DialogFragment {
     EditText gValue;
     EditText bValue;
 
+    private static final String TAG = "dialog_Colorpicker";
+
     static int whichOne;
 
 
@@ -61,13 +63,13 @@ public class dialog_colorpicker extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                colorDisk.hideCursor();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 try{
-                    rgb_reading();
+                    rgb_reading(view);
                 }
 
                 catch(NumberFormatException ex){}
@@ -84,13 +86,13 @@ public class dialog_colorpicker extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                colorDisk.hideCursor();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 try{
-                    rgb_reading();
+                    rgb_reading(view);
                 }
                 catch(NumberFormatException ex){}
             }
@@ -106,13 +108,13 @@ public class dialog_colorpicker extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                colorDisk.hideCursor();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 try{
-                    rgb_reading();
+                    rgb_reading(view);
                 }
                 catch(NumberFormatException ex){}
             }
@@ -159,6 +161,7 @@ public class dialog_colorpicker extends DialogFragment {
             public void onColorBack(int a, int r, int g, int b) {
 //                tv.setText("R：" + r + "\nG：" + g + "\nB：" + b + "\n" + colorDisk.getColorStr());
 //                tv.setTextColor(Color.argb(a, r, g, b));
+
                 rValue.setText(String.valueOf(r));
                 gValue.setText(String.valueOf(g));
                 bValue.setText(String.valueOf(b));
@@ -167,6 +170,8 @@ public class dialog_colorpicker extends DialogFragment {
                 colorStr=colorDisk.getColorStr();
                 colorcode=colorDisk.getColorcode();
             }
+
+
         });
 
         return view;
@@ -212,10 +217,15 @@ public class dialog_colorpicker extends DialogFragment {
         setButton_Background.setSize(width,height);
         setBt.setBackground(setButton_Background);
     }
-    public void rgb_reading(){
+    public void rgb_reading(View view){
         int r= Integer.parseInt(rValue.getText().toString());
         int g= Integer.parseInt(gValue.getText().toString());
         int b= Integer.parseInt(bValue.getText().toString());
+//        Log.d(TAG, "refreshing color picker ");
+//        colorDisk = null;
+//        colorDisk = view.findViewById(R.id.colorDisk);
+
+
         colorStr=  "#" + colorDisk.toBrowserHexValue(r)
                 + colorDisk.toBrowserHexValue(g)
                 + colorDisk.toBrowserHexValue(b);
