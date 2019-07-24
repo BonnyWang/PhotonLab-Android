@@ -36,12 +36,13 @@
     <string-array name="theme_Menu">
         <item>ALL</item>
         <item>Favorite</item>
-        <item>Sweet sweet</item>
+        <item>Music</item>
     </string-array>
 
     <string-array name="Explore_Menu">
         <item>ALL</item>
-
+        <item>Creative</item>
+        <item>Tutorial</item>
     </string-array>
     <string name="Motion_Detect">Motion Detect</string>
     <string name="Time_Delay">Time Delay</string>
@@ -55,6 +56,6 @@
     <string name="Reset">Reset</string>
     <string name="Privacy_Policy">Privacy Policy</string>
     <string name="App_Software">App Software</string>
-    <string name="Explore">Expore</string>
+    <string name="Explore">Explore</string>
     <string name="Layout_Manager">Layout Manager</string>
 </resources>
