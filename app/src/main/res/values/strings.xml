@@ -60,4 +60,5 @@
     <string name="No_Device">No Device</string>
     <string name="Opps_Error">Oops! Error occurred</string>
     <string name="error_Message">Please make sure your WiFi network\n is correctly configurated.</string>
+    <string name="try_again">Try Again</string>
 </resources>

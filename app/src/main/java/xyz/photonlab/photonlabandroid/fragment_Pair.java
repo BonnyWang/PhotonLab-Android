@@ -27,6 +27,7 @@ import android.widget.ScrollView;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -77,6 +78,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     Button back;
     Button connect;
     Button done;
+    Button tryAgain;
     RecyclerView rv;
     EditText password_Input;
     ProgressBar progressBar;
@@ -138,6 +140,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         back = view.findViewById(R.id.backButton_Pairing);
         done = view.findViewById(R.id.done);
         connect = view.findViewById(R.id.connect_Button);
+        tryAgain = view.findViewById(R.id.btTryAgain);
 
         step1_layout = view.findViewById(R.id.step1);
         step2_Layout = view.findViewById(R.id.step2);
@@ -157,6 +160,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         step2_Layout.setVisibility(View.INVISIBLE);
         step3_Layout.setVisibility(View.INVISIBLE);
         step4_Layout.setVisibility(View.INVISIBLE);
+        step4Failed_Layout.setVisibility(View.INVISIBLE);
         progressBar.setProgress(25);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -310,6 +314,19 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                 }
             }
         };
+
+
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Reload to new fragment -bbb
+                fragment_Pair mfragment_pair = new fragment_Pair();
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.container, mfragment_pair);
+                ft.commit();
+            }
+        });
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -516,6 +533,14 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                     done.setVisibility(View.VISIBLE);
                 }catch (Exception e){
                     Log.d(TAG, "onPostExecute: MacError");
+                    layout_Show(step4Failed_Layout);
+                    layout_Gone(step3_Layout, View.INVISIBLE);
+                    progressBar.setProgress(100);
+                    connect.setVisibility(View.GONE);
+                    connect.setClickable(false);
+                    password_Input.setVisibility(View.GONE);
+                    password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    done.setVisibility(View.VISIBLE);
                 }
             }else{
                 layout_Show(step4Failed_Layout);
