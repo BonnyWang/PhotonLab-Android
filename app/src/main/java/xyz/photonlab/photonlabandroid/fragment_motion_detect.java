@@ -28,7 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class fragment_motion_detect extends Fragment {
+public class fragment_motion_detect extends FullScreenFragment {
 
 
     final Context context = getContext();

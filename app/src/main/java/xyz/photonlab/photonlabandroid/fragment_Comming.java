@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import xyz.photonlab.photonlabandroid.R;
 
 
-public class fragment_Comming extends Fragment {
+public class fragment_Comming extends FullScreenFragment {
 
     String pageName;
     TextView title;
