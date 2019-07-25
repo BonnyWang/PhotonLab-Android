@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".fragment_Pair">
 
+    <Button
+        android:id="@+id/backButton_Pairing"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/back_button"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="6dp"
+        android:backgroundTint="@color/colorPrimary"/>
+
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/pairingDevice"
@@ -18,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp" />
 
     <ProgressBar
@@ -74,17 +86,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <Button
-        android:id="@+id/backButton_Pairing"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:text=""
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/back_button"
-        android:layout_marginTop="25dp"
-        android:backgroundTint="@color/colorPrimary"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/step1"

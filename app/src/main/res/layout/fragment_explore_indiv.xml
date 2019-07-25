@@ -23,13 +23,11 @@
                 android:id="@+id/btBackExIndiv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="6dp"
                 android:background="@drawable/back_button"
                 android:backgroundTint="@color/colorPrimary"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -48,15 +46,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
+                android:layout_marginEnd="12dp"
                 android:id="@+id/button3"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/share_border"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_share"
                 android:backgroundTint="@color/colorPrimary"
-                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

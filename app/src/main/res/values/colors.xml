@@ -16,4 +16,5 @@
     <color name="DeepText">#231d33</color>
     <color name="Light_Grey">#c6c6c6</color>
     <color name="Deep_Grey">#8d8d8d</color>
+    <color name="gray">#262626</color>
 </resources>
