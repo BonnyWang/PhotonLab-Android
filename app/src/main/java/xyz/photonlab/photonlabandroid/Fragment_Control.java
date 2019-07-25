@@ -97,7 +97,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
         }else {
 
-            ipAddr = tinyDB.getString("LocalIP");
+            ipAddr = tinyDB.getString("LocalIp");
 
         }
 

@@ -70,6 +70,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     ConstraintLayout step1_layout;
     ConstraintLayout step3_Layout;
     ConstraintLayout step4_Layout;
+    ConstraintLayout step4Failed_Layout;
     ConstraintLayout pbStep3;
 
     Button yes_Connected;
@@ -142,6 +143,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         step2_Layout = view.findViewById(R.id.step2);
         step3_Layout = view.findViewById(R.id.step3);
         step4_Layout = view.findViewById(R.id.step4);
+        step4Failed_Layout = view.findViewById(R.id.step4Failed);
         pbStep3 = view.findViewById(R.id.pbStep3);
 
         password_Input = view.findViewById(R.id.edit_Password);
@@ -221,25 +223,25 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         });
 
         connect.setOnClickListener(new View.OnClickListener() {
-                                       @Override
-                                       public void onClick(View v) {
+           @Override
+           public void onClick(View v) {
 
-                                           webViewPair.loadUrl("http://" + apIpAddress + "/join?ssid=" + TargetSSID
-                                                   + "&password=" + password_Input.getText().toString());
-                                           Log.d(TAG, "onClickConnect: " + "http://" + apIpAddress + "/join?ssid=" + TargetSSID
-                                                   + "&password=" + password_Input.getText().toString());
-
-
-                                           Log.d(TAG, "onClick: start discovery");
-
-                                           new JsonTask().execute("http://" + apIpAddress + "/join?ssid=" + TargetSSID
-                                                   + "&password=" + password_Input.getText().toString());
+//                                           webViewPair.loadUrl("http://" + apIpAddress + "/join?ssid=" + TargetSSID
+//                                                   + "&password=" + password_Input.getText().toString());
+               Log.d(TAG, "onClickConnect: " + "http://" + apIpAddress + "/join?ssid=" + TargetSSID
+                       + "&password=" + password_Input.getText().toString());
 
 
-                                           mnsdFinder = new nsdFinder(getContext());
-                                           mnsdFinder.start();
+               Log.d(TAG, "onClick: start discovery");
 
-                                           pbStep3.setVisibility(View.VISIBLE);
+               new JsonTask().execute("http://" + apIpAddress + "/join?ssid=" + TargetSSID
+                       + "&password=" + password_Input.getText().toString());
+
+
+               mnsdFinder = new nsdFinder(getContext());
+               mnsdFinder.start();
+
+               pbStep3.setVisibility(View.VISIBLE);
 
 /*                browseDisposable = rxDnssd.browse("_elementlight._udp", "local.")
                         .compose(rxDnssd.resolve())
@@ -515,6 +517,16 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                 }catch (Exception e){
                     Log.d(TAG, "onPostExecute: MacError");
                 }
+            }else{
+                layout_Show(step4Failed_Layout);
+                layout_Gone(step3_Layout, View.INVISIBLE);
+                progressBar.setProgress(100);
+                connect.setVisibility(View.GONE);
+                connect.setClickable(false);
+                password_Input.setVisibility(View.GONE);
+                password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                done.setVisibility(View.VISIBLE);
+
             }
 
         }
