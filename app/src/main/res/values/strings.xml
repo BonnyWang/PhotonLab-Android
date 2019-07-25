@@ -21,7 +21,8 @@
     <string name="Settings">Settings</string>
     <string name="PhotonLab_V"> v1.0.1</string>
     <string name="Pairing">Pairing Devices</string>
-    <string name="Pair_Instruction1">Go to your setting\n\n Connect to the WiFi\n "PhotonLab_Element"</string>
+    <string name="Pair_Instruction1">1.Go to system Wi-Fi</string>
+    <string name="Pair_Instruction2">2. Connect "ElementLight-xx"</string>
     <string name="Yes_Connected">Yes, I\'m connected!</string>
     <string name="Wifi_Password">Wifi Password</string>
     <string name="Connect">Connect</string>
@@ -61,4 +62,6 @@
     <string name="Opps_Error">Oops! Error occurred</string>
     <string name="error_Message">Please make sure your WiFi network\n is correctly configurated.</string>
     <string name="try_again">Try Again</string>
+    <string name="Help"><u>Help?</u></string>
+
 </resources>

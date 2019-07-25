@@ -81,19 +81,27 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"/>
-
-            <TextView
-                android:id="@+id/tvDeviceMac"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/ivDevice"
+                android:layout_width="32dp"
                 android:layout_height="wrap_content"
-                android:text="@string/No_Device"
-                android:gravity="end"
+                android:src="@drawable/arrow_right"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor = "#383838"
-                android:textSize="18sp"
-                />
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <!--<TextView-->
+                <!--android:id="@+id/tvDeviceMac"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/No_Device"-->
+                <!--android:gravity="end"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--android:textColor = "#383838"-->
+                <!--android:textSize="18sp"-->
+                <!--/>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

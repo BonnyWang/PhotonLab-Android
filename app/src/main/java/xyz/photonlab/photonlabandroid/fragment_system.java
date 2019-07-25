@@ -21,7 +21,8 @@ public class fragment_system extends Fragment {
     Button btBack;
 
     ConstraintLayout clPrivacy;
-    TextView tvMacAddr;
+    TextView tvDeviceName;
+
 
     TinyDB tinyDB;
 
@@ -56,14 +57,13 @@ public class fragment_system extends Fragment {
             }
         });
 
-        tvMacAddr = view.findViewById(R.id.tvDeviceMac);
-        if(tinyDB.getString("macAddr").equals("")){
+        tvDeviceName = view.findViewById(R.id.tvDeviceName);
+        if(tinyDB.getString("LocalIP").equals("")){
             // No change
             // No device -B
         }else{
-            String mac = tinyDB.getString("macAddr").substring(8,10) + "-"+
-                    tinyDB.getString("macAddr").substring(10);
-            tvMacAddr.setText(mac.trim(), TextView.BufferType.SPANNABLE);
+            String ipAddr = tinyDB.getString("LocalIp");
+            tvDeviceName.setText(ipAddr.trim(), TextView.BufferType.SPANNABLE);
 ////            tvMacAddr.setText();
         }
 

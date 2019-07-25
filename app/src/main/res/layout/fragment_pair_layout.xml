@@ -101,6 +101,17 @@
         android:animateLayoutChanges="true"
         android:background="@color/backGround">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivRounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/rounter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.2"/>
+
         <TextView
             android:id="@+id/instruction1"
             android:layout_width="wrap_content"
@@ -110,12 +121,30 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivRounter"
+            android:background="@drawable/set_background"
             app:layout_constraintVertical_bias="0.24"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#717171"
-            android:gravity="center_horizontal"/>
+            android:textColor="#555555"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/pairInstruction2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/Pair_Instruction2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/instruction1"
+            android:background="@drawable/set_background"
+            app:layout_constraintVertical_bias="0.24"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#8d8d8d"
+            android:gravity="center"/>
 
         <Button
             android:id="@+id/YesConnected"
@@ -123,7 +152,7 @@
             android:layout_height="52dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/instruction1"
+            app:layout_constraintTop_toBottomOf="@id/pairInstruction2"
             android:layout_marginTop="40dp"
             android:text="@string/Yes_Connected"
             android:textStyle="bold"
@@ -141,7 +170,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="15dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/progressBar"
         app:layout_constraintTop_toBottomOf="@id/pairingDevice"
         android:animateLayoutChanges="true"
@@ -237,7 +266,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="15dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/progressBar"
         app:layout_constraintTop_toBottomOf="@id/pairingDevice"
         android:animateLayoutChanges="true"
@@ -276,7 +305,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="15dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/progressBar"
         app:layout_constraintTop_toBottomOf="@id/pairingDevice"
         android:animateLayoutChanges="true"
@@ -307,6 +336,18 @@
             app:layout_constraintTop_toBottomOf="@id/tvOpps_Error"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.1"
+            android:textStyle="bold"
+            android:textColor="@color/Deep_Grey"
+            />
+
+        <TextView
+            android:id="@+id/tvErrorHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Help"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvErrorMessager"
             android:textStyle="bold"
             android:textColor="@color/Deep_Grey"
             />

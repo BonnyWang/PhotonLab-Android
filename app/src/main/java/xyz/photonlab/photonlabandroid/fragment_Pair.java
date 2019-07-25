@@ -6,12 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -100,6 +104,11 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 //    nsdFinder.nsdListner mnsdListener = this;
     Boolean isResolved;
 
+    Handler mhandler;
+
+    TextView tvErrorHelp;
+    TextView tvGotoSetting;
+
 
 
 
@@ -121,6 +130,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
         isResolved = false;
 
+        mhandler = new Handler();
+
 
     }
 
@@ -141,6 +152,7 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         done = view.findViewById(R.id.done);
         connect = view.findViewById(R.id.connect_Button);
         tryAgain = view.findViewById(R.id.btTryAgain);
+        tvErrorHelp = view.findViewById(R.id.tvErrorHelp);
 
         step1_layout = view.findViewById(R.id.step1);
         step2_Layout = view.findViewById(R.id.step2);
@@ -211,18 +223,22 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         yes_Connected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layout_Gone(step1_layout, View.INVISIBLE);
-                layout_Show(step2_Layout);
+                Log.d(TAG, "onClick: "+wifiManager.getConnectionInfo().getSSID());
+                if(wifiManager.getConnectionInfo().getSSID().startsWith("\"ElementLight")){
+                    layout_Gone(step1_layout, View.INVISIBLE);
+                    layout_Show(step2_Layout);
 //                step2_Layout.setVisibility(View.VISIBLE);
 //                step1_layout.setVisibility(View.GONE);
-                progressBar.setProgress(50);
-                yes_Connected.setClickable(false);
-                int tempIP = wifiManager.getDhcpInfo().gateway;
-                apIpAddress = ipToString(tempIP);
-                rv.setVisibility(View.VISIBLE);
-                rv.setClickable(true);
-                rv.setFocusable(true);
-
+                    progressBar.setProgress(50);
+                    yes_Connected.setClickable(false);
+                    int tempIP = wifiManager.getDhcpInfo().gateway;
+                    apIpAddress = ipToString(tempIP);
+                    rv.setVisibility(View.VISIBLE);
+                    rv.setClickable(true);
+                    rv.setFocusable(true);
+                }else {
+                    Toast.makeText(getContext(),"Not connected to the light",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -242,10 +258,14 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                        + "&password=" + password_Input.getText().toString());
 
 
+
+
                mnsdFinder = new nsdFinder(getContext());
                mnsdFinder.start();
 
                pbStep3.setVisibility(View.VISIBLE);
+
+               password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
 /*                browseDisposable = rxDnssd.browse("_elementlight._udp", "local.")
                         .compose(rxDnssd.resolve())
@@ -320,11 +340,30 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
             @Override
             public void onClick(View v) {
 
+                getActivity().getSupportFragmentManager().popBackStack();
+
                 //Reload to new fragment -bbb
                 fragment_Pair mfragment_pair = new fragment_Pair();
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.container, mfragment_pair);
+                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft.replace(R.id.container, mfragment_pair).addToBackStack(null);
                 ft.commit();
+            }
+        });
+
+        tvErrorHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.photonlab.xyz/help.html"));
+                startActivity(browserIntent);
+            }
+        });
+
+        tvGotoSetting = view.findViewById(R.id.instruction1);
+        tvGotoSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
             }
         });
 
@@ -445,6 +484,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
     private class JsonTask extends AsyncTask<String, String, String> {
 
+        Boolean sucess = false;
+
         protected void onPreExecute() {
             super.onPreExecute();
 
@@ -457,6 +498,25 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         }
 
         protected String doInBackground(String... params) {
+
+
+            Runnable runnable =  new Runnable() {
+                @Override
+                public void run() {
+
+                    if(!sucess) {
+
+                        layout_Show(step4Failed_Layout);
+                        layout_Gone(step3_Layout, View.INVISIBLE);
+                        progressBar.setProgress(100);
+                        connect.setVisibility(View.GONE);
+                        connect.setClickable(false);
+                        password_Input.setVisibility(View.GONE);
+                        done.setVisibility(View.VISIBLE);
+                    }
+                }
+            };
+            mhandler.postDelayed(runnable, 30000);
 
 
             HttpURLConnection connection = null;
@@ -479,8 +539,9 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                     buffer.append(line+"\n");
                     Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
 
-                }
 
+                }
+                sucess = true;
                 return buffer.toString();
 
 
@@ -508,50 +569,51 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
             super.onPostExecute(result);
 
             Log.d(TAG, "onPostExecute: "+result);
-            if(result!=null) {
-                String temp = result.replaceAll("\\{", "");
-                temp = temp.replaceAll("\\}", "");
-                temp = temp.replaceAll("\"", "");
-                Log.d(TAG, "onPostExecute:place " + temp);
-                String[] message = temp.split(",");
-                for(int i = 0; i< message.length;i++){
-                    Log.d(TAG, "onPostExecute: "+message[i]);
-                }
 
-                try {
-                    String ipAddr = message[1].split(":")[1];
-                    Log.d(TAG, "onPostExecute: ipAddr : " + ipAddr);
-                    tinyDB.putString("LocalIp", ipAddr);
+            if(sucess) {
+                if (result != null) {
+                    String temp = result.replaceAll("\\{", "");
+                    temp = temp.replaceAll("\\}", "");
+                    temp = temp.replaceAll("\"", "");
+                    Log.d(TAG, "onPostExecute:place " + temp);
+                    String[] message = temp.split(",");
+                    for (int i = 0; i < message.length; i++) {
+                        Log.d(TAG, "onPostExecute: " + message[i]);
+                    }
 
-                    layout_Show(step4_Layout);
-                    layout_Gone(step3_Layout, View.INVISIBLE);
-                    progressBar.setProgress(100);
-                    connect.setVisibility(View.GONE);
-                    connect.setClickable(false);
-                    password_Input.setVisibility(View.GONE);
-                    password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                    done.setVisibility(View.VISIBLE);
-                }catch (Exception e){
-                    Log.d(TAG, "onPostExecute: MacError");
+                    try {
+                        String ipAddr = message[1].split(":")[1];
+                        Log.d(TAG, "onPostExecute: ipAddr : " + ipAddr);
+                        tinyDB.putString("LocalIp", ipAddr);
+
+                        layout_Show(step4_Layout);
+                        layout_Gone(step3_Layout, View.INVISIBLE);
+                        progressBar.setProgress(100);
+                        connect.setVisibility(View.GONE);
+                        connect.setClickable(false);
+                        password_Input.setVisibility(View.GONE);
+                        password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                        done.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        Log.d(TAG, "onPostExecute: MacError");
+                        layout_Show(step4Failed_Layout);
+                        layout_Gone(step3_Layout, View.INVISIBLE);
+                        progressBar.setProgress(100);
+                        connect.setVisibility(View.GONE);
+                        connect.setClickable(false);
+                        password_Input.setVisibility(View.GONE);
+                        done.setVisibility(View.VISIBLE);
+                    }
+                } else {
                     layout_Show(step4Failed_Layout);
                     layout_Gone(step3_Layout, View.INVISIBLE);
                     progressBar.setProgress(100);
                     connect.setVisibility(View.GONE);
                     connect.setClickable(false);
                     password_Input.setVisibility(View.GONE);
-                    password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
                     done.setVisibility(View.VISIBLE);
-                }
-            }else{
-                layout_Show(step4Failed_Layout);
-                layout_Gone(step3_Layout, View.INVISIBLE);
-                progressBar.setProgress(100);
-                connect.setVisibility(View.GONE);
-                connect.setClickable(false);
-                password_Input.setVisibility(View.GONE);
-                password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                done.setVisibility(View.VISIBLE);
 
+                }
             }
 
         }
