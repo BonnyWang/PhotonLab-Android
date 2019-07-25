@@ -127,7 +127,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         int heightInDP = Math.round(dm.heightPixels / dm.density);
         Log.d("fuck", "onCreateView: "+heightInDP);
         if (heightInDP<570) {
-            Toast.makeText( getContext(), "Please change a phone", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onCreateView: " + "please change a " );
         }
         else if (heightInDP<650) {
             CardView cv=view.findViewById(R.id.cv);

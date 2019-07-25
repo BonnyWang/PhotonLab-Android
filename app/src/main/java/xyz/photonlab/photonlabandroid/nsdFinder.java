@@ -21,10 +21,11 @@ public class nsdFinder {
     NsdManager nsdManager;
 
     Context context;
-
+//    nsdListner mnsdListner;
 
     nsdFinder(Context context) {
         this.context = context;
+//        this.mnsdListner = mnsdListner;
     }
 
     public void initializeServerSocket() {
@@ -155,6 +156,8 @@ public class nsdFinder {
             @Override
             public void onServiceResolved(NsdServiceInfo serviceInfo) {
                 Log.e(TAG, "Resolve Succeeded. " + serviceInfo);
+//                mnsdListner.nsdresolved(serviceInfo.getHost().toString());
+                Log.d(TAG, "onServiceResolved: IpAddr " + serviceInfo.getHost().toString());
                 return;
 
 //                if (serviceInfo.getServiceName().equals(serviceName)) {
@@ -167,6 +170,10 @@ public class nsdFinder {
             }
         };
     }
+
+//    interface nsdListner{
+//        public void nsdresolved(String ipAddr);
+//    }
 
     public void start() {
         initializeServerSocket();

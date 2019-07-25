@@ -94,6 +94,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
     Disposable browseDisposable;
 
     TinyDB tinyDB;
+//    nsdFinder.nsdListner mnsdListener = this;
+    Boolean isResolved;
 
 
 
@@ -113,6 +115,8 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
         rxDnssd = new Rx2DnssdEmbedded(getContext());
         tinyDB = new TinyDB(getContext());
+
+        isResolved = false;
 
 
     }
@@ -217,24 +221,27 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
         });
 
         connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                                       @Override
+                                       public void onClick(View v) {
 
-                webViewPair.loadUrl("http://"+ apIpAddress+"/join?ssid="+ TargetSSID
-                                    +"&password="+password_Input.getText().toString());
-                Log.d(TAG, "onClickConnect: "+"http://"+ apIpAddress+"/"+"wifiPassword"+"/"+password_Input.getText().toString());
-
-
-                Log.d(TAG, "onClick: start discovery");
+                                           webViewPair.loadUrl("http://" + apIpAddress + "/join?ssid=" + TargetSSID
+                                                   + "&password=" + password_Input.getText().toString());
+                                           Log.d(TAG, "onClickConnect: " + "http://" + apIpAddress + "/join?ssid=" + TargetSSID
+                                                   + "&password=" + password_Input.getText().toString());
 
 
+                                           Log.d(TAG, "onClick: start discovery");
 
-                mnsdFinder = new nsdFinder(getContext());
-                mnsdFinder.start();
+                                           new JsonTask().execute("http://" + apIpAddress + "/join?ssid=" + TargetSSID
+                                                   + "&password=" + password_Input.getText().toString());
 
-                pbStep3.setVisibility(View.VISIBLE);
 
-                browseDisposable = rxDnssd.browse("_elementlight._udp", "local.")
+                                           mnsdFinder = new nsdFinder(getContext());
+                                           mnsdFinder.start();
+
+                                           pbStep3.setVisibility(View.VISIBLE);
+
+/*                browseDisposable = rxDnssd.browse("_elementlight._udp", "local.")
                         .compose(rxDnssd.resolve())
                         .compose(rxDnssd.queryRecords())
                         .subscribeOn(Schedulers.io())
@@ -242,17 +249,21 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                         .subscribe(bonjourService -> {
                             Log.d("TAG",  bonjourService.getInet4Address().toString());
 
-                            tinyDB.putString("LocalIP", bonjourService.getInet4Address().toString());
-                            new JsonTask().execute("http:/" + bonjourService.getInet4Address().toString() + "/mac" );
+                            if (!isResolved) {
 
-                            layout_Show(step4_Layout);
-                            layout_Gone(step3_Layout,View.INVISIBLE);
-                            progressBar.setProgress(100);
-                            connect.setVisibility(View.GONE);
-                            connect.setClickable(false);
-                            password_Input.setVisibility(View.GONE);
-                            password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                            done.setVisibility(View.VISIBLE);
+                                tinyDB.putString("LocalIP", bonjourService.getInet4Address().toString());
+                                new JsonTask().execute("http:/" + bonjourService.getInet4Address().toString() + "/mac");
+
+                                layout_Show(step4_Layout);
+                                layout_Gone(step3_Layout, View.INVISIBLE);
+                                progressBar.setProgress(100);
+                                connect.setVisibility(View.GONE);
+                                connect.setClickable(false);
+                                password_Input.setVisibility(View.GONE);
+                                password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                                done.setVisibility(View.VISIBLE);
+                            }
+
 //            if (bonjourService.isLost()) {
 //                mServiceAdapter.remove(bonjourService);
 //            } else {
@@ -262,9 +273,12 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
 
 
 
-
+*/
             }
         });
+
+
+
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -485,14 +499,44 @@ public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListe
                     Log.d(TAG, "onPostExecute: "+message[i]);
                 }
 
-                String macAddr = message[1].split(":")[1];
-                Log.d(TAG, "onPostExecute: macAddr : "+ macAddr);
-                tinyDB.putString("macAddr", macAddr);
+                try {
+                    String ipAddr = message[1].split(":")[1];
+                    Log.d(TAG, "onPostExecute: ipAddr : " + ipAddr);
+                    tinyDB.putString("LocalIp", ipAddr);
+
+                    layout_Show(step4_Layout);
+                    layout_Gone(step3_Layout, View.INVISIBLE);
+                    progressBar.setProgress(100);
+                    connect.setVisibility(View.GONE);
+                    connect.setClickable(false);
+                    password_Input.setVisibility(View.GONE);
+                    password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    done.setVisibility(View.VISIBLE);
+                }catch (Exception e){
+                    Log.d(TAG, "onPostExecute: MacError");
+                }
             }
 
         }
     }
 
+
+//    @Override
+//    public void nsdresolved(String ipAddr){
+//
+//        if(isResolved) {
+////            new JsonTask().execute("http:/" + ipAddr + "/mac");
+//
+//            layout_Show(step4_Layout);
+//            layout_Gone(step3_Layout, View.INVISIBLE);
+//            progressBar.setProgress(100);
+//            connect.setVisibility(View.GONE);
+//            connect.setClickable(false);
+//            password_Input.setVisibility(View.GONE);
+//            password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+//            done.setVisibility(View.VISIBLE);
+//        }
+//    }
 
 
 //    public void initializeDiscoveryListener() {

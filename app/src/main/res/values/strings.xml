@@ -58,4 +58,6 @@
     <string name="Explore">Expore</string>
     <string name="Layout_Manager">Layout Manager</string>
     <string name="No_Device">No Device</string>
+    <string name="Opps_Error">Oops! Error occurred</string>
+    <string name="error_Message">Please make sure your WiFi network\n is correctly configurated.</string>
 </resources>
