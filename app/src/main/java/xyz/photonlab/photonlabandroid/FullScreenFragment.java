@@ -29,8 +29,9 @@ public class FullScreenFragment extends Fragment {
 
         navBar = ((Activity) context).findViewById(R.id.nav_view);
         if (navBar != null) {
-            navBar.setVisibility(View.GONE);
+            navBar.clearAnimation();
             navBar.startAnimation(hideAnimation);
+            navBar.setVisibility(View.GONE);
         }
     }
 
@@ -38,8 +39,9 @@ public class FullScreenFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         if (navBar != null) {
-            navBar.setVisibility(View.VISIBLE);
+            navBar.clearAnimation();
             navBar.startAnimation(showAnimation);
+            navBar.setVisibility(View.VISIBLE);
         }
     }
 }
