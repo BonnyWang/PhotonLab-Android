@@ -260,8 +260,8 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 
 
 
-               mnsdFinder = new nsdFinder(getContext());
-               mnsdFinder.start();
+//               mnsdFinder = new nsdFinder(getContext());
+//               mnsdFinder.start();
 
                pbStep3.setVisibility(View.VISIBLE);
 
@@ -500,23 +500,17 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
         protected String doInBackground(String... params) {
 
 
-            Runnable runnable =  new Runnable() {
-                @Override
-                public void run() {
+//            Runnable runnable =  new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if(!sucess) {
+//                        showFail();
+//                    }
+//                }
+//            };
+//            mhandler.postDelayed(runnable, 30000);
 
-                    if(!sucess) {
-
-                        layout_Show(step4Failed_Layout);
-                        layout_Gone(step3_Layout, View.INVISIBLE);
-                        progressBar.setProgress(100);
-                        connect.setVisibility(View.GONE);
-                        connect.setClickable(false);
-                        password_Input.setVisibility(View.GONE);
-                        done.setVisibility(View.VISIBLE);
-                    }
-                }
-            };
-            mhandler.postDelayed(runnable, 30000);
 
 
             HttpURLConnection connection = null;
@@ -524,7 +518,10 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 
             try {
                 URL url = new URL(params[0]);
+
                 connection = (HttpURLConnection) url.openConnection();
+                connection.setConnectTimeout(500);
+                connection.setReadTimeout(30000);
                 connection.connect();
 
 
@@ -561,6 +558,8 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                     e.printStackTrace();
                 }
             }
+
+            sucess = true;
             return null;
         }
 
@@ -595,28 +594,27 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                         password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
                         done.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
-                        Log.d(TAG, "onPostExecute: MacError");
-                        layout_Show(step4Failed_Layout);
-                        layout_Gone(step3_Layout, View.INVISIBLE);
-                        progressBar.setProgress(100);
-                        connect.setVisibility(View.GONE);
-                        connect.setClickable(false);
-                        password_Input.setVisibility(View.GONE);
-                        done.setVisibility(View.VISIBLE);
+                        Log.d(TAG, "onPostExecute: ipError");
+                        Toast.makeText(getContext(), "failed",Toast.LENGTH_LONG);
+                        showFail();
                     }
                 } else {
-                    layout_Show(step4Failed_Layout);
-                    layout_Gone(step3_Layout, View.INVISIBLE);
-                    progressBar.setProgress(100);
-                    connect.setVisibility(View.GONE);
-                    connect.setClickable(false);
-                    password_Input.setVisibility(View.GONE);
-                    done.setVisibility(View.VISIBLE);
+                    showFail();
 
                 }
             }
 
         }
+    }
+
+    private void showFail(){
+        layout_Show(step4Failed_Layout);
+        layout_Gone(step3_Layout, View.INVISIBLE);
+        progressBar.setProgress(100);
+        connect.setVisibility(View.GONE);
+        connect.setClickable(false);
+        password_Input.setVisibility(View.GONE);
+        done.setVisibility(View.VISIBLE);
     }
 
 
