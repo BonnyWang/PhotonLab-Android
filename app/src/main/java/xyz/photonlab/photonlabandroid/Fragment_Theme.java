@@ -2,16 +2,12 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.se.omapi.SEService;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,15 +16,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-
-import xyz.photonlab.photonlabandroid.R;
-import xyz.photonlab.photonlabandroid.model.Session;
-
 import java.util.ArrayList;
 import java.util.Objects;
+
+import xyz.photonlab.photonlabandroid.model.Session;
 
 
 public class Fragment_Theme extends Fragment
@@ -276,7 +267,7 @@ public class Fragment_Theme extends Fragment
             theme_Individual = new fragement_theme_individual(current, isFavorite);
             ((fragement_theme_individual) theme_Individual).setListener(this);
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             ft.replace(R.id.container, theme_Individual).addToBackStack(null);
             ft.commit();
         }
