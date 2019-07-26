@@ -104,7 +104,7 @@ public class fragment_system extends FullScreenFragment {
                 URL url = new URL(params[0]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(1000);
-                connection.setReadTimeout(5000);
+                connection.setReadTimeout(3000);
                 connection.connect();
 
                 InputStream stream = connection.getInputStream();

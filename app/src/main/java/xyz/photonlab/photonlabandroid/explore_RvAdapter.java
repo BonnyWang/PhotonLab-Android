@@ -18,6 +18,7 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
 
     OnNoteListener bonNoteListener;
     Fragment_Explore fragment_explore;
+    boolean loaded;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -44,11 +45,13 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     ArrayList<explore_item_Class> bexplores;
 
     public explore_RvAdapter(ArrayList<explore_item_Class> bexplores,
-                             OnNoteListener bonNoteListener, Fragment_Explore fragment_explore) {
+                             OnNoteListener bonNoteListener, Fragment_Explore fragment_explore, boolean loaded) {
 
         this.bexplores = bexplores;
         this.bonNoteListener = bonNoteListener;
         this.fragment_explore = fragment_explore;
+
+        this.loaded = loaded;
 
     }
 
@@ -85,7 +88,11 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return bexplores.size()+1;
+        if (loaded){
+            return bexplores.size();
+        }else{
+            return bexplores.size()+1;
+        }
     }
 
     @Override

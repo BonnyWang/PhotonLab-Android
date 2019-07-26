@@ -78,7 +78,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         spinnerMenu.setAdapter(spinnerAdapter);
         initializeData();
 
-        explore_RvAdapter adapter = new explore_RvAdapter(bexplores, this, thisone);
+        explore_RvAdapter adapter = new explore_RvAdapter(bexplores, this, thisone,false);
 
         rv.setAdapter(adapter);
 
@@ -88,7 +88,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    explore_RvAdapter adapter0 = new explore_RvAdapter(bexplores, mOnNoteListner, thisone);
+                    explore_RvAdapter adapter0 = new explore_RvAdapter(bexplores, mOnNoteListner, thisone,false);
                     rv.setAdapter(adapter0);
                 }
                 //TODO add position 1-creative and 2-tutorial
@@ -123,7 +123,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
                 GenericTypeIndicator<ArrayList<explore_item_Class>> t = new GenericTypeIndicator<ArrayList<explore_item_Class>>() {
                 };
                 bexplores = dataSnapshot.getValue(t);
-                adapter = new explore_RvAdapter(bexplores, mOnNoteListner, thisone);
+                adapter = new explore_RvAdapter(bexplores, mOnNoteListner, thisone,true);
                 rv.setAdapter(adapter);
             }
 

@@ -88,7 +88,7 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
                 // whenever data at this location is updated.
                 GenericTypeIndicator<ArrayList<theme_Class>> t = new GenericTypeIndicator<ArrayList<theme_Class>>() {};
                 themeDownload = dataSnapshot.getValue(t);
-                adapter = new dlRvAdapter(themeDownload, mlistener, mtheme);
+                adapter = new dlLoadedAdapter(themeDownload, mlistener, mtheme);
                 rv.setAdapter(adapter);
                 Log.d(TAG, "Value is: " );
             }
@@ -99,6 +99,9 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+
+        adapter = new dlRvAdapter(themeDownload, mlistener, mtheme);
+        rv.setAdapter(adapter);
 
 
 
