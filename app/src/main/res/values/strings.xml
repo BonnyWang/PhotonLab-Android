@@ -36,13 +36,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>>
     <string-array name="theme_Menu">
         <item>ALL</item>
+        <item>Music</item>
         <item>Favorite</item>
-        <item>Sweet sweet</item>
     </string-array>
 
     <string-array name="Explore_Menu">
         <item>ALL</item>
-
+        <item>Creative</item>
+        <item>Tutorial</item>
     </string-array>
     <string name="Motion_Detect">Motion Detect</string>
     <string name="Time_Delay">Time Delay</string>
@@ -56,12 +57,14 @@
     <string name="Reset">Reset</string>
     <string name="Privacy_Policy">Privacy Policy</string>
     <string name="App_Software">App Software</string>
-    <string name="Explore">Expore</string>
+    <string name="Explore">Explore</string>
     <string name="Layout_Manager">Layout Manager</string>
+
+    <string name="select">Select</string>
+
     <string name="No_Device">No Device</string>
     <string name="Opps_Error">Oops! Error occurred</string>
     <string name="error_Message">Please make sure your WiFi network\n is correctly configurated.</string>
     <string name="try_again">Try Again</string>
     <string name="Help"><u>Help?</u></string>
-
 </resources>

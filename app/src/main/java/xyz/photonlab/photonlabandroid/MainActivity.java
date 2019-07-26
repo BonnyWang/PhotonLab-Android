@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity  {
 
         super.onCreate(savedInstanceState);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }

@@ -7,7 +7,7 @@
     android:background="?android:attr/selectableItemBackground">
 
     <TextView
-        android:id="@+id/SettingSub"
+        android:id="@+id/theme_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Settings"
@@ -22,19 +22,6 @@
         android:textStyle="bold"
         android:textColor="#999999"/>
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/arrow_right"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"/>
-
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -42,7 +29,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SettingSub"
+        app:layout_constraintTop_toBottomOf="@+id/theme_item"
         android:layout_marginTop="15dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -24,18 +26,22 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import xyz.photonlab.photonlabandroid.R;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
 import static android.content.Context.WINDOW_SERVICE;
 
 
-public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener{
+public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener {
+
+    ConstraintLayout mainContainer;
 
     SeekBar seek_bar;
     TextView text_view;
@@ -84,6 +90,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     TinyDB tinyDB;
     String ipAddr;
 
+    private boolean isAll = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +99,11 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         tinyDB = new TinyDB(getContext());
 
 
-        if(tinyDB.getString("LocalIP").equals("")){
+        if (tinyDB.getString("LocalIP").equals("")) {
 
             Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
 
-        }else {
+        } else {
 
             ipAddr = tinyDB.getString("LocalIp");
 
@@ -104,6 +112,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,8 +124,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         windowManager.getDefaultDisplay().getMetrics(dm);
 
 
-
         final View view = inflater.inflate(R.layout.fragment__control_layout, container, false);
+        mainContainer = view.findViewById(R.id.main_container);
         webView = view.findViewById(R.id.webView);
         seekbar(view);
         //TODO:webview
@@ -125,6 +134,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         sun = view.findViewById(R.id.sun);
         final SeekBar seekBar = view.findViewById(R.id.seekBar5);
         int heightInDP = Math.round(dm.heightPixels / dm.density);
+
+
         Log.d("fuck", "onCreateView: "+heightInDP);
         if (heightInDP<570) {
             Log.d(TAG, "onCreateView: " + "please change a " );
@@ -134,11 +145,12 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             ViewGroup.LayoutParams a=cv.getLayoutParams();
             int b=(int) (250* (getResources().getDisplayMetrics().density));
             a.width=b;
+
             cv.setLayoutParams(a);
-            ViewGroup.MarginLayoutParams c = (ViewGroup.MarginLayoutParams)cv.getLayoutParams();
-            int d=(int) -(30* (getResources().getDisplayMetrics().density));
-            Log.d("hello", "onCreateView: "+d);
-            c.leftMargin=d;
+            ViewGroup.MarginLayoutParams c = (ViewGroup.MarginLayoutParams) cv.getLayoutParams();
+            int d = (int) -(30 * (getResources().getDisplayMetrics().density));
+            Log.d("hello", "onCreateView: " + d);
+            c.leftMargin = d;
             cv.setLayoutParams(c);
         }
         brightness = view.findViewById(R.id.tvBrightness);
@@ -181,12 +193,11 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         colorOptions0 = new LinkedList<>();
 
         final TinyDB tinyDB = new TinyDB(getContext());
-        if(tinyDB.getInt("Brightness") != -1){
+        if (tinyDB.getInt("Brightness") != -1) {
             seekBar.setProgress(tinyDB.getInt("Brightness"));
-        }else{
+        } else {
             seekBar.setProgress(100);
         }
-
 
 
         initialize_Colors();
@@ -196,37 +207,58 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         initialize_Rbuttons();
         add = view.findViewById(R.id.AddColor);
 
+
+        mainContainer.setOnTouchListener(new View.OnTouchListener() {
+            private float origin = 0f;
+            private float sensor = 200f;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    origin = motionEvent.getX();
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    float distance = motionEvent.getX() - origin;
+                    if (distance > sensor) {//swipe right
+                        AllButton.performClick();
+                    } else if (distance < -sensor) {
+                        SingleButton.performClick();
+                    }
+                }
+                return true;
+            }
+        });
+
         power.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_On, null));
-                    power.getBackground().setTint(getResources().getColor(R.color.colorPrimary,null));
+                    power.getBackground().setTint(getResources().getColor(R.color.colorPrimary, null));
 
 
-                    if(setMode == 0){
+                    if (setMode == 0) {
                         checkedButton = view.findViewById(radioGroup.getCheckedRadioButtonId());
                         sun.setColorFilter(0xffffd41f);
                         checkedButton.setChecked(false);
                         checkedButton.setChecked(true);
                         webView.loadUrl("http://192.168.50.48/H");
                         webLoad("pir?status=on");
-                    }else {
+                    } else {
                         sun.setColorFilter(0xffffd41f);
                         seekBar.getProgressDrawable().setTint(seekBarColor);
                         webView.loadUrl("http://192.168.50.48/H");
                         webLoad("pir?status=on");
                     }
 
-                    tinyDB.putInt("Power",1);
+                    tinyDB.putInt("Power", 1);
 
                 } else {
                     seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
-                    sun.setColorFilter(getResources().getColor(R.color.seekBar_Default,null));
+                    sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
                     power.getBackground().setTint(0xffffffff);
                     webView.loadUrl("http://192.168.50.48/L");
 
-                    tinyDB.putInt("Power",0);
+                    tinyDB.putInt("Power", 0);
                 }
 
             }
@@ -235,17 +267,14 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         AllButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (!isAll) {
+                    isAll = true;
                     AllButton.setTextColor(getResources().getColor(R.color.backGround, null));
-                    //All.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
                     All.setBackground(getResources().getDrawable(R.drawable.button1, null));
-                    SingleButton.setChecked(false);
                     setAllLayout();
-                }else {
-                    //All.setCardBackgroundColor(getResources().getColor(R.color.backGround, null) );
-                    All.setBackground(getResources().getDrawable(R.drawable.button, null));
-                    AllButton.setTextColor(getResources().getColor(R.color.DeepText, null));
-                    setSingleLayout();
+                    Single.setCardBackgroundColor(getResources().getColor(R.color.backGround, null));
+                    Single.setBackground(getResources().getDrawable(R.drawable.button, null));
+                    SingleButton.setTextColor(getResources().getColor(R.color.DeepText, null));
                 }
             }
         });
@@ -253,17 +282,14 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         SingleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isAll) {
+                    isAll = false;
                     SingleButton.setTextColor(getResources().getColor(R.color.backGround, null));
-                    //Single.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
                     Single.setBackground(getResources().getDrawable(R.drawable.button1, null));
-                    AllButton.setChecked(false);
                     setSingleLayout();
-                }else {
-                    Single.setCardBackgroundColor(getResources().getColor(R.color.backGround, null) );
-                    Single.setBackground(getResources().getDrawable(R.drawable.button, null));
-                    SingleButton.setTextColor(getResources().getColor(R.color.DeepText, null));
-                    setSingleLayout();
+                    All.setCardBackgroundColor(getResources().getColor(R.color.backGround, null));
+                    All.setBackground(getResources().getDrawable(R.drawable.button, null));
+                    AllButton.setTextColor(getResources().getColor(R.color.DeepText, null));
                 }
             }
         });
@@ -280,22 +306,22 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.rButton1){
-                        setColor(0);
-                        tinyDB.putInt("rbutton", 0);
+                if (checkedId == R.id.rButton1) {
+                    setColor(0);
+                    tinyDB.putInt("rbutton", 0);
                 }
 
-                if(checkedId == R.id.rButton2){
+                if (checkedId == R.id.rButton2) {
                     setColor(1);
                     tinyDB.putInt("rbutton", 1);
                 }
 
-                if(checkedId == R.id.rButton3){
+                if (checkedId == R.id.rButton3) {
                     setColor(2);
                     tinyDB.putInt("rbutton", 2);
                 }
 
-                if(checkedId == R.id.rButton4){
+                if (checkedId == R.id.rButton4) {
                     setColor(3);
                     tinyDB.putInt("rbutton", 3);
                 }
@@ -306,26 +332,26 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                for(int i = 5; i < 9; i++){
+                for (int i = 5; i < 9; i++) {
                     rbuttons0[i].setChecked(false);
                 }
-                if(checkedId == R.id.rButton01){
+                if (checkedId == R.id.rButton01) {
                     setColor0(0);
                     Log.d(TAG, "onCheckedChanged: 00");
                 }
 
-                if(checkedId == R.id.rButton02){
+                if (checkedId == R.id.rButton02) {
                     setColor0(1);
                 }
 
-                if(checkedId == R.id.rButton03){
+                if (checkedId == R.id.rButton03) {
                     setColor0(2);
                 }
 
-                if(checkedId == R.id.rButton04){
+                if (checkedId == R.id.rButton04) {
                     setColor0(3);
                 }
-                if(checkedId == R.id.rButton05){
+                if (checkedId == R.id.rButton05) {
                     setColor0(4);
                 }
 
@@ -336,21 +362,21 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         radioGroup00.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                for(int i = 0; i < 5; i++){
+                for (int i = 0; i < 5; i++) {
                     rbuttons0[i].setChecked(false);
                 }
-                if(checkedId == R.id.rButton06){
+                if (checkedId == R.id.rButton06) {
                     setColor0(5);
                 }
 
-                if(checkedId == R.id.rButton07){
+                if (checkedId == R.id.rButton07) {
                     setColor0(6);
                 }
 
-                if(checkedId == R.id.rButton08){
+                if (checkedId == R.id.rButton08) {
                     setColor0(7);
                 }
-                if(checkedId == R.id.rButton09) {
+                if (checkedId == R.id.rButton09) {
                     setColor0(8);
                 }
             }
@@ -374,7 +400,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 newFragment.show(getChildFragmentManager(), "dialog");
             }
         });
-        
+
         tvGotoSetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -383,28 +409,28 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
                 fragment_layout mfragment_layout = new fragment_layout();
                 FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
-                ftl.setCustomAnimations(R.anim.pop_enter,R.anim.pop_out,R.anim.pop_enter,R.anim.pop_out);
+                ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
                 ftl.replace(R.id.container, mfragment_layout).addToBackStack(null);
                 ftl.commit();
             }
         });
 
 
-        if(tinyDB.getInt("rbutton") != -1){
+        if (tinyDB.getInt("rbutton") != -1) {
             rbuttons[tinyDB.getInt("rbutton")].setChecked(true);
             rbuttons[tinyDB.getInt("rbutton")].setChecked(true);
-        }else{
+        } else {
             rbuttons[0].setChecked(false);
             rbuttons[0].setChecked(true);
         }
 
-        if(tinyDB.getInt("Power") != -1){
-            if(tinyDB.getInt("Power") == 1){
+        if (tinyDB.getInt("Power") != -1) {
+            if (tinyDB.getInt("Power") == 1) {
                 power.setChecked(true);
-            }else {
+            } else {
                 power.setChecked(false);
             }
-        }else{
+        } else {
             power.setChecked(false);
         }
         return view;
@@ -412,18 +438,18 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
-    public void setColor(int checkedOrder){
+    public void setColor(int checkedOrder) {
 
         setMode = 0;
 
-        if(power.isChecked()){
+        if (power.isChecked()) {
             seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
         }
         checked.setStroke(5, setCheckedColor(checkedOrder));
         rbuttons[checkedOrder].setBackground(checked);
     }
 
-    public void setColor0(int checkedOrder){
+    public void setColor0(int checkedOrder) {
 
         checked0.setStroke(5, setCheckedColor0(checkedOrder));
         rbuttons0[checkedOrder].setBackground(checked0);
@@ -463,39 +489,38 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     }
 
 
-
-    public void initialize_Colors(){
+    public void initialize_Colors() {
         TinyDB tinydb = new TinyDB(this.getContext());
 
-        if (tinydb.getInt("color0") == -1 ){
+        if (tinydb.getInt("color0") == -1) {
             Log.d("kan", "initialize_Colors: 0");
 
-            colorOptions.add(getResources().getColor(R.color.yellow,null));
-            colorOptions.add(getResources().getColor(R.color.blue,null));
-            colorOptions.add(getResources().getColor(R.color.orange,null));
-            colorOptions.add(getResources().getColor(R.color.purple,null));
+            colorOptions.add(getResources().getColor(R.color.yellow, null));
+            colorOptions.add(getResources().getColor(R.color.blue, null));
+            colorOptions.add(getResources().getColor(R.color.orange, null));
+            colorOptions.add(getResources().getColor(R.color.purple, null));
 
-        }else{
+        } else {
             colorOptions.add(tinydb.getInt("color0"));
             colorOptions.add(tinydb.getInt("color1"));
             colorOptions.add(tinydb.getInt("color2"));
             colorOptions.add(tinydb.getInt("color3"));
         }
 
-        if (tinydb.getInt("color00") == -1 ){
+        if (tinydb.getInt("color00") == -1) {
             Log.d("kan", "initialize_Colors: 0");
 
-            colorOptions0.add(getResources().getColor(R.color.yellow,null));
-            colorOptions0.add(getResources().getColor(R.color.blue,null));
-            colorOptions0.add(getResources().getColor(R.color.orange,null));
-            colorOptions0.add(getResources().getColor(R.color.purple,null));
-            colorOptions0.add(getResources().getColor(R.color.purple,null));
-            colorOptions0.add(getResources().getColor(R.color.yellow,null));
-            colorOptions0.add(getResources().getColor(R.color.blue,null));
-            colorOptions0.add(getResources().getColor(R.color.orange,null));
-            colorOptions0.add(getResources().getColor(R.color.purple,null));
+            colorOptions0.add(getResources().getColor(R.color.yellow, null));
+            colorOptions0.add(getResources().getColor(R.color.blue, null));
+            colorOptions0.add(getResources().getColor(R.color.orange, null));
+            colorOptions0.add(getResources().getColor(R.color.purple, null));
+            colorOptions0.add(getResources().getColor(R.color.purple, null));
+            colorOptions0.add(getResources().getColor(R.color.yellow, null));
+            colorOptions0.add(getResources().getColor(R.color.blue, null));
+            colorOptions0.add(getResources().getColor(R.color.orange, null));
+            colorOptions0.add(getResources().getColor(R.color.purple, null));
 
-        }else{
+        } else {
 
             colorOptions0.add(tinydb.getInt("color00"));
             colorOptions0.add(tinydb.getInt("color01"));
@@ -510,13 +535,13 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
-    public void initialize_Rbuttons(){
-        for (int i = 0; i < 4 ; i++){
+    public void initialize_Rbuttons() {
+        for (int i = 0; i < 4; i++) {
             rbuttons[i].getButtonDrawable().setTint(colorOptions.peek());
             colorOptions.add(colorOptions.remove());
         }
 
-        for (int i = 0; i < 9 ; i++){
+        for (int i = 0; i < 9; i++) {
             rbuttons0[i].getButtonDrawable().setTint(colorOptions0.peek());
             colorOptions0.add(colorOptions0.remove());
         }
@@ -527,30 +552,30 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         );
 
 
-        int ipx = (int)px;
+        int ipx = (int) px;
         checked.setShape(GradientDrawable.OVAL);
-        checked.setSize(ipx,ipx);
-        checked.setColors(new int[]{0x00000000,0x00000000});
+        checked.setSize(ipx, ipx);
+        checked.setColors(new int[]{0x00000000, 0x00000000});
 
         checked0.setShape(GradientDrawable.OVAL);
-        checked0.setSize(ipx,ipx);
-        checked0.setColors(new int[]{0x00000000,0x00000000});
+        checked0.setSize(ipx, ipx);
+        checked0.setColors(new int[]{0x00000000, 0x00000000});
 
     }
 
-    int setCheckedColor(int which){
+    int setCheckedColor(int which) {
         int thisColor;
-        for (int i = 0; i < 4 ; i++){
+        for (int i = 0; i < 4; i++) {
             rbuttons[i].setBackground(null);
         }
 
         int j;
-        for (j = 0; j < which; j++){
+        for (j = 0; j < which; j++) {
             colorOptions.add(colorOptions.remove());
         }
 
         thisColor = colorOptions.peek();
-        for (int k = which; j < 4; j++){
+        for (int k = which; j < 4; j++) {
             colorOptions.add(colorOptions.remove());
         }
 
@@ -558,19 +583,19 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
-    int setCheckedColor0(int which){
+    int setCheckedColor0(int which) {
         int thisColor;
-        for (int i = 0; i < 9 ; i++){
+        for (int i = 0; i < 9; i++) {
             rbuttons0[i].setBackground(null);
         }
 
         int j;
-        for (j = 0; j < which; j++){
+        for (j = 0; j < which; j++) {
             colorOptions0.add(colorOptions0.remove());
         }
 
         thisColor = colorOptions0.peek();
-        for (int k = which; j < 9; j++){
+        for (int k = which; j < 9; j++) {
             colorOptions0.add(colorOptions0.remove());
         }
 
@@ -580,9 +605,9 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
 
     @Override
-    public int getRGB(int rgbValue, int which){
+    public int getRGB(int rgbValue, int which) {
 
-        if(which == 0) {
+        if (which == 0) {
 
             TinyDB tinydb = new TinyDB(getContext());
 
@@ -607,20 +632,19 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             rbuttons[3].setChecked(true);
             seek_bar.setProgress(100);
             return rgbValue;
-        }else{
+        } else {
             TinyDB tinydb = new TinyDB(getContext());
             colorOptions0.remove();
             colorOptions0.add(rgbValue);
-            int a =1;
+            int a = 1;
 
-            for(int i = 0; i < 9; i++){
+            for (int i = 0; i < 9; i++) {
                 tinydb.remove("color0" + i);
                 Log.d(TAG, "getRGB: rmoveLoop");
             }
 
 
-
-            for(int i = 0; i < 9; i++){
+            for (int i = 0; i < 9; i++) {
                 String key = "color0" + i;
                 tinydb.putInt(key, colorOptions0.peek());
                 colorOptions0.add(colorOptions0.remove());
@@ -637,13 +661,13 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
 
     @Override
-    public void beSet(int rgbValue, int which){
+    public void beSet(int rgbValue, int which) {
 
         power.setChecked(true);
 
         //clear selection
         radioGroup.clearCheck();
-        for (int i = 0; i < 4 ; i++){
+        for (int i = 0; i < 4; i++) {
             rbuttons[i].setBackground(null);
         }
 
@@ -654,14 +678,14 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
-    private void setAllLayout(){
+    private void setAllLayout() {
         //Set visible
         power.setVisibility(View.VISIBLE);
         power.setClickable(true);
         seek_bar.setVisibility(View.VISIBLE);
         seek_bar.setActivated(true);
         sun.setVisibility(View.VISIBLE);
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             rbuttons[i].setVisibility(View.VISIBLE);
             rbuttons[i].setClickable(true);
         }
@@ -685,14 +709,14 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     }
 
     //reverse
-    private void setSingleLayout(){
+    private void setSingleLayout() {
         //Set visible
         power.setVisibility(View.GONE);
         power.setClickable(false);
         seek_bar.setVisibility(View.GONE);
         seek_bar.setActivated(false);
         sun.setVisibility(View.GONE);
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             rbuttons[i].setVisibility(View.GONE);
             rbuttons[i].setClickable(false);
         }
@@ -716,10 +740,10 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     }
 
 
-    private void webLoad(String command){
+    private void webLoad(String command) {
 
-        String commandline = "http:/"+ipAddr+"/"+command;
-        Log.d(TAG, "webControl: "+ commandline);
+        String commandline = "http:/" + ipAddr + "/" + command;
+        Log.d(TAG, "webControl: " + commandline);
 
         webView.loadUrl(commandline);
 

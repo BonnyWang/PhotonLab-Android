@@ -11,9 +11,10 @@
         android:icon="@drawable/themeicon"
         android:title="@string/title_dashboard" />
 
+    <!--TODO change the icon-->
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/music"
+        android:icon="@drawable/ic_explore"
         android:title="@string/title_notifications" />
     <item
         android:id="@+id/navigation_notifications2"

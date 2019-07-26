@@ -13,7 +13,7 @@ import android.widget.Button;
 import xyz.photonlab.photonlabandroid.views.setLayoutView;
 
 
-public class fragment_layout extends Fragment {
+public class fragment_layout extends FullScreenFragment {
 
     Button btAddHex;
     Button btDelete;

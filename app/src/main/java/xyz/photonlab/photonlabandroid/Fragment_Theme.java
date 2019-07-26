@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.se.omapi.SEService;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,14 +23,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 
 import xyz.photonlab.photonlabandroid.R;
+import xyz.photonlab.photonlabandroid.model.Session;
 
 import java.util.ArrayList;
 
 
 public class Fragment_Theme extends Fragment
         implements RvAdapter.OnNoteListener,
-                   fragement_theme_individual.themeIndivListener,
-                   fragment_theme_Download.fdlListener{
+        fragement_theme_individual.themeIndivListener,
+        fragment_theme_Download.fdlListener {
 
     private final static String TAG = "Fragment_Theme";
     Context context;
@@ -57,8 +59,7 @@ public class Fragment_Theme extends Fragment
 
     }
 
-    public static Fragment_Theme getInstance()
-    {
+    public static Fragment_Theme getInstance() {
         if (single_instance == null)
             single_instance = new Fragment_Theme();
 
@@ -71,10 +72,10 @@ public class Fragment_Theme extends Fragment
         // Inflate the layout for this fragment
         context = getContext();
         View view = inflater.inflate(R.layout.fragment__theme_layout, container, false);
-        rv = (RecyclerView)view.findViewById(R.id.rv);
+        rv = (RecyclerView) view.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
-        imageView_Card = (ImageView)view.findViewById(R.id.imageView_Card);
+        imageView_Card = (ImageView) view.findViewById(R.id.imageView_Card);
 
         spinnerMenu = view.findViewById(R.id.spinnerThemes);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
@@ -82,8 +83,13 @@ public class Fragment_Theme extends Fragment
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMenu.setAdapter(spinnerAdapter);
 
+        Session.getInstance().requestTheme(getContext());
+        mfavoriteTheme = Session.getInstance().getMfavoriteTheme();
+        mtheme = Session.getInstance().getMtheme();
+        sweetTheme = Session.getInstance().getSweetTheme();
 
-        initializeData();
+        //initializeData();
+
 
         final RvAdapter adapter = new RvAdapter(mtheme, this);
 
@@ -94,22 +100,26 @@ public class Fragment_Theme extends Fragment
         spinnerMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 try {
                     ((TextView) view).setText(null);
                 }catch (Exception e){
                     ;
                 }
                 if(position == 0) {
+
                     RvAdapter adapter0 = new RvAdapter(mtheme, mOnNoteListener);
                     rv.setAdapter(adapter0);
+                    rv.getChildAt(adapter0.getItemCount() - 1);
                 }
-                if(position == 1) {
-                    RvAdapter adapter1 = new RvAdapter(mfavoriteTheme, mOnNoteListener);
+
+                if (position == 1) {
+                    RvAdapter adapter1 = new NoAddRvAdapter(mfavoriteTheme, mOnNoteListener);
                     rv.setAdapter(adapter1);
                 }
 
-                if(position == 2) {
-                    RvAdapter adapter1 = new RvAdapter(sweetTheme, mOnNoteListener);
+                if (position == 2) {
+                    RvAdapter adapter1 = new NoAddRvAdapter(sweetTheme, mOnNoteListener);
                     rv.setAdapter(adapter1);
 
                 }
@@ -134,57 +144,54 @@ public class Fragment_Theme extends Fragment
 
     }
 
-    private void initializeData(){
-
-        TinyDB tinyDB = new TinyDB(getContext());
-
-        mtheme = new ArrayList<>();
-        mtheme.add(new theme_Class("Spring", 0xff009e00, 0xfffcee21, "Photonlab", "Home Happy Sunset"));
-        mtheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d,"Photonlab", "Sweet sweet"));
-        mtheme.add(new theme_Class("Sky", 0xff00b7ff, 0xff00ffee,"Photonlab", "Blue Blue"));
-        mtheme.add(new theme_Class("Neon Glow", 0xff00ffa1, 0xff00ffff,"Photonlab", "High"));
-
-
-        //Use for clear the database
-//        for(int i = 0; i <= dlThemeNo; i++ ) {
-//           tinyDB.remove("dlTheme" + i);
-//            Log.d(TAG, "initializeData: Hi");
+//    private void initializeData() {
 //
+//        TinyDB tinyDB = new TinyDB(getContext());
+//
+//        mtheme = new ArrayList<>();
+//        mtheme.add(new theme_Class("Spring", 0xff009e00, 0xfffcee21, "Photonlab", "Home Happy Sunset"));
+//        mtheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d, "Photonlab", "Sweet sweet"));
+//        mtheme.add(new theme_Class("Sky", 0xff00b7ff, 0xff00ffee, "Photonlab", "Blue Blue"));
+//        mtheme.add(new theme_Class("Neon Glow", 0xff00ffa1, 0xff00ffff, "Photonlab", "High"));
+//
+//
+//        //Use for clear the database
+////        for(int i = 0; i <= dlThemeNo; i++ ) {
+////           tinyDB.remove("dlTheme" + i);
+////            Log.d(TAG, "initializeData: Hi");
+////
+////        }
+////
+////        tinyDB.remove("dlThemeNo");
+//        //
+//
+//        dlThemeNo = tinyDB.getInt("dlThemeNo");
+//        if (tinyDB.getInt("dlThemeNo") != -1) {
+//            for (int i = 0; i <= dlThemeNo; i++) {
+//                mtheme.add(tinyDB.getObject("dlTheme" + i, theme_Class.class));
+//            }
+//            Log.d(TAG, "initializeData: Hi");
 //        }
 //
-//        tinyDB.remove("dlThemeNo");
-        //
-
-        dlThemeNo = tinyDB.getInt("dlThemeNo");
-        if(tinyDB.getInt("dlThemeNo")!= -1){
-            for(int i = 0; i <= dlThemeNo; i++ ){
-                mtheme.add(tinyDB.getObject("dlTheme" + i, theme_Class.class ));
-            }
-            Log.d(TAG, "initializeData: Hi");
-        }
-
-        mfavoriteTheme = new ArrayList<>();
-        favOrder = new ArrayList<>();
-
-
-
-        if(tinyDB.getListInt("favOrder").size() != 0){
-            favOrder = tinyDB.getListInt("favOrder");
-            for(int i = 0; i < favOrder.size(); i++){
-                mfavoriteTheme.add(mtheme.get(favOrder.get(i)));
-                Log.d(TAG, "initializeData: tinydb");
-            }
-        }
-
-
-
-        sweetTheme = new ArrayList<>();
-        sweetTheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d,"Photonlab", "Sweet sweet"));
-    }
+//        mfavoriteTheme = new ArrayList<>();
+//        favOrder = new ArrayList<>();
+//
+//
+//        if (tinyDB.getListInt("favOrder").size() != 0) {
+//            favOrder = tinyDB.getListInt("favOrder");
+//            for (int i = 0; i < favOrder.size(); i++) {
+//                mfavoriteTheme.add(mtheme.get(favOrder.get(i)));
+//                Log.d(TAG, "initializeData: tinydb");
+//            }
+//        }
+//
+//
+//        sweetTheme = new ArrayList<>();
+//        sweetTheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d, "Photonlab", "Sweet sweet"));
+//    }
 
     @Override
     public void onNoteClick(int position) {
-
 
 
         if (spinnerMenu.getSelectedItemPosition() == 0) {
@@ -192,19 +199,19 @@ public class Fragment_Theme extends Fragment
 
         }
 
-        if (spinnerMenu.getSelectedItemPosition() == 1){
-            gotoIndiv(mfavoriteTheme,position);
+        if (spinnerMenu.getSelectedItemPosition() == 1) {
+            gotoIndiv(mfavoriteTheme, position);
         }
 
         if (spinnerMenu.getSelectedItemPosition() == 2) {
-            gotoIndiv(sweetTheme , position);
+            gotoIndiv(sweetTheme, position);
         }
     }
 
 
     @Override
-    public theme_Class Addavorite (theme_Class current){
-        if(!mfavoriteTheme.contains(current)) {
+    public theme_Class Addavorite(theme_Class current) {
+        if (!mfavoriteTheme.contains(current)) {
             mfavoriteTheme.add(current);
             TinyDB tinyDB = new TinyDB(getContext());
             favOrder.add(mtheme.indexOf(current));
@@ -212,8 +219,7 @@ public class Fragment_Theme extends Fragment
         }
 
 
-
-        if(spinnerMenu.getSelectedItemPosition() == 1){
+        if (spinnerMenu.getSelectedItemPosition() == 1) {
             RvAdapter adapterInAddF = new RvAdapter(mfavoriteTheme, this);
             rv.setAdapter(adapterInAddF);
         }
@@ -222,12 +228,12 @@ public class Fragment_Theme extends Fragment
     }
 
     @Override
-    public theme_Class RemoveFavorite(theme_Class current){
+    public theme_Class RemoveFavorite(theme_Class current) {
         mfavoriteTheme.remove(current);
-        favOrder.remove((Object)mtheme.indexOf(current));
+        favOrder.remove((Object) mtheme.indexOf(current));
         TinyDB tinyDB = new TinyDB(getContext());
         tinyDB.putListInt("favOrder", favOrder);
-        if(spinnerMenu.getSelectedItemPosition() == 1){
+        if (spinnerMenu.getSelectedItemPosition() == 1) {
             RvAdapter adapterInRemF = new RvAdapter(mfavoriteTheme, this);
             rv.setAdapter(adapterInRemF);
         }
@@ -235,7 +241,7 @@ public class Fragment_Theme extends Fragment
         return current;
     }
 
-    private  void gotoIndiv(ArrayList<theme_Class> themeList, int position) {
+    private void gotoIndiv(ArrayList<theme_Class> themeList, int position) {
         boolean isFavorite = false;
 
         if (position == themeList.size()) {
@@ -264,14 +270,14 @@ public class Fragment_Theme extends Fragment
 
     //add the downloaded theme
     @Override
-    public theme_Class dlTheme(theme_Class theme){
+    public theme_Class dlTheme(theme_Class theme) {
         TinyDB tinyDB = new TinyDB(getContext());
 
         //add to the number each time
         dlThemeNo = tinyDB.getInt("dlThemeNo") + 1;
 
         tinyDB.putInt("dlThemeNo", dlThemeNo);
-        tinyDB.putObject("dlTheme"+dlThemeNo, theme);
+        tinyDB.putObject("dlTheme" + dlThemeNo, theme);
 
 
         mtheme.add(theme);

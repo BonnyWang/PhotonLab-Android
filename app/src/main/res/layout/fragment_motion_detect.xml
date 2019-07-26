@@ -15,10 +15,11 @@
         android:id="@+id/backButton_Motion"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="25dp"
         android:background="@drawable/back_button"
         android:backgroundTint="@color/colorPrimary"
         android:text=""
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,17 +27,18 @@
         android:id="@+id/tvMotion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
         android:text="@string/Motion_Detect"
         android:textColor="#555555"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"  />
 
     <LinearLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -45,6 +47,7 @@
         android:layout_marginTop="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/switch_detect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -91,6 +94,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/time_delay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -138,6 +142,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/theme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

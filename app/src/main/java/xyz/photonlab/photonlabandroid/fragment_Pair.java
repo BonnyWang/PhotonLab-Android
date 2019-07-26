@@ -59,7 +59,7 @@ import java.nio.ByteOrder;
 import java.util.List;
 
 
-public class fragment_Pair extends Fragment implements wifiRvAdapter.OnNoteListener{
+public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.OnNoteListener{
 
 
     static final String TAG = "fragment_Pair";

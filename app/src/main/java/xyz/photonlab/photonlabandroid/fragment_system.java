@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-public class fragment_system extends Fragment {
+public class fragment_system extends FullScreenFragment {
 
     Button btBack;
 
