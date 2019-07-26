@@ -183,53 +183,53 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-    private class CheckLightState extends Thread{
-
-        Context context;
-
-        CheckLightState(Context context){
-            this.context = context;
-        }
-
-        @Override
-        public void run(){
-            if(tinyDB.getString("LocalIP").equals("")){
-
-                Toast.makeText(context, "Please Pair First", Toast.LENGTH_SHORT).show();
-
-            }else {
-
-                ipAddr = tinyDB.getString("LocalIp");
-
-                try {
-                    URL url = new URL("http://"+ipAddr+"/ip");
-                    Log.d(TAG, "onCreate: URLLLL"+ url);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    Log.d(TAG, "onCreate: Open Connected");
-//                urlConnection.connect();
-                    Log.d(TAG, "onCreate: Connected?");
-                    try {
-                        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    }catch (Exception e){
-                        Log.d(TAG, "onCreate: input error");
-                        Toast.makeText(context, "Device not connected", Toast.LENGTH_SHORT).show();
-                    } finally {
-                        Log.d(TAG, "onCreate: finally");
-                        urlConnection.disconnect();
-                    }
-                }catch (Exception e){
-                    Toast.makeText(context, "Device not connected", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onCreate: url error");
-                }
-
-
-            }
-
-
-        }
+//    private class CheckLightState extends Thread{
+//
+//        Context context;
+//
+//        CheckLightState(Context context){
+//            this.context = context;
+//        }
+//
+//        @Override
+//        public void run(){
+//            if(tinyDB.getString("LocalIP").equals("")){
+//
+//                Toast.makeText(context, "Please Pair First", Toast.LENGTH_SHORT).show();
+//
+//            }else {
+//
+//                ipAddr = tinyDB.getString("LocalIp");
+//
+//                try {
+//                    URL url = new URL("http://"+ipAddr+"/ip");
+//                    Log.d(TAG, "onCreate: URLLLL"+ url);
+//                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//                    Log.d(TAG, "onCreate: Open Connected");
+////                urlConnection.connect();
+//                    Log.d(TAG, "onCreate: Connected?");
+//                    try {
+//                        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//                    }catch (Exception e){
+//                        Log.d(TAG, "onCreate: input error");
+//                        Toast.makeText(context, "Device not connected", Toast.LENGTH_SHORT).show();
+//                    } finally {
+//                        Log.d(TAG, "onCreate: finally");
+//                        urlConnection.disconnect();
+//                    }
+//                }catch (Exception e){
+//                    Toast.makeText(context, "Device not connected", Toast.LENGTH_SHORT).show();
+//                    Log.d(TAG, "onCreate: url error");
+//                }
+//
+//
+//            }
 
 
-    }
+//        }
+
+
+//    }
 //    @Override
 //    public void mainControl(String Tag, int Value){
 //        String tempCommand;
