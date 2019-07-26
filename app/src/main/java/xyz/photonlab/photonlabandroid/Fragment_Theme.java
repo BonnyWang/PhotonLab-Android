@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import xyz.photonlab.photonlabandroid.R;
 import xyz.photonlab.photonlabandroid.model.Session;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class Fragment_Theme extends Fragment
@@ -41,6 +44,7 @@ public class Fragment_Theme extends Fragment
     ImageView imageView_Card;
     Fragment theme_Individual;
     Spinner spinnerMenu;
+    View btn_no_more;
     RvAdapter.OnNoteListener mOnNoteListener = this;
 
     fragment_theme_Download.fdlListener mfdlListener = this;
@@ -72,10 +76,11 @@ public class Fragment_Theme extends Fragment
         // Inflate the layout for this fragment
         context = getContext();
         View view = inflater.inflate(R.layout.fragment__theme_layout, container, false);
-        rv = (RecyclerView) view.findViewById(R.id.rv);
+        rv = view.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
-        imageView_Card = (ImageView) view.findViewById(R.id.imageView_Card);
+        imageView_Card = view.findViewById(R.id.imageView_Card);
+        btn_no_more = view.findViewById(R.id.btn_no_more);
 
         spinnerMenu = view.findViewById(R.id.spinnerThemes);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
@@ -94,6 +99,7 @@ public class Fragment_Theme extends Fragment
         final RvAdapter adapter = new RvAdapter(mtheme, this);
 
         rv.setAdapter(adapter);
+        updateButtonTypeForRv();
 
         spinnerMenu.setSelection(0);
 
@@ -103,10 +109,9 @@ public class Fragment_Theme extends Fragment
 
                 try {
                     ((TextView) view).setText(null);
-                }catch (Exception e){
-                    ;
+                } catch (Exception ignored) {
                 }
-                if(position == 0) {
+                if (position == 0) {
 
                     RvAdapter adapter0 = new RvAdapter(mtheme, mOnNoteListener);
                     rv.setAdapter(adapter0);
@@ -121,9 +126,8 @@ public class Fragment_Theme extends Fragment
                 if (position == 2) {
                     RvAdapter adapter1 = new NoAddRvAdapter(sweetTheme, mOnNoteListener);
                     rv.setAdapter(adapter1);
-
                 }
-
+                updateButtonTypeForRv();
             }
 
             @Override
@@ -189,6 +193,16 @@ public class Fragment_Theme extends Fragment
 //        sweetTheme = new ArrayList<>();
 //        sweetTheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d, "Photonlab", "Sweet sweet"));
 //    }
+
+    private void updateButtonTypeForRv() {
+        int count = Objects.requireNonNull(rv.getAdapter()).getItemCount();
+        if (count == 0 && btn_no_more.getVisibility() == View.GONE) {
+            btn_no_more.setVisibility(View.VISIBLE);
+        }
+        if (count > 0 && btn_no_more.getVisibility() == View.VISIBLE) {
+            btn_no_more.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onNoteClick(int position) {

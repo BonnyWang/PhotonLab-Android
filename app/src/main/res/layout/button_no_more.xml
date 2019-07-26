@@ -7,7 +7,6 @@
     android:focusable="true">
 
     <androidx.cardview.widget.CardView
-        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/plus_Theme_Card"
         android:layout_width="match_parent"
         android:layout_height="185dp"
@@ -28,11 +27,11 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/plus_Theme"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/ic_add"
+                android:background="@drawable/ic_more"
                 android:backgroundTint="@color/Light_Grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.502"
