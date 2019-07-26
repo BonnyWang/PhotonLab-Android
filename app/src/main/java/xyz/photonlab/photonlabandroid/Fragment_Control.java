@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -46,6 +49,8 @@ import static android.content.Context.WINDOW_SERVICE;
 
 
 public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener{
+
+    ConstraintLayout mainContainer;
 
     SeekBar seek_bar;
     TextView text_view;
@@ -103,6 +108,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,6 +122,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
 
         final View view = inflater.inflate(R.layout.fragment__control_layout, container, false);
+        mainContainer = view.findViewById(R.id.main_container);
         webView = view.findViewById(R.id.webView);
         seekbar(view);
         //TODO:webview
@@ -194,6 +201,26 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         checked0 = new GradientDrawable();
         initialize_Rbuttons();
         add = view.findViewById(R.id.AddColor);
+
+        mainContainer.setOnTouchListener(new View.OnTouchListener() {
+            private float origin = 0f;
+            private float sensor = 200f;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    origin = motionEvent.getX();
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    float distance = motionEvent.getX() - origin;
+                    if (distance > sensor) {//swipe right
+                        AllButton.performClick();
+                    } else if (distance < -sensor) {
+                        SingleButton.performClick();
+                    }
+                }
+                return true;
+            }
+        });
 
         power.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
