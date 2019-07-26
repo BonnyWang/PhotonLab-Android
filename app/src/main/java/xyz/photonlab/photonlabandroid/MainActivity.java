@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                    ft1.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    ft1.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
                     ft1.replace(R.id.fgm, fragment_Control);
                     ft1.commit();
                     whichanim = 0;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity  {
                     if (whichanim < 2) {
                         ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                     } else {
-                        ft2.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                        ft2.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
                     }
 
                     whichanim = 2;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity  {
                     if (whichanim < 3) {
                         ft3.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                     } else {
-                        ft3.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                        ft3.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
                     }
                     whichanim = 3;
                     ft3.replace(R.id.fgm, fragment_Explore);

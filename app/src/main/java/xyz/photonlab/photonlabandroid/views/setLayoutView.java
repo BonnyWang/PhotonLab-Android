@@ -151,7 +151,7 @@ public class setLayoutView extends View {
 
         for(int i = 0; i < potentialNumber; i++){
             //For debug purpose-Bonny
-//            canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
+           canvas.drawCircle(potentialPosi[i][0],potentialPosi[i][1],5,paint);
         }
 
 
@@ -163,9 +163,6 @@ public class setLayoutView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event){
         boolean value = super.onTouchEvent(event);
-        
-
-
 
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:{

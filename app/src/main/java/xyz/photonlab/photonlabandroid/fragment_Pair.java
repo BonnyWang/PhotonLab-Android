@@ -59,7 +59,7 @@ import java.nio.ByteOrder;
 import java.util.List;
 
 
-public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.OnNoteListener{
+public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.OnNoteListener {
 
 
     static final String TAG = "fragment_Pair";
@@ -68,7 +68,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 
     List<ScanResult> results;
     wifiRvAdapter.OnNoteListener onNoteListener = this;
-    String[] PERMS_INITIAL= {Manifest.permission.ACCESS_FINE_LOCATION};
+    String[] PERMS_INITIAL = {Manifest.permission.ACCESS_FINE_LOCATION};
 
 
     ScrollView step2_Layout;
@@ -90,7 +90,6 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
     EditText editText_Password;
 
 
-
     String apIpAddress;
     String TargetSSID;
     String TargetPassword;
@@ -101,7 +100,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
     Disposable browseDisposable;
 
     TinyDB tinyDB;
-//    nsdFinder.nsdListner mnsdListener = this;
+    //    nsdFinder.nsdListner mnsdListener = this;
     Boolean isResolved;
 
     Handler mhandler;
@@ -110,15 +109,12 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
     TextView tvGotoSetting;
 
 
-
-
 //    NsdManager nsdManager;
 //    NsdManager.DiscoveryListener discoveryListener;
 
-    public fragment_Pair(){
+    public fragment_Pair() {
 
     }
-
 
 
     @Override
@@ -142,10 +138,10 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 
         final Context context = getActivity().getApplicationContext();
         //Yo, This is really shitty
-        requestPermissions(PERMS_INITIAL,127);
-       // setListener(mlistener);
-       // mlistener.scan_Wifi();
-        rv = (RecyclerView)view.findViewById(R.id.wifiRV);
+        requestPermissions(PERMS_INITIAL, 127);
+        // setListener(mlistener);
+        // mlistener.scan_Wifi();
+        rv = (RecyclerView) view.findViewById(R.id.wifiRV);
         progressBar = view.findViewById(R.id.progressBar);
         yes_Connected = view.findViewById(R.id.YesConnected);
         back = view.findViewById(R.id.backButton_Pairing);
@@ -165,8 +161,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
         webViewPair = view.findViewById(R.id.webViewPair);
 
 
-        final WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-
+        final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
 
         step2_Layout.setVisibility(View.INVISIBLE);
@@ -179,7 +174,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
             @Override
             public void onClick(View v) {
                 int progress = progressBar.getProgress();
-                switch (progress){
+                switch (progress) {
                     case 25:
                         getActivity().getSupportFragmentManager().popBackStack();
                         return;
@@ -223,8 +218,8 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
         yes_Connected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: "+wifiManager.getConnectionInfo().getSSID());
-                if(wifiManager.getConnectionInfo().getSSID().startsWith("\"ElementLight")){
+                Log.d(TAG, "onClick: " + wifiManager.getConnectionInfo().getSSID());
+                if (wifiManager.getConnectionInfo().getSSID().startsWith("\"ElementLight")) {
                     layout_Gone(step1_layout, View.INVISIBLE);
                     layout_Show(step2_Layout);
 //                step2_Layout.setVisibility(View.VISIBLE);
@@ -236,36 +231,34 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                     rv.setVisibility(View.VISIBLE);
                     rv.setClickable(true);
                     rv.setFocusable(true);
-                }else {
-                    Toast.makeText(getContext(),"Not connected to the light",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Not connected to the light", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         connect.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
 //                                           webViewPair.loadUrl("http://" + apIpAddress + "/join?ssid=" + TargetSSID
 //                                                   + "&password=" + password_Input.getText().toString());
-               Log.d(TAG, "onClickConnect: " + "http://" + apIpAddress + "/join?ssid=" + TargetSSID
-                       + "&password=" + password_Input.getText().toString());
+                Log.d(TAG, "onClickConnect: " + "http://" + apIpAddress + "/join?ssid=" + TargetSSID
+                        + "&password=" + password_Input.getText().toString());
 
 
-               Log.d(TAG, "onClick: start discovery");
+                Log.d(TAG, "onClick: start discovery");
 
-               new JsonTask().execute("http://" + apIpAddress + "/join?ssid=" + TargetSSID
-                       + "&password=" + password_Input.getText().toString());
-
-
+                new JsonTask().execute("http://" + apIpAddress + "/join?ssid=" + TargetSSID
+                        + "&password=" + password_Input.getText().toString());
 
 
-               mnsdFinder = new nsdFinder(getContext());
-               mnsdFinder.start();
+                mnsdFinder = new nsdFinder(getContext());
+                mnsdFinder.start();
 
-               pbStep3.setVisibility(View.VISIBLE);
+                pbStep3.setVisibility(View.VISIBLE);
 
-               password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
 /*                browseDisposable = rxDnssd.browse("_elementlight._udp", "local.")
                         .compose(rxDnssd.resolve())
@@ -302,8 +295,6 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 */
             }
         });
-
-
 
 
         done.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +336,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                 //Reload to new fragment -bbb
                 fragment_Pair mfragment_pair = new fragment_Pair();
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft.replace(R.id.container, mfragment_pair).addToBackStack(null);
                 ft.commit();
             }
@@ -383,7 +374,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
         }
 
 
-        return view ;
+        return view;
     }
 
     private void scanSuccess(WifiManager wifiManager) {
@@ -411,14 +402,14 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 
         //webViewPair.loadUrl("http://"+ apIpAddress+"/"+"wifiName"+"/"+TargetSSID);
 
-        Log.d(TAG, "onNoteClick: "+apIpAddress+"/"+TargetSSID);
+        Log.d(TAG, "onNoteClick: " + apIpAddress + "/" + TargetSSID);
 
 
     }
 
 
-    public void layout_Show(View view){
-        TranslateAnimation animate = new TranslateAnimation(view.getWidth(),0,0,0);
+    public void layout_Show(View view) {
+        TranslateAnimation animate = new TranslateAnimation(view.getWidth(), 0, 0, 0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
@@ -427,31 +418,31 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
     }
 
     // To animate view slide out from right to left
-    public void layout_Gone(View view, int visibility){
-        TranslateAnimation animate = new TranslateAnimation(0,-view.getWidth(),0,0);
+    public void layout_Gone(View view, int visibility) {
+        TranslateAnimation animate = new TranslateAnimation(0, -view.getWidth(), 0, 0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
         view.setVisibility(visibility);
     }
 
-    public void Blayout_Gone(View view, int visibility){
-        TranslateAnimation animate = new TranslateAnimation(0,view.getWidth(),0,0);
+    public void Blayout_Gone(View view, int visibility) {
+        TranslateAnimation animate = new TranslateAnimation(0, view.getWidth(), 0, 0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
         view.setVisibility(visibility);
     }
 
-    public void Blayout_Show(View view){
-        TranslateAnimation animate = new TranslateAnimation(-view.getWidth(),0,0,0);
+    public void Blayout_Show(View view) {
+        TranslateAnimation animate = new TranslateAnimation(-view.getWidth(), 0, 0, 0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
         view.setVisibility(View.VISIBLE);
     }
 
-    public String ipToString(int tempIP){
+    public String ipToString(int tempIP) {
         if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
             tempIP = Integer.reverseBytes(tempIP);
         }
@@ -470,14 +461,14 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
     }
 
 
-
     public interface pairing_Listener {
         //TODO: return back the ip address of the device -Bonny
         public void mainControl(String Tag, int value);
+
         public int rounterIpAddress(int address);
     }
 
-    public void setListener(pairing_Listener mlistener){
+    public void setListener(pairing_Listener mlistener) {
         this.mlistener = mlistener;
 
     }
@@ -500,11 +491,11 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
         protected String doInBackground(String... params) {
 
 
-            Runnable runnable =  new Runnable() {
+            Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
 
-                    if(!sucess) {
+                    if (!sucess) {
 
                         layout_Show(step4Failed_Layout);
                         layout_Gone(step3_Layout, View.INVISIBLE);
@@ -536,7 +527,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                 String line = "";
 
                 while ((line = reader.readLine()) != null) {
-                    buffer.append(line+"\n");
+                    buffer.append(line + "\n");
                     Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
 
 
@@ -568,9 +559,9 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            Log.d(TAG, "onPostExecute: "+result);
+            Log.d(TAG, "onPostExecute: " + result);
 
-            if(sucess) {
+            if (sucess) {
                 if (result != null) {
                     String temp = result.replaceAll("\\{", "");
                     temp = temp.replaceAll("\\}", "");
