@@ -28,6 +28,8 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
     TextView tvTitle;
     ConstraintLayout topBox;
     Button btShare;
+    Animation animationShow;
+    Animation animationHide;
 
     public fragment_explore_indiv(String link, String title) {
 
@@ -54,7 +56,7 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
         wvexplore.loadUrl(link);
         wvexplore.getSettings().setJavaScriptEnabled(true);
         wvexplore.getSettings().setDomStorageEnabled(true);
-        wvexplore.setOnTouchListener(this);
+        //wvexplore.setOnTouchListener(this);
 
         btBack = view.findViewById(R.id.btBackExIndiv);
         btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
@@ -64,13 +66,28 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, "PhotonLab Inc");
             intent.putExtra(Intent.EXTRA_TEXT, wvexplore.getUrl());
-            startActivity(Intent.createChooser(intent,"Share"));
+            startActivity(Intent.createChooser(intent, "Share"));
         });
 
 
         tvTitle = view.findViewById(R.id.tvExIndivTitle);
         tvTitle.setText(title);
+        animationHide = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
+        animationShow = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
 
+        animationHide.setAnimationListener(new FinishAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                topBox.setVisibility(View.GONE);
+            }
+        });
+
+        animationShow.setAnimationListener(new FinishAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                topBox.setVisibility(View.VISIBLE);
+            }
+        });
         return view;
     }
 
@@ -94,4 +111,20 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
         return false;
     }
 
+}
+
+abstract class FinishAnimationListener implements Animation.AnimationListener {
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public abstract void onAnimationEnd(Animation animation);
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
 }
