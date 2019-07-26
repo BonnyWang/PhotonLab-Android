@@ -80,7 +80,7 @@ public class fragment_system extends FullScreenFragment {
             new JsonTask().execute("http://"+ipAddr+"/ip");
 ////            tvMacAddr.setText();
         }
-
+//
         return view;
     }
 
