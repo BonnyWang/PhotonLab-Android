@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -99,7 +100,14 @@ public class Fragment_Theme extends Fragment
         spinnerMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
+
+                try {
+                    ((TextView) view).setText(null);
+                }catch (Exception e){
+                    ;
+                }
+                if(position == 0) {
+
                     RvAdapter adapter0 = new RvAdapter(mtheme, mOnNoteListener);
                     rv.setAdapter(adapter0);
                     rv.getChildAt(adapter0.getItemCount() - 1);
@@ -120,7 +128,7 @@ public class Fragment_Theme extends Fragment
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+//                ((TextView)view).setText(null);
             }
         });
 

@@ -105,7 +105,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
         } else {
 
-            ipAddr = tinyDB.getString("LocalIP");
+            ipAddr = tinyDB.getString("LocalIp");
 
         }
 
@@ -134,14 +134,18 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         sun = view.findViewById(R.id.sun);
         final SeekBar seekBar = view.findViewById(R.id.seekBar5);
         int heightInDP = Math.round(dm.heightPixels / dm.density);
-        Log.d("fuck", "onCreateView: " + heightInDP);
-        if (heightInDP < 570) {
-            Toast.makeText(getContext(), "Please change a phone", Toast.LENGTH_SHORT).show();
-        } else if (heightInDP < 650) {
-            CardView cv = view.findViewById(R.id.cv);
-            ViewGroup.LayoutParams a = cv.getLayoutParams();
-            int b = (int) (250 * (getResources().getDisplayMetrics().density));
-            a.width = b;
+
+
+        Log.d("fuck", "onCreateView: "+heightInDP);
+        if (heightInDP<570) {
+            Log.d(TAG, "onCreateView: " + "please change a " );
+        }
+        else if (heightInDP<650) {
+            CardView cv=view.findViewById(R.id.cv);
+            ViewGroup.LayoutParams a=cv.getLayoutParams();
+            int b=(int) (250* (getResources().getDisplayMetrics().density));
+            a.width=b;
+
             cv.setLayoutParams(a);
             ViewGroup.MarginLayoutParams c = (ViewGroup.MarginLayoutParams) cv.getLayoutParams();
             int d = (int) -(30 * (getResources().getDisplayMetrics().density));
