@@ -1,12 +1,17 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +22,15 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 //added for Fragment -Bonny
 
@@ -42,6 +56,8 @@ public class MainActivity extends AppCompatActivity  {
 
     ConstraintLayout container;
 
+    TinyDB tinyDB;
+    String ipAddr;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -115,6 +131,8 @@ public class MainActivity extends AppCompatActivity  {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         webViewMain = findViewById(R.id.webViewMain);
 
+        tinyDB = new TinyDB(getBaseContext());
+
 
 
         FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
@@ -151,18 +169,67 @@ public class MainActivity extends AppCompatActivity  {
 
         myRef.setValue("Hello, World!");
 
+        if(tinyDB.getString("LocalIp").equals("")){
 
+            Toast.makeText(this, "Please Pair First", Toast.LENGTH_SHORT).show();
 
-
+        }else {
+//            CheckLightState mcheckLightState =  new CheckLightState(getApplicationContext());
+//            mcheckLightState.start();
+        }
 
 
     }
 
 
 
-    private void fing(){
+//    private class CheckLightState extends Thread{
+//
+//        Context context;
+//
+//        CheckLightState(Context context){
+//            this.context = context;
+//        }
+//
+//        @Override
+//        public void run(){
+//            if(tinyDB.getString("LocalIP").equals("")){
+//
+//                Toast.makeText(context, "Please Pair First", Toast.LENGTH_SHORT).show();
+//
+//            }else {
+//
+//                ipAddr = tinyDB.getString("LocalIp");
+//
+//                try {
+//                    URL url = new URL("http://"+ipAddr+"/ip");
+//                    Log.d(TAG, "onCreate: URLLLL"+ url);
+//                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//                    Log.d(TAG, "onCreate: Open Connected");
+////                urlConnection.connect();
+//                    Log.d(TAG, "onCreate: Connected?");
+//                    try {
+//                        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//                    }catch (Exception e){
+//                        Log.d(TAG, "onCreate: input error");
+//                        Toast.makeText(context, "Device not connected", Toast.LENGTH_SHORT).show();
+//                    } finally {
+//                        Log.d(TAG, "onCreate: finally");
+//                        urlConnection.disconnect();
+//                    }
+//                }catch (Exception e){
+//                    Toast.makeText(context, "Device not connected", Toast.LENGTH_SHORT).show();
+//                    Log.d(TAG, "onCreate: url error");
+//                }
+//
+//
+//            }
 
-    }
+
+//        }
+
+
+//    }
 //    @Override
 //    public void mainControl(String Tag, int Value){
 //        String tempCommand;
@@ -181,7 +248,6 @@ public class MainActivity extends AppCompatActivity  {
 //            fragment_pair.setListener(this);
 //        }
 //    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 //        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
@@ -193,6 +259,8 @@ public class MainActivity extends AppCompatActivity  {
 //    https://blog.csdn.net/a10615/article/details/52427047
 
 }
+
+
 
 
 
