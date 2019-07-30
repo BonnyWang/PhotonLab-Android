@@ -6,10 +6,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import xyz.photonlab.photonlabandroid.views.LightStage;
 import xyz.photonlab.photonlabandroid.views.setLayoutView;
 
 
@@ -20,7 +25,7 @@ public class fragment_layout extends FullScreenFragment {
     Button btRotate;
     Button btBack;
     Button btNext;
-    setLayoutView msetLayoutView;
+    LightStage msetLayoutView;
 
     float rotation;
 
@@ -43,7 +48,7 @@ public class fragment_layout extends FullScreenFragment {
         btAddHex.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                msetLayoutView.addHex();
+                msetLayoutView.addLight();
             }
         });
 
@@ -52,7 +57,7 @@ public class fragment_layout extends FullScreenFragment {
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                msetLayoutView.deleteHex();
+                msetLayoutView.deleteLight();
             }
         });
 
@@ -60,22 +65,14 @@ public class fragment_layout extends FullScreenFragment {
         btRotate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                msetLayoutView.setRotation(rotation+90);
-//                rotation = rotation + 90;
+                msetLayoutView.rotateLight();
             }
         });
 
         btBack = view.findViewById(R.id.btBackLayout);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
         btNext = view.findViewById(R.id.btNext);
-
         return view;
     }
 

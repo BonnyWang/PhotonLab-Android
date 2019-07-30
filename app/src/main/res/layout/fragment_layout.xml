@@ -10,7 +10,16 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-    <xyz.photonlab.photonlabandroid.views.setLayoutView
+    <!--<xyz.photonlab.photonlabandroid.views.setLayoutView-->
+    <!--android:id="@+id/msetLayoutView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/btBackLayout"-->
+    <!--app:layout_constraintBottom_toTopOf="@id/btAddHex"-->
+    <!--app:layout_constraintVertical_bias="0.4"/>-->
+    <xyz.photonlab.photonlabandroid.views.LightStage
         android:id="@+id/msetLayoutView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -18,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btBackLayout"
         app:layout_constraintBottom_toTopOf="@id/btAddHex"
-        app:layout_constraintVertical_bias="0.4"/>
+        app:layout_constraintVertical_bias="0.4" />
 
     <Button
         android:id="@+id/btAddHex"
