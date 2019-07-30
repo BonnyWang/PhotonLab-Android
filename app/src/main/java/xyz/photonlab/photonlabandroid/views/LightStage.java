@@ -61,7 +61,7 @@ public class LightStage extends View {
         }
         for (Dot dot : dots) {
             dot.update();
-            dot.draw(canvas);
+            //dot.draw(canvas);
         }
         invalidate();
     }
@@ -140,16 +140,18 @@ public class LightStage extends View {
         Dot nearest = null;
         float distance = Float.MAX_VALUE;
         for (Dot dot : dots) {
+            if (dot.getParent().equals(light))
+                continue;
             float x = light.getX();
             float y = light.getY();
             float d = (x - dot.getX()) * (x - dot.getX()) + (y - dot.getY()) * (y - dot.getY());
             if (d < distance) {
                 boolean flag = true;
                 for (Light toCompare : lights) {
-                    if (toCompare.equals(light))
-                        continue;
-                    if (light.conflictTo(toCompare)) {
+                    if (Math.abs(toCompare.getX() - dot.getX()) < 10
+                            && Math.abs(toCompare.getY() - dot.getY()) < 10) {//conflicted
                         flag = false;
+                        break;
                     }
                 }
                 if (flag) {
@@ -161,8 +163,6 @@ public class LightStage extends View {
         if (nearest != null) {
             light.setX(nearest.getX());
             light.setY(nearest.getY());
-        } else {
-            Log.e("KILL","sss");
         }
     }
 

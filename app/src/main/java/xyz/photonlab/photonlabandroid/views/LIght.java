@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Light implements Comparable<Light> {
 
+    private List<Light> lights;
+
     @Override
     public int compareTo(Light light) {
         //sort
@@ -17,18 +19,19 @@ public class Light implements Comparable<Light> {
 
     private boolean checked = false;
     private boolean settled = false;
-    private Light from = null;
 
-    protected int colorIdle = Color.argb(255, 230, 230, 230);
-    protected int colorSettle = Color.argb(255, 230, 230, 141);
+    private float sx, sy;
+    private int colorIdle = Color.argb(255, 230, 230, 230);
+    private int colorSettle = Color.argb(255, 230, 230, 141);
 
     static final float RADIUS = 80f;
-    protected static final float deg60 = (float) Math.PI / 3;
+    private static final float deg60 = (float) Math.PI / 3;
+    private static final float deg30 = (float) Math.PI / 6;
 
     private float x;
     private float y;
 
-    protected Paint paint;
+    Paint paint;
     private Path path;
     private int direction = 4;//from 0 to 5
 
@@ -47,27 +50,24 @@ public class Light implements Comparable<Light> {
             path.lineTo(x + RADIUS * (float) Math.cos(i * deg60), y + RADIUS * (float) Math.sin(i * deg60));
         }
         path.close();
-
+        this.lights = lights;
         //find the source light
-        float deg = (float) Math.PI / 6;
-        float sX = lights.get(0).getX();
-        float sY = lights.get(0).getY();
-
-        from = null;
+        sx = x + (RADIUS * 2) * (float) Math.cos(2 * (direction + 1) * deg30 - deg30);
+        sy = y + (RADIUS * 2) * (float) Math.sin(2 * (direction + 1) * deg30 - deg30);
+        boolean flag = false;
         for (Light light : lights) {
-            if (this.equals(light))
+            if (light.equals(this))
                 continue;
-            from = lights.get(0);
-        }
-        if (from != null) {
-            from = lights.get(0);
-            System.out.println(from.isSettled());
-            setSettled(from.isSettled());
-        } else {
-            setSettled(false);
+            if (Math.abs(light.getX() - sx) < 10 && Math.abs(light.getY() - sy) < 10) {
+                if (light.isSettled() && Math.abs(light.getDirection() - direction) != 3)
+                    flag = true;
+                break;
+            }
         }
 
-        if (this.settled) {
+        setSettled(flag);
+
+        if (this.isSettled()) {
             paint.setColor(colorSettle);
         } else {
             paint.setColor(colorIdle);
@@ -85,17 +85,12 @@ public class Light implements Comparable<Light> {
         }
         paint.setStrokeWidth(10);
         paint.setColor(Color.argb(100, 200, 120, 33));
-        float interfazeRadius = RADIUS + 5;
+        float interfazeRadius = RADIUS;
         canvas.drawLine(x + interfazeRadius * (float) Math.cos(direction * deg60),
                 y + interfazeRadius * (float) Math.sin(direction * deg60),
                 x + interfazeRadius * (float) Math.cos((direction + 1) * deg60),
                 y + interfazeRadius * (float) Math.sin((direction + 1) * deg60), paint);
-    }
-
-    public boolean conflictTo(Light light) {
-        float tx = light.getX(), ty = light.getY();
-        float distance = (getX() - tx) * (getX() - tx) + (getY() - ty) * (getY() - ty);
-        return distance <= RADIUS * RADIUS - RADIUS;
+        //canvas.drawCircle(sx, sy, 20, paint);
     }
 
     public float getX() {
