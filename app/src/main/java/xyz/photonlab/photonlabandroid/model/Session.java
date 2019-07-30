@@ -1,12 +1,23 @@
 package xyz.photonlab.photonlabandroid.model;
 
 import android.content.Context;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import xyz.photonlab.photonlabandroid.TinyDB;
 import xyz.photonlab.photonlabandroid.theme_Class;
+import xyz.photonlab.photonlabandroid.views.Light;
+import xyz.photonlab.photonlabandroid.views.LightStage;
+import xyz.photonlab.photonlabandroid.views.MotherLight;
 
 public class Session {
 
@@ -106,4 +117,87 @@ public class Session {
         tinyDB.putInt("current_theme_index", currentThemeIndex);
         this.currentThemeIndex = currentThemeIndex;
     }
+
+    public LightStage requireLayoutStage(Context context) {
+        return loadLayoutFromLocal(context);
+    }
+
+    private LightStage loadLayoutFromLocal(Context context) {
+        LightStage stage;
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(context.openFileInput("layoutManager.data")));
+            String json = reader.readLine();
+            Log.e("read", json);
+            stage = new LightStage(context);
+            JSONObject src = new JSONObject(json);
+            JSONArray lights = src.getJSONArray("lights");
+            LightStage finalStage = stage;
+            stage.setOnViewCreatedListener(() -> {
+                try {
+                    finalStage.getLights().clear();
+                    finalStage.getDots().clear();
+                    for (int i = 0; i < lights.length(); i++) {
+                        Light light;
+                        JSONObject o = lights.getJSONObject(i);
+                        if (i == 0)
+                            light = new MotherLight((float) o.getDouble("x"), (float) o.getDouble("y"));
+                        else
+                            light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
+                        light.setDirection(o.getInt("direction"));
+                        finalStage.addLight(light);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            stage = null;
+        }
+        return stage;
+    }
+
+    public boolean saveLayoutToLocal(Context context, LightStage stage) {
+        PrintWriter writer = null;
+        try {
+            //parse
+            JSONObject lightStage = new JSONObject();
+            JSONArray lights = new JSONArray();
+            lightStage.put("timestamp", System.currentTimeMillis());
+            lightStage.put("lights", lights);
+            List<Light> lightList = stage.getLights();
+            for (Light light : lightList) {
+                lights.put(parseLight(light));
+            }
+            //save
+            writer = new PrintWriter(context.openFileOutput("layoutManager.data", Context.MODE_PRIVATE));
+            writer.println(lightStage);
+            Log.e("save", lightStage.toString());
+            writer.flush();
+            writer.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+    }
+
+    private JSONObject parseLight(Light light) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("direction", light.getDirection());
+            object.put("x", light.getX());
+            object.put("y", light.getY());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
 }

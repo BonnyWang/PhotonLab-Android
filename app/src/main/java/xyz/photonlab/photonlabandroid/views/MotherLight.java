@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MotherLight extends Light {
 
-    MotherLight(float x, float y) {
+    public MotherLight(float x, float y) {
         super(x, y);
         setSettled(true);
     }
@@ -16,7 +16,7 @@ public class MotherLight extends Light {
     @Override
     public void update(List<Light> light) {
         super.update(light);
-        paint.setColor(Color.argb(255, 240, 118, 58));
+        currentColor = Color.argb(255, 240, 118, 58);
         setSettled(true);
     }
 

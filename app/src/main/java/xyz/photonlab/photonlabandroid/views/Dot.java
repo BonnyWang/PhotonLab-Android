@@ -1,14 +1,14 @@
 package xyz.photonlab.photonlabandroid.views;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import androidx.annotation.Nullable;
 
-public class Dot {
+import java.io.Serializable;
+
+public class Dot implements Serializable {
     private float x, y;
-    private final Paint paint;
     private float offsetX, offsetY;
 
     public Light getParent() {
@@ -20,8 +20,6 @@ public class Dot {
     Dot(float x, float y) {
         this.x = x;
         this.y = y;
-        paint = new Paint();
-        paint.setColor(Color.BLACK);
     }
 
     void update() {
@@ -30,7 +28,7 @@ public class Dot {
     }
 
     void draw(Canvas canvas) {
-        canvas.drawCircle(x, y, 4, paint);
+        canvas.drawCircle(x, y, 4, new Paint());
     }
 
     public float getY() {

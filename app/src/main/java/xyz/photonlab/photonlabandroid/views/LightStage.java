@@ -5,12 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,11 +19,13 @@ import xyz.photonlab.photonlabandroid.R;
 
 import static xyz.photonlab.photonlabandroid.views.Light.RADIUS;
 
-public class LightStage extends View {
+public class LightStage extends View implements Serializable {
 
-    private RectF screenArea;
-    private Paint paint;
+    private RectF screenArea, visibleArea;
     private List<Light> lights;
+    private Paint paint = new Paint();
+    private OnViewCreatedListener onViewCreatedListener;
+
     List<Dot> dots = new ArrayList<>();
 
     public LightStage(Context context) {
@@ -38,8 +40,8 @@ public class LightStage extends View {
 
     private void init() {
         screenArea = new RectF(0f, 0f, 0f, 0f);
-        paint = new Paint();
-        paint.setColor(getResources().getColor(R.color.backGround, null));
+        visibleArea = new RectF(0, 0, 0, 0);
+
         lights = new ArrayList<>();
     }
 
@@ -49,11 +51,19 @@ public class LightStage extends View {
         super.onFinishInflate();
         this.screenArea.right = getMeasuredWidth();
         this.screenArea.bottom = getMeasuredHeight();
+        this.visibleArea.left = -300;
+        this.visibleArea.top = -300;
+        this.visibleArea.bottom = getMeasuredHeight() + 300;
+        this.visibleArea.right = -getMeasuredWidth() + 300;
+        RADIUS = this.screenArea.width() / 16;
+        if (this.onViewCreatedListener != null)
+            this.onViewCreatedListener.onViewCreated();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        paint.setColor(getResources().getColor(R.color.backGround, null));
         canvas.drawRect(screenArea, paint);
         for (Light light : lights) {
             light.update(lights);
@@ -176,12 +186,16 @@ public class LightStage extends View {
     public void addLight() {
         Light light;
         if (lights.size() == 0) {
-            light = new MotherLight(screenArea.right * (float) Math.random(),
-                    screenArea.bottom * (float) Math.random());
+            light = new MotherLight(screenArea.right / 2,
+                    screenArea.bottom / 2);
         } else {
             light = new Light(screenArea.right * (float) Math.random(),
                     screenArea.bottom * (float) Math.random());
         }
+        this.addLight(light);
+    }
+
+    public void addLight(Light light) {
         generateDot(light);
         this.lights.add(light);
         clearChecked();
@@ -213,4 +227,27 @@ public class LightStage extends View {
         }
     }
 
+    public int getUselessLightNum() {
+        int num = 0;
+        for (Light light : lights)
+            if (!light.isSettled())
+                num++;
+        return num;
+    }
+
+    public List<Light> getLights() {
+        return this.lights;
+    }
+
+    public void setOnViewCreatedListener(OnViewCreatedListener onViewCreatedListener) {
+        this.onViewCreatedListener = onViewCreatedListener;
+    }
+
+    public List<Dot> getDots() {
+        return this.dots;
+    }
+
+    public interface OnViewCreatedListener {
+        void onViewCreated();
+    }
 }
