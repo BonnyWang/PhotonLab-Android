@@ -1,22 +1,22 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.graphics.drawable.Drawable;
+import android.annotation.SuppressLint;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -24,500 +24,120 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.cardview.widget.CardView;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import xyz.photonlab.photonlabandroid.R;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.views.LightStage;
 
 import static android.content.Context.WINDOW_SERVICE;
 
 
-public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener{
+public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener {
 
-    SeekBar seek_bar;
-    TextView text_view;
-    TextView brightness;
-    int progressValue;
-    CardView cardView;
-    ToggleButton power;
-    ImageView sun;
-    int checkedOrder;
-    RadioGroup radioGroup;
-    RadioButton[] rbuttons;
-    static Queue<Integer> colorOptions;
+    private TinyDB tinyDB;
 
+    private String ipAddr;
+    private int currentColor0, currentColor1;
+    private GradientDrawable checked0, checked1;
+    private boolean isAll;
+    private LinearLayout content_container;
 
-    GradientDrawable checked;
-    RadioButton checkedButton;
+    private int progress;
 
-    Button add;
+    private ConstraintLayout allContainer, singleContainer;
+    private FrameLayout content;
+    private TextView tvToAll, tvToSingle, brightness, tvGotoSetup;
+    private ToggleButton power;
+    private ImageView sun;
+    private SeekBar seekBar;
+    private RadioGroup group0, group1, group2;
+    private RadioButton[] radioButtons0, radioButtons1;
+    private Button add0, add1;
 
-    int setMode;
-    int seekBarColor;
+    private Queue<Integer> colorOptions0, colorOptions1;
 
-    //TODO:Need to later write it in main activity instead, use interface to call the function in main
-    WebView webView;
-
-    ToggleButton SingleButton;
-    ToggleButton AllButton;
-    CardView Single;
-    CardView All;
-    Fragment fragment_ColorPicker;
-    static final String TAG = "fragment_Control";
-    FrameLayout fl;
-    CardView powerCard;
-
-
-    //Single layout
-    TextView tvNoLayout;
-    TextView tvGotoSetup;
-    RadioGroup radioGroup0;
-    RadioGroup radioGroup00;
-    RadioButton[] rbuttons0;
-    static Queue<Integer> colorOptions0;
-    Button add0;
-    GradientDrawable checked0;
-
-    TinyDB tinyDB;
-    String ipAddr;
-
+    private Animation slide_in_left, slide_out_right, slide_out_left, slide_in_right;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         tinyDB = new TinyDB(getContext());
-
+        if (tinyDB.getString("LocalIP").equals("")) {
+            Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
+        } else {
+            ipAddr = tinyDB.getString("LocalIP");
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        // Inflate the layout for this fragment
         DisplayMetrics dm = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) getContext().getSystemService(WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(dm);
 
-
-
-        final View view = inflater.inflate(R.layout.fragment__control_layout, container, false);
-        webView = view.findViewById(R.id.webView);
-        seekbar(view);
-        //TODO:webview
-        webView = view.findViewById(R.id.webView);
-        power = view.findViewById(R.id.Power);
-        sun = view.findViewById(R.id.sun);
-        final SeekBar seekBar = view.findViewById(R.id.seekBar5);
-        int heightInDP = Math.round(dm.heightPixels / dm.density);
-        Log.d("fuck", "onCreateView: "+heightInDP);
-        if (heightInDP<570) {
-            Log.d(TAG, "onCreateView: " + "please change a " );
+        //check the screen
+        if (getContext() != null) {
+            WindowManager windowManager = (WindowManager) getContext().getSystemService(WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getMetrics(dm);
+            int heightInDP = Math.round(dm.heightPixels / dm.density);
+            Log.d("fuck", "onCreateView: " + heightInDP);
+            if (heightInDP < 570) {
+                Toast.makeText(getContext(), "Please change a phone", Toast.LENGTH_SHORT).show();
+                return new View(getContext());
+            }
+            slide_in_left = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
+            slide_out_right = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_right);
+            slide_out_left = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left);
+            slide_in_right = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
         }
-        else if (heightInDP<650) {
-            CardView cv=view.findViewById(R.id.cv);
-            ViewGroup.LayoutParams a=cv.getLayoutParams();
-            int b=(int) (250* (getResources().getDisplayMetrics().density));
-            a.width=b;
-            cv.setLayoutParams(a);
-            ViewGroup.MarginLayoutParams c = (ViewGroup.MarginLayoutParams)cv.getLayoutParams();
-            int d=(int) -(30* (getResources().getDisplayMetrics().density));
-            Log.d("hello", "onCreateView: "+d);
-            c.leftMargin=d;
-            cv.setLayoutParams(c);
-        }
-        brightness = view.findViewById(R.id.tvBrightness);
 
-        Single = view.findViewById(R.id.Single);
-        All = view.findViewById(R.id.All);
-        AllButton = view.findViewById(R.id.AllButton);
-        SingleButton = view.findViewById(R.id.SingleButton);
+        isAll = true;
+        tinyDB = new TinyDB(getContext());
+        final View contentView = inflater.inflate(R.layout.fragment_control_layout_v2, container, false);
+        initView(contentView);
+        addViewEvent();
 
-        rbuttons = new RadioButton[4];
-        rbuttons[0] = view.findViewById(R.id.rButton1);
-        rbuttons[1] = view.findViewById(R.id.rButton2);
-        rbuttons[2] = view.findViewById(R.id.rButton3);
-        rbuttons[3] = view.findViewById(R.id.rButton4);
-
-        fl = view.findViewById(R.id.seekBarCard);
-        powerCard = view.findViewById(R.id.powerCard);
-
-        //Single layout
-        tvNoLayout = view.findViewById(R.id.noLayout);
-        tvGotoSetup = view.findViewById(R.id.tvGotoSetup);
-        radioGroup0 = view.findViewById(R.id.radioGroup0);
-        radioGroup00 = view.findViewById(R.id.radioGroup00);
-        rbuttons0 = new RadioButton[9];
-        rbuttons0[0] = view.findViewById(R.id.rButton01);
-        rbuttons0[1] = view.findViewById(R.id.rButton02);
-        rbuttons0[2] = view.findViewById(R.id.rButton03);
-        rbuttons0[3] = view.findViewById(R.id.rButton04);
-        rbuttons0[4] = view.findViewById(R.id.rButton05);
-        rbuttons0[5] = view.findViewById(R.id.rButton06);
-        rbuttons0[6] = view.findViewById(R.id.rButton07);
-        rbuttons0[7] = view.findViewById(R.id.rButton08);
-        rbuttons0[8] = view.findViewById(R.id.rButton09);
-        add0 = view.findViewById(R.id.AddColor00);
-
-        radioGroup = view.findViewById(R.id.radioGroup);
-
-
-        colorOptions = new LinkedList<>();
-        colorOptions0 = new LinkedList<>();
-
-        final TinyDB tinyDB = new TinyDB(getContext());
-        if(tinyDB.getInt("Brightness") != -1){
+        if (tinyDB.getInt("Brightness") != -1) {
             seekBar.setProgress(tinyDB.getInt("Brightness"));
-        }else{
+            brightness.setText(tinyDB.getInt("Brightness") + "%");
+        } else {
             seekBar.setProgress(100);
         }
 
-
-
-        initialize_Colors();
-
-        checked = new GradientDrawable();
-        checked0 = new GradientDrawable();
-        initialize_Rbuttons();
-        add = view.findViewById(R.id.AddColor);
-
-        power.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_On, null));
-                    power.getBackground().setTint(getResources().getColor(R.color.colorPrimary,null));
-
-
-                    if(setMode == 0){
-                        checkedButton = view.findViewById(radioGroup.getCheckedRadioButtonId());
-                        sun.setColorFilter(0xffffd41f);
-                        checkedButton.setChecked(false);
-                        checkedButton.setChecked(true);
-                        webView.loadUrl("http://192.168.50.48/H");
-                        webLoad("pir?status=on");
-                    }else {
-                        sun.setColorFilter(0xffffd41f);
-                        seekBar.getProgressDrawable().setTint(seekBarColor);
-                        webView.loadUrl("http://192.168.50.48/H");
-                        webLoad("pir?status=on");
-                    }
-
-                    tinyDB.putInt("Power",1);
-
-                } else {
-                    seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
-                    sun.setColorFilter(getResources().getColor(R.color.seekBar_Default,null));
-                    power.getBackground().setTint(0xffffffff);
-                    webView.loadUrl("http://192.168.50.48/L");
-
-                    tinyDB.putInt("Power",0);
-                }
-
-            }
-        });
-
-        AllButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    AllButton.setTextColor(getResources().getColor(R.color.backGround, null));
-                    //All.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
-                    All.setBackground(getResources().getDrawable(R.drawable.button1, null));
-                    SingleButton.setChecked(false);
-                    setAllLayout();
-                }else {
-                    //All.setCardBackgroundColor(getResources().getColor(R.color.backGround, null) );
-                    All.setBackground(getResources().getDrawable(R.drawable.button, null));
-                    AllButton.setTextColor(getResources().getColor(R.color.DeepText, null));
-                    setSingleLayout();
-                }
-            }
-        });
-
-        SingleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    SingleButton.setTextColor(getResources().getColor(R.color.backGround, null));
-                    //Single.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary, null) );
-                    Single.setBackground(getResources().getDrawable(R.drawable.button1, null));
-                    AllButton.setChecked(false);
-                    setSingleLayout();
-                }else {
-                    Single.setCardBackgroundColor(getResources().getColor(R.color.backGround, null) );
-                    Single.setBackground(getResources().getDrawable(R.drawable.button, null));
-                    SingleButton.setTextColor(getResources().getColor(R.color.DeepText, null));
-                    setSingleLayout();
-                }
-            }
-        });
-
-        SingleButton.setChecked(true);
-        SingleButton.setChecked(false);
-
-        AllButton.setChecked(true);
-
-
-        checkedOrder = 0;
-
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.rButton1){
-                        setColor(0);
-                        tinyDB.putInt("rbutton", 0);
-                }
-
-                if(checkedId == R.id.rButton2){
-                    setColor(1);
-                    tinyDB.putInt("rbutton", 1);
-                }
-
-                if(checkedId == R.id.rButton3){
-                    setColor(2);
-                    tinyDB.putInt("rbutton", 2);
-                }
-
-                if(checkedId == R.id.rButton4){
-                    setColor(3);
-                    tinyDB.putInt("rbutton", 3);
-                }
-            }
-        });
-
-        radioGroup0.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                for(int i = 5; i < 9; i++){
-                    rbuttons0[i].setChecked(false);
-                }
-                if(checkedId == R.id.rButton01){
-                    setColor0(0);
-                    Log.d(TAG, "onCheckedChanged: 00");
-                }
-
-                if(checkedId == R.id.rButton02){
-                    setColor0(1);
-                }
-
-                if(checkedId == R.id.rButton03){
-                    setColor0(2);
-                }
-
-                if(checkedId == R.id.rButton04){
-                    setColor0(3);
-                }
-                if(checkedId == R.id.rButton05){
-                    setColor0(4);
-                }
-
-
-            }
-        });
-
-        radioGroup00.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                for(int i = 0; i < 5; i++){
-                    rbuttons0[i].setChecked(false);
-                }
-                if(checkedId == R.id.rButton06){
-                    setColor0(5);
-                }
-
-                if(checkedId == R.id.rButton07){
-                    setColor0(6);
-                }
-
-                if(checkedId == R.id.rButton08){
-                    setColor0(7);
-                }
-                if(checkedId == R.id.rButton09) {
-                    setColor0(8);
-                }
-            }
-        });
-
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = dialog_colorpicker.newInstance(0);
-                ((dialog_colorpicker) newFragment).setListener(Fragment_Control.this);
-                newFragment.show(getChildFragmentManager(), "dialog");
-            }
-        });
-
-        add0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = dialog_colorpicker.newInstance(1);
-                ((dialog_colorpicker) newFragment).setListener(Fragment_Control.this);
-                newFragment.show(getChildFragmentManager(), "dialog");
-            }
-        });
-        
-        tvGotoSetup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: go to Setup");
-                //TODO: need to add sth -Bonny
-
-                fragment_layout mfragment_layout = new fragment_layout();
-                FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
-                ftl.setCustomAnimations(R.anim.pop_enter,R.anim.pop_out,R.anim.pop_enter,R.anim.pop_out);
-                ftl.replace(R.id.container, mfragment_layout).addToBackStack(null);
-                ftl.commit();
-            }
-        });
-
-
-        if(tinyDB.getInt("rbutton") != -1){
-            rbuttons[tinyDB.getInt("rbutton")].setChecked(true);
-            rbuttons[tinyDB.getInt("rbutton")].setChecked(true);
-        }else{
-            rbuttons[0].setChecked(false);
-            rbuttons[0].setChecked(true);
+        if (tinyDB.getInt("Power") == 1) {
+            power.performClick();
         }
 
-        if(tinyDB.getInt("Power") != -1){
-            if(tinyDB.getInt("Power") == 1){
-                power.setChecked(true);
-            }else {
-                power.setChecked(false);
-            }
-        }else{
-            power.setChecked(false);
+        colorOptions0 = new LinkedBlockingQueue<>();
+        colorOptions1 = new LinkedBlockingQueue<>();
+        initializeColorQueues();
+        wrapRadios();
+        seekBar.getProgressDrawable().setTint(currentColor0);
+        if (tinyDB.getInt("rbutton") != -1) {
+            radioButtons0[tinyDB.getInt("rbutton")].performClick();
+        } else {
+            radioButtons0[0].performClick();
         }
-        return view;
-
-
+        singleContainer.setVisibility(View.GONE);
+        return contentView;
     }
 
-    public void setColor(int checkedOrder){
-
-        setMode = 0;
-
-        if(power.isChecked()){
-            seek_bar.getProgressDrawable().setTint(setCheckedColor(checkedOrder));
-        }
-        checked.setStroke(5, setCheckedColor(checkedOrder));
-        rbuttons[checkedOrder].setBackground(checked);
-    }
-
-    public void setColor0(int checkedOrder){
-
-        checked0.setStroke(5, setCheckedColor0(checkedOrder));
-        rbuttons0[checkedOrder].setBackground(checked0);
-
-    }
-
-
-    public void seekbar(View view) {
-        seek_bar = (SeekBar) view.findViewById(R.id.seekBar5);
-        text_view = (TextView) view.findViewById(R.id.bright_Value);
-        progressValue = seek_bar.getProgress();
-        text_view.setText(progressValue + "%");
-
-        seek_bar.setOnSeekBarChangeListener(
-                new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        progressValue = progress;
-                        text_view.setText(progressValue + "%");
-
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        text_view.setText(progressValue + "%");
-                        TinyDB tinyDB = new TinyDB(getContext());
-                        tinyDB.putInt("Brightness", progressValue);
-
-                    }
-                }
-        );
-    }
-
-
-
-    public void initialize_Colors(){
-        TinyDB tinydb = new TinyDB(this.getContext());
-
-        if (tinydb.getInt("color0") == -1 ){
-            Log.d("kan", "initialize_Colors: 0");
-
-            colorOptions.add(getResources().getColor(R.color.yellow,null));
-            colorOptions.add(getResources().getColor(R.color.blue,null));
-            colorOptions.add(getResources().getColor(R.color.orange,null));
-            colorOptions.add(getResources().getColor(R.color.purple,null));
-
-        }else{
-            colorOptions.add(tinydb.getInt("color0"));
-            colorOptions.add(tinydb.getInt("color1"));
-            colorOptions.add(tinydb.getInt("color2"));
-            colorOptions.add(tinydb.getInt("color3"));
-        }
-
-        if (tinydb.getInt("color00") == -1 ){
-            Log.d("kan", "initialize_Colors: 0");
-
-            colorOptions0.add(getResources().getColor(R.color.yellow,null));
-            colorOptions0.add(getResources().getColor(R.color.blue,null));
-            colorOptions0.add(getResources().getColor(R.color.orange,null));
-            colorOptions0.add(getResources().getColor(R.color.purple,null));
-            colorOptions0.add(getResources().getColor(R.color.purple,null));
-            colorOptions0.add(getResources().getColor(R.color.yellow,null));
-            colorOptions0.add(getResources().getColor(R.color.blue,null));
-            colorOptions0.add(getResources().getColor(R.color.orange,null));
-            colorOptions0.add(getResources().getColor(R.color.purple,null));
-
-        }else{
-
-            colorOptions0.add(tinydb.getInt("color00"));
-            colorOptions0.add(tinydb.getInt("color01"));
-            colorOptions0.add(tinydb.getInt("color02"));
-            colorOptions0.add(tinydb.getInt("color03"));
-            colorOptions0.add(tinydb.getInt("color04"));
-            colorOptions0.add(tinydb.getInt("color05"));
-            colorOptions0.add(tinydb.getInt("color06"));
-            colorOptions0.add(tinydb.getInt("color07"));
-            colorOptions0.add(tinydb.getInt("color08"));
-        }
-
-    }
-
-    public void initialize_Rbuttons(){
-        for (int i = 0; i < 4 ; i++){
-            rbuttons[i].getButtonDrawable().setTint(colorOptions.peek());
-            colorOptions.add(colorOptions.remove());
-        }
-
-        for (int i = 0; i < 9 ; i++){
-            rbuttons0[i].getButtonDrawable().setTint(colorOptions0.peek());
+    private void wrapRadios() {
+        for (int i = 0; i < 4; i++) {
+            radioButtons0[i].getButtonDrawable().setTint(colorOptions0.peek());
             colorOptions0.add(colorOptions0.remove());
+        }
+
+        for (int i = 0; i < 9; i++) {
+            radioButtons1[i].getButtonDrawable().setTint(colorOptions1.peek());
+            colorOptions1.add(colorOptions1.remove());
         }
         float px = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -525,205 +145,405 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 getResources().getDisplayMetrics()
         );
 
-
-        int ipx = (int)px;
-        checked.setShape(GradientDrawable.OVAL);
-        checked.setSize(ipx,ipx);
-        checked.setColors(new int[]{0x00000000,0x00000000});
-
+        int ipx = (int) px;
+        checked0 = new GradientDrawable();
         checked0.setShape(GradientDrawable.OVAL);
-        checked0.setSize(ipx,ipx);
-        checked0.setColors(new int[]{0x00000000,0x00000000});
+        checked0.setSize(ipx, ipx);
+        checked0.setColors(new int[]{0x00000000, 0x00000000});
+
+        checked1 = new GradientDrawable();
+        checked1.setShape(GradientDrawable.OVAL);
+        checked1.setSize(ipx, ipx);
+        checked1.setColors(new int[]{0x00000000, 0x00000000});
+    }
+
+    private void initializeColorQueues() {
+        if (tinyDB.getInt("color0") == -1) {
+            Log.d("kan", "initialize_Colors: 0");
+            colorOptions0.add(getResources().getColor(R.color.yellow, null));
+            colorOptions0.add(getResources().getColor(R.color.blue, null));
+            colorOptions0.add(getResources().getColor(R.color.orange, null));
+            colorOptions0.add(getResources().getColor(R.color.purple, null));
+        } else {
+            colorOptions0.add(tinyDB.getInt("color0"));
+            colorOptions0.add(tinyDB.getInt("color1"));
+            colorOptions0.add(tinyDB.getInt("color2"));
+            colorOptions0.add(tinyDB.getInt("color3"));
+        }
+        if (tinyDB.getInt("rbutton") == -1)
+            currentColor0 = colorOptions0.peek();
+        else
+            currentColor0 = setCheckedColor(tinyDB.getInt("rbutton"));
+
+        if (tinyDB.getInt("color00") == -1) {
+            Log.d("kan", "initialize_Colors1: 0");
+            colorOptions1.add(getResources().getColor(R.color.yellow, null));
+            colorOptions1.add(getResources().getColor(R.color.blue, null));
+            colorOptions1.add(getResources().getColor(R.color.orange, null));
+            colorOptions1.add(getResources().getColor(R.color.purple, null));
+            colorOptions1.add(getResources().getColor(R.color.purple, null));
+            colorOptions1.add(getResources().getColor(R.color.yellow, null));
+            colorOptions1.add(getResources().getColor(R.color.blue, null));
+            colorOptions1.add(getResources().getColor(R.color.orange, null));
+            colorOptions1.add(getResources().getColor(R.color.purple, null));
+        } else {
+            colorOptions1.add(tinyDB.getInt("color00"));
+            colorOptions1.add(tinyDB.getInt("color01"));
+            colorOptions1.add(tinyDB.getInt("color02"));
+            colorOptions1.add(tinyDB.getInt("color03"));
+            colorOptions1.add(tinyDB.getInt("color04"));
+            colorOptions1.add(tinyDB.getInt("color05"));
+            colorOptions1.add(tinyDB.getInt("color06"));
+            colorOptions1.add(tinyDB.getInt("color07"));
+            colorOptions1.add(tinyDB.getInt("color08"));
+        }
+        currentColor1 = colorOptions1.peek();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void addViewEvent() {
+        tvToAll.setOnClickListener((view) -> {
+            if (!isAll)
+                toggleCurrentMainView();
+        });
+        tvToSingle.setOnClickListener((view) -> {
+            if (isAll)
+                toggleCurrentMainView();
+        });
+
+        content.setOnTouchListener(new SlideListener());
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                brightness.setText(progress + "%");
+                Fragment_Control.this.progress = progress;
+                tinyDB.putInt("Brightness", Fragment_Control.this.progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+        });
+
+        power.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                power.getBackground().setTint(getResources().getColor(R.color.colorPrimary, null));
+                seekBar.getProgressDrawable().setTint(currentColor0);
+                sun.setColorFilter(0xffffd41f);
+                tinyDB.putInt("Power", 1);
+            } else {
+                seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
+                sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
+                tinyDB.putInt("Power", 0);
+                power.getBackground().setTint(0xffffffff);
+            }
+        });
+
+        tvGotoSetup.setOnClickListener(v -> {
+            //TODO: need to add sth -Bonny
+            fragment_layout mfragment_layout = new fragment_layout();
+            FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
+            ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
+            ftl.replace(R.id.container, mfragment_layout).addToBackStack(null);
+            ftl.commit();
+        });
+
+        group0.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rButton1) {
+                setColor(0);
+                tinyDB.putInt("rbutton", 0);
+            }
+
+            if (checkedId == R.id.rButton2) {
+                setColor(1);
+                tinyDB.putInt("rbutton", 1);
+            }
+
+            if (checkedId == R.id.rButton3) {
+                setColor(2);
+                tinyDB.putInt("rbutton", 2);
+            }
+
+            if (checkedId == R.id.rButton4) {
+                setColor(3);
+                tinyDB.putInt("rbutton", 3);
+            }
+        });
+        add0.setOnClickListener(view -> {
+            DialogFragment newFragment = dialog_colorpicker.newInstance(0);
+            ((dialog_colorpicker) newFragment).setListener(Fragment_Control.this);
+            newFragment.show(getChildFragmentManager(), "dialog");
+        });
+        add1.setOnClickListener(v -> {
+            DialogFragment newFragment = dialog_colorpicker.newInstance(1);
+            ((dialog_colorpicker) newFragment).setListener(Fragment_Control.this);
+            newFragment.show(getChildFragmentManager(), "dialog");
+        });
+        group1.setOnCheckedChangeListener((group, checkedId) -> {
+
+            for (int i = 5; i < 9; i++) {
+                radioButtons1[i].setChecked(false);
+            }
+            if (checkedId == R.id.rButton01) {
+                setColor0(0);
+            }
+
+            if (checkedId == R.id.rButton02) {
+                setColor0(1);
+            }
+
+            if (checkedId == R.id.rButton03) {
+                setColor0(2);
+            }
+
+            if (checkedId == R.id.rButton04) {
+                setColor0(3);
+            }
+            if (checkedId == R.id.rButton05) {
+                setColor0(4);
+            }
+
+
+        });
+
+        group2.setOnCheckedChangeListener((group, checkedId) -> {
+            for (int i = 0; i < 5; i++) {
+                radioButtons1[i].setChecked(false);
+            }
+            if (checkedId == R.id.rButton06) {
+                setColor0(5);
+            }
+
+            if (checkedId == R.id.rButton07) {
+                setColor0(6);
+            }
+
+            if (checkedId == R.id.rButton08) {
+                setColor0(7);
+            }
+            if (checkedId == R.id.rButton09) {
+                setColor0(8);
+            }
+        });
+    }
+
+    private void setColor(int checkedOrder) {
+        currentColor0 = setCheckedColor(checkedOrder);
+        if (power.isChecked()) {
+            seekBar.getProgressDrawable().setTint(currentColor0);
+        }
+
+        checked0.setStroke(5, setCheckedColor(checkedOrder));
+        radioButtons0[checkedOrder].setBackground(checked0);
+    }
+
+    public void setColor0(int checkedOrder) {
+
+        checked1.setStroke(5, setCheckedColor0(checkedOrder));
+        radioButtons1[checkedOrder].setBackground(checked1);
 
     }
 
-    int setCheckedColor(int which){
+    int setCheckedColor0(int which) {
         int thisColor;
-        for (int i = 0; i < 4 ; i++){
-            rbuttons[i].setBackground(null);
+        for (int i = 0; i < 9; i++) {
+            radioButtons1[i].setBackground(null);
         }
 
         int j;
-        for (j = 0; j < which; j++){
-            colorOptions.add(colorOptions.remove());
+        for (j = 0; j < which; j++) {
+            colorOptions1.add(colorOptions1.remove());
         }
 
-        thisColor = colorOptions.peek();
-        for (int k = which; j < 4; j++){
-            colorOptions.add(colorOptions.remove());
+        thisColor = colorOptions1.peek();
+        for (int k = which; j < 9; j++) {
+            colorOptions1.add(colorOptions1.remove());
         }
 
         return thisColor;
 
     }
 
-    int setCheckedColor0(int which){
+    int setCheckedColor(int which) {
         int thisColor;
-        for (int i = 0; i < 9 ; i++){
-            rbuttons0[i].setBackground(null);
+        for (int i = 0; i < 4; i++) {
+            radioButtons0[i].setBackground(null);
         }
-
         int j;
-        for (j = 0; j < which; j++){
+        for (j = 0; j < which; j++) {
             colorOptions0.add(colorOptions0.remove());
         }
-
         thisColor = colorOptions0.peek();
-        for (int k = which; j < 9; j++){
+        for (int k = which; j < 4; j++) {
             colorOptions0.add(colorOptions0.remove());
         }
-
         return thisColor;
+    }
 
+    private void toggleCurrentMainView() {
+        allContainer.clearAnimation();
+        singleContainer.clearAnimation();
+        if (isAll) {
+            allContainer.startAnimation(slide_out_left);
+            singleContainer.startAnimation(slide_in_right);
+            allContainer.setVisibility(View.GONE);
+            singleContainer.setVisibility(View.VISIBLE);
+            tvToAll.setBackgroundResource(R.drawable.round_normal);
+            tvToAll.setTextColor(getResources().getColor(R.color.DeepText, null));
+            tvToSingle.setBackgroundResource(R.drawable.round_sel);
+            tvToSingle.setTextColor(getResources().getColor(R.color.backGround, null));
+        } else {
+            allContainer.startAnimation(slide_in_left);
+            singleContainer.startAnimation(slide_out_right);
+            allContainer.setVisibility(View.VISIBLE);
+            singleContainer.setVisibility(View.GONE);
+            tvToSingle.setBackgroundResource(R.drawable.round_normal);
+            tvToSingle.setTextColor(getResources().getColor(R.color.DeepText, null));
+            tvToAll.setBackgroundResource(R.drawable.round_sel);
+            tvToAll.setTextColor(getResources().getColor(R.color.backGround, null));
+        }
+        isAll = !isAll;
+    }
+
+    private void initView(View contentView) {
+        allContainer = contentView.findViewById(R.id.all_container);
+        singleContainer = contentView.findViewById(R.id.single_container);
+        content = contentView.findViewById(R.id.content);
+        tvToAll = contentView.findViewById(R.id.tv_select_all);
+        tvToSingle = contentView.findViewById(R.id.tv_select_single);
+        tvGotoSetup = contentView.findViewById(R.id.tvGotoSetup);
+        brightness = contentView.findViewById(R.id.progress_tip);
+        power = contentView.findViewById(R.id.Power);
+        sun = contentView.findViewById(R.id.sun);
+        seekBar = contentView.findViewById(R.id.seekBar_brightness);
+        add0 = contentView.findViewById(R.id.AddColor);
+        add1 = contentView.findViewById(R.id.AddColor00);
+
+        radioButtons0 = new RadioButton[4];
+        radioButtons1 = new RadioButton[9];
+
+        radioButtons0[0] = contentView.findViewById(R.id.rButton1);
+        radioButtons0[1] = contentView.findViewById(R.id.rButton2);
+        radioButtons0[2] = contentView.findViewById(R.id.rButton3);
+        radioButtons0[3] = contentView.findViewById(R.id.rButton4);
+
+        radioButtons1[0] = contentView.findViewById(R.id.rButton01);
+        radioButtons1[1] = contentView.findViewById(R.id.rButton02);
+        radioButtons1[2] = contentView.findViewById(R.id.rButton03);
+        radioButtons1[3] = contentView.findViewById(R.id.rButton04);
+        radioButtons1[4] = contentView.findViewById(R.id.rButton05);
+        radioButtons1[5] = contentView.findViewById(R.id.rButton06);
+        radioButtons1[6] = contentView.findViewById(R.id.rButton07);
+        radioButtons1[7] = contentView.findViewById(R.id.rButton08);
+        radioButtons1[8] = contentView.findViewById(R.id.rButton09);
+        group0 = contentView.findViewById(R.id.radioGroup);
+        group1 = contentView.findViewById(R.id.radioGroup0);
+        group2 = contentView.findViewById(R.id.radioGroup00);
+        content_container = contentView.findViewById(R.id.content_container);
+        LightStage lightStage = Session.getInstance().requireLayoutStage(getContext());
+        if (lightStage != null) {
+            content_container.removeAllViews();
+            content_container.addView(lightStage);
+            lightStage.denyMove();
+            lightStage.requireCenter();
+            lightStage.setOnTouchListener(new SlideListener());
+        }
     }
 
 
     @Override
-    public int getRGB(int rgbValue, int which){
+    public int getRGB(int rgbValue, int which) {
 
-        if(which == 0) {
+        if (which == 0) {
 
             TinyDB tinydb = new TinyDB(getContext());
 
-            colorOptions.remove();
-            colorOptions.add(rgbValue);
+            colorOptions0.remove();
+            colorOptions0.add(rgbValue);
             tinydb.remove("color0");
             tinydb.remove("color1");
             tinydb.remove("color2");
             tinydb.remove("color3");
-            tinydb.putInt("color0", colorOptions.peek());
-            colorOptions.add(colorOptions.remove());
-            tinydb.putInt("color1", colorOptions.peek());
-            colorOptions.add(colorOptions.remove());
-            tinydb.putInt("color2", colorOptions.peek());
-            colorOptions.add(colorOptions.remove());
-            tinydb.putInt("color3", colorOptions.peek());
-            colorOptions.add(colorOptions.remove());
+            tinydb.putInt("color0", colorOptions0.peek());
+            colorOptions0.add(colorOptions0.remove());
+            tinydb.putInt("color1", colorOptions0.peek());
+            colorOptions0.add(colorOptions0.remove());
+            tinydb.putInt("color2", colorOptions0.peek());
+            colorOptions0.add(colorOptions0.remove());
+            tinydb.putInt("color3", colorOptions0.peek());
+            colorOptions0.add(colorOptions0.remove());
 
 
-            initialize_Rbuttons();
-            rbuttons[3].setChecked(false);
-            rbuttons[3].setChecked(true);
-            seek_bar.setProgress(100);
-            return rgbValue;
-        }else{
+            wrapRadios();
+            radioButtons0[3].setChecked(false);
+            radioButtons0[3].setChecked(true);
+            seekBar.setProgress(100);
+        } else {
             TinyDB tinydb = new TinyDB(getContext());
-            colorOptions0.remove();
-            colorOptions0.add(rgbValue);
-            int a =1;
+            colorOptions1.remove();
+            colorOptions1.add(rgbValue);
+            int a = 1;
 
-            for(int i = 0; i < 9; i++){
+            for (int i = 0; i < 9; i++) {
                 tinydb.remove("color0" + i);
-                Log.d(TAG, "getRGB: rmoveLoop");
             }
 
 
-
-            for(int i = 0; i < 9; i++){
+            for (int i = 0; i < 9; i++) {
                 String key = "color0" + i;
-                tinydb.putInt(key, colorOptions0.peek());
-                colorOptions0.add(colorOptions0.remove());
-                Log.d(TAG, "getRGB: loop Sucess");
+                tinydb.putInt(key, colorOptions1.peek());
+                colorOptions1.add(colorOptions1.remove());
             }
-
-
-            initialize_Rbuttons();
-            rbuttons0[8].setChecked(false);
-            rbuttons0[8].setChecked(true);
-            return rgbValue;
+            wrapRadios();
+            radioButtons1[8].setChecked(false);
+            radioButtons1[8].setChecked(true);
         }
+        return rgbValue;
     }
 
 
     @Override
-    public void beSet(int rgbValue, int which){
+    public void beSet(int rgbValue, int which) {
 
         power.setChecked(true);
 
         //clear selection
-        radioGroup.clearCheck();
-        for (int i = 0; i < 4 ; i++){
-            rbuttons[i].setBackground(null);
+        group0.clearCheck();
+        for (int i = 0; i < 4; i++) {
+            radioButtons0[i].setBackground(null);
         }
 
-        seek_bar.setProgress(100);
-        seek_bar.getProgressDrawable().setTint(rgbValue);
-        seekBarColor = rgbValue;
-        setMode = 1;
-
+        seekBar.setProgress(100);
+        seekBar.getProgressDrawable().setTint(rgbValue);
+        currentColor0 = rgbValue;
     }
 
-    private void setAllLayout(){
-        //Set visible
-        power.setVisibility(View.VISIBLE);
-        power.setClickable(true);
-        seek_bar.setVisibility(View.VISIBLE);
-        seek_bar.setActivated(true);
-        sun.setVisibility(View.VISIBLE);
-        for(int i = 0; i < 4; i++){
-            rbuttons[i].setVisibility(View.VISIBLE);
-            rbuttons[i].setClickable(true);
+    private class SlideListener implements View.OnTouchListener {
+
+        private float origin = 0f;
+        private float sensor = 100f;
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            view.performClick();
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                origin = motionEvent.getX();
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                float distance = motionEvent.getX() - origin;
+                if (distance > sensor) {//swipe right
+                    tvToAll.performClick();
+                } else if (distance < -sensor) {
+                    tvToSingle.performClick();
+                }
+            }
+            return true;
         }
-        add.setVisibility(View.VISIBLE);
-        add.setClickable(true);
-        fl.setVisibility(View.VISIBLE);
-        powerCard.setVisibility(View.VISIBLE);
-        text_view.setVisibility(View.VISIBLE);
-        brightness.setVisibility(View.VISIBLE);
-
-        //hide
-        tvGotoSetup.setVisibility(View.GONE);
-        tvNoLayout.setVisibility(View.GONE);
-        tvGotoSetup.setClickable(false);
-        radioGroup0.setVisibility(View.GONE);
-        radioGroup0.setClickable(false);
-        radioGroup00.setVisibility(View.GONE);
-        radioGroup00.setClickable(false);
-        add0.setVisibility(View.GONE);
-        add0.setClickable(false);
     }
-
-    //reverse
-    private void setSingleLayout(){
-        //Set visible
-        power.setVisibility(View.GONE);
-        power.setClickable(false);
-        seek_bar.setVisibility(View.GONE);
-        seek_bar.setActivated(false);
-        sun.setVisibility(View.GONE);
-        for(int i = 0; i < 4; i++){
-            rbuttons[i].setVisibility(View.GONE);
-            rbuttons[i].setClickable(false);
-        }
-        add.setVisibility(View.GONE);
-        add.setClickable(false);
-        fl.setVisibility(View.GONE);
-        powerCard.setVisibility(View.GONE);
-        text_view.setVisibility(View.GONE);
-        brightness.setVisibility(View.GONE);
-
-        //hide
-        tvGotoSetup.setVisibility(View.VISIBLE);
-        tvNoLayout.setVisibility(View.VISIBLE);
-        tvGotoSetup.setClickable(true);
-        radioGroup0.setVisibility(View.VISIBLE);
-        radioGroup0.setClickable(true);
-        radioGroup00.setVisibility(View.VISIBLE);
-        radioGroup00.setClickable(true);
-        add0.setVisibility(View.VISIBLE);
-        add0.setClickable(true);
-    }
-
-
-    private void webLoad(String command){
-
-        String commandline = "http:/"+ipAddr+"/"+command;
-        Log.d(TAG, "webControl: "+ commandline);
-
-        webView.loadUrl(commandline);
-
-    }
-
 }
-
-

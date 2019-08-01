@@ -27,6 +27,8 @@ public class Light implements Serializable {
     private float x;
     private float y;
 
+    private float positionX, positionY;
+
     private Path path;
     private int direction = 1;//from 0 to 5
 
@@ -36,10 +38,13 @@ public class Light implements Serializable {
     }
 
     public void update(List<Light> lights) {
+        positionX = x + LightStage.offsetX;
+        positionY = y + LightStage.offsetY;
         this.path = new Path();
-        path.moveTo(x + RADIUS, y);
+        path.moveTo(positionX + RADIUS + paint.getStrokeWidth(), positionY);
         for (int i = 1; i < 6; i++) {
-            path.lineTo(x + RADIUS * (float) Math.cos(i * deg60), y + RADIUS * (float) Math.sin(i * deg60));
+            path.lineTo(positionX + (RADIUS + paint.getStrokeWidth()) * (float) Math.cos(i * deg60),
+                    positionY + (RADIUS + paint.getStrokeWidth()) * (float) Math.sin(i * deg60));
         }
         path.close();
         //find the source light
@@ -76,13 +81,13 @@ public class Light implements Serializable {
             paint.setColor(Color.argb(100, 33, 33, 230));
             canvas.drawPath(path, paint);
         }
-        paint.setStrokeWidth(0.2f * RADIUS);
+        paint.setStrokeWidth(0.1f * RADIUS);
         paint.setColor(Color.argb(150, 110, 120, 103));
         float interfazeRadius = RADIUS;
-        canvas.drawLine(x + interfazeRadius * (float) Math.cos(direction * deg60),
-                y + interfazeRadius * (float) Math.sin(direction * deg60),
-                x + interfazeRadius * (float) Math.cos((direction + 1) * deg60),
-                y + interfazeRadius * (float) Math.sin((direction + 1) * deg60), paint);
+        canvas.drawLine(positionX + interfazeRadius * (float) Math.cos(direction * deg60),
+                positionY + interfazeRadius * (float) Math.sin(direction * deg60),
+                positionX + interfazeRadius * (float) Math.cos((direction + 1) * deg60),
+                positionY + interfazeRadius * (float) Math.sin((direction + 1) * deg60), paint);
         //canvas.drawCircle(sx, sy, 20, paint);
     }
 

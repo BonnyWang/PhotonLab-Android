@@ -1,7 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,10 +65,16 @@ public class fragment_layout extends FullScreenFragment {
         btNext = view.findViewById(R.id.btNext);
         btNext.setOnClickListener(view1 -> {
             int num = msetLayoutView.getUselessLightNum();
-            if (num != 0)
-                Toast.makeText(getContext(), num + " lights are useless!", Toast.LENGTH_SHORT).show();
-
-            Toast.makeText(getContext(), "Saved!" + session.saveLayoutToLocal(getContext(), msetLayoutView), Toast.LENGTH_SHORT).show();
+            String tip = "";
+            if (num != 0) {
+                tip = num + " lights are useless!";
+            }
+            if (session.saveLayoutToLocal(getContext(), msetLayoutView)) {
+                Toast.makeText(getContext(), "Saved! " + tip, Toast.LENGTH_SHORT).show();
+                if (getActivity() != null)
+                    getActivity().getSupportFragmentManager().popBackStack();
+            } else
+                Toast.makeText(getContext(), "Save Failed" + tip, Toast.LENGTH_SHORT).show();
         });
         return view;
     }

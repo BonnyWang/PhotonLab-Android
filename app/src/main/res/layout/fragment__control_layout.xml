@@ -31,28 +31,24 @@
                 android:rotation="-90"
                 app:cardCornerRadius="33dp"
                 app:cardPreventCornerOverlap="false"
-
-
                 app:contentPadding="0dp"
-
                 app:cardElevation="8dp"
                 app:cardBackgroundColor="@android:color/transparent"
                 android:layout_marginTop="120dp"
                 android:layout_marginLeft="-36dp">
-            <SeekBar
-                android:id="@+id/seekBar5"
-                android:layout_width="300dp"
-                android:layout_height="131dp"
-
-                android:progressDrawable="@drawable/seekbar_drawable_progress"
-                android:background="@drawable/seekbar_drawable_background"
-                android:thumb="@drawable/seekbar_drawable_thumb"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                android:layout_marginLeft="-16dp"/>
+                <SeekBar
+                    android:id="@+id/seekBar5"
+                    android:layout_width="300dp"
+                    android:layout_height="131dp"
+                    android:progressDrawable="@drawable/seekbar_drawable_progress"
+                    android:background="@drawable/seekbar_drawable_background"
+                    android:thumb="@drawable/seekbar_drawable_thumb"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5"
+                    android:layout_marginLeft="-16dp"/>
 
 
 
@@ -149,104 +145,104 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <!--<androidx.appcompat.widget.LinearLayoutCompat-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
-                    <RadioButton
-                        android:id="@+id/rButton01"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/oval"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked"/>
-                    <RadioButton
-                        android:id="@+id/rButton02"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/ovalblue"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_blue"/>
-                    <RadioButton
-                        android:id="@+id/rButton03"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/ovalorange"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_orange"/>
-                    <RadioButton
-                        android:id="@+id/rButton04"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/ovalpurple"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_purple"/>
-                    <RadioButton
-                        android:id="@+id/rButton05"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/ovalpurple"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_purple"/>
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+                <RadioButton
+                    android:id="@+id/rButton01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/oval"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked"/>
+                <RadioButton
+                    android:id="@+id/rButton02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/ovalblue"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked_blue"/>
+                <RadioButton
+                    android:id="@+id/rButton03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/ovalorange"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked_orange"/>
+                <RadioButton
+                    android:id="@+id/rButton04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/ovalpurple"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked_purple"/>
+                <RadioButton
+                    android:id="@+id/rButton05"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/ovalpurple"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/checked_purple"/>
             </RadioGroup>
         </LinearLayout>
 
-                <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
-    <RadioGroup
-        android:id="@+id/radioGroup00"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coloroptions0"
-        android:layout_marginTop="15dp">
-                    <RadioButton
-                        android:id="@+id/rButton06"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/oval"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked"/>
-                    <RadioButton
-                        android:id="@+id/rButton07"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/ovalblue"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_blue"/>
-                    <RadioButton
-                        android:id="@+id/rButton08"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/ovalorange"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_orange"/>
-                    <RadioButton
-                        android:id="@+id/rButton09"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/ovalpurple"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_purple"/>
-                    <Button
-                        android:id="@+id/AddColor00"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/add_color_24dp"
-                        />
+        <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+        <RadioGroup
+            android:id="@+id/radioGroup00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/coloroptions0"
+            android:layout_marginTop="15dp">
+            <RadioButton
+                android:id="@+id/rButton06"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/oval"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/checked"/>
+            <RadioButton
+                android:id="@+id/rButton07"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/ovalblue"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/checked_blue"/>
+            <RadioButton
+                android:id="@+id/rButton08"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/ovalorange"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/checked_orange"/>
+            <RadioButton
+                android:id="@+id/rButton09"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/ovalpurple"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/checked_purple"/>
+            <Button
+                android:id="@+id/AddColor00"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/add_color_24dp"
+                />
 
 
-            </RadioGroup>
+        </RadioGroup>
 
 
 
@@ -293,7 +289,6 @@
             android:id="@+id/powerCard"
             android:layout_width="64dp"
             android:layout_height="64dp"
-
             app:cardCornerRadius="32dp"
             app:cardBackgroundColor="#cbbce7"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -404,6 +399,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="visible"/>
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Dot implements Serializable {
     private float x, y;
     private float offsetX, offsetY;
+    private float positionX, positionY;
 
     public Light getParent() {
         return parent;
@@ -23,12 +24,14 @@ public class Dot implements Serializable {
     }
 
     void update() {
+        positionX = parent.getX() + offsetX + LightStage.offsetX;
+        positionY = parent.getY() + offsetY + LightStage.offsetY;
         this.setX(parent.getX() + offsetX);
-        this.setY(parent.getY() + getOffsetY());
+        this.setY(parent.getY() + offsetY);
     }
 
     void draw(Canvas canvas) {
-        canvas.drawCircle(x, y, 4, new Paint());
+        canvas.drawCircle(positionX, positionY, 4, new Paint());
     }
 
     public float getY() {

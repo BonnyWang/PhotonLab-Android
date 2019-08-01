@@ -2,9 +2,11 @@ package xyz.photonlab.photonlabandroid.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -21,12 +23,16 @@ import static xyz.photonlab.photonlabandroid.views.Light.RADIUS;
 
 public class LightStage extends View implements Serializable {
 
-    private RectF screenArea, visibleArea;
+    private RectF screenArea;
     private List<Light> lights;
     private Paint paint = new Paint();
     private OnViewCreatedListener onViewCreatedListener;
+    private boolean movable = true;
+    public static float offsetX, offsetY;
+    private float tempX, tempY;
 
     List<Dot> dots = new ArrayList<>();
+    private boolean needCenter = false;
 
     public LightStage(Context context) {
         super(context);
@@ -40,7 +46,6 @@ public class LightStage extends View implements Serializable {
 
     private void init() {
         screenArea = new RectF(0f, 0f, 0f, 0f);
-        visibleArea = new RectF(0, 0, 0, 0);
 
         lights = new ArrayList<>();
     }
@@ -51,13 +56,14 @@ public class LightStage extends View implements Serializable {
         super.onFinishInflate();
         this.screenArea.right = getMeasuredWidth();
         this.screenArea.bottom = getMeasuredHeight();
-        this.visibleArea.left = -300;
-        this.visibleArea.top = -300;
-        this.visibleArea.bottom = getMeasuredHeight() + 300;
-        this.visibleArea.right = -getMeasuredWidth() + 300;
         RADIUS = this.screenArea.width() / 16;
         if (this.onViewCreatedListener != null)
             this.onViewCreatedListener.onViewCreated();
+        if (needCenter && getMotherLight() != null) {
+            offsetX = screenArea.width() / 2 - getMotherLight().getX();
+            offsetY = screenArea.height() / 2 - getMotherLight().getY();
+        }
+        setBackgroundColor(Color.RED);
     }
 
     @Override
@@ -87,12 +93,13 @@ public class LightStage extends View implements Serializable {
         performClick();
         float x = motionEvent.getX();
         float y = motionEvent.getY();
-
+        float positionX = x - offsetX;
+        float positionY = y - offsetY;
         if (MotionEvent.ACTION_DOWN == motionEvent.getAction()) {
             Light down = null;
             float downDistance = Float.MAX_VALUE;
             for (Light light : lights) {//find the nearest light
-                float distance = (x - light.getX()) * (x - light.getX()) + (y - light.getY()) * (y - light.getY());
+                float distance = (positionX - light.getX()) * (positionX - light.getX()) + (positionY - light.getY()) * (positionY - light.getY());
                 distance = (float) Math.sqrt(distance);
                 if (distance <= RADIUS) {
                     if (downDistance > distance) {
@@ -104,9 +111,12 @@ public class LightStage extends View implements Serializable {
             clearChecked();
             if (down != null) {
                 down.setChecked(true);
+            } else {
+                tempY = y;
+                tempX = x;
             }
 
-        } else if (MotionEvent.ACTION_MOVE == motionEvent.getAction()) {
+        } else if (MotionEvent.ACTION_MOVE == motionEvent.getAction() && movable) {
             Light toMove = null;
             for (Light light : lights) {
                 if (light.isChecked()) {
@@ -114,12 +124,25 @@ public class LightStage extends View implements Serializable {
                 }
             }
             if (toMove != null) {
-                toMove.setX(x);
-                toMove.setY(y);
+                toMove.setX(positionX);
+                toMove.setY(positionY);
             } else {
-                //todo translate screen
+                offsetX += x - tempX;
+                offsetY += y - tempY;
+                tempX = x;
+                tempY = y;
+                Log.e("offsetX", offsetX + "");
+                Log.e("offsetY", offsetY + "");
+                if (offsetX + getMotherLight().getX() < 0)
+                    offsetX = -getMotherLight().getX();
+                if (offsetX + getMotherLight().getX() > screenArea.right)
+                    offsetX = -getMotherLight().getX() + screenArea.right;
+                if (offsetY + getMotherLight().getY() < 0)
+                    offsetY = -getMotherLight().getY();
+                if (offsetY + getMotherLight().getY() > screenArea.bottom)
+                    offsetY = -getMotherLight().getY() + screenArea.bottom;
             }
-        } else if (MotionEvent.ACTION_UP == motionEvent.getAction()) {
+        } else if (MotionEvent.ACTION_UP == motionEvent.getAction() && movable) {
             for (Light light : lights) {
                 if (light.isChecked()) {
                     settleLight(light);
@@ -189,13 +212,14 @@ public class LightStage extends View implements Serializable {
             light = new MotherLight(screenArea.right / 2,
                     screenArea.bottom / 2);
         } else {
-            light = new Light(screenArea.right * (float) Math.random(),
-                    screenArea.bottom * (float) Math.random());
+            light = new Light(screenArea.width() / 2 - offsetX, 2 * RADIUS - offsetY);
         }
         this.addLight(light);
     }
 
     public void addLight(Light light) {
+        if (lights.size() >= 20)
+            return;
         generateDot(light);
         this.lights.add(light);
         clearChecked();
@@ -247,7 +271,22 @@ public class LightStage extends View implements Serializable {
         return this.dots;
     }
 
+    public MotherLight getMotherLight() {
+        if (lights.size() == 0)
+            return null;
+        else
+            return (MotherLight) lights.get(0);
+    }
+
+    public void requireCenter() {
+        this.needCenter = true;
+    }
+
     public interface OnViewCreatedListener {
         void onViewCreated();
+    }
+
+    public void denyMove() {
+        this.movable = false;
     }
 }
