@@ -118,11 +118,11 @@ public class Session {
         this.currentThemeIndex = currentThemeIndex;
     }
 
-    public LightStage requireLayoutStage(Context context) {
-        return loadLayoutFromLocal(context);
+    public LightStage requireLayoutStage(Context context, boolean plane) {
+        return loadLayoutFromLocal(context, plane);
     }
 
-    private LightStage loadLayoutFromLocal(Context context) {
+    private LightStage loadLayoutFromLocal(Context context, boolean plane) {
         LightStage stage;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(context.openFileInput("layoutManager.data")));
@@ -144,6 +144,10 @@ public class Session {
                         else
                             light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
                         light.setDirection(o.getInt("direction"));
+                        if (plane) {
+                            light.setPlane(true);
+                        }
+                        light.setPlaneColor(o.getInt("plane_color"));
                         finalStage.addLight(light);
                     }
                 } catch (Exception e) {
@@ -194,6 +198,7 @@ public class Session {
             object.put("direction", light.getDirection());
             object.put("x", light.getX());
             object.put("y", light.getY());
+            object.put("plane_color", light.getPlaneColor());
         } catch (JSONException e) {
             e.printStackTrace();
         }

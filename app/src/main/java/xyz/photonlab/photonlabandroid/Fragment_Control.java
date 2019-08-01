@@ -30,16 +30,18 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 
 import static android.content.Context.WINDOW_SERVICE;
 
 
-public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener {
+public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener, fragment_layout.OnSavedLayoutListener, LightStage.OnLightCheckedChangeListener {
 
     private TinyDB tinyDB;
 
@@ -60,6 +62,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     private RadioGroup group0, group1, group2;
     private RadioButton[] radioButtons0, radioButtons1;
     private Button add0, add1;
+    private LightStage lightStage;
 
     private Queue<Integer> colorOptions0, colorOptions1;
 
@@ -76,12 +79,23 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         }
     }
 
+    private void refreshLightStage() {
+        lightStage = Session.getInstance().requireLayoutStage(getContext(), true);
+        if (lightStage != null && content_container != null) {
+            content_container.removeAllViews();
+            content_container.addView(lightStage);
+            lightStage.denyMove();
+            lightStage.requireCenter();
+            //lightStage.setOnTouchListener(new SlideListener(false));
+            lightStage.setOnLightCheckedChangeListener(this);
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         DisplayMetrics dm = new DisplayMetrics();
-
         //check the screen
         if (getContext() != null) {
             WindowManager windowManager = (WindowManager) getContext().getSystemService(WINDOW_SERVICE);
@@ -211,8 +225,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 toggleCurrentMainView();
         });
 
-        content.setOnTouchListener(new SlideListener());
-
+        allContainer.setOnTouchListener(new SlideListener(true));
+        singleContainer.setOnTouchListener(new SlideListener(true));
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -249,6 +263,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         tvGotoSetup.setOnClickListener(v -> {
             //TODO: need to add sth -Bonny
             fragment_layout mfragment_layout = new fragment_layout();
+            mfragment_layout.setListener(this);
             FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
             ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
             ftl.replace(R.id.container, mfragment_layout).addToBackStack(null);
@@ -287,27 +302,32 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             newFragment.show(getChildFragmentManager(), "dialog");
         });
         group1.setOnCheckedChangeListener((group, checkedId) -> {
-
+            Log.i("checked change count", "");
             for (int i = 5; i < 9; i++) {
                 radioButtons1[i].setChecked(false);
             }
             if (checkedId == R.id.rButton01) {
                 setColor0(0);
+                setPlaneColorByRadio(0);
             }
 
             if (checkedId == R.id.rButton02) {
                 setColor0(1);
+                setPlaneColorByRadio(1);
             }
 
             if (checkedId == R.id.rButton03) {
                 setColor0(2);
+                setPlaneColorByRadio(2);
             }
 
             if (checkedId == R.id.rButton04) {
                 setColor0(3);
+                setPlaneColorByRadio(3);
             }
             if (checkedId == R.id.rButton05) {
                 setColor0(4);
+                setPlaneColorByRadio(4);
             }
 
 
@@ -319,19 +339,49 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             }
             if (checkedId == R.id.rButton06) {
                 setColor0(5);
+                setPlaneColorByRadio(5);
             }
 
             if (checkedId == R.id.rButton07) {
                 setColor0(6);
+                setPlaneColorByRadio(6);
             }
 
             if (checkedId == R.id.rButton08) {
                 setColor0(7);
+                setPlaneColorByRadio(7);
             }
             if (checkedId == R.id.rButton09) {
                 setColor0(8);
+                setPlaneColorByRadio(8);
             }
+
         });
+    }
+
+    private void setPlaneColorByRadio(int which) {
+        if (!radioButtons1[which].isChecked())
+            return;
+        if (lightStage != null) {
+            Iterator<Integer> iterator = colorOptions1.iterator();
+            int i = 0;
+            while (iterator.hasNext()) {
+                int color = iterator.next();
+                if (i == which) {
+                    lightStage.setPlaneColor(color);
+                    break;
+                }
+                i++;
+            }
+            Session.getInstance().saveLayoutToLocal(getContext(), lightStage);
+        }
+    }
+
+    private void setPlaneColor(int src) {
+        if (lightStage != null) {
+            lightStage.setPlaneColor(src);
+        }
+        Session.getInstance().saveLayoutToLocal(getContext(), lightStage);
     }
 
     private void setColor(int checkedOrder) {
@@ -447,14 +497,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         group1 = contentView.findViewById(R.id.radioGroup0);
         group2 = contentView.findViewById(R.id.radioGroup00);
         content_container = contentView.findViewById(R.id.content_container);
-        LightStage lightStage = Session.getInstance().requireLayoutStage(getContext());
-        if (lightStage != null) {
-            content_container.removeAllViews();
-            content_container.addView(lightStage);
-            lightStage.denyMove();
-            lightStage.requireCenter();
-            lightStage.setOnTouchListener(new SlideListener());
-        }
+        refreshLightStage();
     }
 
 
@@ -495,7 +538,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 tinydb.remove("color0" + i);
             }
 
-
             for (int i = 0; i < 9; i++) {
                 String key = "color0" + i;
                 tinydb.putInt(key, colorOptions1.peek());
@@ -511,24 +553,53 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     @Override
     public void beSet(int rgbValue, int which) {
-
-        power.setChecked(true);
-
-        //clear selection
-        group0.clearCheck();
-        for (int i = 0; i < 4; i++) {
-            radioButtons0[i].setBackground(null);
+        if (which == 0) {
+            power.setChecked(true);
+            //clear selection
+            group0.clearCheck();
+            for (int i = 0; i < 4; i++) {
+                radioButtons0[i].setBackground(null);
+            }
+            seekBar.setProgress(100);
+            seekBar.getProgressDrawable().setTint(rgbValue);
+            currentColor0 = rgbValue;
+        } else {
+            group1.clearCheck();
+            group2.clearCheck();
+            for (RadioButton button : radioButtons1) {
+                button.setBackground(null);
+            }
+            setPlaneColor(rgbValue);
         }
+    }
 
-        seekBar.setProgress(100);
-        seekBar.getProgressDrawable().setTint(rgbValue);
-        currentColor0 = rgbValue;
+    @Override
+    public void onSavedLayout(boolean saved) {
+        if (saved)
+            refreshLightStage();
+    }
+
+    @Override
+    public void onLightCheckedChanged(Light light) {
+        Log.i("lightChanged", light + "");
+        if (group1 != null)
+            group1.clearCheck();
+        if (group2 != null)
+            group2.clearCheck();
+        for (RadioButton button : radioButtons1) {
+            button.setBackground(null);
+        }
     }
 
     private class SlideListener implements View.OnTouchListener {
 
+        private final boolean returnFlag;
         private float origin = 0f;
         private float sensor = 100f;
+
+        SlideListener(boolean returnFlag) {
+            this.returnFlag = returnFlag;
+        }
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -543,7 +614,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                     tvToSingle.performClick();
                 }
             }
-            return true;
+            return returnFlag;
         }
     }
 }

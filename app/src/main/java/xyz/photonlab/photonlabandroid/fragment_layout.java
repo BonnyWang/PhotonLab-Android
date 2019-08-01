@@ -23,6 +23,11 @@ public class fragment_layout extends FullScreenFragment {
     Button btNext;
     LightStage msetLayoutView;
     Session session;
+    OnSavedLayoutListener listener;
+
+    public void setListener(OnSavedLayoutListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,7 @@ public class fragment_layout extends FullScreenFragment {
         session = Session.getInstance();
         ConstraintLayout view = (ConstraintLayout) inflater.inflate(R.layout.fragment_layout, container, false);
 
-        msetLayoutView = session.requireLayoutStage(getContext());
+        msetLayoutView = session.requireLayoutStage(getContext(), false);
 
         LinearLayout layoutContainer = view.findViewById(R.id.layoutContainer);
 
@@ -65,18 +70,27 @@ public class fragment_layout extends FullScreenFragment {
         btNext = view.findViewById(R.id.btNext);
         btNext.setOnClickListener(view1 -> {
             int num = msetLayoutView.getUselessLightNum();
-            String tip = "";
-            if (num != 0) {
-                tip = num + " lights are useless!";
+            if (num > 0) {
+                Toast.makeText(getContext(), "Layout Error!", Toast.LENGTH_SHORT).show();
+                return;
             }
             if (session.saveLayoutToLocal(getContext(), msetLayoutView)) {
-                Toast.makeText(getContext(), "Saved! " + tip, Toast.LENGTH_SHORT).show();
-                if (getActivity() != null)
-                    getActivity().getSupportFragmentManager().popBackStack();
-            } else
-                Toast.makeText(getContext(), "Save Failed" + tip, Toast.LENGTH_SHORT).show();
+                if (listener != null)
+                    listener.onSavedLayout(true);
+                Toast.makeText(getContext(), "Saved! ", Toast.LENGTH_SHORT).show();
+            } else {
+                if (listener != null)
+                    listener.onSavedLayout(false);
+                Toast.makeText(getContext(), "Save Failed!", Toast.LENGTH_SHORT).show();
+            }
+            if (getActivity() != null)
+                getActivity().getSupportFragmentManager().popBackStack();
         });
         return view;
+    }
+
+    interface OnSavedLayoutListener {
+        void onSavedLayout(boolean saved);
     }
 
 }

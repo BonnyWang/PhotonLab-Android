@@ -2,8 +2,11 @@ package xyz.photonlab.photonlabandroid.views;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
+
+import androidx.core.graphics.ColorUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,6 +34,8 @@ public class Light implements Serializable {
 
     private Path path;
     private int direction = 1;//from 0 to 5
+    private boolean plane = false;
+    private int planeColor = Color.rgb(200, 200, 200);
 
     public Light(float x, float y) {
         this.x = x;
@@ -68,26 +73,32 @@ public class Light implements Serializable {
         } else {
             currentColor = colorIdle;
         }
+
     }
 
     void draw(Canvas canvas) {
         paint.setColor(currentColor);
+        if (plane) {
+            paint.setColor(planeColor);
+        }
+
         paint.setStrokeWidth(0);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         canvas.drawPath(this.path, paint);
         if (checked) {
-            paint.setStrokeWidth(5);
+            paint.setStrokeWidth(6);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(Color.argb(100, 33, 33, 230));
+            paint.setColor(Color.argb(255, 66, 66, 66));
             canvas.drawPath(path, paint);
         }
         paint.setStrokeWidth(0.1f * RADIUS);
         paint.setColor(Color.argb(150, 110, 120, 103));
         float interfazeRadius = RADIUS;
-        canvas.drawLine(positionX + interfazeRadius * (float) Math.cos(direction * deg60),
-                positionY + interfazeRadius * (float) Math.sin(direction * deg60),
-                positionX + interfazeRadius * (float) Math.cos((direction + 1) * deg60),
-                positionY + interfazeRadius * (float) Math.sin((direction + 1) * deg60), paint);
+        if (!plane)
+            canvas.drawLine(positionX + interfazeRadius * (float) Math.cos(direction * deg60),
+                    positionY + interfazeRadius * (float) Math.sin(direction * deg60),
+                    positionX + interfazeRadius * (float) Math.cos((direction + 1) * deg60),
+                    positionY + interfazeRadius * (float) Math.sin((direction + 1) * deg60), paint);
         //canvas.drawCircle(sx, sy, 20, paint);
     }
 
@@ -130,4 +141,17 @@ public class Light implements Serializable {
     public void setSettled(boolean settled) {
         this.settled = settled;
     }
+
+    public void setPlaneColor(int planeColor) {
+        this.planeColor = planeColor;
+    }
+
+    public void setPlane(boolean plane) {
+        this.plane = plane;
+    }
+
+    public int getPlaneColor() {
+        return planeColor;
+    }
+
 }

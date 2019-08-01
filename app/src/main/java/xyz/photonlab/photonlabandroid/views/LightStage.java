@@ -23,13 +23,16 @@ import static xyz.photonlab.photonlabandroid.views.Light.RADIUS;
 
 public class LightStage extends View implements Serializable {
 
-    private RectF screenArea;
+    private RectF screenArea, bound;
     private List<Light> lights;
     private Paint paint = new Paint();
     private OnViewCreatedListener onViewCreatedListener;
     private boolean movable = true;
     public static float offsetX, offsetY;
     private float tempX, tempY;
+    private OnLightCheckedChangeListener onLightCheckedChangeListener;
+
+    private Light selectedLight;
 
     List<Dot> dots = new ArrayList<>();
     private boolean needCenter = false;
@@ -111,12 +114,20 @@ public class LightStage extends View implements Serializable {
             clearChecked();
             if (down != null) {
                 down.setChecked(true);
+                if (onLightCheckedChangeListener != null && !down.equals(selectedLight)) {
+                    selectedLight = down;
+                    onLightCheckedChangeListener.onLightCheckedChanged(down);
+                }
             } else {
                 tempY = y;
                 tempX = x;
+                if (onLightCheckedChangeListener != null) {
+                    selectedLight = null;
+                    onLightCheckedChangeListener.onLightCheckedChanged(null);
+                }
             }
 
-        } else if (MotionEvent.ACTION_MOVE == motionEvent.getAction() && movable) {
+        } else if (MotionEvent.ACTION_MOVE == motionEvent.getAction()) {
             Light toMove = null;
             for (Light light : lights) {
                 if (light.isChecked()) {
@@ -124,23 +135,43 @@ public class LightStage extends View implements Serializable {
                 }
             }
             if (toMove != null) {
-                toMove.setX(positionX);
-                toMove.setY(positionY);
+                if (movable) {
+                    toMove.setX(positionX);
+                    toMove.setY(positionY);
+                    refreshBound();
+                }
             } else {
                 offsetX += x - tempX;
                 offsetY += y - tempY;
                 tempX = x;
                 tempY = y;
-                Log.e("offsetX", offsetX + "");
-                Log.e("offsetY", offsetY + "");
-                if (offsetX + getMotherLight().getX() < 0)
-                    offsetX = -getMotherLight().getX();
-                if (offsetX + getMotherLight().getX() > screenArea.right)
-                    offsetX = -getMotherLight().getX() + screenArea.right;
-                if (offsetY + getMotherLight().getY() < 0)
-                    offsetY = -getMotherLight().getY();
-                if (offsetY + getMotherLight().getY() > screenArea.bottom)
-                    offsetY = -getMotherLight().getY() + screenArea.bottom;
+                Log.i("offsetX", offsetX + "");
+                Log.i("offsetY", offsetY + "");
+                Log.i("boundRender", "[" + (bound.left + offsetX) + ","
+                        + (bound.top + offsetY) + "," + (bound.right + offsetX) + ","
+                        + (bound.bottom + offsetY) + "]");
+                if (bound.width() < screenArea.width()) {
+                    if (bound.left + offsetX < 0)
+                        offsetX = -bound.left;
+                    if (bound.right + offsetX > screenArea.right)
+                        offsetX = screenArea.right - bound.right;
+                } else {
+                    if (bound.left + offsetX > 0)
+                        offsetX = -bound.left;
+                    if (bound.right + offsetX < screenArea.right)
+                        offsetX = screenArea.right - bound.right;
+                }
+                if (bound.height() < screenArea.height()) {
+                    if (bound.top + offsetY < 0)
+                        offsetY = -bound.top;
+                    if (bound.bottom + offsetY > screenArea.bottom)
+                        offsetY = screenArea.bottom - bound.bottom;
+                } else {
+                    if (bound.top + offsetY > 0)
+                        offsetY = -bound.top;
+                    if (bound.bottom + offsetY < screenArea.bottom)
+                        offsetY = screenArea.bottom - bound.bottom;
+                }
             }
         } else if (MotionEvent.ACTION_UP == motionEvent.getAction() && movable) {
             for (Light light : lights) {
@@ -196,6 +227,7 @@ public class LightStage extends View implements Serializable {
         if (nearest != null) {
             light.setX(nearest.getX());
             light.setY(nearest.getY());
+            refreshBound();
         }
     }
 
@@ -224,6 +256,7 @@ public class LightStage extends View implements Serializable {
         this.lights.add(light);
         clearChecked();
         light.setChecked(true);
+        refreshBound();
     }
 
     public void deleteLight() {
@@ -238,6 +271,7 @@ public class LightStage extends View implements Serializable {
                         }
                     }
                 }
+                refreshBound();
                 return;
             }
     }
@@ -282,8 +316,42 @@ public class LightStage extends View implements Serializable {
         this.needCenter = true;
     }
 
+    public void setPlaneColor(int color) {
+        for (Light light : lights) {
+            if (light.isChecked())
+                light.setPlaneColor(color);
+        }
+    }
+
+    public void setOnLightCheckedChangeListener(OnLightCheckedChangeListener
+                                                        onLightCheckedChangeListener) {
+        this.onLightCheckedChangeListener = onLightCheckedChangeListener;
+    }
+
+    private void refreshBound() {
+        float left = Float.MAX_VALUE, right = Float.MIN_VALUE,
+                top = Float.MAX_VALUE, bottom = Float.MIN_VALUE;
+        for (Light item : lights) {
+            if (item.getX() < left)
+                left = item.getX();
+            if (item.getX() > right)
+                right = item.getX();
+            if (item.getY() > bottom)
+                bottom = item.getY();
+            if (item.getY() < top)
+                top = item.getY();
+        }
+        float r = RADIUS * 4;
+        bound = new RectF(left - r, top - r, right + r, bottom + r);
+        Log.i("bound", bound.toString());
+    }
+
     public interface OnViewCreatedListener {
         void onViewCreated();
+    }
+
+    public interface OnLightCheckedChangeListener {
+        void onLightCheckedChanged(Light light);
     }
 
     public void denyMove() {

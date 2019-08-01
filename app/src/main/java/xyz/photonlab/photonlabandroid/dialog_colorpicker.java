@@ -68,11 +68,10 @@ public class dialog_colorpicker extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                try{
+                try {
                     rgb_reading(view);
+                } catch (NumberFormatException ex) {
                 }
-
-                catch(NumberFormatException ex){}
             }
         });
 
@@ -91,10 +90,10 @@ public class dialog_colorpicker extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                try{
+                try {
                     rgb_reading(view);
+                } catch (NumberFormatException ex) {
                 }
-                catch(NumberFormatException ex){}
             }
         });
 
@@ -113,26 +112,26 @@ public class dialog_colorpicker extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                try{
+                try {
                     rgb_reading(view);
+                } catch (NumberFormatException ex) {
                 }
-                catch(NumberFormatException ex){}
             }
         });
 
 
         //tv=(TextView)view.findViewById(R.id.tv_info);
-        closeBt = (Button)view.findViewById(R.id.close);
+        closeBt = (Button) view.findViewById(R.id.close);
 
         closeBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             dismiss();
+                dismiss();
                 //getParentFragment().getChildFragmentManager().popBackStack();
             }
         });
 
-        addFavBt =(Button)view.findViewById(R.id.AddFavColor);
+        addFavBt = (Button) view.findViewById(R.id.AddFavColor);
 
         addFavBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,20 +141,18 @@ public class dialog_colorpicker extends DialogFragment {
             }
         });
 
-        setBt = (Button)view.findViewById(R.id.setColorButton);
+        setBt = (Button) view.findViewById(R.id.setColorButton);
         setBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (whichOne == 0) {
-                    mlistener.beSet(colorcode, whichOne);
-                    dismiss();
-                }
+                mlistener.beSet(colorcode, whichOne);
+                dismiss();
 
             }
         });
 
-        colorDisk=(ColorPicker)view.findViewById(R.id.colorDisk);
+        colorDisk = (ColorPicker) view.findViewById(R.id.colorDisk);
         colorDisk.setOnColorBackListener(new ColorPicker.OnColorBackListener() {
             @Override
             public void onColorBack(int a, int r, int g, int b) {
@@ -167,8 +164,8 @@ public class dialog_colorpicker extends DialogFragment {
                 bValue.setText(String.valueOf(b));
 
                 setButton_Color(colorDisk.getColorStr());
-                colorStr=colorDisk.getColorStr();
-                colorcode=colorDisk.getColorcode();
+                colorStr = colorDisk.getColorStr();
+                colorcode = colorDisk.getColorcode();
             }
 
 
@@ -188,15 +185,17 @@ public class dialog_colorpicker extends DialogFragment {
 
     public interface colorPick_Listener {
         // TODO: Update argument type and name
-        public int getRGB(int rgbValue, int which);
-        public void beSet(int rgbValue, int which);
+        int getRGB(int rgbValue, int which);
+
+        void beSet(int rgbValue, int which);
     }
 
-    public void setListener(dialog_colorpicker.colorPick_Listener mlistener){
+    public void setListener(dialog_colorpicker.colorPick_Listener mlistener) {
         this.mlistener = mlistener;
 
     }
-    public void setButton_Color(String colorStr){
+
+    public void setButton_Color(String colorStr) {
         GradientDrawable setButton_Background = new GradientDrawable();
         setButton_Background.setShape(GradientDrawable.RECTANGLE);
         setButton_Background.setCornerRadius(24);
@@ -214,24 +213,25 @@ public class dialog_colorpicker extends DialogFragment {
         );
         int width = (int) px;
         int height = (int) px1;
-        setButton_Background.setSize(width,height);
+        setButton_Background.setSize(width, height);
         setBt.setBackground(setButton_Background);
     }
-    public void rgb_reading(View view){
-        int r= Integer.parseInt(rValue.getText().toString());
-        int g= Integer.parseInt(gValue.getText().toString());
-        int b= Integer.parseInt(bValue.getText().toString());
+
+    public void rgb_reading(View view) {
+        int r = Integer.parseInt(rValue.getText().toString());
+        int g = Integer.parseInt(gValue.getText().toString());
+        int b = Integer.parseInt(bValue.getText().toString());
 //        Log.d(TAG, "refreshing color picker ");
 //        colorDisk = null;
 //        colorDisk = view.findViewById(R.id.colorDisk);
 
 
-        colorStr=  "#" + colorDisk.toBrowserHexValue(r)
+        colorStr = "#" + colorDisk.toBrowserHexValue(r)
                 + colorDisk.toBrowserHexValue(g)
                 + colorDisk.toBrowserHexValue(b);
         setButton_Color(colorStr);
         colorcode = (255 & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
-        Log.d("yes", "rgb_reading: "+colorcode);
+        Log.d("yes", "rgb_reading: " + colorcode);
     }
 
 }
