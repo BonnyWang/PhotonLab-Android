@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollable"
     android:background="@android:color/background_light"
     tools:context=".MainActivity">
 
@@ -20,144 +21,116 @@
             android:backgroundTint="#aaaaaa"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.05" />
+            app:layout_constraintVertical_bias="0.02" />
 
         <xyz.photonlab.photonlabandroid.ColorPicker
             android:id="@+id/colorDisk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linput"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.01"/>
+            app:layout_constraintTop_toBottomOf="@id/close"
+            app:layout_constraintVertical_bias="0.01" />
 
 
         <Button
             android:id="@+id/AddFavColor"
-            android:layout_width="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:background="@drawable/set_background"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/set_background_no_size"
+            android:elevation="0dp"
             android:text="@string/Add_to_Favorite"
             android:textAllCaps="false"
             android:textColor="#bdbdbd"
             android:textSize="20sp"
-            android:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/setColorButton"
-            android:layout_marginBottom="50dp"
-            style="?android:attr/borderlessButtonStyle"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <Button
             android:id="@+id/setColorButton"
-            android:layout_width="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/set_background"
-            android:text="@string/Set"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/colorDisk"
-
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="32dp"
             android:layout_marginBottom="30dp"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textColor="#bdbdbd"
-            android:textAllCaps="false"
+            android:background="@drawable/set_background_no_size"
             android:elevation="0dp"
-            style="?android:attr/borderlessButtonStyle"/>
-
-        <LinearLayout
-            android:id="@+id/linput"
-            android:layout_width="395dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/close"
-            android:layout_marginTop="15dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/Set"
+            android:textAllCaps="false"
+            android:textColor="#bdbdbd"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"
-            android:visibility="visible">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/AddFavColor" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/R"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/setColorButton"
+            app:layout_constraintTop_toBottomOf="@id/colorDisk">
 
             <EditText
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="32dp"
                 android:id="@+id/editTextR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:ems="3"
-                android:inputType="numberSigned"
                 android:background="@drawable/rgb_edittext"
                 android:backgroundTint="#fcb9b8"
+                android:ems="3"
                 android:gravity="center"
-                android:padding="5dp"/>
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/G"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="invisible"/>
+                android:inputType="numberSigned"
+                android:padding="5dp" />
 
             <EditText
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/editTextG"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:ems="3"
-                android:inputType="numberSigned"
+                android:layout_gravity="center"
                 android:background="@drawable/rgb_edittext"
                 android:backgroundTint="#d3f0d2"
+                android:ems="3"
                 android:gravity="center"
-                android:padding="5dp"/>
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/B"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="invisible"/>
+                android:inputType="numberSigned"
+                android:padding="5dp" />
 
             <EditText
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_gravity="end"
                 android:id="@+id/editTextB"
+                android:layout_marginEnd="32dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:ems="3"
-                android:inputType="numberSigned"
                 android:background="@drawable/rgb_edittext"
                 android:backgroundTint="#c1d4f1"
+                android:ems="3"
                 android:gravity="center"
-                android:padding="5dp"/>
-        </LinearLayout>
-
-
+                android:inputType="numberSigned"
+                android:padding="5dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </FrameLayout>

@@ -125,15 +125,16 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             seekBar.setProgress(100);
         }
 
-        if (tinyDB.getInt("Power") == 1) {
-            power.performClick();
-        }
-
         colorOptions0 = new LinkedBlockingQueue<>();
         colorOptions1 = new LinkedBlockingQueue<>();
         initializeColorQueues();
         wrapRadios();
-        seekBar.getProgressDrawable().setTint(currentColor0);
+
+        if (tinyDB.getInt("Power") == 1) {
+            power.performClick();
+            seekBar.getProgressDrawable().setTint(currentColor0);
+        }
+
         if (tinyDB.getInt("rbutton") != -1) {
             radioButtons0[tinyDB.getInt("rbutton")].performClick();
         } else {
@@ -230,7 +231,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                brightness.setText(progress + "%");
+                String progressStr = progress + "%";
+                brightness.setText(progressStr);
                 Fragment_Control.this.progress = progress;
                 tinyDB.putInt("Brightness", Fragment_Control.this.progress);
             }
@@ -445,18 +447,18 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             singleContainer.startAnimation(slide_in_right);
             allContainer.setVisibility(View.GONE);
             singleContainer.setVisibility(View.VISIBLE);
-            tvToAll.setBackgroundResource(R.drawable.round_normal);
+            tvToAll.setBackgroundResource(R.drawable.button);
             tvToAll.setTextColor(getResources().getColor(R.color.DeepText, null));
-            tvToSingle.setBackgroundResource(R.drawable.round_sel);
+            tvToSingle.setBackgroundResource(R.drawable.button1);
             tvToSingle.setTextColor(getResources().getColor(R.color.backGround, null));
         } else {
             allContainer.startAnimation(slide_in_left);
             singleContainer.startAnimation(slide_out_right);
             allContainer.setVisibility(View.VISIBLE);
             singleContainer.setVisibility(View.GONE);
-            tvToSingle.setBackgroundResource(R.drawable.round_normal);
+            tvToSingle.setBackgroundResource(R.drawable.button);
             tvToSingle.setTextColor(getResources().getColor(R.color.DeepText, null));
-            tvToAll.setBackgroundResource(R.drawable.round_sel);
+            tvToAll.setBackgroundResource(R.drawable.button1);
             tvToAll.setTextColor(getResources().getColor(R.color.backGround, null));
         }
         isAll = !isAll;

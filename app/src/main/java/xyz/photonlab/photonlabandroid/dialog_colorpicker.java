@@ -200,21 +200,24 @@ public class dialog_colorpicker extends DialogFragment {
         setButton_Background.setShape(GradientDrawable.RECTANGLE);
         setButton_Background.setCornerRadius(24);
         setButton_Background.setColor(Color.parseColor(colorStr));
-        float px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                313,
-                getResources().getDisplayMetrics()
-        );
+//        float px = TypedValue.applyDimension(
+////                TypedValue.COMPLEX_UNIT_DIP,
+////                313,
+////                getResources().getDisplayMetrics()
+////        );
 
-        float px1 = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                52,
-                getResources().getDisplayMetrics()
-        );
-        int width = (int) px;
-        int height = (int) px1;
-        setButton_Background.setSize(width, height);
+//        float px1 = TypedValue.applyDimension(
+//                TypedValue.COMPLEX_UNIT_DIP,
+//                52,
+//                getResources().getDisplayMetrics()
+//        );
+        //int width = (int) px;
+        //int height = (int) px1;
+        //setButton_Background.setSize(width, height);
         setBt.setBackground(setButton_Background);
+        if (getContext() != null) {
+            setBt.setTextColor(getContext().getResources().getColor(R.color.DeepText, null));
+        }
     }
 
     public void rgb_reading(View view) {

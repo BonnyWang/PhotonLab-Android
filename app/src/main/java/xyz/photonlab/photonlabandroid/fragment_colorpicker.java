@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,12 +22,13 @@ import androidx.fragment.app.Fragment;
 import xyz.photonlab.photonlabandroid.R;
 
 public class fragment_colorpicker extends Fragment {
-    private ColorPicker colorDisk=null;
+    private ColorPicker colorDisk = null;
     private TextView tv;
     private Button closeBt;
     private Button setBt;
     private Button addFavBt;
     private TextView tv_rgb;
+    private ScrollView scrollView;
     Fragment fragment_Control;
     EditText rValue;
     EditText gValue;
@@ -35,7 +37,6 @@ public class fragment_colorpicker extends Fragment {
 
     int rgbValue;
     colorPick_Listener mlistener;
-
 
 
     public fragment_colorpicker() {
@@ -51,19 +52,25 @@ public class fragment_colorpicker extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_colorpicker_layout,container,false);
+        ScrollView view = (ScrollView) inflater.inflate(R.layout.fragment_colorpicker_layout, container, false);
         rValue = view.findViewById(R.id.editTextR);
         Log.d("shit1", "onTextChanged:hello ");
+
+        rValue.setOnFocusChangeListener((v,focused)->{
+            Log.e("before Change","");
+            scrollView.scrollTo(0, 1000);
+        });
+
         rValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                Log.i("before Change","");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr = "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -72,7 +79,7 @@ public class fragment_colorpicker extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr = "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -90,7 +97,7 @@ public class fragment_colorpicker extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr = "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -98,7 +105,7 @@ public class fragment_colorpicker extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr = "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -115,7 +122,7 @@ public class fragment_colorpicker extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr = "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -123,7 +130,7 @@ public class fragment_colorpicker extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr = "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
                 setButton_Color(colorStr);
@@ -131,7 +138,7 @@ public class fragment_colorpicker extends Fragment {
         });
         setListener(mlistener);
         //tv=(TextView)view.findViewById(R.id.tv_info);
-        closeBt = (Button)view.findViewById(R.id.close);
+        closeBt = (Button) view.findViewById(R.id.close);
 
         closeBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +150,7 @@ public class fragment_colorpicker extends Fragment {
             }
         });
 
-        addFavBt =(Button)view.findViewById(R.id.AddFavColor);
+        addFavBt = (Button) view.findViewById(R.id.AddFavColor);
 
         addFavBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,12 +159,12 @@ public class fragment_colorpicker extends Fragment {
             }
         });
 
-        setBt = (Button)view.findViewById(R.id.setColorButton);
+        setBt = (Button) view.findViewById(R.id.setColorButton);
         setBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //constructer of fragment moumou
-                colorStr=  "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
+                colorStr = "#" + colorDisk.toBrowserHexValue(Integer.parseInt(rValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(gValue.getText().toString()))
                         + colorDisk.toBrowserHexValue(Integer.parseInt(bValue.getText().toString()));
 //                fragment_Control = new Fragment_Control(colorDisk.getColorStr());
@@ -171,7 +178,7 @@ public class fragment_colorpicker extends Fragment {
             }
         });
 
-        colorDisk=(ColorPicker)view.findViewById(R.id.colorDisk);
+        colorDisk = (ColorPicker) view.findViewById(R.id.colorDisk);
         colorDisk.setOnColorBackListener(new ColorPicker.OnColorBackListener() {
             @Override
             public void onColorBack(int a, int r, int g, int b) {
@@ -182,19 +189,15 @@ public class fragment_colorpicker extends Fragment {
                 gValue.setText(String.valueOf(g));
                 bValue.setText(String.valueOf(b));
                 setButton_Color(colorDisk.getColorStr());
-                colorStr=colorDisk.getColorStr();
+                colorStr = colorDisk.getColorStr();
             }
         });
-
-
-
-
 
 
         return view;
     }
 
-    public void setButton_Color(String colorStr){
+    public void setButton_Color(String colorStr) {
         GradientDrawable setButton_Background = new GradientDrawable();
         setButton_Background.setShape(GradientDrawable.RECTANGLE);
         setButton_Background.setCornerRadius(24);
@@ -212,19 +215,20 @@ public class fragment_colorpicker extends Fragment {
         );
         int width = (int) px;
         int height = (int) px1;
-        setButton_Background.setSize(width,height);
+        setButton_Background.setSize(width, height);
         setBt.setBackground(setButton_Background);
     }
 
     public interface colorPick_Listener {
         // TODO: Update argument type and name
         public int getRGB(int rgbValue);
+
         public void setColor(int rgbValue);
     }
 
-    public void setListener(colorPick_Listener mlistener){
+    public void setListener(colorPick_Listener mlistener) {
         this.mlistener = mlistener;
-   }
+    }
 
 
 }

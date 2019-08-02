@@ -9,7 +9,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,42 +19,59 @@
             android:layout_height="0dp"
             android:layout_weight="0.5" />
 
-        <TextView
-            android:elevation="10dp"
-            android:layout_weight="1.2"
-            android:id="@+id/tv_select_all"
+        <LinearLayout
+            android:id="@+id/All"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/round_sel"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="@string/All"
-            android:textAlignment="center"
-            android:textColor="@color/backGround"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_height="95dp"
+            android:layout_weight="1.4"
+            android:background="@android:color/transparent"
+            app:layout_constraintVertical_bias="0.0875">
+
+            <TextView
+                android:id="@+id/tv_select_all"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button1"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/All"
+                android:textAlignment="center"
+                android:textColor="@color/backGround"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="0.4" />
+            android:layout_weight="0.2" />
 
-        <TextView
-            android:elevation="10dp"
-            android:id="@+id/tv_select_single"
+        <LinearLayout
+            android:id="@+id/Single"
             android:layout_width="0dp"
-            android:layout_weight="1.2"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/round_normal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="@string/Single"
-            android:textAlignment="center"
-            android:textColor="@color/DeepText"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_height="95dp"
+            android:layout_weight="1.4"
+            android:background="@android:color/transparent"
+            app:layout_constraintVertical_bias="0.0875">
+
+            <TextView
+                android:id="@+id/tv_select_single"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/Single"
+                android:textAlignment="center"
+                android:textColor="@color/DeepText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <View
             android:layout_width="0dp"
@@ -74,10 +91,10 @@
 
             <ImageView
                 android:id="@+id/sun"
-                android:layout_width="wrap_content"
-                android:layout_height="52dp"
-                android:layout_marginTop="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:contentDescription="@string/app_name"
+                app:layout_constraintBottom_toTopOf="@id/seek_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -85,29 +102,31 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/seek_container"
-                android:layout_width="140dp"
-                android:layout_height="280dp"
-                android:layout_marginTop="30dp"
-                android:padding="0dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="36dp"
                 app:cardCornerRadius="33dp"
                 app:cardElevation="8dp"
                 app:cardPreventCornerOverlap="false"
                 app:contentPadding="0dp"
+                app:layout_constraintBottom_toTopOf="@id/colors_1"
+                app:layout_constraintDimensionRatio="w,1:2"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sun">
+                app:layout_constraintTop_toBottomOf="@+id/sun"
+                app:layout_constraintVertical_weight="3">
 
                 <xyz.photonlab.photonlabandroid.views.VerticalSeekBar
                     android:id="@+id/seekBar_brightness"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="0dp"
                     android:background="@drawable/seekbar_drawable_background"
-                    android:padding="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
                     android:progressDrawable="@drawable/seekbar_drawable_progress"
-                    android:scaleX="1.3"
-                    android:scaleY="1.2"
-                    android:thumb="@drawable/seekbar_drawable_thumb" />
+                    android:thumb="@drawable/seekbar_drawable_thumb"
+                    android:thumbOffset="0dp" />
 
                 <TextView
                     android:id="@+id/progress_tip"
@@ -132,12 +151,14 @@
             <LinearLayout
                 android:id="@+id/colors_1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/powerCard_c"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/seek_container">
+                app:layout_constraintTop_toBottomOf="@id/seek_container"
+                app:layout_constraintVertical_weight="1">
 
                 <RadioGroup
                     android:id="@+id/radioGroup"
@@ -191,26 +212,35 @@
                     android:background="@drawable/add_color_24dp" />
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/powerCard"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:cardBackgroundColor="#cbbce7"
-                app:cardCornerRadius="32dp"
-                app:cardElevation="0dp"
+            <LinearLayout
+                android:id="@+id/powerCard_c"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/colors_1">
+                app:layout_constraintTop_toBottomOf="@id/colors_1"
+                app:layout_constraintVertical_weight="1">
 
-                <ToggleButton
-                    android:id="@+id/Power"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/powerCard"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:background="@drawable/power_button"
-                    android:textOff=""
-                    android:textOn="" />
-            </androidx.cardview.widget.CardView>
+                    app:cardBackgroundColor="#cbbce7"
+                    app:cardCornerRadius="32dp"
+                    app:cardElevation="0dp">
+
+                    <ToggleButton
+                        android:id="@+id/Power"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/power_button"
+                        android:textOff=""
+                        android:textOn="" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -221,12 +251,15 @@
 
             <LinearLayout
                 android:id="@+id/content_container"
-                android:layout_width="match_parent"
-                android:layout_height="440dp"
-                android:layout_marginTop="50dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintBottom_toTopOf="@id/groups_container"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_weight="8">
 
                 <TextView
                     android:id="@+id/noLayout"
@@ -248,115 +281,122 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <RadioGroup
-                android:id="@+id/radioGroup0"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+            <LinearLayout
+                android:id="@+id/groups_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/content_container">
+                app:layout_constraintTop_toBottomOf="@id/content_container"
+                app:layout_constraintVertical_weight="2">
 
-                <RadioButton
-                    android:id="@+id/rButton01"
+                <RadioGroup
+                    android:id="@+id/radioGroup0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked"
-                    android:button="@drawable/oval" />
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/rButton02"
+                    <RadioButton
+                        android:id="@+id/rButton01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked"
+                        android:button="@drawable/oval" />
+
+                    <RadioButton
+                        android:id="@+id/rButton02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked_blue"
+                        android:button="@drawable/ovalblue" />
+
+                    <RadioButton
+                        android:id="@+id/rButton03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked_orange"
+                        android:button="@drawable/ovalorange" />
+
+                    <RadioButton
+                        android:id="@+id/rButton04"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked_purple"
+                        android:button="@drawable/ovalpurple" />
+
+                    <RadioButton
+                        android:id="@+id/rButton05"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked_purple"
+                        android:button="@drawable/ovalpurple" />
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked_blue"
-                    android:button="@drawable/ovalblue" />
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/rButton03"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked_orange"
-                    android:button="@drawable/ovalorange" />
+                    <RadioButton
+                        android:id="@+id/rButton06"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked"
+                        android:button="@drawable/oval" />
 
-                <RadioButton
-                    android:id="@+id/rButton04"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked_purple"
-                    android:button="@drawable/ovalpurple" />
+                    <RadioButton
+                        android:id="@+id/rButton07"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked_blue"
+                        android:button="@drawable/ovalblue" />
 
-                <RadioButton
-                    android:id="@+id/rButton05"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked_purple"
-                    android:button="@drawable/ovalpurple" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/rButton08"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked_orange"
+                        android:button="@drawable/ovalorange" />
 
-            <RadioGroup
-                android:id="@+id/radioGroup00"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/radioGroup0">
+                    <RadioButton
+                        android:id="@+id/rButton09"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/checked_purple"
+                        android:button="@drawable/ovalpurple" />
 
-                <RadioButton
-                    android:id="@+id/rButton06"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked"
-                    android:button="@drawable/oval" />
-
-                <RadioButton
-                    android:id="@+id/rButton07"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked_blue"
-                    android:button="@drawable/ovalblue" />
-
-                <RadioButton
-                    android:id="@+id/rButton08"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked_orange"
-                    android:button="@drawable/ovalorange" />
-
-                <RadioButton
-                    android:id="@+id/rButton09"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/checked_purple"
-                    android:button="@drawable/ovalpurple" />
-
-                <Button
-                    android:id="@+id/AddColor00"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/add_color_24dp" />
-            </RadioGroup>
+                    <Button
+                        android:id="@+id/AddColor00"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/add_color_24dp" />
+                </RadioGroup>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </LinearLayout>
