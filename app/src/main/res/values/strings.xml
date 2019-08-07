@@ -67,4 +67,12 @@
     <string name="error_Message">Please make sure your WiFi network\n is correctly configurated.</string>
     <string name="try_again">Try Again</string>
     <string name="Help"><u>Help?</u></string>
+    <string name="save_your_wifi_info">Save Your WIFI Info</string>
+    <string name="pending">pending…</string>
+    <string name="wifi_info_tip">Please make sure your Wifi network is correctly configured</string>
+    <string name="underlineHelp"><u>Help?</u></string>
+    <string name="not_connect">Not Connect</string>
+    <string name="_1_go_to_settings_wlan">1.Go to Settings-WLAN</string>
+    <string name="_2_connect">2.Connect "ElementLight-xx"</string>
+    <string name="go_to_settings">Go To Settings</string>
 </resources>

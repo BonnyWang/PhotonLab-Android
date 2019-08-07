@@ -1,6 +1,7 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -34,7 +35,9 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import okhttp3.Request;
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 
@@ -67,6 +70,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     private Queue<Integer> colorOptions0, colorOptions1;
 
     private Animation slide_in_left, slide_out_right, slide_out_left, slide_in_right;
+    private int brightness_value;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -235,6 +239,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 brightness.setText(progressStr);
                 Fragment_Control.this.progress = progress;
                 tinyDB.putInt("Brightness", Fragment_Control.this.progress);
+                brightness_value = seekBar.getProgress();
             }
 
             @Override
@@ -254,11 +259,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 seekBar.getProgressDrawable().setTint(currentColor0);
                 sun.setColorFilter(0xffffd41f);
                 tinyDB.putInt("Power", 1);
+                Request request = new Request.Builder().url(" http://xxx.xxx.xxx.xxx/on").build();
+                new NetworkHelper().connect(request);
             } else {
                 seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
                 sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
                 tinyDB.putInt("Power", 0);
                 power.getBackground().setTint(0xffffffff);
+                Request request = new Request.Builder().url(" http://xxx.xxx.xxx.xxx/off").build();
+                new NetworkHelper().connect(request);
             }
         });
 
@@ -292,6 +301,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 setColor(3);
                 tinyDB.putInt("rbutton", 3);
             }
+
         });
         add0.setOnClickListener(view -> {
             DialogFragment newFragment = dialog_colorpicker.newInstance(0);
@@ -391,16 +401,36 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         if (power.isChecked()) {
             seekBar.getProgressDrawable().setTint(currentColor0);
         }
-
+        float[] hsv = new float[3];
+        Color.colorToHSV(currentColor0, hsv);
+        hsv[2] = hsv[2] * brightness_value / 100;
+        requestColorChange(Color.HSVToColor(hsv), true);
         checked0.setStroke(5, setCheckedColor(checkedOrder));
         radioButtons0[checkedOrder].setBackground(checked0);
     }
 
+    private void requestColorChange(int color, boolean global) {
+        NetworkHelper helper = new NetworkHelper();
+        int red = (color & 0xff0000) >> 16;
+        int green = (color & 0x00ff00) >> 8;
+        int blue = (color & 0x0000ff);
+        String url;
+        if (global)
+            url = "http://" + Session.getInstance().getLocalIP() + "/setall?r=" + red + "&g=" + green + "&b=" + blue;
+        else
+            url = "http://" + Session.getInstance().getLocalIP() + "/setsingle?r=" + red + "&g=" + green + "&b=" + blue
+                    + "&paneladdress=" + "paneladdress";
+        Request request = new Request.Builder().get()
+                .url(url)
+                .build();
+        helper.connect(request);
+    }
+
     public void setColor0(int checkedOrder) {
-
-        checked1.setStroke(5, setCheckedColor0(checkedOrder));
+        int color = setCheckedColor0(checkedOrder);
+        checked1.setStroke(5, setCheckedColor0(color));
         radioButtons1[checkedOrder].setBackground(checked1);
-
+        requestColorChange(currentColor1, false);
     }
 
     int setCheckedColor0(int which) {
@@ -499,6 +529,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         group1 = contentView.findViewById(R.id.radioGroup0);
         group2 = contentView.findViewById(R.id.radioGroup00);
         content_container = contentView.findViewById(R.id.content_container);
+        LinearLayout groups_container = contentView.findViewById(R.id.groups_container);
+        groups_container.getLayoutParams().width =  groups_container.getMeasuredHeight();
         refreshLightStage();
     }
 
@@ -565,6 +597,10 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             seekBar.setProgress(100);
             seekBar.getProgressDrawable().setTint(rgbValue);
             currentColor0 = rgbValue;
+            float[] hsv = new float[3];
+            Color.colorToHSV(currentColor0, hsv);
+            hsv[2] = hsv[2] * brightness_value / 100;
+            requestColorChange(Color.HSVToColor(hsv), true);
         } else {
             group1.clearCheck();
             group2.clearCheck();
@@ -572,6 +608,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 button.setBackground(null);
             }
             setPlaneColor(rgbValue);
+            requestColorChange(rgbValue, false);
         }
     }
 

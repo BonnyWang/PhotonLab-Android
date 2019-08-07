@@ -1,8 +1,11 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,10 +34,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+
+import xyz.photonlab.photonlabandroid.model.Session;
 
 //added for Fragment -Bonny
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     //implements fragment_Pair.pairing_Listener
     private final String TAG = "Mainactivity";
 
@@ -58,6 +64,12 @@ public class MainActivity extends AppCompatActivity  {
 
     TinyDB tinyDB;
     String ipAddr;
+
+    int bottomHeight;
+
+    public int getBottomHeight() {
+        return bottomHeight;
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -118,7 +130,7 @@ public class MainActivity extends AppCompatActivity  {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
@@ -128,11 +140,11 @@ public class MainActivity extends AppCompatActivity  {
         container.setVisibility(View.GONE);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        this.bottomHeight = navView.getMeasuredHeight();
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         webViewMain = findViewById(R.id.webViewMain);
 
         tinyDB = new TinyDB(getBaseContext());
-
 
 
         FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
@@ -140,6 +152,8 @@ public class MainActivity extends AppCompatActivity  {
         ft0.replace(R.id.container, start_anim).addToBackStack(null);
         ft0.commit();
 
+        //checkPermission
+        getPermissions();
 
 
         runnable = new Runnable() {
@@ -147,7 +161,7 @@ public class MainActivity extends AppCompatActivity  {
             public void run() {
                 //Second fragment after 5 seconds appears
 
-                FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.remove(start_anim);
                 ft.commitAllowingStateLoss();
                 //fragment_Control = new Fragment_Control();
@@ -169,18 +183,18 @@ public class MainActivity extends AppCompatActivity  {
 
         myRef.setValue("Hello, World!");
 
-        if(tinyDB.getString("LocalIp").equals("")){
+        if (tinyDB.getString("LocalIp").equals("")) {
 
             Toast.makeText(this, "Please Pair First", Toast.LENGTH_SHORT).show();
 
-        }else {
+        } else {
 //            CheckLightState mcheckLightState =  new CheckLightState(getApplicationContext());
 //            mcheckLightState.start();
         }
 
+        Session.setShake(BitmapFactory.decodeResource(getResources(), R.drawable.shake));
 
     }
-
 
 
 //    private class CheckLightState extends Thread{
@@ -241,7 +255,7 @@ public class MainActivity extends AppCompatActivity  {
 //        return address;
 //    }
 
-//    @Override
+    //    @Override
 //    public void onAttachFragment(Fragment fragment) {
 //        if (fragment instanceof fragment_Pair) {
 //            fragment_Pair fragment_pair = (fragment_Pair) fragment;
@@ -258,14 +272,42 @@ public class MainActivity extends AppCompatActivity  {
 
 //    https://blog.csdn.net/a10615/article/details/52427047
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        for (int grantResult : grantResults) {
+            if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                Session.getInstance().setPermissionFlag(false);
+            }
+        }
+    }
+
+    public void getPermissions() {
+        final String[] permissions = new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+        };
+
+        for (int i = 0; i < permissions.length; i++) {
+            int hasPermission = checkSelfPermission(permissions[i]);
+            if (hasPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permissions[i]}, i);
+            }
+        }
+    }
 }
 
 
-
-
-
-
-        //Set the fragment to be control by default -Bonny
+//Set the fragment to be control by default -Bonny
 
 
 //        seekbar();
@@ -293,7 +335,7 @@ public class MainActivity extends AppCompatActivity  {
 //            //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 //        }
 
-        //making the phone discoverable for 300s -Bonny
+//making the phone discoverable for 300s -Bonny
 //        Intent discoverableIntent = new Intent(
 //                BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 //        discoverableIntent.putExtra(
@@ -303,7 +345,7 @@ public class MainActivity extends AppCompatActivity  {
 //        Set<BluetoothDevice> mBTdevices = mbluetoothAdapter.getBondedDevices();
 
 
-        //May not need this if using bonded device-Bonny
+//May not need this if using bonded device-Bonny
         /*if(mbluetoothAdapter.isDiscovering()){
             Log.d("BT", "onCreate:1 ");
             mbluetoothAdapter.cancelDiscovery();

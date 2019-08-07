@@ -49,45 +49,45 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_explore_indiv, container, false);
-        topBox = view.findViewById(R.id.fgexTopBar);
-        btShare = view.findViewById(R.id.button3);
-        wvexplore = view.findViewById(R.id.wvexplore);
-        wvexplore.loadUrl(link);
-        wvexplore.getSettings().setJavaScriptEnabled(true);
-        wvexplore.getSettings().setDomStorageEnabled(true);
-        //wvexplore.setOnTouchListener(this);
-
-        btBack = view.findViewById(R.id.btBackExIndiv);
-        btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
-
-        btShare.setOnClickListener((v) -> {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_SUBJECT, "PhotonLab Inc");
-            intent.putExtra(Intent.EXTRA_TEXT, wvexplore.getUrl());
-            startActivity(Intent.createChooser(intent, "Share"));
-        });
-
-
-        tvTitle = view.findViewById(R.id.tvExIndivTitle);
-        tvTitle.setText(title);
-        animationHide = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
-        animationShow = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
-
-        animationHide.setAnimationListener(new FinishAnimationListener() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                topBox.setVisibility(View.GONE);
-            }
-        });
-
-        animationShow.setAnimationListener(new FinishAnimationListener() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                topBox.setVisibility(View.VISIBLE);
-            }
-        });
+        View view = inflater.inflate(R.layout.fragment_explore_indiv_v2, container, false);
+//        topBox = view.findViewById(R.id.fgexTopBar);
+//        btShare = view.findViewById(R.id.button3);
+//        wvexplore = view.findViewById(R.id.wvexplore);
+//        wvexplore.loadUrl(link);
+//        wvexplore.getSettings().setJavaScriptEnabled(true);
+//        wvexplore.getSettings().setDomStorageEnabled(true);
+//        //wvexplore.setOnTouchListener(this);
+//
+//        btBack = view.findViewById(R.id.btBackExIndiv);
+//        btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
+//
+//        btShare.setOnClickListener((v) -> {
+//            Intent intent = new Intent(Intent.ACTION_SEND);
+//            intent.setType("text/plain");
+//            intent.putExtra(Intent.EXTRA_SUBJECT, "PhotonLab Inc");
+//            intent.putExtra(Intent.EXTRA_TEXT, wvexplore.getUrl());
+//            startActivity(Intent.createChooser(intent, "Share"));
+//        });
+//
+//
+//        tvTitle = view.findViewById(R.id.tvExIndivTitle);
+//        tvTitle.setText(title);
+//        animationHide = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
+//        animationShow = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
+//
+//        animationHide.setAnimationListener(new FinishAnimationListener() {
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                topBox.setVisibility(View.GONE);
+//            }
+//        });
+//
+//        animationShow.setAnimationListener(new FinishAnimationListener() {
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                topBox.setVisibility(View.VISIBLE);
+//            }
+//        });
         return view;
     }
 

@@ -141,36 +141,38 @@ public class LightStage extends View implements Serializable {
                     refreshBound();
                 }
             } else {
-                offsetX += x - tempX;
-                offsetY += y - tempY;
-                tempX = x;
-                tempY = y;
-                Log.i("offsetX", offsetX + "");
-                Log.i("offsetY", offsetY + "");
-                Log.i("boundRender", "[" + (bound.left + offsetX) + ","
-                        + (bound.top + offsetY) + "," + (bound.right + offsetX) + ","
-                        + (bound.bottom + offsetY) + "]");
-                if (bound.width() < screenArea.width()) {
-                    if (bound.left + offsetX < 0)
-                        offsetX = -bound.left;
-                    if (bound.right + offsetX > screenArea.right)
-                        offsetX = screenArea.right - bound.right;
-                } else {
-                    if (bound.left + offsetX > 0)
-                        offsetX = -bound.left;
-                    if (bound.right + offsetX < screenArea.right)
-                        offsetX = screenArea.right - bound.right;
-                }
-                if (bound.height() < screenArea.height()) {
-                    if (bound.top + offsetY < 0)
-                        offsetY = -bound.top;
-                    if (bound.bottom + offsetY > screenArea.bottom)
-                        offsetY = screenArea.bottom - bound.bottom;
-                } else {
-                    if (bound.top + offsetY > 0)
-                        offsetY = -bound.top;
-                    if (bound.bottom + offsetY < screenArea.bottom)
-                        offsetY = screenArea.bottom - bound.bottom;
+                if (bound != null) {
+                    offsetX += x - tempX;
+                    offsetY += y - tempY;
+                    tempX = x;
+                    tempY = y;
+                    Log.i("offsetX", offsetX + "");
+                    Log.i("offsetY", offsetY + "");
+                    Log.i("boundRender", "[" + (bound.left + offsetX) + ","
+                            + (bound.top + offsetY) + "," + (bound.right + offsetX) + ","
+                            + (bound.bottom + offsetY) + "]");
+                    if (bound.width() < screenArea.width()) {
+                        if (bound.left + offsetX < 0)
+                            offsetX = -bound.left;
+                        if (bound.right + offsetX > screenArea.right)
+                            offsetX = screenArea.right - bound.right;
+                    } else {
+                        if (bound.left + offsetX > 0)
+                            offsetX = -bound.left;
+                        if (bound.right + offsetX < screenArea.right)
+                            offsetX = screenArea.right - bound.right;
+                    }
+                    if (bound.height() < screenArea.height()) {
+                        if (bound.top + offsetY < 0)
+                            offsetY = -bound.top;
+                        if (bound.bottom + offsetY > screenArea.bottom)
+                            offsetY = screenArea.bottom - bound.bottom;
+                    } else {
+                        if (bound.top + offsetY > 0)
+                            offsetY = -bound.top;
+                        if (bound.bottom + offsetY < screenArea.bottom)
+                            offsetY = screenArea.bottom - bound.bottom;
+                    }
                 }
             }
         } else if (MotionEvent.ACTION_UP == motionEvent.getAction() && movable) {
@@ -241,7 +243,7 @@ public class LightStage extends View implements Serializable {
     public void addLight() {
         Light light;
         if (lights.size() == 0) {
-            light = new MotherLight(screenArea.right / 2,
+            light = new MotherLight(getContext(), screenArea.right / 2,
                     screenArea.bottom / 2);
         } else {
             light = new Light(screenArea.width() / 2 - offsetX, 2 * RADIUS - offsetY);

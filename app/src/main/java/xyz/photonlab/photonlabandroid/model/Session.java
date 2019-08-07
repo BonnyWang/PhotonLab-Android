@@ -1,6 +1,7 @@
 package xyz.photonlab.photonlabandroid.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -22,10 +23,12 @@ import xyz.photonlab.photonlabandroid.views.MotherLight;
 public class Session {
 
     private static Session instance;
-
+    private static Bitmap shake;
     private ArrayList<theme_Class> mtheme;
     private ArrayList<theme_Class> mfavoriteTheme;
     private ArrayList<theme_Class> sweetTheme;
+    private String localIP = "192.168.1.103";
+    private boolean permissionFlag = true;
 
     private int currentThemeIndex = -1;
 
@@ -37,6 +40,14 @@ public class Session {
         if (instance == null)
             instance = new Session();
         return instance;
+    }
+
+    public static Bitmap getShake() {
+        return shake;
+    }
+
+    public static void setShake(Bitmap shake) {
+        Session.shake = shake;
     }
 
     public void requestTheme(Context context) {
@@ -140,7 +151,7 @@ public class Session {
                         Light light;
                         JSONObject o = lights.getJSONObject(i);
                         if (i == 0)
-                            light = new MotherLight((float) o.getDouble("x"), (float) o.getDouble("y"));
+                            light = new MotherLight(context, (float) o.getDouble("x"), (float) o.getDouble("y"));
                         else
                             light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
                         light.setDirection(o.getInt("direction"));
@@ -205,4 +216,19 @@ public class Session {
         return object;
     }
 
+    public String getLocalIP() {
+        return localIP;
+    }
+
+    public void setLocalIP(String localIP) {
+        this.localIP = localIP;
+    }
+
+    public void setPermissionFlag(boolean permissionFlag) {
+        this.permissionFlag = permissionFlag;
+    }
+
+    public boolean isPermissionFlag() {
+        return permissionFlag;
+    }
 }

@@ -9,12 +9,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 
 
-public class fragment_layout extends FullScreenFragment {
+public class fragment_layout extends Fragment {
 
     Button btAddHex;
     Button btDelete;

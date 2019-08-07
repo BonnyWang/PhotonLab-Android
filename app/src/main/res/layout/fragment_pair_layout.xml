@@ -1,408 +1,378 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_Pair"
     android:background="@color/backGround"
     android:clickable="true"
-    android:focusable="true">
-
-    <Button
-        android:id="@+id/backButton_Pairing"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:text=""
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/back_button"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="6dp"
-        android:backgroundTint="@color/colorPrimary"/>
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/pairingDevice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Pairing"
-        android:textColor="#555555"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="313dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:progressTint="@color/colorPrimary"/>
-
-    <ScrollView
-        android:id="@+id/step2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/pairingDevice"
-        app:layout_constraintBottom_toTopOf="@id/progressBar"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
-        android:visibility="visible"
-        android:animateLayoutChanges="true"
-        android:background="@color/backGround">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="15dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/wifiRV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground">
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <ProgressBar
-                android:id="@+id/progressBar2"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="30dp"
-
-                android:indeterminateTint="@color/colorPrimary"
-                android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
-
-    </ScrollView>
+    android:focusable="true"
+    android:orientation="vertical"
+    tools:context=".FragmentPair">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/step1"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/progressBar"
-        app:layout_constraintTop_toBottomOf="@id/pairingDevice"
-        android:animateLayoutChanges="true"
-        android:background="@color/backGround">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivRounter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/rounter"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.2"/>
-
-        <TextView
-            android:layout_marginTop="30dp"
-            android:id="@+id/instruction1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/Pair_Instruction1"
-            app:layout_constraintBottom_toTopOf="@id/pairInstruction2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivRounter"
-            android:background="@drawable/set_background"
-            app:layout_constraintVertical_bias="0.24"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#555555"
-            android:gravity="center" />
-
-        <TextView
-            android:id="@+id/pairInstruction2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/Pair_Instruction2"
-            app:layout_constraintBottom_toBottomOf="@id/YesConnected"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/instruction1"
-            android:background="@drawable/set_background"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#8d8d8d"
-            android:gravity="center"/>
+        android:layout_height="?attr/actionBarSize">
 
         <Button
-            app:layout_constraintVertical_bias="0.9"
-            android:id="@+id/YesConnected"
-            android:layout_width="313dp"
-            android:layout_height="52dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pairInstruction2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/Yes_Connected"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginBottom="25dp"
-            android:textColor="@android:color/white"
-            android:background="@drawable/set_background"
+            android:id="@+id/backButton_pair"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/back_button"
             android:backgroundTint="@color/colorPrimary"
-            android:textAllCaps="false"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Pairing"
+            android:textColor="#555555"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/Done"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/step3"
+    <FrameLayout
+        android:id="@+id/pair_step_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/progressBar"
-        app:layout_constraintTop_toBottomOf="@id/pairingDevice"
-        android:animateLayoutChanges="true"
-        android:background="@color/backGround">
-
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/connect_Button"
-                    android:layout_width="@dimen/Set_Button_Width"
-                    android:layout_height="@dimen/Set_Button_Height"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:background="@drawable/set_background"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:text="@string/Connect"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_Password" />
-
-                <EditText
-                    android:id="@+id/edit_Password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintVertical_bias="0.2"
-                    android:hint="@string/Wifi_Password"
-                    android:gravity="center_horizontal"
-                    android:foregroundTint="@color/colorPrimary"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:textCursorDrawable="@color/colorPrimary"
-                    android:imeOptions="actionDone"/>
-
-
-
-                <TextView
-                    android:id="@+id/instruction3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Instruction_3"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/connect_Button"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:gravity="center_horizontal" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </FrameLayout>
-
-
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/pbStep3"
+            android:id="@+id/pair_step_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#90FAFAFA"
+            android:background="@color/backGround">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/ssid_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="25dp"
+                app:cardBackgroundColor="#e3e3e3"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/ssid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/pending"
+                    android:textAlignment="center"
+                    android:textColor="#333333"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/rgb_edittext"
+                android:backgroundTint="@color/light_gray"
+                android:clickable="true"
+                android:focusable="true"
+                android:hint="@string/Wifi_Password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/ssid_container"
+                tools:ignore="Autofill" />
+
+            <Button
+                android:id="@+id/step1_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/round_normal"
+                android:backgroundTint="@color/colorPrimary"
+                android:elevation="4dp"
+                android:text="@string/Next"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/password" />
+
+            <TextView
+                android:id="@+id/wifi_info_tip"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/wifi_info_tip"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/step1_next"
+                app:layout_goneMarginTop="50dp" />
+
+            <TextView
+                android:id="@+id/tv_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/underlineHelp"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textSize="22sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/wifi_info_tip" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pair_step_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/router"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:contentDescription="@string/Pairing"
+                android:src="@drawable/rounter"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/step2_tip1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/_1_go_to_settings_wlan"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/router" />
+
+            <TextView
+                android:id="@+id/step2_tip2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/_2_connect"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/step2_tip1" />
+
+            <Button
+                android:id="@+id/to_system_wifi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/round_normal"
+                android:backgroundTint="#e3e3e3"
+                android:elevation="4dp"
+                android:text="@string/go_to_settings"
+                android:textAllCaps="false"
+                android:textColor="@color/gray"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/step2_tip2" />
+
+            <Button
+                android:id="@+id/yes_connected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/round_normal"
+                android:backgroundTint="@color/colorPrimary"
+                android:elevation="4dp"
+                android:text="@string/Yes_Connected"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/to_system_wifi" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pair_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#88ffffff"
             android:visibility="gone">
 
             <ProgressBar
-                android:id="@+id/progressBar3"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:indeterminateTint="@color/colorPrimary"
+                android:indeterminateTintMode="src_atop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:indeterminateTint="@color/colorPrimary"/>
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/success"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp"
+            android:animateLayoutChanges="true"
+            android:background="@color/backGround"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/progressBar"
+            app:layout_constraintTop_toBottomOf="@id/pairingDevice">
 
+            <TextView
+                android:id="@+id/goodToGo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Good_To_Go"
+                android:textColor="#c6c6c6"
+                android:textSize="34dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.2" />
 
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="344dp"
+                android:layout_height="230dp"
+                android:src="@drawable/goodtogo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/goodToGo"
+                app:layout_constraintVertical_bias="0.2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stepFailed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:background="@color/backGround"
+            android:visibility="gone">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/step4"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/progressBar"
-        app:layout_constraintTop_toBottomOf="@id/pairingDevice"
-        android:animateLayoutChanges="true"
-        android:background="@color/backGround">
+            <TextView
+                android:id="@+id/tvOpps_Error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Opps_Error"
+                android:textColor="#c6c6c6"
+                android:textSize="34dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivError"
+                app:layout_constraintVertical_bias="0.2" />
 
-        <TextView
-            android:id="@+id/goodToGo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Good_To_Go"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.2"
-            android:textStyle="bold"
-            android:textSize="34dp"
-            android:textColor="#c6c6c6"
-            />
+            <TextView
+                android:id="@+id/tvErrorMessager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error_Message"
+                android:textColor="@color/Deep_Grey"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvOpps_Error"
+                app:layout_constraintVertical_bias="0.1" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="344dp"
-            android:layout_height="230dp"
-            android:src="@drawable/goodtogo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/goodToGo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.2"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvErrorHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Help"
+                android:textColor="@color/Deep_Grey"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvErrorMessager" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/step4Failed"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/progressBar"
-        app:layout_constraintTop_toBottomOf="@id/pairingDevice"
-        android:animateLayoutChanges="true"
-        android:background="@color/backGround">
+            <ImageView
+                android:id="@+id/ivError"
+                android:layout_width="344dp"
+                android:layout_height="230dp"
+                android:src="@drawable/pair_error"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
 
-        <TextView
-            android:id="@+id/tvOpps_Error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Opps_Error"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivError"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.2"
-            android:textStyle="bold"
-            android:textSize="34dp"
-            android:textColor="#c6c6c6"
-            />
+            <Button
+                android:id="@+id/btTryAgain"
+                android:layout_width="313dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/set_background"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="@string/try_again"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvErrorMessager" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/tvErrorMessager"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/error_Message"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvOpps_Error"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.1"
-            android:textStyle="bold"
-            android:textColor="@color/Deep_Grey"
-            />
-
-        <TextView
-            android:id="@+id/tvErrorHelp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Help"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvErrorMessager"
-            android:textStyle="bold"
-            android:textColor="@color/Deep_Grey"
-            />
-
-        <ImageView
-            android:id="@+id/ivError"
-            android:layout_width="344dp"
-            android:layout_height="230dp"
-            android:src="@drawable/pair_error"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.3"/>
-
-        <Button
-            android:id="@+id/btTryAgain"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="313dp"
-            android:layout_height="52dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvErrorMessager"
-            android:layout_marginTop="40dp"
-            android:text="@string/try_again"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@android:color/white"
-            android:background="@drawable/set_background"
-            android:backgroundTint="@color/colorPrimary"
-            android:textAllCaps="false"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Done"
-        android:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimary" />
-
-    <WebView
-        android:id="@+id/webViewPair"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:progress="33"
+            android:progressTint="@color/colorPrimary" />
+    </FrameLayout>
+</LinearLayout>

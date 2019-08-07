@@ -5,7 +5,7 @@ import java.util.List;
 
 public class dlLoadedAdapter extends dlRvAdapter {
     public dlLoadedAdapter(List<theme_Class> mdlthemes, dlListener mlistener, ArrayList<theme_Class> mthemes) {
-        super(mthemes, mlistener, mthemes);
+        super(mdlthemes, mlistener, mthemes);
     }
 
     @Override

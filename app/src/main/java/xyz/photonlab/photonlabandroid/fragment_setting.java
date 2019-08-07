@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import xyz.photonlab.photonlabandroid.R;
+import xyz.photonlab.photonlabandroid.model.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        final RecyclerView rv = (RecyclerView)view.findViewById(R.id.setRV);
+        final RecyclerView rv = (RecyclerView) view.findViewById(R.id.setRV);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
 
@@ -48,7 +49,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         return view;
     }
 
-    public void initializeData(){
+    public void initializeData() {
         mSettings = new ArrayList<>();
         mSettings.add(new setting_Content("Pairing"));
         mSettings.add(new setting_Content("Feedback"));
@@ -65,11 +66,16 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
     public void onNoteClick(int position) {
         switch (position) {
             case 0:
-                fragment_Pair fragment_pair = new fragment_Pair();
-                FragmentTransaction ft0 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft0.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft0.replace(R.id.container,fragment_pair).addToBackStack(null);
-                ft0.commit();
+                if (Session.getInstance().isPermissionFlag()) {
+                    FragmentPair fragment_pair = new FragmentPair();
+                    FragmentTransaction ft0 = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft0.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    ft0.replace(R.id.container, fragment_pair).addToBackStack(null);
+                    ft0.commit();
+                } else {
+                    Session.getInstance().setPermissionFlag(true);
+                    ((MainActivity) getActivity()).getPermissions();
+                }
                 break;
 
             case 1:
@@ -81,15 +87,15 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
             case 2:
                 fragment_motion_detect mfragment_motion_detect = fragment_motion_detect.getInstance();
                 FragmentTransaction ft2 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft2.replace(R.id.container,mfragment_motion_detect).addToBackStack(null);
+                ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft2.replace(R.id.container, mfragment_motion_detect).addToBackStack(null);
                 ft2.commit();
                 break;
 
             case 5:
                 fragment_layout mfragment_layout = new fragment_layout();
                 FragmentTransaction ft5 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 ft5.replace(R.id.container, mfragment_layout).addToBackStack(null);
                 ft5.commit();
                 break;
@@ -97,8 +103,8 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
             case 6:
                 fragment_system mfragment_system = new fragment_system();
                 FragmentTransaction ft6 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft6.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft6.replace(R.id.container,mfragment_system).addToBackStack(null);
+                ft6.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft6.replace(R.id.container, mfragment_system).addToBackStack(null);
                 ft6.commit();
                 break;
 
@@ -106,7 +112,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
             default:
                 fragment_Comming fragment_comming = new fragment_Comming(mSettings.get(position).subtitle);
                 FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 ft1.replace(R.id.container, fragment_comming).addToBackStack(null);
                 ft1.commit();
 
@@ -114,8 +120,6 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         }
 
     }
-
-
 
 
 }

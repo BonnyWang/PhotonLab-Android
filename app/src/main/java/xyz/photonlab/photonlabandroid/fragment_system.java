@@ -1,21 +1,19 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +23,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import okhttp3.Request;
+import okhttp3.Response;
+import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
+import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
+
 
 public class fragment_system extends FullScreenFragment {
 
@@ -32,9 +35,10 @@ public class fragment_system extends FullScreenFragment {
 
     Button btBack;
 
-    ConstraintLayout clPrivacy;
-    TextView tvDeviceName;
+    ProgressBar loadding;
 
+    ConstraintLayout paireState, clPrivacy, reset_container;
+    TextView tvDeviceName;
 
     TinyDB tinyDB;
     String ipAddr;
@@ -62,22 +66,51 @@ public class fragment_system extends FullScreenFragment {
             }
         });
 
-        clPrivacy = view.findViewById(R.id.clPrivacy);
-        clPrivacy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.photonlab.xyz/privacypolicy.html"));
-                startActivity(browserIntent);
+        paireState = view.findViewById(R.id.pair_state);
+        paireState.setOnClickListener((v) -> {
+            loadding.setVisibility(View.VISIBLE);
+            if (ipAddr != null && !ipAddr.equals("")) {
+                new JsonTask().execute("http://" + ipAddr + "/ip");
             }
         });
 
+        clPrivacy = view.findViewById(R.id.clPrivacy);
+        clPrivacy.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.photonlab.xyz/privacypolicy.html"));
+            startActivity(browserIntent);
+        });
+
+        reset_container = view.findViewById(R.id.reset_container);
+        reset_container.setOnClickListener(v -> {
+            if (ipAddr != null) {
+                NetworkHelper helper = new NetworkHelper();
+                Request req = new Request.Builder()
+                        .url("http://" + ipAddr + "/reset?secret=000000")
+                        .build();
+                helper.setCallback(new NetworkCallback() {
+                    @Override
+                    public void onSuccess(Response response) {
+                        tinyDB.remove("LocalIp");
+                    }
+
+                    @Override
+                    public void onFailed(String msg) {
+
+                    }
+                });
+                helper.connect(req);
+            } else {
+                Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
+            }
+        });
+        loadding = view.findViewById(R.id.pair_state_load);
         tvDeviceName = view.findViewById(R.id.tvDeviceName);
-        if(ipAddr.equals("")){
+        if (ipAddr.equals("")) {
             // No change
             // No device -B
-        }else{
-            tvDeviceName.setText(ipAddr.trim(), TextView.BufferType.SPANNABLE);
-            new JsonTask().execute("http://"+ipAddr+"/ip");
+        } else {
+            tvDeviceName.setText("Not Connected", TextView.BufferType.SPANNABLE);
+            new JsonTask().execute("http://" + ipAddr + "/ip");
 ////            tvMacAddr.setText();
         }
 //
@@ -149,9 +182,9 @@ public class fragment_system extends FullScreenFragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            Log.d(TAG, "onPostExecute: "+result);
-
-            if(sucess) {
+            Log.d(TAG, "onPostExecute: " + result);
+            loadding.setVisibility(View.GONE);
+            if (sucess) {
                 if (result != null) {
                     String temp = result.replaceAll("\\{", "");
                     temp = temp.replaceAll("\\}", "");
@@ -172,9 +205,7 @@ public class fragment_system extends FullScreenFragment {
 //                        tvDeviceName.setText("Not Connected", TextView.BufferType.SPANNABLE);
 //
 //                    }
-                } else {
-
-                    tvDeviceName.setText("Not Connected", TextView.BufferType.SPANNABLE);
+                    tvDeviceName.setText(ipAddr, TextView.BufferType.SPANNABLE);
                 }
             }
 

@@ -59,7 +59,7 @@ import java.nio.ByteOrder;
 import java.util.List;
 
 
-public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.OnNoteListener {
+public class fragment_pair extends FullScreenFragment implements wifiRvAdapter.OnNoteListener {
 
 
     static final String TAG = "fragment_Pair";
@@ -112,7 +112,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 //    NsdManager nsdManager;
 //    NsdManager.DiscoveryListener discoveryListener;
 
-    public fragment_Pair() {
+    public fragment_pair() {
 
     }
 
@@ -134,7 +134,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pair_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_pair_before, container, false);
 
         final Context context = getActivity().getApplicationContext();
         //Yo, This is really shitty
@@ -253,7 +253,6 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                         + "&password=" + password_Input.getText().toString());
 
 
-
                 pbStep3.setVisibility(View.VISIBLE);
 
 //               mnsdFinder = new nsdFinder(getContext());
@@ -268,12 +267,9 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bonjourService -> {
                             Log.d("TAG",  bonjourService.getInet4Address().toString());
-
                             if (!isResolved) {
-
                                 tinyDB.putString("LocalIP", bonjourService.getInet4Address().toString());
                                 new JsonTask().execute("http:/" + bonjourService.getInet4Address().toString() + "/mac");
-
                                 layout_Show(step4_Layout);
                                 layout_Gone(step3_Layout, View.INVISIBLE);
                                 progressBar.setProgress(100);
@@ -283,16 +279,12 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                                 password_Input.onEditorAction(EditorInfo.IME_ACTION_DONE);
                                 done.setVisibility(View.VISIBLE);
                             }
-
 //            if (bonjourService.isLost()) {
 //                mServiceAdapter.remove(bonjourService);
 //            } else {
 //                mServiceAdapter.add(bonjourService);
 //            }
                         }, throwable -> Log.e("TAG", "error", throwable));
-
-
-
 */
             }
         });
@@ -335,7 +327,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                 getActivity().getSupportFragmentManager().popBackStack();
 
                 //Reload to new fragment -bbb
-                fragment_Pair mfragment_pair = new fragment_Pair();
+                fragment_pair mfragment_pair = new fragment_pair();
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft.replace(R.id.container, mfragment_pair).addToBackStack(null);
@@ -504,7 +496,6 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
 //            mhandler.postDelayed(runnable, 30000);
 
 
-
             HttpURLConnection connection = null;
             BufferedReader reader = null;
 
@@ -560,7 +551,7 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
             super.onPostExecute(result);
 
             Log.d(TAG, "onPostExecute: " + result);
-
+            Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
             if (sucess) {
                 if (result != null) {
                     String temp = result.replaceAll("\\{", "");
@@ -587,19 +578,18 @@ public class fragment_Pair extends FullScreenFragment implements wifiRvAdapter.O
                         done.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         Log.d(TAG, "onPostExecute: ipError");
-                        Toast.makeText(getContext(), "failed",Toast.LENGTH_LONG);
+                        Toast.makeText(getContext(), "failed", Toast.LENGTH_LONG);
                         showFail();
                     }
                 } else {
                     showFail();
-
                 }
             }
 
         }
     }
 
-    private void showFail(){
+    private void showFail() {
         layout_Show(step4Failed_Layout);
         layout_Gone(step3_Layout, View.INVISIBLE);
         progressBar.setProgress(100);
