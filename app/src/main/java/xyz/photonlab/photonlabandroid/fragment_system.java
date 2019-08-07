@@ -25,6 +25,7 @@ import java.net.URL;
 
 import okhttp3.Request;
 import okhttp3.Response;
+import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
@@ -48,7 +49,7 @@ public class fragment_system extends FullScreenFragment {
         super.onCreate(savedInstanceState);
 
         tinyDB = new TinyDB(getContext());
-        ipAddr = tinyDB.getString("LocalIp");
+        ipAddr = Session.getInstance().getLocalIP(getContext());
 
     }
 
@@ -59,12 +60,7 @@ public class fragment_system extends FullScreenFragment {
         View view = inflater.inflate(R.layout.fragment_system, container, false);
 
         btBack = view.findViewById(R.id.backButton_System);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
         paireState = view.findViewById(R.id.pair_state);
         paireState.setOnClickListener((v) -> {
@@ -91,6 +87,7 @@ public class fragment_system extends FullScreenFragment {
                     @Override
                     public void onSuccess(Response response) {
                         tinyDB.remove("LocalIp");
+                        Session.getInstance().setLocalIP("");
                     }
 
                     @Override
@@ -205,7 +202,7 @@ public class fragment_system extends FullScreenFragment {
 //                        tvDeviceName.setText("Not Connected", TextView.BufferType.SPANNABLE);
 //
 //                    }
-                    tvDeviceName.setText(ipAddr, TextView.BufferType.SPANNABLE);
+                    tvDeviceName.setText(ipAddr);
                 }
             }
 

@@ -48,7 +48,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     private TinyDB tinyDB;
 
-    private String ipAddr;
     private int currentColor0, currentColor1;
     private GradientDrawable checked0, checked1;
     private boolean isAll;
@@ -57,7 +56,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     private int progress;
 
     private ConstraintLayout allContainer, singleContainer;
-    private FrameLayout content;
     private TextView tvToAll, tvToSingle, brightness, tvGotoSetup;
     private ToggleButton power;
     private ImageView sun;
@@ -75,11 +73,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tinyDB = new TinyDB(getContext());
-        if (tinyDB.getString("LocalIP").equals("")) {
+        if (Session.getInstance().getLocalIP(getContext()).equals("")) {
             Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
-        } else {
-            ipAddr = tinyDB.getString("LocalIP");
         }
     }
 
@@ -416,9 +411,9 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         int blue = (color & 0x0000ff);
         String url;
         if (global)
-            url = "http://" + Session.getInstance().getLocalIP() + "/setall?r=" + red + "&g=" + green + "&b=" + blue;
+            url = "http://" + Session.getInstance().getLocalIP(getContext()) + "/setall?r=" + red + "&g=" + green + "&b=" + blue;
         else
-            url = "http://" + Session.getInstance().getLocalIP() + "/setsingle?r=" + red + "&g=" + green + "&b=" + blue
+            url = "http://" + Session.getInstance().getLocalIP(getContext()) + "/setsingle?r=" + red + "&g=" + green + "&b=" + blue
                     + "&paneladdress=" + "paneladdress";
         Request request = new Request.Builder().get()
                 .url(url)
@@ -497,7 +492,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     private void initView(View contentView) {
         allContainer = contentView.findViewById(R.id.all_container);
         singleContainer = contentView.findViewById(R.id.single_container);
-        content = contentView.findViewById(R.id.content);
         tvToAll = contentView.findViewById(R.id.tv_select_all);
         tvToSingle = contentView.findViewById(R.id.tv_select_single);
         tvGotoSetup = contentView.findViewById(R.id.tvGotoSetup);
@@ -530,7 +524,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         group2 = contentView.findViewById(R.id.radioGroup00);
         content_container = contentView.findViewById(R.id.content_container);
         LinearLayout groups_container = contentView.findViewById(R.id.groups_container);
-        groups_container.getLayoutParams().width =  groups_container.getMeasuredHeight();
+        groups_container.getLayoutParams().width = groups_container.getMeasuredHeight();
         refreshLightStage();
     }
 

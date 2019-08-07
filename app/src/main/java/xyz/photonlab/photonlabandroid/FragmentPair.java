@@ -2,10 +2,13 @@ package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -80,11 +83,11 @@ public class FragmentPair extends FullScreenFragment {
         out = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left);
         findView(view);
         addViewEvent();
-        if ((wifi_ssid = getWifiInfo()) != null) {
-            tv_SSID.setText(wifi_ssid);
-        } else {
-            tv_SSID.setText("Not Connected!");
-        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void addViewEvent() {
@@ -120,7 +123,7 @@ public class FragmentPair extends FullScreenFragment {
 
         yes.setOnClickListener(v -> {
             String currentSsid = getWifiInfo();
-            if (currentSsid != null) {
+            if (currentSsid != null && currentSsid.startsWith("ElementLight-")) {
                 tellLightTheWifiInfo();
                 mask.setVisibility(View.VISIBLE);
             } else {
@@ -129,9 +132,7 @@ public class FragmentPair extends FullScreenFragment {
         });
 
         //step3
-        doneButton.setOnClickListener((v) -> {
-            exit.performClick();
-        });
+        doneButton.setOnClickListener((v) -> exit.performClick());
         try_again_btn.setOnClickListener((v) -> {
             getActivity().getSupportFragmentManager().popBackStack();
 
@@ -142,6 +143,40 @@ public class FragmentPair extends FullScreenFragment {
             ft.replace(R.id.container, mfragment_pair).addToBackStack(null);
             ft.commit();
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("start", "FragmentPair");
+        checkLocation();
+        String cSsid;
+        if ((cSsid = getWifiInfo()) != null) {
+            Log.i("cSsid", cSsid);
+            if (step1_container.getVisibility() != View.GONE) {
+                wifi_ssid = cSsid;
+                tv_SSID.setText(wifi_ssid);
+                Log.i("wifi_ssid_changed:",wifi_ssid);
+            }
+        } else {
+            tv_SSID.setText("Not Connected!");
+        }
+    }
+
+    private void checkLocation() {
+        assert getActivity() != null;
+        LocationManager lm = (LocationManager) getActivity().getSystemService(Activity.LOCATION_SERVICE);
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setTitle("Please Open Your Location Service")
+                    .setIcon(R.drawable.lightbulb)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.go_to_location, (dialog1, which) -> {
+                        getActivity().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }).create();
+            dialog.show();
+        }
     }
 
     private void tellLightTheWifiInfo() {
@@ -227,21 +262,7 @@ public class FragmentPair extends FullScreenFragment {
             Log.i("gateway_ip", current_gateway_ip);
             String ssid = wifiManager.getConnectionInfo().getSSID();
             Log.i("SSID", ssid);
-            if (ssid.toLowerCase().equals("<unknown ssid>")) {
-                ConnectivityManager connManager = (ConnectivityManager) getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-                assert connManager != null;
-                NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
-                if (networkInfo.isConnected()) {
-                    Log.i("networkInfo", networkInfo.toString());
-                    if (networkInfo.getExtraInfo() != null) {
-                        Log.i("networkInfo.extra", networkInfo.getExtraInfo());
-                        return networkInfo.getExtraInfo().replace("\"", "");
-                    }
-                }
-                return null;
-            } else {
-                return ssid.replaceAll("\"", "");
-            }
+            return ssid.replaceAll("\"", "");
         }
         return null;
     }

@@ -162,4 +162,10 @@ public class Light implements Serializable {
         this.originDirection = this.direction;
         this.direction = direction;
     }
+
+    public void setDirection(int direction, boolean shouldAnimate) {
+        setDirection(direction);
+        if (!shouldAnimate)
+            originDirection = this.direction;
+    }
 }

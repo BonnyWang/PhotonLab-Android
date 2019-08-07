@@ -71,7 +71,7 @@ public class fragment_layout extends Fragment {
         btNext = view.findViewById(R.id.btNext);
         btNext.setOnClickListener(view1 -> {
             int num = msetLayoutView.getUselessLightNum();
-            if (num > 0) {
+            if (num > 0 || msetLayoutView.getLights().size() == 0) {
                 Toast.makeText(getContext(), "Layout Error!", Toast.LENGTH_SHORT).show();
                 return;
             }

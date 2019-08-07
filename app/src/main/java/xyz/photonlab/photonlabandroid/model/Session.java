@@ -27,7 +27,7 @@ public class Session {
     private ArrayList<theme_Class> mtheme;
     private ArrayList<theme_Class> mfavoriteTheme;
     private ArrayList<theme_Class> sweetTheme;
-    private String localIP = "192.168.1.103";
+    private String localIP = "";
     private boolean permissionFlag = true;
 
     private int currentThemeIndex = -1;
@@ -154,9 +154,11 @@ public class Session {
                             light = new MotherLight(context, (float) o.getDouble("x"), (float) o.getDouble("y"));
                         else
                             light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
-                        light.setDirection(o.getInt("direction"));
+                        light.setDirection(o.getInt("direction"), false);
                         if (plane) {
                             light.setPlane(true);
+                            if (light instanceof MotherLight)
+                                ((MotherLight) light).denyIconRotate();
                         }
                         light.setPlaneColor(o.getInt("plane_color"));
                         finalStage.addLight(light);
@@ -216,7 +218,9 @@ public class Session {
         return object;
     }
 
-    public String getLocalIP() {
+    public String getLocalIP(Context context) {
+        if (localIP.equals(""))
+            localIP = new TinyDB(context).getString("LocalIp");
         return localIP;
     }
 

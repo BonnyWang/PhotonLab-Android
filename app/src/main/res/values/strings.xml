@@ -75,4 +75,7 @@
     <string name="_1_go_to_settings_wlan">1.Go to Settings-WLAN</string>
     <string name="_2_connect">2.Connect "ElementLight-xx"</string>
     <string name="go_to_settings">Go To Settings</string>
+    <string name="please_open_location_service">\t\tPlease Open Location Service</string>
+    <string name="open_location_settings">Open Location Settings</string>
+    <string name="go_to_location">Setup Location Service</string>
 </resources>
