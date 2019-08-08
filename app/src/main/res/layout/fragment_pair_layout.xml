@@ -92,18 +92,18 @@
             </androidx.cardview.widget.CardView>
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/wifi_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/rgb_edittext"
-                android:backgroundTint="@color/light_gray"
+                android:backgroundTint="#ccc"
                 android:clickable="true"
                 android:focusable="true"
                 android:hint="@string/Wifi_Password"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:maxLines="1"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -126,16 +126,19 @@
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textSize="22sp"
-                app:layout_constraintTop_toBottomOf="@id/password" />
+                app:layout_constraintTop_toBottomOf="@id/wifi_pwd" />
 
             <TextView
+                android:lineSpacingExtra="8dp"
                 android:id="@+id/wifi_info_tip"
-                android:layout_width="250dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/wifi_info_tip"
                 android:textAlignment="center"
-                android:textSize="22sp"
+                android:textSize="16sp"
+                android:layout_marginStart="36dp"
+                android:layout_marginEnd="36dp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -143,14 +146,13 @@
                 app:layout_goneMarginTop="50dp" />
 
             <TextView
+                android:layout_marginTop="8dp"
                 android:id="@+id/tv_help"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:text="@string/underlineHelp"
                 android:textAlignment="center"
-                android:textColor="@color/gray"
-                android:textSize="22sp"
+                android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/wifi_info_tip" />
@@ -311,6 +313,8 @@
                 app:layout_constraintVertical_bias="0.2" />
 
             <TextView
+                android:textSize="16sp"
+                android:textAlignment="center"
                 android:id="@+id/tvErrorMessager"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -324,6 +328,7 @@
                 app:layout_constraintVertical_bias="0.1" />
 
             <TextView
+                android:textSize="16sp"
                 android:id="@+id/tvErrorHelp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

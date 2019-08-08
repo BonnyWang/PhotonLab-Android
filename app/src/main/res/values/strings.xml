@@ -54,7 +54,7 @@
     <string name="Next">Next</string>
     <string name="System">System</string>
     <string name="Device_Name">No Device</string>
-    <string name="Reset">Reset</string>
+    <string name="Reset">Hardware Reset</string>
     <string name="Privacy_Policy">Privacy Policy</string>
     <string name="App_Software">App Software</string>
     <string name="Explore">Explore</string>
@@ -64,7 +64,7 @@
 
     <string name="No_Device">No Device</string>
     <string name="Opps_Error">Oops! Error occurred</string>
-    <string name="error_Message">Please make sure your WiFi network\n is correctly configurated.</string>
+    <string name="error_Message">Please make sure your WiFi network\n is correctly configured.</string>
     <string name="try_again">Try Again</string>
     <string name="Help"><u>Help?</u></string>
     <string name="save_your_wifi_info">Save Your WIFI Info</string>

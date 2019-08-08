@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -396,6 +395,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         if (power.isChecked()) {
             seekBar.getProgressDrawable().setTint(currentColor0);
         }
+        //all radio selected color
         float[] hsv = new float[3];
         Color.colorToHSV(currentColor0, hsv);
         hsv[2] = hsv[2] * brightness_value / 100;
@@ -422,8 +422,9 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     }
 
     public void setColor0(int checkedOrder) {
-        int color = setCheckedColor0(checkedOrder);
-        checked1.setStroke(5, setCheckedColor0(color));
+        //all radio selected color
+        currentColor1 = setCheckedColor0(checkedOrder);
+        checked1.setStroke(5, setCheckedColor0(checkedOrder));
         radioButtons1[checkedOrder].setBackground(checked1);
         requestColorChange(currentColor1, false);
     }

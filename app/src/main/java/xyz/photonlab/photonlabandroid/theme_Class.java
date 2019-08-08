@@ -1,6 +1,8 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -8,26 +10,41 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class theme_Class {
 
-        String name;
-        int start_Color;
-        int end_Color;
-        String creater;
-        String mood;
+    String name;
+    String start_Color;
+    String end_Color;
+    String creater;
+    String mood;
 
-        //TODO:Can delet the gradient drawable file now -Bonny
+    @Exclude
+    int startColorInt = Color.RED;
 
-    public theme_Class(){
+    @Exclude
+    int endColorInt = Color.BLUE;
+
+    //TODO:Can delet the gradient drawable file now -Bonny
+
+    public theme_Class() {
 
     }
 
-
-
-    public theme_Class(String name, int start_Color, int end_Color, String creater, String mood){
-
-        this.name = name;
+    //will be reflect by fireBase store
+    public void setStart_Color(String start_Color) {
         this.start_Color = start_Color;
-        this.end_Color = end_Color;
+        this.startColorInt = Color.parseColor(start_Color);
+    }
 
+    //will be reflect by fireBase store
+    public void setEnd_Color(String end_Color) {
+        this.end_Color = end_Color;
+        this.endColorInt = Color.parseColor(end_Color);
+    }
+
+    public theme_Class(String name, int start_Color, int end_Color, String creater, String mood) {
+        Log.i("int Constructor", "I was invoked!");
+        this.name = name;
+        this.startColorInt = start_Color;
+        this.endColorInt = end_Color;
         this.creater = creater;
         this.mood = mood;
     }
@@ -38,28 +55,27 @@ public class theme_Class {
     }
 
 
-
-
     public String getCreater() {
         return creater;
     }
 
-    public String getMood(){
+    public String getMood() {
         return mood;
     }
 
     @Exclude
-    public GradientDrawable getGradientDrawablt(){
+    public GradientDrawable getGradientDrawablt() {
         GradientDrawable gradientDrawable;
-        gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{start_Color,end_Color});
+        gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{startColorInt, endColorInt});
         return gradientDrawable;
     }
 
     @Exclude
     public int[] getColors() {
-        int[] colors = {start_Color,end_Color};
-        return colors ;
+        int[] colors = {startColorInt, endColorInt};
+        return colors;
     }
+
 }
 
 

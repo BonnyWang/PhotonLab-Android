@@ -7,10 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,8 +26,6 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
     TextView tvTitle;
     ConstraintLayout topBox;
     Button btShare;
-    Animation animationShow;
-    Animation animationHide;
 
     public fragment_explore_indiv(String link, String title) {
 
@@ -48,16 +44,13 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore_indiv_v2, container, false);
-//        topBox = view.findViewById(R.id.fgexTopBar);
         btShare = view.findViewById(R.id.button3);
         wvexplore = view.findViewById(R.id.wvexplore);
         wvexplore.loadUrl(link);
         wvexplore.getSettings().setJavaScriptEnabled(true);
         wvexplore.getSettings().setDomStorageEnabled(true);
-//        //wvexplore.setOnTouchListener(this);
-//
+
         btBack = view.findViewById(R.id.btBackExIndiv);
         btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
@@ -68,26 +61,10 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
             intent.putExtra(Intent.EXTRA_TEXT, wvexplore.getUrl());
             startActivity(Intent.createChooser(intent, "Share"));
         });
-//
-//
         tvTitle = view.findViewById(R.id.tvExIndivTitle);
         tvTitle.setText(title);
-//        animationHide = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
-//        animationShow = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
-//
-//        animationHide.setAnimationListener(new FinishAnimationListener() {
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                topBox.setVisibility(View.GONE);
-//            }
-//        });
-//
-//        animationShow.setAnimationListener(new FinishAnimationListener() {
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                topBox.setVisibility(View.VISIBLE);
-//            }
-//        });
+
+        wvexplore.setWebViewClient(new MyWebViewClient());
         return view;
     }
 
@@ -111,20 +88,7 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
         return false;
     }
 
-}
-
-abstract class FinishAnimationListener implements Animation.AnimationListener {
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-
-    }
-
-    @Override
-    public abstract void onAnimationEnd(Animation animation);
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-
+    private class MyWebViewClient extends WebViewClient {
+        //todo add some special functions
     }
 }

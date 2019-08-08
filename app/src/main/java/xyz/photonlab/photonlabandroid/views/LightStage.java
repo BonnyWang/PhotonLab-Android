@@ -63,8 +63,10 @@ public class LightStage extends View implements Serializable {
         if (this.onViewCreatedListener != null)
             this.onViewCreatedListener.onViewCreated();
         if (needCenter && getMotherLight() != null) {
-            offsetX = screenArea.width() / 2 - getMotherLight().getX();
-            offsetY = screenArea.height() / 2 - getMotherLight().getY();
+            if (bound != null) {
+                offsetX = screenArea.centerX() - bound.centerX();
+                offsetY = screenArea.centerY() - bound.centerY();
+            }
         }
         setBackgroundColor(Color.RED);
     }
@@ -179,6 +181,7 @@ public class LightStage extends View implements Serializable {
             for (Light light : lights) {
                 if (light.isChecked()) {
                     settleLight(light);
+                    break;
                 }
             }
         }
@@ -214,6 +217,8 @@ public class LightStage extends View implements Serializable {
             if (d < distance) {
                 boolean flag = true;
                 for (Light toCompare : lights) {
+                    if (toCompare.equals(light))
+                        continue;
                     if (Math.abs(toCompare.getX() - dot.getX()) < 10
                             && Math.abs(toCompare.getY() - dot.getY()) < 10) {//conflicted
                         flag = false;

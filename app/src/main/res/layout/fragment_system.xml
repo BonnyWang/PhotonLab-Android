@@ -73,7 +73,7 @@
                 android:id="@+id/tvDeviceName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Device_Name"
+                android:text="@string/not_connect"
                 app:layout_constraintStart_toEndOf="@id/ivlight"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -85,6 +85,7 @@
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"/>
             <ProgressBar
+                android:visibility="gone"
                 android:indeterminateTint="@color/colorPrimary"
                 android:id="@+id/pair_state_load"
                 app:layout_constraintEnd_toEndOf="parent"

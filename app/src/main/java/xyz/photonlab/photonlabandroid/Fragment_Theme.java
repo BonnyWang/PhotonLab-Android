@@ -239,8 +239,9 @@ public class Fragment_Theme extends Fragment
         TinyDB tinyDB = new TinyDB(getContext());
         tinyDB.putListInt("favOrder", favOrder);
         if (spinnerMenu.getSelectedItemPosition() == 1) {
-            RvAdapter adapterInRemF = new RvAdapter(mfavoriteTheme, this);
+            RvAdapter adapterInRemF = new NoAddRvAdapter(mfavoriteTheme, this);
             rv.setAdapter(adapterInRemF);
+            updateButtonTypeForRv();
         }
 
         return current;

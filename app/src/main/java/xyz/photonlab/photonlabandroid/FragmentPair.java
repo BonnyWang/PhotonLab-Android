@@ -4,18 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +64,7 @@ public class FragmentPair extends FullScreenFragment {
     //stepFailed
     private ConstraintLayout faile_container;
     private Button try_again_btn;
+    private TextView tvErrorHelp;
 
     @Nullable
     @Override
@@ -134,15 +131,17 @@ public class FragmentPair extends FullScreenFragment {
         //step3
         doneButton.setOnClickListener((v) -> exit.performClick());
         try_again_btn.setOnClickListener((v) -> {
-            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().popBackStackImmediate();
 
             //Reload to new fragment -bbb
-            FragmentPair mfragment_pair = new FragmentPair();
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-            ft.replace(R.id.container, mfragment_pair).addToBackStack(null);
-            ft.commit();
+            FragmentPair fragment_pair = new FragmentPair();
+            FragmentTransaction ft0 = getActivity().getSupportFragmentManager().beginTransaction();
+            ft0.replace(R.id.container, fragment_pair).addToBackStack(null);
+            ft0.commit();
         });
+
+        //step failed
+        tvErrorHelp.setOnClickListener((v) -> tv_help.performClick());
     }
 
     @Override
@@ -156,7 +155,7 @@ public class FragmentPair extends FullScreenFragment {
             if (step1_container.getVisibility() != View.GONE) {
                 wifi_ssid = cSsid;
                 tv_SSID.setText(wifi_ssid);
-                Log.i("wifi_ssid_changed:",wifi_ssid);
+                Log.i("wifi_ssid_changed:", wifi_ssid);
             }
         } else {
             tv_SSID.setText("Not Connected!");
@@ -223,6 +222,7 @@ public class FragmentPair extends FullScreenFragment {
         step2_container.setVisibility(View.GONE);
         faile_container.startAnimation(in);
         step2_container.startAnimation(out);
+        progressBar.setVisibility(View.GONE);
         progressBar.setProgress(100);
         progressBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(250, 30, 30)));
     }
@@ -232,6 +232,7 @@ public class FragmentPair extends FullScreenFragment {
         step2_container.setVisibility(View.GONE);
         success_container.startAnimation(in);
         step2_container.startAnimation(out);
+        progressBar.setVisibility(View.GONE);
         doneButton.setVisibility(View.VISIBLE);
         progressBar.setProgress(100);
     }
@@ -262,6 +263,8 @@ public class FragmentPair extends FullScreenFragment {
             Log.i("gateway_ip", current_gateway_ip);
             String ssid = wifiManager.getConnectionInfo().getSSID();
             Log.i("SSID", ssid);
+            if (ssid.replaceAll("\"", "").toLowerCase().equals("<unknown ssid>"))
+                return null;
             return ssid.replaceAll("\"", "");
         }
         return null;
@@ -273,7 +276,7 @@ public class FragmentPair extends FullScreenFragment {
 
         //step1
         step1_container = contentView.findViewById(R.id.pair_step_1);
-        et_wifi_password = contentView.findViewById(R.id.password);
+        et_wifi_password = contentView.findViewById(R.id.wifi_pwd);
         tv_help = contentView.findViewById(R.id.tv_help);
         tv_SSID = contentView.findViewById(R.id.ssid);
         next = contentView.findViewById(R.id.step1_next);
@@ -289,16 +292,17 @@ public class FragmentPair extends FullScreenFragment {
         doneButton = contentView.findViewById(R.id.done);
 
         //stepFailed
+        tvErrorHelp = contentView.findViewById(R.id.tvErrorHelp);
         faile_container = contentView.findViewById(R.id.stepFailed);
         try_again_btn = contentView.findViewById(R.id.btTryAgain);
 
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i("FragmentPair", "Detach");
+    public void onStop() {
+        Log.i("FragmentPair", "stop");
         cleanEditTextProblems();
+        super.onStop();
     }
 
     private void cleanEditTextProblems() {
@@ -306,7 +310,6 @@ public class FragmentPair extends FullScreenFragment {
         if (imm != null) {
             imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
         }
-        et_wifi_password.setInputType(InputType.TYPE_NULL);
         et_wifi_password.clearFocus();
     }
 }

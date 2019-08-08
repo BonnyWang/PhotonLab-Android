@@ -158,7 +158,7 @@ public class Session {
                         if (plane) {
                             light.setPlane(true);
                             if (light instanceof MotherLight)
-                                ((MotherLight) light).denyIconRotate();
+                                ((MotherLight) light).preventIcon();
                         }
                         light.setPlaneColor(o.getInt("plane_color"));
                         finalStage.addLight(light);
