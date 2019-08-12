@@ -18,6 +18,8 @@ public class Light implements Serializable {
 
     int currentColor;
 
+    private int num = -1;//-1 for not set yet
+
     static float RADIUS = 100f;
     private static final float deg60 = (float) Math.PI / 3;
     private static final float deg30 = (float) Math.PI / 6;
@@ -34,6 +36,7 @@ public class Light implements Serializable {
     private boolean plane = false;
     private int planeColor = Color.rgb(200, 200, 200);
     protected float originDirection = 1;
+    private int litUp = -1;//-1 for useless,0 for not lit up,1 for lit up
 
     public Light(float x, float y) {
         this.x = x;
@@ -88,6 +91,11 @@ public class Light implements Serializable {
         paint.setColor(currentColor);
         if (plane) {
             paint.setColor(planeColor);
+        }
+        if (litUp == 0) {
+            paint.setColor(colorIdle);
+        } else if (litUp == 1) {
+            paint.setColor(colorSettle);
         }
         paint.setStrokeWidth(0);
         paint.setStyle(Paint.Style.FILL);
@@ -167,5 +175,25 @@ public class Light implements Serializable {
         setDirection(direction);
         if (!shouldAnimate)
             originDirection = this.direction;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    public void litUp() {
+        this.litUp = 1;
+    }
+
+    public void litDown() {
+        this.litUp = 0;
+    }
+
+    public boolean isLitUp() {
+        return litUp == 1;
     }
 }

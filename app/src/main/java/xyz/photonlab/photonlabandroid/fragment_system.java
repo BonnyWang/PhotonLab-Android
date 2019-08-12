@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import okhttp3.Request;
@@ -24,13 +25,11 @@ import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
 public class fragment_system extends FullScreenFragment {
 
-    private static final String TAG = "fragment_system";
-
     Button btBack;
 
-    ProgressBar loadding;
+    ProgressBar loading;
 
-    ConstraintLayout paireState, clPrivacy, reset_container;
+    ConstraintLayout pairState, clPrivacy, reset_container;
     TextView tvDeviceName;
 
     TinyDB tinyDB;
@@ -46,7 +45,7 @@ public class fragment_system extends FullScreenFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_system, container, false);
@@ -54,9 +53,9 @@ public class fragment_system extends FullScreenFragment {
         btBack = view.findViewById(R.id.backButton_System);
         btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
-        paireState = view.findViewById(R.id.pair_state);
-        paireState.setOnClickListener((v) -> {
-            loadding.setVisibility(View.VISIBLE);
+        pairState = view.findViewById(R.id.pair_state);
+        pairState.setOnClickListener((v) -> {
+            loading.setVisibility(View.VISIBLE);
             if (!ipAddr.equals("")) {
                 //new JsonTask().execute("http://" + ipAddr + "/ip");
                 NetworkHelper helper = new NetworkHelper();
@@ -72,7 +71,7 @@ public class fragment_system extends FullScreenFragment {
                         if (activity != null) {
                             activity.runOnUiThread(() -> {
                                 tvDeviceName.setText(ipAddr);
-                                loadding.setVisibility(View.GONE);
+                                loading.setVisibility(View.GONE);
                             });
                         }
                     }
@@ -83,14 +82,14 @@ public class fragment_system extends FullScreenFragment {
                         if (activity != null) {
                             activity.runOnUiThread(() -> {
                                 tvDeviceName.setText("Not Connect");
-                                loadding.setVisibility(View.GONE);
+                                loading.setVisibility(View.GONE);
                             });
                         }
                     }
                 });
             } else {
                 tvDeviceName.setText("No Device");
-                loadding.setVisibility(View.GONE);
+                loading.setVisibility(View.GONE);
             }
         });
 
@@ -117,7 +116,7 @@ public class fragment_system extends FullScreenFragment {
                         if (activity != null)
                             activity.runOnUiThread(() -> {
                                         Toast.makeText(getContext(), "Reset Succeed", Toast.LENGTH_SHORT).show();
-                                        paireState.performClick();
+                                        pairState.performClick();
                                     }
                             );
 
@@ -125,11 +124,10 @@ public class fragment_system extends FullScreenFragment {
 
                     @Override
                     public void onFailed(String msg) {
-//                        Activity activity = getActivity();
-//                        if (activity != null)
-//                            activity.runOnUiThread(() ->
-//                                    Toast.makeText(getContext(), "Reset Failed:" + msg, Toast.LENGTH_LONG).show());
-                        onSuccess(null);
+                        Activity activity = getActivity();
+                        if (activity != null)
+                            activity.runOnUiThread(() ->
+                                    Toast.makeText(getContext(), "Reset Failed:" + msg, Toast.LENGTH_LONG).show());
                         Log.e("reset error", msg);
                     }
                 });
@@ -138,7 +136,7 @@ public class fragment_system extends FullScreenFragment {
                 Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
             }
         });
-        loadding = view.findViewById(R.id.pair_state_load);
+        loading = view.findViewById(R.id.pair_state_load);
         tvDeviceName = view.findViewById(R.id.tvDeviceName);
 
         return view;
@@ -147,8 +145,8 @@ public class fragment_system extends FullScreenFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (paireState != null)
-            paireState.performClick();
+        if (pairState != null)
+            pairState.performClick();
     }
 
 }

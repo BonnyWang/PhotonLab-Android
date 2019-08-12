@@ -10,7 +10,7 @@
     <string name="demo_card_text">DemoCard</string>
     <string name="Progress">Progress</string>
     <string name="Brightness">Brightness</string>
-    <string name="All">All</string>
+    <string name="All">Group</string>
     <string name="Single">Single</string>
     <string name="PhotonLab">PhotonLab</string>
     <string name="Set">Set</string>
@@ -78,4 +78,8 @@
     <string name="please_open_location_service">\t\tPlease Open Location Service</string>
     <string name="open_location_settings">Open Location Settings</string>
     <string name="go_to_location">Setup Location Service</string>
+    <string name="location_match">Location Match</string>
+    <string name="select_the_lit_light">Address Individual Panel</string>
+    <string name="adapt_your_layout">Match Your Layout</string>
+    <string name="smart_home">Smart Home</string>
 </resources>

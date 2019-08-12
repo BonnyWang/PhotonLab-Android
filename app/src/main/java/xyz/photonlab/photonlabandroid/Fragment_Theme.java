@@ -70,6 +70,7 @@ public class Fragment_Theme extends Fragment
         rv = view.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
+        rv.setNestedScrollingEnabled(false);
         imageView_Card = view.findViewById(R.id.imageView_Card);
         btn_no_more = view.findViewById(R.id.btn_no_more);
 
@@ -274,7 +275,7 @@ public class Fragment_Theme extends Fragment
         }
     }
 
-    //add the downloaded theme
+    //add the downloaded themeicon
     @Override
     public theme_Class dlTheme(theme_Class theme) {
         TinyDB tinyDB = new TinyDB(getContext());

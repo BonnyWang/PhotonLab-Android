@@ -37,6 +37,9 @@ public class LightStage extends View implements Serializable {
     List<Dot> dots = new ArrayList<>();
     private boolean needCenter = false;
 
+
+    private final float verticalOffset = 0.5f * RADIUS * (float) Math.sqrt(3);
+
     public LightStage(Context context) {
         super(context);
         init();
@@ -76,6 +79,9 @@ public class LightStage extends View implements Serializable {
         super.onDraw(canvas);
         paint.setColor(getResources().getColor(R.color.backGround, null));
         canvas.drawRect(screenArea, paint);
+        paint.setColor(Color.RED);
+        if (bound != null)
+            canvas.drawRect(new RectF(bound.left + offsetX, bound.top + offsetY, bound.right + offsetX, bound.bottom + offsetY), paint);
         for (Light light : lights) {
             light.update(lights);
             light.draw(canvas);
@@ -339,18 +345,33 @@ public class LightStage extends View implements Serializable {
         float left = Float.MAX_VALUE, right = Float.MIN_VALUE,
                 top = Float.MAX_VALUE, bottom = Float.MIN_VALUE;
         for (Light item : lights) {
-            if (item.getX() < left)
-                left = item.getX();
-            if (item.getX() > right)
-                right = item.getX();
-            if (item.getY() > bottom)
-                bottom = item.getY();
-            if (item.getY() < top)
-                top = item.getY();
+            if (item.getX() - RADIUS < left)
+                left = item.getX() - RADIUS;
+            if (item.getX() + RADIUS > right)
+                right = item.getX() + RADIUS;
+            if (item.getY() + verticalOffset > bottom)
+                bottom = item.getY() + verticalOffset;
+            if (item.getY() - verticalOffset < top)
+                top = item.getY() - verticalOffset;
         }
         float r = RADIUS * 4;
         bound = new RectF(left - r, top - r, right + r, bottom + r);
         Log.i("bound", bound.toString());
+    }
+
+    public void enterSetupMode() {
+        for (Light light : lights) {
+            light.setNum(-1);
+            light.litDown();
+            light.setChecked(false);
+        }
+    }
+
+    public boolean allLitUp() {
+        for (Light light : lights)
+            if (!light.isLitUp())
+                return false;
+        return true;
     }
 
     public interface OnViewCreatedListener {

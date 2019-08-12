@@ -37,7 +37,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        final RecyclerView rv = (RecyclerView) view.findViewById(R.id.setRV);
+        final RecyclerView rv = view.findViewById(R.id.setRV);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
 
@@ -51,15 +51,18 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
 
     public void initializeData() {
         mSettings = new ArrayList<>();
-        mSettings.add(new setting_Content("Pairing"));
-        mSettings.add(new setting_Content("Feedback"));
-        mSettings.add(new setting_Content("Motion Detect"));
-        mSettings.add(new setting_Content("Clock"));
-        mSettings.add(new setting_Content("IoT"));
-        mSettings.add(new setting_Content("Layout Manager"));
-        mSettings.add(new setting_Content("System"));
-
-
+        mSettings.add(new setting_Content("Pairing", R.drawable.setting_item_wifi));
+        mSettings.add(new setting_Content("System", R.drawable.ic_settings_setting));
+        mSettings.add(new setting_Content("Layout Manager", R.drawable.ic_setting_poly));
+        //====================
+        mSettings.add(new setting_Content("Schedules", R.drawable.setting_item_schedules));
+        mSettings.add(new setting_Content("Smart Home", R.drawable.setting_item_smarthome));
+        mSettings.add(new setting_Content("Motion Detect", R.drawable.ic_person));
+        mSettings.add(new setting_Content("Other Utilities", R.drawable.ic_settings_tool));
+        //====================
+        mSettings.add(new setting_Content("Feedback", R.drawable.setting_item_feedback));
+        mSettings.add(new setting_Content("Contact Support", R.drawable.setting_item_contact));
+        mSettings.add(new setting_Content("About", R.drawable.setting_item_about));
     }
 
     @Override
@@ -79,35 +82,37 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 break;
 
             case 1:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/gMS8dfWuBtd58TEM7"));
-                startActivity(browserIntent);
-                break;
-
-            //Motion Detect;
-            case 2:
-                fragment_motion_detect mfragment_motion_detect = fragment_motion_detect.getInstance();
-                FragmentTransaction ft2 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft2.replace(R.id.container, mfragment_motion_detect).addToBackStack(null);
-                ft2.commit();
-                break;
-
-            case 5:
-                fragment_layout mfragment_layout = new fragment_layout();
-                FragmentTransaction ft5 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                ft5.replace(R.id.container, mfragment_layout).addToBackStack(null);
-                ft5.commit();
-                break;
-
-            case 6:
                 fragment_system mfragment_system = new fragment_system();
                 FragmentTransaction ft6 = getActivity().getSupportFragmentManager().beginTransaction();
                 ft6.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 ft6.replace(R.id.container, mfragment_system).addToBackStack(null);
                 ft6.commit();
                 break;
-
+            case 2:
+                fragment_layout mfragment_layout = new fragment_layout();
+                FragmentTransaction ft5 = getActivity().getSupportFragmentManager().beginTransaction();
+                ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft5.replace(R.id.container, mfragment_layout).addToBackStack(null);
+                ft5.commit();
+                break;
+            case 4:
+                FragmentSmartHome smartHome = new FragmentSmartHome();
+                FragmentTransaction ftSh = getActivity().getSupportFragmentManager().beginTransaction();
+                ftSh.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ftSh.replace(R.id.container, smartHome).addToBackStack(null);
+                ftSh.commit();
+                break;
+            case 5:
+                fragment_motion_detect mfragment_motion_detect = fragment_motion_detect.getInstance();
+                FragmentTransaction ft2 = getActivity().getSupportFragmentManager().beginTransaction();
+                ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft2.replace(R.id.container, mfragment_motion_detect).addToBackStack(null);
+                ft2.commit();
+                break;
+            case 7:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/gMS8dfWuBtd58TEM7"));
+                startActivity(browserIntent);
+                break;
 
             default:
                 fragment_Comming fragment_comming = new fragment_Comming(mSettings.get(position).subtitle);

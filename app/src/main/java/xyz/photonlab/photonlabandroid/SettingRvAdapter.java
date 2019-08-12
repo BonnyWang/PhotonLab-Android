@@ -3,6 +3,7 @@ package xyz.photonlab.photonlabandroid;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,17 +15,18 @@ import java.util.List;
 public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyViewHolder> {
     private SettingRvAdapter.OnNoteListener mOnNoteListener;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
         TextView textView;
-
+        ImageView titleIcon;
 
         SettingRvAdapter.OnNoteListener onNoteListener;
 
         public MyViewHolder(View v, SettingRvAdapter.OnNoteListener onNoteListener) {
             super(v);
-            textView = (TextView) itemView.findViewById(R.id.SettingSub);
+            textView = itemView.findViewById(R.id.SettingSub);
+            titleIcon = itemView.findViewById(R.id.title_icon);
             this.onNoteListener = onNoteListener;
             v.setOnClickListener(this);
         }
@@ -37,7 +39,7 @@ public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyVi
 
     List<setting_Content> mSettings;
 
-    public SettingRvAdapter(List<setting_Content> mSettings, SettingRvAdapter.OnNoteListener onNoteListener){
+    public SettingRvAdapter(List<setting_Content> mSettings, SettingRvAdapter.OnNoteListener onNoteListener) {
         this.mSettings = mSettings;
         this.mOnNoteListener = onNoteListener;
     }
@@ -50,13 +52,14 @@ public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyVi
     @Override
     public SettingRvAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.setting_item, viewGroup, false);
-        MyViewHolder myViewHolder = new MyViewHolder(v , mOnNoteListener);
+        MyViewHolder myViewHolder = new MyViewHolder(v, mOnNoteListener);
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(SettingRvAdapter.MyViewHolder holder, int i) {
         holder.textView.setText(mSettings.get(i).getSubtitle());
+        holder.titleIcon.setImageResource(mSettings.get(i).getIconRes());
     }
 
     @Override
@@ -64,7 +67,7 @@ public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyVi
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public interface OnNoteListener{
+    public interface OnNoteListener {
         void onNoteClick(int position);
     }
 }

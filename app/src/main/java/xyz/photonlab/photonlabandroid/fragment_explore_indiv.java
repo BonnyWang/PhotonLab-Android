@@ -40,6 +40,13 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (wvexplore != null)
+            wvexplore.clearFocus();
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

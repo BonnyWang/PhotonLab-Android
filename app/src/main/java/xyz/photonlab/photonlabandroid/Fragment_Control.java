@@ -473,19 +473,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             singleContainer.startAnimation(slide_in_right);
             allContainer.setVisibility(View.GONE);
             singleContainer.setVisibility(View.VISIBLE);
-            tvToAll.setBackgroundResource(R.drawable.button);
-            tvToAll.setTextColor(getResources().getColor(R.color.DeepText, null));
-            tvToSingle.setBackgroundResource(R.drawable.button1);
-            tvToSingle.setTextColor(getResources().getColor(R.color.backGround, null));
+            tvToSingle.setTextColor(getResources().getColor(R.color.text_selected, null));
+            tvToAll.setTextColor(getResources().getColor(R.color.text_normal, null));
         } else {
             allContainer.startAnimation(slide_in_left);
             singleContainer.startAnimation(slide_out_right);
             allContainer.setVisibility(View.VISIBLE);
             singleContainer.setVisibility(View.GONE);
-            tvToSingle.setBackgroundResource(R.drawable.button);
-            tvToSingle.setTextColor(getResources().getColor(R.color.DeepText, null));
-            tvToAll.setBackgroundResource(R.drawable.button1);
-            tvToAll.setTextColor(getResources().getColor(R.color.backGround, null));
+            tvToAll.setTextColor(getResources().getColor(R.color.text_selected, null));
+            tvToSingle.setTextColor(getResources().getColor(R.color.text_normal, null));
         }
         isAll = !isAll;
     }

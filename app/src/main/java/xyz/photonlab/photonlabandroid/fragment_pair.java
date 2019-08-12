@@ -232,7 +232,7 @@ public class fragment_pair extends FullScreenFragment implements wifiRvAdapter.O
                     rv.setClickable(true);
                     rv.setFocusable(true);
                 } else {
-                    Toast.makeText(getContext(), "Not connected to the light", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Not connect to the light", Toast.LENGTH_SHORT).show();
                 }
             }
         });

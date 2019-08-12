@@ -155,6 +155,7 @@ public class Session {
                         else
                             light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
                         light.setDirection(o.getInt("direction"), false);
+                        light.setNum(o.getInt("num"));
                         if (plane) {
                             light.setPlane(true);
                             if (light instanceof MotherLight)
@@ -212,6 +213,7 @@ public class Session {
             object.put("x", light.getX());
             object.put("y", light.getY());
             object.put("plane_color", light.getPlaneColor());
+            object.put("num", light.getNum());
         } catch (JSONException e) {
             e.printStackTrace();
         }
