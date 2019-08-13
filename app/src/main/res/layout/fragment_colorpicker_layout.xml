@@ -34,7 +34,7 @@
             android:id="@+id/linput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:layout_marginBottom="10dp"
             android:visibility="visible">
 
@@ -89,14 +89,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/set_background_no_size"
             android:elevation="0dp"
             android:text="@string/Set"
-            android:textAllCaps="false"
             android:textColor="#bdbdbd"
-            android:textSize="20sp" />
+            android:textAllCaps="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="18sp"/>
 
         <Button
             android:id="@+id/AddFavColor"
@@ -104,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/set_background_no_size"
@@ -112,7 +114,9 @@
             android:text="@string/Add_to_Favorite"
             android:textAllCaps="false"
             android:textColor="#bdbdbd"
-            android:textSize="20sp" />
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="18sp" />
 
 
     </LinearLayout>

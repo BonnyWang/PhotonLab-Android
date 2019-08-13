@@ -218,9 +218,9 @@ public class dialog_colorpicker extends DialogFragment {
         //int height = (int) px1;
         //setButton_Background.setSize(width, height);
         setBt.setBackground(setButton_Background);
-        if (getContext() != null) {
-            setBt.setTextColor(getContext().getResources().getColor(R.color.DeepText, null));
-        }
+//        if (getContext() != null) {
+//            setBt.setTextColor(getContext().getResources().getColor(R.color.DeepText, null));
+//        }
     }
 
     public void rgb_reading(View view) {

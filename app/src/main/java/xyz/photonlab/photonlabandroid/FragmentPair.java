@@ -28,6 +28,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONObject;
@@ -38,7 +40,7 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
-public class FragmentPair extends FullScreenFragment {
+public class FragmentPair extends Fragment {
 
     private Animation in, out;
     private Button exit;
@@ -59,7 +61,7 @@ public class FragmentPair extends FullScreenFragment {
 
     //stepSuccess
     private ConstraintLayout success_container;
-    private Button doneButton;
+    private Button doneButton, goLayoutButton, goMainButton;
 
     //stepFailed
     private ConstraintLayout faile_container;
@@ -139,6 +141,25 @@ public class FragmentPair extends FullScreenFragment {
             FragmentTransaction ft0 = getActivity().getSupportFragmentManager().beginTransaction();
             ft0.replace(R.id.container, fragment_pair).addToBackStack(null);
             ft0.commit();
+        });
+
+        goMainButton.setOnClickListener(v -> {
+            Activity activity = getActivity();
+            if (activity instanceof MainActivity) {
+                ((MainActivity) activity).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                ((MainActivity) activity).goMain();
+            }
+        });
+
+        goLayoutButton.setOnClickListener(v -> {
+            if (getActivity() == null)
+                return;
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction tx = fragmentManager.beginTransaction();
+            fragmentManager.popBackStack();
+            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            tx.replace(R.id.container, new fragment_layout()).addToBackStack(null);
+            tx.commit();
         });
 
         //step failed
@@ -290,6 +311,8 @@ public class FragmentPair extends FullScreenFragment {
         //stepSuccess
         success_container = contentView.findViewById(R.id.success);
         doneButton = contentView.findViewById(R.id.done);
+        goLayoutButton = contentView.findViewById(R.id.go_to_layout);
+        goMainButton = contentView.findViewById(R.id.to_main);
 
         //stepFailed
         tvErrorHelp = contentView.findViewById(R.id.tvErrorHelp);

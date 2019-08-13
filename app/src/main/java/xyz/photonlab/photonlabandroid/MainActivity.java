@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     String ipAddr;
 
     int bottomHeight;
+    private BottomNavigationView navView;
 
     public int getBottomHeight() {
         return bottomHeight;
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         container = findViewById(R.id.MainContainer);
         container.setVisibility(View.GONE);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         this.bottomHeight = navView.getMeasuredHeight();
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -288,6 +290,11 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(new String[]{permissions[i]}, i);
             }
         }
+    }
+
+    public void goMain() {
+        Log.i("goMain", "try to go control fragment");
+        navView.setSelectedItemId(R.id.navigation_home);
     }
 }
 

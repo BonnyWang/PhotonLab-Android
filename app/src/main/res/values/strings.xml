@@ -27,8 +27,7 @@
     <string name="Wifi_Password">Wifi Password</string>
     <string name="Connect">Connect</string>
     <string name="Instruction_3">Please make sure your WiFi network\n is correctly configurated.</string>
-    <string name="Good_To_Go1">You are good</string>
-    <string name="Good_To_Go2">\tto go!</string>
+    <string name="Good_To_Go">You are good <font color="#fe9949">to go!</font></string>
     <string name="Done">Done</string>
     <string name="Coming_Soon">Coming Soon!</string>
     <string name="No_Layout">No Layout</string>
@@ -84,4 +83,6 @@
     <string name="adapt_your_layout">Match Your Layout</string>
     <string name="smart_home">Smart Home</string>
     <string name="about">About</string>
+    <string name="go_to_layout_manager">Go to Layout Manager</string>
+    <string name="set_your_favorite_color">Set Your Favorite Color</string>
 </resources>

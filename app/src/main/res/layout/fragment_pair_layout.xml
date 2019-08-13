@@ -275,51 +275,71 @@
             app:layout_constraintBottom_toTopOf="@id/progressBar"
             app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
-            <LinearLayout
-                android:id="@+id/goodToGo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.2">
-
-                <TextView
-                    android:id="@+id/goodToGo_in1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Good_To_Go1"
-                    android:textColor="#c6c6c6"
-                    android:textSize="34dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/goodToGo2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Good_To_Go2"
-                    android:textColor="#fe9949"
-                    android:textSize="34dp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/goodToGo"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.2" />
-            </LinearLayout>
-
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="344dp"
                 android:layout_height="230dp"
+                android:layout_marginTop="40dp"
                 android:src="@drawable/goodtogo"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/goodToGo"
-                app:layout_constraintVertical_bias="0.2" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_good_to_go"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/Good_To_Go"
+                android:textColor="#c6c6c6"
+                android:textSize="34dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView4" />
+
+            <Button
+
+                android:id="@+id/go_to_layout"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/set_background"
+                android:backgroundTint="@color/colorPrimary"
+                android:paddingStart="25dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="25dp"
+                android:paddingBottom="8dp"
+                android:text="@string/go_to_layout_manager"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_good_to_go" />
+
+            <Button
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:id="@+id/to_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/set_background"
+                android:backgroundTint="#DB49D8"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/set_your_favorite_color"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/go_to_layout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -342,6 +362,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:layout_marginTop="30dp"
                 android:id="@+id/tvOpps_Error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -354,15 +375,15 @@
                 app:layout_constraintTop_toBottomOf="@id/ivError" />
 
             <Button
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 android:id="@+id/btTryAgain"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/set_background"
                 android:backgroundTint="@color/colorPrimary"
-                android:paddingStart="25dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="25dp"
                 android:paddingBottom="8dp"
                 android:text="@string/try_again"
                 android:textAllCaps="false"
@@ -374,14 +395,16 @@
                 app:layout_constraintTop_toBottomOf="@id/tvOpps_Error" />
 
             <Button
+                android:layout_marginEnd="25dp"
+                android:layout_marginStart="25dp"
                 android:id="@+id/tvErrorHelp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:background="@drawable/set_background"
                 android:backgroundTint="#FF7F50"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/underlineHelp"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
