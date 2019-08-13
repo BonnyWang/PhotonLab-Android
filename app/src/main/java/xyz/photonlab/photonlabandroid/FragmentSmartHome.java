@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.SmartHomeItem;
 
@@ -37,18 +38,19 @@ public class FragmentSmartHome extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Button exit = view.findViewById(R.id.backButton_Coming);
         recyclerView = view.findViewById(R.id.home_rView);
-        exit.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
+        exit.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
         initData();
         initRecyclerView();
     }
 
     private void initData() {
         data = new ArrayList<>();
-        data.add(new SmartHomeItem("Google Home", Color.rgb(100, 100, 245)));
-        data.add(new SmartHomeItem("Amazon Alexa", Color.rgb(100, 200, 245)));
-        data.add(new SmartHomeItem("IFTTT", Color.rgb(30, 30, 30)));
-        data.add(new SmartHomeItem("Google Home", Color.rgb(245, 100, 100)));
-        data.add(new SmartHomeItem("Google Home", Color.rgb(100, 100, 245)));
+        data.add(new SmartHomeItem("Google Home", Color.rgb(100, 100, 245),
+                "https://support.google.com/googlenest/topic/7029677?hl=en&ref_topic=7029097"));
+        data.add(new SmartHomeItem("Amazon Alexa", Color.rgb(100, 200, 245),
+                "https://www.amazon.com/gp/help/customer/display.html?nodeId=G201549510"));
+        data.add(new SmartHomeItem("IFTTT", Color.rgb(30, 30, 30),
+                "https://help.ifttt.com/hc/en-us/articles/115010158167-How-does-IFTTT-work-"));
     }
 
     private void initRecyclerView() {
@@ -56,11 +58,11 @@ public class FragmentSmartHome extends Fragment {
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(new MyAdapter(data, (v, position) -> {
             Log.i("item clicked", data.get(position).getTitle());
-            fragment_explore_indiv bfgExplore = new fragment_explore_indiv("https://photonlab.xyz/",
+            fragment_explore_indiv bfgExplore = new fragment_explore_indiv(data.get(position).getLink(),
                     data.get(position).getTitle());
-            FragmentTransaction ftindiv = getActivity().getSupportFragmentManager().beginTransaction();
-            ftindiv.replace(R.id.container, bfgExplore).addToBackStack(null);
-            ftindiv.commit();
+            FragmentTransaction exTx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            exTx.replace(R.id.container, bfgExplore).addToBackStack(null);
+            exTx.commit();
         }));
     }
 }
@@ -106,9 +108,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.tv.setText(data.get(position).getTitle());
         holder.cardView.setCardBackgroundColor(data.get(position).getColor());
-        holder.cardView.setOnClickListener(v -> {
-            this.listener.onItemClick(v, position);
-        });
+        holder.cardView.setOnClickListener(v -> this.listener.onItemClick(v, position));
         Log.i("holder", holder.toString());
     }
 

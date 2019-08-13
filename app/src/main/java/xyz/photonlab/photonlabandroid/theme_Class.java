@@ -15,6 +15,7 @@ public class theme_Class {
     String end_Color;
     String creater;
     String mood;
+    int[] colors;
 
     @Exclude
     int startColorInt = Color.RED;
@@ -72,7 +73,11 @@ public class theme_Class {
 
     @Exclude
     public int[] getColors() {
-        int[] colors = {startColorInt, endColorInt};
+        if (colors == null)
+            colors = new int[]{
+                    startColorInt,
+                    endColorInt
+            };
         return colors;
     }
 

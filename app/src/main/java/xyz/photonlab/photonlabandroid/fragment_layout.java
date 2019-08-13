@@ -1,6 +1,8 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.app.Service;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,11 +101,12 @@ public class fragment_layout extends Fragment {
         lightStage.setOnLightCheckedChangeListener(light -> {
             this.checkedLight = light;
         });
-
+        Vibrator vibrator = (Vibrator) (getActivity().getSystemService(Service.VIBRATOR_SERVICE));
         step1Next.setOnClickListener(v -> {
             if (checkedLight != null && !checkedLight.isLitUp()) {
                 checkedLight.setNum(currentNum);
                 checkedLight.litUp();
+                vibrator.vibrate(50);
                 if (lightStage.allLitUp()) {
                     Toast.makeText(getContext(), "Address pair completed!", Toast.LENGTH_SHORT).show();
                     session.saveLayoutToLocal(getContext(), lightStage);

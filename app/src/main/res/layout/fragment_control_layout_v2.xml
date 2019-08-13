@@ -236,14 +236,15 @@
                     android:id="@+id/powerCard"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    app:cardBackgroundColor="#cbbce7"
+                    app:cardBackgroundColor="@color/seekBar_Default"
                     app:cardCornerRadius="32dp"
-                    app:cardElevation="0dp">
+                    app:cardElevation="4dp">
 
                     <ToggleButton
                         android:id="@+id/Power"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:layout_gravity="center"
                         android:background="@drawable/power_button"
                         android:textOff=""
                         android:textOn="" />

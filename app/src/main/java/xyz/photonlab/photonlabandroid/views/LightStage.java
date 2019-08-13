@@ -23,7 +23,7 @@ import static xyz.photonlab.photonlabandroid.views.Light.RADIUS;
 
 public class LightStage extends View implements Serializable {
 
-    private RectF screenArea, bound;
+    private RectF screenArea, bound = new RectF();
     private List<Light> lights;
     private Paint paint = new Paint();
     private OnViewCreatedListener onViewCreatedListener;
@@ -62,7 +62,7 @@ public class LightStage extends View implements Serializable {
         super.onFinishInflate();
         this.screenArea.right = getMeasuredWidth();
         this.screenArea.bottom = getMeasuredHeight();
-        RADIUS = this.screenArea.width() / 16;
+        RADIUS = this.screenArea.width() / 20;
         if (this.onViewCreatedListener != null)
             this.onViewCreatedListener.onViewCreated();
         if (needCenter && getMotherLight() != null) {
@@ -79,9 +79,7 @@ public class LightStage extends View implements Serializable {
         super.onDraw(canvas);
         paint.setColor(getResources().getColor(R.color.backGround, null));
         canvas.drawRect(screenArea, paint);
-        paint.setColor(Color.RED);
-        if (bound != null)
-            canvas.drawRect(new RectF(bound.left + offsetX, bound.top + offsetY, bound.right + offsetX, bound.bottom + offsetY), paint);
+        paint.setColor(Color.GREEN);
         for (Light light : lights) {
             light.update(lights);
             light.draw(canvas);
@@ -342,8 +340,8 @@ public class LightStage extends View implements Serializable {
     }
 
     private void refreshBound() {
-        float left = Float.MAX_VALUE, right = Float.MIN_VALUE,
-                top = Float.MAX_VALUE, bottom = Float.MIN_VALUE;
+        float left = Float.MAX_VALUE, right = -Float.MAX_VALUE,
+                top = Float.MAX_VALUE, bottom = -Float.MAX_VALUE;
         for (Light item : lights) {
             if (item.getX() - RADIUS < left)
                 left = item.getX() - RADIUS;

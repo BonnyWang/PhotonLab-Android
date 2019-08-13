@@ -131,6 +131,7 @@ public class FragmentPair extends FullScreenFragment {
         //step3
         doneButton.setOnClickListener((v) -> exit.performClick());
         try_again_btn.setOnClickListener((v) -> {
+            progressBar.setVisibility(View.VISIBLE);
             getActivity().getSupportFragmentManager().popBackStackImmediate();
 
             //Reload to new fragment -bbb
@@ -218,13 +219,13 @@ public class FragmentPair extends FullScreenFragment {
     }
 
     private void toFail() {
+        mask.setVisibility(View.GONE);
         faile_container.setVisibility(View.VISIBLE);
         step2_container.setVisibility(View.GONE);
         faile_container.startAnimation(in);
         step2_container.startAnimation(out);
+        progressBar.setProgress(33);
         progressBar.setVisibility(View.GONE);
-        progressBar.setProgress(100);
-        progressBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(250, 30, 30)));
     }
 
     private void toSuccess() {
@@ -232,7 +233,6 @@ public class FragmentPair extends FullScreenFragment {
         step2_container.setVisibility(View.GONE);
         success_container.startAnimation(in);
         step2_container.startAnimation(out);
-        progressBar.setVisibility(View.GONE);
         doneButton.setVisibility(View.VISIBLE);
         progressBar.setProgress(100);
     }

@@ -1,14 +1,14 @@
 package xyz.photonlab.photonlabandroid.model;
 
-import android.graphics.Color;
-
 public class SmartHomeItem {
-    private String title;
-    private int color;
+    private final String title;
+    private final int color;
+    private final String link;
 
-    public SmartHomeItem(String title, int color) {
+    public SmartHomeItem(String title, int color, String link) {
         this.title = title;
         this.color = color;
+        this.link = link;
     }
 
     public int getColor() {
@@ -17,5 +17,9 @@ public class SmartHomeItem {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getLink() {
+        return link;
     }
 }

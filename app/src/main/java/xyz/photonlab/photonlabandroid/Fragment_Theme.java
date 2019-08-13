@@ -85,6 +85,20 @@ public class Fragment_Theme extends Fragment
         mtheme = Session.getInstance().getMtheme();
         sweetTheme = Session.getInstance().getSweetTheme();
 
+        boolean flag = false;
+
+        for (theme_Class theme :
+                mtheme) {
+            if (theme instanceof ColorfulThemeClass)
+                flag = true;
+        }
+        if (!flag){
+            ColorfulThemeClass rainbow = new ColorfulThemeClass();
+            rainbow.name = "Rainbow";
+            rainbow.creater = "PhotonLab";
+            rainbow.mood = "Rainbow";
+            mtheme.add(rainbow);
+        }
         //initializeData();
 
 

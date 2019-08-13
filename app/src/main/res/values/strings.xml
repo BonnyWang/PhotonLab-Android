@@ -27,7 +27,8 @@
     <string name="Wifi_Password">Wifi Password</string>
     <string name="Connect">Connect</string>
     <string name="Instruction_3">Please make sure your WiFi network\n is correctly configurated.</string>
-    <string name="Good_To_Go">You are good to go!</string>
+    <string name="Good_To_Go1">You are good</string>
+    <string name="Good_To_Go2">\tto go!</string>
     <string name="Done">Done</string>
     <string name="Coming_Soon">Coming Soon!</string>
     <string name="No_Layout">No Layout</string>
@@ -63,18 +64,18 @@
     <string name="select">Select</string>
 
     <string name="No_Device">No Device</string>
-    <string name="Opps_Error">Oops! Error occurred</string>
+    <string name="Opps_Error"><font color="#fe9949">Oops!</font> Error occurred</string>
     <string name="error_Message">Please make sure your WiFi network\n is correctly configured.</string>
     <string name="try_again">Try Again</string>
     <string name="Help"><u>Help?</u></string>
     <string name="save_your_wifi_info">Save Your WIFI Info</string>
     <string name="pending">pending…</string>
-    <string name="wifi_info_tip">Please make sure your Wifi network is correctly configured</string>
-    <string name="underlineHelp"><u>Help?</u></string>
+    <string name="wifi_info_tip">Please make sure your Wifi network is correctly configured.</string>
+    <string name="underlineHelp">Need Help?</string>
     <string name="not_connect">Not Connect</string>
     <string name="_1_go_to_settings_wlan">1.Go to Settings-WLAN</string>
-    <string name="_2_connect">2.Connect "ElementLight-xx"</string>
-    <string name="go_to_settings">Go To Settings</string>
+    <string name="_2_connect">Connect \"ElementLight-xx\"</string>
+    <string name="go_to_settings">Go To System Wi-Fi settings</string>
     <string name="please_open_location_service">\t\tPlease Open Location Service</string>
     <string name="open_location_settings">Open Location Settings</string>
     <string name="go_to_location">Setup Location Service</string>
@@ -82,4 +83,5 @@
     <string name="select_the_lit_light">Address Individual Panel</string>
     <string name="adapt_your_layout">Match Your Layout</string>
     <string name="smart_home">Smart Home</string>
+    <string name="about">About</string>
 </resources>

@@ -29,7 +29,7 @@ public class fragment_system extends FullScreenFragment {
 
     ProgressBar loading;
 
-    ConstraintLayout pairState, clPrivacy, reset_container;
+    ConstraintLayout pairState, reset_container;
     TextView tvDeviceName;
 
     TinyDB tinyDB;
@@ -91,12 +91,6 @@ public class fragment_system extends FullScreenFragment {
                 tvDeviceName.setText("No Device");
                 loading.setVisibility(View.GONE);
             }
-        });
-
-        clPrivacy = view.findViewById(R.id.clPrivacy);
-        clPrivacy.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.photonlab.xyz/privacypolicy.html"));
-            startActivity(browserIntent);
         });
 
         reset_container = view.findViewById(R.id.reset_container);

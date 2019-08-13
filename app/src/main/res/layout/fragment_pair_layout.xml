@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -55,22 +55,24 @@
     <FrameLayout
         android:id="@+id/pair_step_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/pair_step_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/backGround">
+            android:background="@color/backGround"
+            android:visibility="visible">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/ssid_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                app:cardBackgroundColor="#e3e3e3"
+                app:cardBackgroundColor="#F0F0F0"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="0dp"
                 app:cardPreventCornerOverlap="false"
@@ -82,12 +84,12 @@
                     android:id="@+id/ssid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     android:text="@string/pending"
                     android:textAlignment="center"
                     android:textColor="#333333"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
 
@@ -105,12 +107,22 @@
                 android:hint="@string/Wifi_Password"
                 android:inputType="text"
                 android:maxLines="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:textAlignment="center"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/ssid_container"
                 tools:ignore="Autofill" />
+
+            <View
+                android:id="@+id/step1_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="#e2e2e2"
+                app:layout_constraintTop_toBottomOf="@id/step1_next" />
 
             <Button
                 android:id="@+id/step1_next"
@@ -122,40 +134,50 @@
                 android:background="@drawable/round_normal"
                 android:backgroundTint="@color/colorPrimary"
                 android:elevation="4dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/Next"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/wifi_pwd" />
 
             <TextView
-                android:lineSpacingExtra="8dp"
                 android:id="@+id/wifi_info_tip"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="36dp"
                 android:text="@string/wifi_info_tip"
                 android:textAlignment="center"
+                android:textColor="#aaaaaa"
                 android:textSize="16sp"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="36dp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/step1_next"
+                app:layout_constraintTop_toBottomOf="@id/tv_help"
                 app:layout_goneMarginTop="50dp" />
 
-            <TextView
-                android:layout_marginTop="8dp"
+            <Button
                 android:id="@+id/tv_help"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/round_normal"
+                android:backgroundTint="#fe9949"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/underlineHelp"
                 android:textAlignment="center"
-                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/wifi_info_tip" />
+                app:layout_constraintTop_toBottomOf="@id/step1_divider" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,30 +198,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/step2_tip1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/_1_go_to_settings_wlan"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/router" />
-
-            <TextView
-                android:id="@+id/step2_tip2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/_2_connect"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/step2_tip1" />
-
             <Button
                 android:id="@+id/to_system_wifi"
                 android:layout_width="match_parent"
@@ -208,13 +206,44 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/round_normal"
-                android:backgroundTint="#e3e3e3"
-                android:elevation="4dp"
+                android:backgroundTint="#fff"
+                android:elevation="6dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/go_to_settings"
                 android:textAllCaps="false"
                 android:textColor="@color/gray"
-                android:textSize="22sp"
-                app:layout_constraintTop_toBottomOf="@id/step2_tip2" />
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/router" />
+
+            <TextView
+                android:id="@+id/connect_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/round_normal"
+                android:backgroundTint="#f0f0f0"
+                android:gravity="center"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="@string/_2_connect"
+                android:textAllCaps="false"
+                android:textColor="#717171"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/to_system_wifi" />
+
+            <View
+                android:id="@+id/step2_div"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="25dp"
+                android:background="#e2e2e2"
+                app:layout_constraintTop_toBottomOf="@id/connect_light" />
 
             <Button
                 android:id="@+id/yes_connected"
@@ -226,57 +255,60 @@
                 android:background="@drawable/round_normal"
                 android:backgroundTint="@color/colorPrimary"
                 android:elevation="4dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/Yes_Connected"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
-                android:textSize="22sp"
-                app:layout_constraintTop_toBottomOf="@id/to_system_wifi" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/pair_mask"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#88ffffff"
-            android:visibility="gone">
-
-            <ProgressBar
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:indeterminateTint="@color/colorPrimary"
-                android:indeterminateTintMode="src_atop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4" />
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/step2_div" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/success"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
             android:layout_marginBottom="15dp"
             android:animateLayoutChanges="true"
             android:background="@color/backGround"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/progressBar"
-            app:layout_constraintTop_toBottomOf="@id/pairingDevice">
+            app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
-            <TextView
+            <LinearLayout
                 android:id="@+id/goodToGo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Good_To_Go"
-                android:textColor="#c6c6c6"
-                android:textSize="34dp"
-                android:textStyle="bold"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.2" />
+                app:layout_constraintVertical_bias="0.2">
+
+                <TextView
+                    android:id="@+id/goodToGo_in1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Good_To_Go1"
+                    android:textColor="#c6c6c6"
+                    android:textSize="34dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/goodToGo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Good_To_Go2"
+                    android:textColor="#fe9949"
+                    android:textSize="34dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/goodToGo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.2" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -294,9 +326,20 @@
             android:id="@+id/stepFailed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="40dp"
             android:animateLayoutChanges="true"
             android:background="@color/backGround"
             android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/ivError"
+                android:layout_width="344dp"
+                android:layout_height="230dp"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/pair_error"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvOpps_Error"
@@ -306,57 +349,21 @@
                 android:textColor="#c6c6c6"
                 android:textSize="34dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivError"
-                app:layout_constraintVertical_bias="0.2" />
-
-            <TextView
-                android:textSize="16sp"
-                android:textAlignment="center"
-                android:id="@+id/tvErrorMessager"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/error_Message"
-                android:textColor="@color/Deep_Grey"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvOpps_Error"
-                app:layout_constraintVertical_bias="0.1" />
-
-            <TextView
-                android:textSize="16sp"
-                android:id="@+id/tvErrorHelp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Help"
-                android:textColor="@color/Deep_Grey"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvErrorMessager" />
-
-            <ImageView
-                android:id="@+id/ivError"
-                android:layout_width="344dp"
-                android:layout_height="230dp"
-                android:src="@drawable/pair_error"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.3" />
+                app:layout_constraintTop_toBottomOf="@id/ivError" />
 
             <Button
                 android:id="@+id/btTryAgain"
-                android:layout_width="313dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/set_background"
                 android:backgroundTint="@color/colorPrimary"
+                android:paddingStart="25dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="25dp"
+                android:paddingBottom="8dp"
                 android:text="@string/try_again"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
@@ -364,20 +371,76 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvErrorMessager" />
+                app:layout_constraintTop_toBottomOf="@id/tvOpps_Error" />
+
+            <Button
+                android:id="@+id/tvErrorHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/set_background"
+                android:backgroundTint="#FF7F50"
+                android:text="@string/underlineHelp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btTryAgain" />
+
+            <TextView
+                android:id="@+id/tvErrorMessager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error_Message"
+                android:textAlignment="center"
+                android:textColor="@color/Deep_Grey"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvErrorHelp"
+                app:layout_constraintVertical_bias="0.1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="313dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
             android:layout_gravity="bottom|center"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="25dp"
             android:layout_marginBottom="15dp"
+            android:background="#ccc"
             android:progress="33"
+            android:progressDrawable="@drawable/seekbar_drawable_progress"
             android:progressTint="@color/colorPrimary" />
     </FrameLayout>
-</LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pair_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88ffffff"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:indeterminateTint="@color/colorPrimary"
+            android:indeterminateTintMode="src_atop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

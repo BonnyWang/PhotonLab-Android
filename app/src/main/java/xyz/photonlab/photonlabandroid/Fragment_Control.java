@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -40,6 +42,7 @@ import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 
+import static android.content.Context.VIBRATOR_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
 
 
@@ -56,6 +59,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     private ConstraintLayout allContainer, singleContainer;
     private TextView tvToAll, tvToSingle, brightness, tvGotoSetup;
+    private CardView powerBack;
     private ToggleButton power;
     private ImageView sun;
     private SeekBar seekBar;
@@ -68,6 +72,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     private Animation slide_in_left, slide_out_right, slide_out_left, slide_in_right;
     private int brightness_value;
+    private boolean isFirst = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,6 +134,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         wrapRadios();
 
         if (tinyDB.getInt("Power") == 1) {
+            isFirst = true;
             power.performClick();
             seekBar.getProgressDrawable().setTint(currentColor0);
         }
@@ -247,15 +253,23 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
         });
 
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
+
         power.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                vibrator.vibrate(50);
+            }
             if (isChecked) {
-                power.getBackground().setTint(getResources().getColor(R.color.colorPrimary, null));
+                powerBack.setCardBackgroundColor(Color.parseColor("#67D96A"));
                 seekBar.getProgressDrawable().setTint(currentColor0);
                 sun.setColorFilter(0xffffd41f);
                 tinyDB.putInt("Power", 1);
                 Request request = new Request.Builder().url(" http://xxx.xxx.xxx.xxx/on").build();
                 new NetworkHelper().connect(request);
             } else {
+                powerBack.setCardBackgroundColor(getResources().getColor(R.color.seekBar_Default, null));
                 seekBar.getProgressDrawable().setTint(getResources().getColor(R.color.seekBar_Default, null));
                 sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
                 tinyDB.putInt("Power", 0);
@@ -494,6 +508,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         tvGotoSetup = contentView.findViewById(R.id.tvGotoSetup);
         brightness = contentView.findViewById(R.id.progress_tip);
         power = contentView.findViewById(R.id.Power);
+        powerBack = contentView.findViewById(R.id.powerCard);
         sun = contentView.findViewById(R.id.sun);
         seekBar = contentView.findViewById(R.id.seekBar_brightness);
         add0 = contentView.findViewById(R.id.AddColor);

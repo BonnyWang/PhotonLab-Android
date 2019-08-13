@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 ft3.commit();
                 return true;
 
-            case R.id.navigation_notifications2:
+            case R.id.Setting:
                 if (fragment_Setting == null)
                     fragment_Setting = new fragment_setting();
                 FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();

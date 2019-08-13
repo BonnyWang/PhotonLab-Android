@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorWhite">#ffffff</color>
-    <color name="colorPrimary">#5c57b3</color>
-    <color name="colorPrimaryDark">#5c57b3</color>
+    <color name="colorPrimary">#4A90E2</color>
+    <color name="colorPrimaryDark">#4A90E2</color>
     <color name="backGround">#FAFAFA</color>
     <color name="colorAccent">#888</color>
-    <color name="bottomNavPressed">#5c57b3</color>
+    <color name="bottomNavPressed">#4A90E2</color>
     <color name="bottomNavDefault">#8d8d8d</color>
     <color name="seekBar_Default">#d1d1d1</color>
     <color name="seekBar_On">#ffa3a3</color>
