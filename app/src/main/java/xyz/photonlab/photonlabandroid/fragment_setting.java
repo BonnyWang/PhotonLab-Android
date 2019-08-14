@@ -120,7 +120,14 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/gMS8dfWuBtd58TEM7"));
                 startActivity(browserIntent);
                 break;
-
+            case 8:
+                Intent mailIntent = new Intent(Intent.ACTION_SEND);
+                mailIntent.setType("text/plain");
+                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@phontonlab.xyz"});
+                mailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                mailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                startActivity(Intent.createChooser(mailIntent, "Send Mail"));
+                break;
             case 9:
                 FragmentAbout fragmentAbout = new FragmentAbout();
                 FragmentTransaction txAbout = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();

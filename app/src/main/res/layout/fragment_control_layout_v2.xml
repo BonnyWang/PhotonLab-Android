@@ -16,7 +16,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/All"
@@ -37,7 +37,7 @@
                 android:text="@string/All"
                 android:textAlignment="center"
                 android:textColor="@color/text_selected"
-                android:textSize="28sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -73,14 +73,14 @@
                 android:text="@string/Single"
                 android:textAlignment="center"
                 android:textColor="@color/text_normal"
-                android:textSize="28sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="1" />
     </LinearLayout>
 
     <FrameLayout
@@ -94,6 +94,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:layout_marginTop="20dp"
                 android:id="@+id/sun"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -213,10 +214,11 @@
 
                 <Button
                     android:id="@+id/AddColor"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    android:backgroundTint="#C8C8C8"
                     android:background="@drawable/add_color_24dp" />
             </LinearLayout>
 
@@ -300,7 +302,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/content_container"
-                app:layout_constraintVertical_weight="2">
+                app:layout_constraintVertical_weight="2.5">
 
                 <RadioGroup
                     android:id="@+id/radioGroup0"
@@ -358,7 +360,7 @@
                     android:id="@+id/radioGroup00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -399,10 +401,11 @@
 
                     <Button
                         android:id="@+id/AddColor00"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
+                        android:backgroundTint="#C8C8C8"
                         android:background="@drawable/add_color_24dp" />
                 </RadioGroup>
             </LinearLayout>

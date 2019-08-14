@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -199,28 +200,7 @@ public class dialog_colorpicker extends DialogFragment {
     }
 
     public void setButton_Color(String colorStr) {
-        GradientDrawable setButton_Background = new GradientDrawable();
-        setButton_Background.setShape(GradientDrawable.RECTANGLE);
-        setButton_Background.setCornerRadius(24);
-        setButton_Background.setColor(Color.parseColor(colorStr));
-//        float px = TypedValue.applyDimension(
-////                TypedValue.COMPLEX_UNIT_DIP,
-////                313,
-////                getResources().getDisplayMetrics()
-////        );
-
-//        float px1 = TypedValue.applyDimension(
-//                TypedValue.COMPLEX_UNIT_DIP,
-//                52,
-//                getResources().getDisplayMetrics()
-//        );
-        //int width = (int) px;
-        //int height = (int) px1;
-        //setButton_Background.setSize(width, height);
-        setBt.setBackground(setButton_Background);
-//        if (getContext() != null) {
-//            setBt.setTextColor(getContext().getResources().getColor(R.color.DeepText, null));
-//        }
+        setBt.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(colorStr)));
     }
 
     public void rgb_reading(View view) {

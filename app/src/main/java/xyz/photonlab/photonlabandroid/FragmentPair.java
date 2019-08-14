@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -67,6 +68,7 @@ public class FragmentPair extends Fragment {
     private ConstraintLayout faile_container;
     private Button try_again_btn;
     private TextView tvErrorHelp;
+    private AppCompatActivity activity;
 
     @Nullable
     @Override
@@ -134,11 +136,12 @@ public class FragmentPair extends Fragment {
         doneButton.setOnClickListener((v) -> exit.performClick());
         try_again_btn.setOnClickListener((v) -> {
             progressBar.setVisibility(View.VISIBLE);
-            getActivity().getSupportFragmentManager().popBackStackImmediate();
+            activity.getSupportFragmentManager().popBackStackImmediate();
 
             //Reload to new fragment -bbb
             FragmentPair fragment_pair = new FragmentPair();
-            FragmentTransaction ft0 = getActivity().getSupportFragmentManager().beginTransaction();
+            Log.i("pairFragment", activity + "");
+            FragmentTransaction ft0 = activity.getSupportFragmentManager().beginTransaction();
             ft0.replace(R.id.container, fragment_pair).addToBackStack(null);
             ft0.commit();
         });
@@ -164,6 +167,19 @@ public class FragmentPair extends Fragment {
 
         //step failed
         tvErrorHelp.setOnClickListener((v) -> tv_help.performClick());
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof AppCompatActivity)
+            this.activity = (AppCompatActivity) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
     }
 
     @Override

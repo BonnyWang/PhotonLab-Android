@@ -70,7 +70,7 @@ public class fragement_theme_individual extends Fragment {
         setButton = view.findViewById(R.id.setbutton);
         setButton_Background = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, gradient);
         setButton_Background.setShape(GradientDrawable.RECTANGLE);
-        setButton_Background.setCornerRadius(50);
+        setButton_Background.setCornerRadius(30);
         setButton_Background.setSize(1000, 50);
         setButton.setBackground(setButton_Background);
         setButton.setOnClickListener(new View.OnClickListener() {
