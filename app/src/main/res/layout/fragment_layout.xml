@@ -80,6 +80,8 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:clickable="true"
+            android:focusable="true"
             android:id="@+id/step0_btns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
