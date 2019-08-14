@@ -112,7 +112,7 @@ public class FragmentPair extends Fragment {
                 step2_container.setVisibility(View.VISIBLE);
                 progressBar.setProgress(75);
             } else {
-                Toast.makeText(getContext(), "You are not connected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "You are not connected to Wi-Fi", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -128,7 +128,7 @@ public class FragmentPair extends Fragment {
                 tellLightTheWifiInfo();
                 mask.setVisibility(View.VISIBLE);
             } else {
-                Toast.makeText(getContext(), "Current wifi unavailable!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Not connected to the light", Toast.LENGTH_SHORT).show();
             }
         });
 

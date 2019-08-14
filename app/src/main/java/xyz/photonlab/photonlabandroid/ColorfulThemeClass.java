@@ -5,7 +5,11 @@ import android.graphics.drawable.GradientDrawable;
 
 public class ColorfulThemeClass extends theme_Class {
     ColorfulThemeClass() {
-        this.colors = new int[] {
+        initColorArray();
+    }
+
+    private void initColorArray() {
+        this.colors = new int[]{
                 Color.parseColor("#f72323"),
 //            Color.parseColor("#f79823"),
                 Color.parseColor("#f7ec23"),
@@ -14,6 +18,11 @@ public class ColorfulThemeClass extends theme_Class {
                 Color.parseColor("#232ef7"),
                 Color.parseColor("#f023f7"),
         };
+    }
+
+    public ColorfulThemeClass(String name, int start_Color, int end_Color, String creater, String mood) {
+        super(name, start_Color, end_Color, creater, mood);
+        initColorArray();
     }
 
     @Override

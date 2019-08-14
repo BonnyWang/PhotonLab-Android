@@ -45,12 +45,15 @@ public class FragmentSmartHome extends Fragment {
 
     private void initData() {
         data = new ArrayList<>();
-        data.add(new SmartHomeItem("Google Home", Color.rgb(100, 100, 245),
+        data.add(new SmartHomeItem("Google Home", Color.parseColor("#4382F0"),
                 "https://support.google.com/googlenest/topic/7029677?hl=en&ref_topic=7029097"));
-        data.add(new SmartHomeItem("Amazon Alexa", Color.rgb(100, 200, 245),
+        data.add(new SmartHomeItem("Amazon Alexa", Color.parseColor("#14BAF8"),
                 "https://www.amazon.com/gp/help/customer/display.html?nodeId=G201549510"));
-        data.add(new SmartHomeItem("IFTTT", Color.rgb(30, 30, 30),
+        data.add(new SmartHomeItem("IFTTT", Color.parseColor("#000000"),
                 "https://help.ifttt.com/hc/en-us/articles/115010158167-How-does-IFTTT-work-"));
+        data.add(new SmartHomeItem("YouTube", Color.parseColor("#F70000"),
+                "https://photonlab.xyz/help.html"));
+
     }
 
     private void initRecyclerView() {

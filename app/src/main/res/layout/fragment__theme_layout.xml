@@ -52,7 +52,9 @@
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:paddingTop="20dp"
+            android:clipToPadding="false"
+            android:paddingBottom="20dp"
             android:scrollbars="vertical" />
 
         <include

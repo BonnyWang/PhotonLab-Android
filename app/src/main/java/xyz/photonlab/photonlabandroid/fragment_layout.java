@@ -108,7 +108,7 @@ public class fragment_layout extends Fragment {
                 checkedLight.litUp();
                 vibrator.vibrate(50);
                 if (lightStage.allLitUp()) {
-                    Toast.makeText(getContext(), "Address pair completed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You are all set!", Toast.LENGTH_SHORT).show();
                     session.saveLayoutToLocal(getContext(), lightStage);
                     done.setVisibility(View.VISIBLE);
                 } else {
@@ -123,7 +123,7 @@ public class fragment_layout extends Fragment {
             if (flag) {
                 Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "Save Error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Save Error", Toast.LENGTH_SHORT).show();
             }
             activity.getSupportFragmentManager().popBackStack();
         });

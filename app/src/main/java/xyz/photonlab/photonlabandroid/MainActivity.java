@@ -8,8 +8,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,17 +28,13 @@ import xyz.photonlab.photonlabandroid.model.Session;
 
 public class MainActivity extends AppCompatActivity {
     //implements fragment_Pair.pairing_Listener
-    private final String TAG = "Mainactivity";
+    private final String TAG = "MainActivity";
 
     int whichanim = 0;
 
-
-    //Fragments
-    Fragment_Theme fragment_Theme;
-    Fragment fragment_Control = new Fragment_Control();
-    Fragment fragment_Setting;
-    Fragment fragment_Explore;
     Fragment start_anim = new fragment_start_anim();
+    //Fragments
+    Fragment[] fragments = new Fragment[4];
 
     static Handler handler = new Handler();
     static Runnable runnable;
@@ -46,70 +42,70 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout container;
 
     TinyDB tinyDB;
-    String ipAddr;
 
-    int bottomHeight;
     private BottomNavigationView navView;
 
-    public int getBottomHeight() {
-        return bottomHeight;
-    }
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = item -> {
-        switch (item.getItemId()) {
+            = menuItem -> {
+        switch (menuItem.getItemId()) {
             case R.id.navigation_home:
-                if (fragment_Control == null)
-                    fragment_Control = new Fragment_Control();
-                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                ft1.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
-                ft1.replace(R.id.fgm, fragment_Control);
-                ft1.commit();
-                whichanim = 0;
+                createOrReplaceFragment(0);
                 return true;
-
             case R.id.navigation_dashboard:
-
-                if (fragment_Theme == null)
-                    fragment_Theme = Fragment_Theme.getInstance();
-                //ragment_Theme = new Fragment_Theme();
-                FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-                if (whichanim < 2) {
-                    ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                } else {
-                    ft2.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
-                }
-
-                whichanim = 2;
-                ft2.replace(R.id.fgm, fragment_Theme);
-                ft2.commit();
+                createOrReplaceFragment(1);
                 return true;
             case R.id.navigation_notifications:
-                if (fragment_Explore == null)
-                    fragment_Explore = Fragment_Explore.getInstance();
-                FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
-                if (whichanim < 3) {
-                    ft3.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                } else {
-                    ft3.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
-                }
-                whichanim = 3;
-                ft3.replace(R.id.fgm, fragment_Explore);
-                ft3.commit();
+                createOrReplaceFragment(2);
                 return true;
-
             case R.id.Setting:
-                if (fragment_Setting == null)
-                    fragment_Setting = new fragment_setting();
-                FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
-                ft4.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                ft4.replace(R.id.fgm, fragment_Setting);
-                ft4.commit();
-                whichanim = 4;
+                createOrReplaceFragment(3);
                 return true;
         }
         return false;
     };
+
+    private void createOrReplaceFragment(int i) {
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        //if fragment is null, create and add to container
+        if (fragments[i] == null) {
+            switch (i) {
+                case 1:
+                    fragments[i] = new Fragment_Theme();
+                    break;
+                case 2:
+                    fragments[i] = new Fragment_Explore();
+                    break;
+                case 3:
+                    fragments[i] = new fragment_setting();
+                    break;
+                default:
+                    Log.e(TAG, "Current Fragment index is not support!");
+                    throw new IllegalArgumentException();
+            }
+            tx.add(R.id.fgm, fragments[i]);
+        }
+
+        //add animation
+        if (i > whichanim) {
+            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+        if (i < whichanim) {
+            tx.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
+
+        //hide other fragment and show current fragment
+        for (int j = 0; j < 4; j++) {
+            if (i == j) {
+                tx.show(fragments[j]);
+            } else {
+                if (fragments[j] != null)
+                    tx.hide(fragments[j]);
+            }
+        }
+
+        whichanim = i;
+        tx.commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,12 +124,9 @@ public class MainActivity extends AppCompatActivity {
         container.setVisibility(View.GONE);
 
         navView = findViewById(R.id.nav_view);
-        this.bottomHeight = navView.getMeasuredHeight();
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        tinyDB = new TinyDB(getBaseContext());
-
-
+        //show welcome
         FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
         ft0.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
         ft0.replace(R.id.container, start_anim).addToBackStack(null);
@@ -143,27 +136,25 @@ public class MainActivity extends AppCompatActivity {
         //checkPermission
         getPermissions();
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                //Second fragment after 5 seconds appears
+        tinyDB = new TinyDB(getBaseContext());
 
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.remove(start_anim);
-                ft.commitAllowingStateLoss();
-                //fragment_Control = new Fragment_Control();
-//                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-//                ft1.replace(R.id.fgm, fragment_Control);
-//                ft1.commit();
-                container.setVisibility(View.VISIBLE);
+        //init fragments
+        fragments[0] = new Fragment_Control();
+
+        runnable = () -> {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.remove(start_anim);
+            for (Fragment fragment : fragments) {
+                if (fragment != null) {
+                    ft.add(R.id.fgm, fragment);
+                }
             }
+            ft.commitAllowingStateLoss();
+            Log.i(TAG, "fragment created");
+            container.setVisibility(View.VISIBLE);
         };
 
         handler.postDelayed(runnable, 3000);
-
-        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-        ft1.replace(R.id.fgm, fragment_Control);
-        ft1.commit();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");
@@ -174,9 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Please Pair First", Toast.LENGTH_SHORT).show();
 
-        } else {
-//            CheckLightState mcheckLightState =  new CheckLightState(getApplicationContext());
-//            mcheckLightState.start();
         }
 
         Session.setShake(BitmapFactory.decodeResource(getResources(), R.drawable.shake));

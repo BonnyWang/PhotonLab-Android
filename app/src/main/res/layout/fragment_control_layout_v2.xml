@@ -120,9 +120,11 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sun"
+                app:cardBackgroundColor="#ffededed"
                 app:layout_constraintVertical_weight="3">
 
                 <xyz.photonlab.photonlabandroid.views.VerticalSeekBar
+                    android:visibility="gone"
                     android:id="@+id/seekBar_brightness"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -140,6 +142,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/progress_off_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/off"
+                        android:textColor="#8F8D90"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:visibility="gone"
                         android:id="@+id/progress_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -149,6 +161,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/brightness_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -256,6 +269,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
             android:id="@+id/single_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

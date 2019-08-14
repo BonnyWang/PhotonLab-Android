@@ -10,15 +10,17 @@
     <androidx.cardview.widget.CardView
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         android:id="@+id/smart_home_rv"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="0dp"
         app:cardBackgroundColor="@color/gray"
-        app:cardCornerRadius="10dp">
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp">
 
         <TextView
             android:id="@+id/smart_home_tv"

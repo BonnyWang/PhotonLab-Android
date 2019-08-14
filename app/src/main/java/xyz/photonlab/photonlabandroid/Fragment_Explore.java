@@ -63,6 +63,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Log.e("explore", "creating view");
         context = getContext();
         View view = inflater.inflate(R.layout.fragment__explore_layout, container, false);
 
@@ -149,22 +150,12 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
 
     @Override
     public void onNoteClick(int position) {
-
-
-        if (spinnerMenu.getSelectedItemPosition() == 0) {
-            //TODO:
-
             fragment_explore_indiv bfgExplore = new fragment_explore_indiv(bexplores.get(position).getLink(),
                     bexplores.get(position).getTitle());
             FragmentTransaction ftindiv = getActivity().getSupportFragmentManager().beginTransaction();
-            ftindiv.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
+            ftindiv.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             ftindiv.replace(R.id.container, bfgExplore).addToBackStack(null);
             ftindiv.commit();
-
-        } else {
-
-
-        }
     }
 
 

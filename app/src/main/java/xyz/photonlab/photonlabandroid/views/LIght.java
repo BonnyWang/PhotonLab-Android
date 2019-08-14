@@ -88,6 +88,7 @@ public class Light implements Serializable {
     }
 
     void draw(Canvas canvas) {
+        canvas.save();
         paint.setColor(currentColor);
         if (plane) {
             paint.setColor(planeColor);
@@ -97,15 +98,16 @@ public class Light implements Serializable {
         } else if (litUp == 1) {
             paint.setColor(colorSettle);
         }
+
         paint.setStrokeWidth(0);
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawPath(this.path, paint);
         if (checked) {
-            paint.setStrokeWidth(6);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(Color.argb(255, 66, 66, 66));
-            canvas.drawPath(path, paint);
+            paint.setAlpha(153);
         }
+        canvas.drawPath(this.path, paint);
+
+
+        //draw direction pointer
         paint.setStrokeWidth(0.15f * RADIUS);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setColor(Color.argb(255, 255, 255, 255));
@@ -115,7 +117,8 @@ public class Light implements Serializable {
                     positionY + interfazeRadius * (float) Math.sin(originDirection * deg60),
                     positionX + interfazeRadius * (float) Math.cos((originDirection + 1) * deg60),
                     positionY + interfazeRadius * (float) Math.sin((originDirection + 1) * deg60), paint);
-        //canvas.drawCircle(sx, sy, 20, paint);
+
+        canvas.restore();
     }
 
     public float getX() {
