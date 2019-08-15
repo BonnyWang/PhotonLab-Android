@@ -1,11 +1,17 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -17,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -37,6 +44,15 @@ public class FragmentSmartHome extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Button exit = view.findViewById(R.id.backButton_Coming);
+        Button help = view.findViewById(R.id.button3);
+
+        help.setOnClickListener(v -> {
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://photonlab.xyz/help.html")));
+            }
+        });
+
         recyclerView = view.findViewById(R.id.home_rView);
         exit.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
         initData();
@@ -64,7 +80,8 @@ public class FragmentSmartHome extends Fragment {
             fragment_explore_indiv bfgExplore = new fragment_explore_indiv(data.get(position).getLink(),
                     data.get(position).getTitle());
             FragmentTransaction exTx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-            exTx.replace(R.id.container, bfgExplore).addToBackStack(null);
+            exTx.setCustomAnimations(R.anim.pop_enter, FragmentTransaction.TRANSIT_NONE, FragmentTransaction.TRANSIT_NONE, R.anim.pop_out);
+            exTx.add(R.id.container, bfgExplore).addToBackStack(null);
             exTx.commit();
         }));
     }

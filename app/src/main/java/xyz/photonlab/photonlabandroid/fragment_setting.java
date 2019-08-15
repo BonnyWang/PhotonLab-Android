@@ -79,7 +79,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 if (Session.getInstance().isPermissionFlag()) {
                     FragmentPair fragment_pair = new FragmentPair();
                     FragmentTransaction ft0 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                    ft0.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    ft0.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                     ft0.replace(R.id.container, fragment_pair).addToBackStack(null);
                     ft0.commit();
                 } else {
@@ -91,28 +91,28 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
             case 1:
                 fragment_system mfragment_system = new fragment_system();
                 FragmentTransaction ft6 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                ft6.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft6.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft6.replace(R.id.container, mfragment_system).addToBackStack(null);
                 ft6.commit();
                 break;
             case 2:
                 fragment_layout mfragment_layout = new fragment_layout();
                 FragmentTransaction ft5 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft5.replace(R.id.container, mfragment_layout).addToBackStack(null);
                 ft5.commit();
                 break;
             case 4:
                 FragmentSmartHome smartHome = new FragmentSmartHome();
                 FragmentTransaction ftSh = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                ftSh.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ftSh.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ftSh.replace(R.id.container, smartHome).addToBackStack(null);
                 ftSh.commit();
                 break;
             case 5:
                 fragment_motion_detect mfragment_motion_detect = fragment_motion_detect.getInstance();
                 FragmentTransaction ft2 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft2.replace(R.id.container, mfragment_motion_detect).addToBackStack(null);
                 ft2.commit();
                 break;
@@ -131,7 +131,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
             case 9:
                 FragmentAbout fragmentAbout = new FragmentAbout();
                 FragmentTransaction txAbout = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                txAbout.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                txAbout.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 txAbout.replace(R.id.container, fragmentAbout).addToBackStack(null);
                 txAbout.commit();
                 break;
@@ -139,7 +139,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
             default:
                 fragment_Comming fragment_comming = new fragment_Comming(mSettings.get(position).subtitle);
                 FragmentTransaction ft1 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                ft1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft1.replace(R.id.container, fragment_comming).addToBackStack(null);
                 ft1.commit();
 

@@ -83,7 +83,6 @@
                 android:text="@string/Privacy_Policy"
                 android:textColor="#383838"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivPrivacy"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -126,7 +125,6 @@
                 android:text="@string/App_Software"
                 android:textColor="#383838"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivAppSoft"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -139,7 +137,6 @@
                 android:text="@string/PhotonLab_V"
                 android:textColor="#383838"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

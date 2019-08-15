@@ -2,16 +2,9 @@ package xyz.photonlab.photonlabandroid;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,18 +14,16 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 
@@ -72,7 +63,7 @@ public class fragment_motion_detect extends FullScreenFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_motion_detect, container, false);
         tvCallDial = view.findViewById(R.id.tvCallDialog);
@@ -102,29 +93,26 @@ public class fragment_motion_detect extends FullScreenFragment {
             }
         });
 
-        pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                tvCallDial.setText(getTime(date));
+        pvTime = new TimePickerBuilder(getContext(), (date, v) -> {
+            tvCallDial.setText(getTime(date));
 
-                timeDelay.clear();
-                timeDelay.add(date.getHours());
-                timeDelay.add(date.getMinutes());
-                timeDelay.add(date.getSeconds());
-                TinyDB tinyDB = new TinyDB(getContext());
-                tinyDB.putListInt("delayTime", timeDelay);
+            timeDelay.clear();
+            timeDelay.add(date.getHours());
+            timeDelay.add(date.getMinutes());
+            timeDelay.add(date.getSeconds());
+            TinyDB tinyDB1 = new TinyDB(getContext());
+            tinyDB1.putListInt("delayTime", timeDelay);
 
-                settedDate = date;
-                initialdate.setTime(settedDate);
-                Log.i("pvTime", "onTimeSelect");
+            settedDate = date;
+            initialdate.setTime(settedDate);
+            Log.i("pvTime", "onTimeSelect");
 
-            }
         }).setType(new boolean[]{false, false, false, true, true, true})
                 .setLabel("Year", "Monty", "Day", "h", "min", "s")
                 .setCancelText("Cancel")
-                .setCancelColor(getResources().getColor(R.color.design_default_color_primary, null))
+                .setCancelColor(getResources().getColor(R.color.colorPrimary, null))
                 .setSubmitText("Confirm")
-                .setSubmitColor(getResources().getColor(R.color.design_default_color_primary, null))
+                .setSubmitColor(getResources().getColor(R.color.colorPrimary, null))
                 .isDialog(true)
                 .setDate(initialdate)
                 .build();

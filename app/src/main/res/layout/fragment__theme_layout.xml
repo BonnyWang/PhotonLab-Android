@@ -19,11 +19,10 @@
 
             <TextView
                 android:id="@+id/message"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:padding="10dp"
                 android:text="@string/title_Theme"
                 android:textColor="@android:color/black"
@@ -52,9 +51,8 @@
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
             android:clipToPadding="false"
-            android:paddingBottom="20dp"
+            android:padding="3dp"
             android:scrollbars="vertical" />
 
         <include

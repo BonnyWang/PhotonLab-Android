@@ -1,14 +1,14 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import xyz.photonlab.photonlabandroid.R;
 
 import java.util.List;
 
@@ -49,21 +49,29 @@ public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyVi
         return mSettings.size();
     }
 
+    @NonNull
     @Override
-    public SettingRvAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public SettingRvAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.setting_item, viewGroup, false);
         MyViewHolder myViewHolder = new MyViewHolder(v, mOnNoteListener);
         return myViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(SettingRvAdapter.MyViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull SettingRvAdapter.MyViewHolder holder, int i) {
         holder.textView.setText(mSettings.get(i).getSubtitle());
         holder.titleIcon.setImageResource(mSettings.get(i).getIconRes());
+        if (i < 3) {
+            holder.titleIcon.getDrawable().setTint(Color.parseColor("#64b5f6"));
+        } else if (i < 7) {
+            holder.titleIcon.getDrawable().setTint(Color.parseColor("#ce93d8"));
+        } else {
+            holder.titleIcon.getDrawable().setTint(Color.parseColor("#b0bec5"));
+        }
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 

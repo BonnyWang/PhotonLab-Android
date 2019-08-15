@@ -90,7 +90,6 @@
 
                 android:textSize="18sp"
 
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivlight"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -159,8 +158,6 @@
                 android:textColor="#383838"
 
                 android:textSize="18sp"
-
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivlight1"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -208,7 +205,6 @@
 
                 android:textColor="#383838"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivReset"
                 app:layout_constraintTop_toTopOf="parent" />

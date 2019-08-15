@@ -8,10 +8,10 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
     android:paddingStart="12dp"
-    android:paddingEnd="12dp">
+    android:paddingTop="15dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="15dp">
 
     <ImageView
         android:id="@+id/title_icon"
@@ -21,7 +21,7 @@
         android:contentDescription="@string/app_name"
         android:foregroundTint="#717171"
         android:src="@drawable/lock"
-        android:tint="#383838"
+        android:tint="#717171"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,9 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/Privacy_Policy"
-        android:textColor="#383838"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/title_icon"
         app:layout_constraintTop_toTopOf="parent" />

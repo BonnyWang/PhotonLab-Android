@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,10 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
+
+import xyz.photonlab.photonlabandroid.model.explore_item_Class;
 
 
 public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNoteListener {
@@ -41,6 +46,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
     private static final String TAG = "Fragment_Explore";
 
 
+    @SuppressLint("StaticFieldLeak")
     private static Fragment_Explore single_instance = null;
 
     Fragment_Explore thisone = this;
@@ -60,7 +66,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         Log.e("explore", "creating view");
@@ -68,7 +74,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         View view = inflater.inflate(R.layout.fragment__explore_layout, container, false);
 
 
-        rv = (RecyclerView) view.findViewById(R.id.rvExplore);
+        rv = view.findViewById(R.id.rvExplore);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
         rv.setNestedScrollingEnabled(false);
@@ -89,14 +95,25 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    explore_RvAdapter adapter0 = new explore_RvAdapter(bexplores, mOnNoteListner, thisone, false);
+                    explore_RvAdapter adapter0 = new explore_RvAdapter(bexplores, mOnNoteListner, thisone, true);
+                    rv.setAdapter(adapter0);
+                } else if (position == 1) {//Creative
+                    ArrayList<explore_item_Class> creativeList = new ArrayList<>();
+                    for (explore_item_Class item : bexplores) {
+                        if (item.isCreative())
+                            creativeList.add(item);
+                    }
+                    explore_RvAdapter adapter0 = new explore_RvAdapter(creativeList, mOnNoteListner, thisone, true);
+                    rv.setAdapter(adapter0);
+                } else if (position == 2) {
+                    ArrayList<explore_item_Class> tutorialList = new ArrayList<>();
+                    for (explore_item_Class item : bexplores) {
+                        if (item.isTutorial())
+                            tutorialList.add(item);
+                    }
+                    explore_RvAdapter adapter0 = new explore_RvAdapter(tutorialList, mOnNoteListner, thisone, true);
                     rv.setAdapter(adapter0);
                 }
-                //TODO add position 1-creative and 2-tutorial
-//                if(position == 1) {
-//                    RvAdapter adapter1 = new RvAdapter(mfavoriteMusic, mOnNoteListner);
-//                    rv.setAdapter(adapter1);
-//                }
 
             }
 
@@ -116,46 +133,55 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("mexplore");
 
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                GenericTypeIndicator<ArrayList<explore_item_Class>> t = new GenericTypeIndicator<ArrayList<explore_item_Class>>() {
+                GenericTypeIndicator<ArrayList<Map<String, String>>> t = new GenericTypeIndicator<ArrayList<Map<String, String>>>() {
                 };
-                bexplores = dataSnapshot.getValue(t);
+                bexplores = new ArrayList<>();
+                ArrayList<Map<String, String>> src = dataSnapshot.getValue(t);
+
+                if (src != null)
+                    for (Map<String, String> map : src) {
+                        explore_item_Class item = new explore_item_Class();
+                        bexplores.add(item);
+                        item.setImageLink(map.get("imageLink"));
+                        item.setLink(map.get("link"));
+                        item.setTitle(map.get("title"));
+                        String category = map.get("category");
+                        if (category != null && category.equals("Creative")) {
+                            item.addCategory(explore_item_Class.CREATIVE);
+                        }
+                        if (category != null && category.equals("Tutorial")) {
+                            item.addCategory(explore_item_Class.TUTORIAL);
+                        }
+                    }
                 adapter = new explore_RvAdapter(bexplores, mOnNoteListner, thisone, true);
                 rv.setAdapter(adapter);
+
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
                 Toast.makeText(getContext(), "Failed to access server", Toast.LENGTH_SHORT).show();
             }
         });
 
-//        mfavoriteMusic = new ArrayList<>();
-//        favOrder = new ArrayList<>();
-//        TinyDB tinyDB = new TinyDB(this.getContext());
-//        if(tinyDB.getListInt("favOrderMusic").size() != 0){
-//            favOrder = tinyDB.getListInt("favOrderMusic");
-//            for(int i = 0; i < favOrder.size(); i++){
-//                mfavoriteMusic.add(mMusic.get(favOrder.get(i)));
-//            }
-//        }
-
     }
 
     @Override
     public void onNoteClick(int position) {
-            fragment_explore_indiv bfgExplore = new fragment_explore_indiv(bexplores.get(position).getLink(),
-                    bexplores.get(position).getTitle());
-            FragmentTransaction ftindiv = getActivity().getSupportFragmentManager().beginTransaction();
-            ftindiv.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-            ftindiv.replace(R.id.container, bfgExplore).addToBackStack(null);
-            ftindiv.commit();
+        fragment_explore_indiv bfgExplore = new fragment_explore_indiv(bexplores.get(position).getLink(),
+                bexplores.get(position).getTitle());
+        FragmentTransaction ftindiv = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+        ftindiv.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+        ftindiv.replace(R.id.container, bfgExplore).addToBackStack(null);
+        ftindiv.commit();
     }
 
 

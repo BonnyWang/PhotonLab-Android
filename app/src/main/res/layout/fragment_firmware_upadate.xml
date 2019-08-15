@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/backButton_Motion"
+            android:id="@+id/backButton"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="15dp"
@@ -34,7 +34,7 @@
             android:id="@+id/tvMotion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Motion_Detect"
+            android:text="@string/firmware_update"
             android:textColor="#555555"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -46,6 +46,8 @@
 
 
     <LinearLayout
+        android:clickable="true"
+        android:focusable="true"
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -54,142 +56,65 @@
         app:layout_constraintTop_toBottomOf="@+id/title">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/switch_detect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="15dp">
 
-            <ImageView
-                android:id="@+id/ivSearch"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/search_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/Motion_Detect"
+                android:text="@string/download_firmware"
                 android:textColor="#383838"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivSearch"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <Switch
-                android:id="@+id/swMotion"
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/ivResetArrow1"
+                android:layout_width="32dp"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:theme="@style/SCBSwitch"
+                android:src="@android:drawable/stat_sys_download"
+                android:tint="#8d8d8d"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:clickable="true"
+            android:focusable="true"
             android:id="@+id/time_delay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
             android:orientation="horizontal"
             android:padding="15dp">
 
-            <ImageView
-                android:id="@+id/ivTime"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/time24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-
-                />
-
             <TextView
-                android:id="@+id/tvTime"
+                android:id="@+id/current_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/Time_Delay"
-
+                android:text="@string/current_version"
                 android:textColor="#383838"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivTime"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvCallDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/timeDialog"
+                android:text="@string/firmware_version"
                 android:textColor="#8d8d8d"
-
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/theme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-            <ImageView
-                android:id="@+id/ivThemeTrigger"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#717171"
-                android:foregroundTint="#717171"
-
-                android:src="@drawable/menu_black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvThemeTrigger"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/Themes_Trigger"
-                android:textColor="#383838"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivThemeTrigger"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvTriggerName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="0dp"
-                android:text="@string/Trigger_Name"
-                android:textColor="#555555"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ivTriggerRight"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/ivTriggerRight"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow_right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

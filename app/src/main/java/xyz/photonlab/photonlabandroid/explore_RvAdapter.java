@@ -1,18 +1,17 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+
+import xyz.photonlab.photonlabandroid.model.explore_item_Class;
 
 public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.MyViewHolder> {
 
@@ -61,13 +60,13 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
                                                              int viewType) {
         View v;
 
-        if(viewType == R.layout.cardview_explore){
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_explore, parent,false);
-        }else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar, parent,false);
+        if (viewType == R.layout.cardview_explore) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_explore, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar, parent, false);
         }
 
-        MyViewHolder myViewHolder = new MyViewHolder(v , bonNoteListener);
+        MyViewHolder myViewHolder = new MyViewHolder(v, bonNoteListener);
         return myViewHolder;
     }
 
@@ -76,10 +75,10 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        if(position == bexplores.size()){
+        if (position == bexplores.size()) {
             ;
-        }else {
-            ImageView imageView =  holder.bimageView;
+        } else {
+            ImageView imageView = holder.bimageView;
             Glide.with(fragment_explore).load(bexplores.get(position).getImageLink()).centerCrop().into(imageView);
         }
 
@@ -88,10 +87,10 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if (loaded){
+        if (loaded) {
             return bexplores.size();
-        }else{
-            return bexplores.size()+1;
+        } else {
+            return bexplores.size() + 1;
         }
     }
 
@@ -100,7 +99,7 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
         return (position == bexplores.size()) ? R.layout.progressbar : R.layout.cardview_explore;
     }
 
-    public interface OnNoteListener{
+    public interface OnNoteListener {
         void onNoteClick(int position);
     }
 

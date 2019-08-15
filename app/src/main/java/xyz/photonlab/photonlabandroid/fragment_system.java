@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
+
+import java.util.Objects;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -29,7 +32,7 @@ public class fragment_system extends FullScreenFragment {
 
     ProgressBar loading;
 
-    ConstraintLayout pairState, reset_container;
+    ConstraintLayout pairState, reset_container, firmware_upadate;
     TextView tvDeviceName;
 
     TinyDB tinyDB;
@@ -132,6 +135,14 @@ public class fragment_system extends FullScreenFragment {
         });
         loading = view.findViewById(R.id.pair_state_load);
         tvDeviceName = view.findViewById(R.id.tvDeviceName);
+        firmware_upadate = view.findViewById(R.id.firmware_update);
+
+        firmware_upadate.setOnClickListener(v -> {
+            FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+            tx.replace(R.id.container, new FragmentFirmwareUpdate()).addToBackStack(null);
+            tx.commit();
+        });
 
         return view;
     }

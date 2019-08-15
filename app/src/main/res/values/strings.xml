@@ -87,4 +87,7 @@
     <string name="set_your_favorite_color">Set Your Favorite Color</string>
     <string name="firmware_update">Firmware Update</string>
     <string name="off">OFF</string>
+    <string name="download_firmware">Download Firmware</string>
+    <string name="current_version">Current Version</string>
+    <string name="firmware_version">1.0.0</string>
 </resources>
