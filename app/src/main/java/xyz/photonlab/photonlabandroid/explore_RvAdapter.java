@@ -4,7 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -22,15 +24,16 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView bimageView;
+        TextView title, desc;
 
         OnNoteListener bonNoteListener;
 
         public MyViewHolder(View v, explore_RvAdapter.OnNoteListener bonNoteListener) {
             super(v);
             bimageView = itemView.findViewById(R.id.ivExplore);
+            title = itemView.findViewById(R.id.title);
+            desc = itemView.findViewById(R.id.tv_desc);
             this.bonNoteListener = bonNoteListener;
-
-//            bimageView.setOnClickListener(this);
             v.setOnClickListener(this);
         }
 
@@ -55,31 +58,28 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
-    public explore_RvAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public explore_RvAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                              int viewType) {
-        View v;
-
-        if (viewType == R.layout.cardview_explore) {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_explore, parent, false);
-        } else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar, parent, false);
-        }
-
-        MyViewHolder myViewHolder = new MyViewHolder(v, bonNoteListener);
-        return myViewHolder;
+        View v = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+        return new MyViewHolder(v, bonNoteListener);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        if (position == bexplores.size()) {
-            ;
-        } else {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+
+        if (position != bexplores.size()) {
             ImageView imageView = holder.bimageView;
             Glide.with(fragment_explore).load(bexplores.get(position).getImageLink()).centerCrop().into(imageView);
+        }
+
+        explore_item_Class item = bexplores.get(position);
+
+        if (item.getDescription() != null) {
+            holder.title.setText(item.getTitle());
+            holder.desc.setText(item.getDescription());
         }
 
     }
@@ -89,14 +89,18 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     public int getItemCount() {
         if (loaded) {
             return bexplores.size();
-        } else {
-            return bexplores.size() + 1;
         }
+        return bexplores.size() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == bexplores.size()) ? R.layout.progressbar : R.layout.cardview_explore;
+        if (bexplores.get(position).getDescription() != null)
+            return R.layout.explore_item_with_desc;
+        if (position == bexplores.size())
+            return R.layout.progressbar;
+
+        return R.layout.cardview_explore;
     }
 
     public interface OnNoteListener {

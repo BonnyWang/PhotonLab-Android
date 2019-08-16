@@ -53,6 +53,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -62,21 +63,17 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:padding="3dp"
                 android:id="@+id/home_rView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingTop="3dp"
                 android:scrollbars="none" />
 
             <include
                 android:id="@+id/btn_no_more"
                 layout="@layout/button_no_more" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="10dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

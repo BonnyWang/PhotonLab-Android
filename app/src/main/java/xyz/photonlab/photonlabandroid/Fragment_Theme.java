@@ -1,7 +1,10 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +45,7 @@ public class Fragment_Theme extends Fragment
 
     ArrayList<Integer> favOrder = new ArrayList<>();
 
+    @SuppressLint("StaticFieldLeak")
     private static Fragment_Theme single_instance = null;
     RecyclerView rv;
 
@@ -50,8 +54,6 @@ public class Fragment_Theme extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     public static Fragment_Theme getInstance() {
@@ -75,9 +77,13 @@ public class Fragment_Theme extends Fragment
         btn_no_more = view.findViewById(R.id.btn_no_more);
 
         spinnerMenu = view.findViewById(R.id.spinnerThemes);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
-                R.array.theme_Menu, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
+//                R.array.theme_Menu, android.R.layout.simple_spinner_item);
+
+        SimpleCheckableAdapter spinnerAdapter = new SimpleCheckableAdapter(getResources().getStringArray(R.array.theme_Menu));
+
+        // spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_item);
+
         spinnerMenu.setAdapter(spinnerAdapter);
 
         Session.getInstance().requestTheme(getContext());
@@ -100,8 +106,12 @@ public class Fragment_Theme extends Fragment
                     ((TextView) view).setText(null);
                 } catch (Exception ignored) {
                 }
-                if (position == 0) {
 
+                spinnerAdapter.setChecked(position);
+
+                Log.i("position", position + "");
+
+                if (position == 0) {
                     RvAdapter adapter0 = new RvAdapter(mtheme, mOnNoteListener);
                     rv.setAdapter(adapter0);
                     rv.getChildAt(adapter0.getItemCount() - 1);

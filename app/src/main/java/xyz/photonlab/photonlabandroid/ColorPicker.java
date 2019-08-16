@@ -30,7 +30,7 @@ public class ColorPicker extends View {
     private PointF mLeftSelectPoint;//坐标
     private OnColorBackListener onColorBackListener;
     private int mLeftBitmapRadius;
-    public String colorStr="";
+    public String colorStr = "";
     private int initX = 0;
     private int initY = 0;
     private int r;//半径
@@ -39,14 +39,14 @@ public class ColorPicker extends View {
     boolean hideCursor;
 
 
-    public ColorPicker(Context context, AttributeSet attrs ) {
-        super(context,attrs);
+    public ColorPicker(Context context, AttributeSet attrs) {
+        super(context, attrs);
         this.mContext = context;
         init();
     }
 
     public ColorPicker(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public void setOnColorBackListener(OnColorBackListener listener) {
@@ -67,25 +67,27 @@ public class ColorPicker extends View {
         initX = bitmapTemp.getWidth() / 2;
         initY = bitmapTemp.getHeight() / 2;
         r = bitmapTemp.getHeight() / 2;
-        Log.d(TAG, "init: "+mLeftBitmapRadius+"  "+r+"  "+initX);
+        Log.d(TAG, "init: " + mLeftBitmapRadius + "  " + r + "  " + initX);
         mLeftSelectPoint = new PointF(0, 0);
 
         hideCursor = false;
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(bitmapTemp , null , new Rect(0, 0, mWidth , mHeight ), mBitmapPaint);
+        canvas.drawBitmap(bitmapTemp, null, new Rect(0, 0, mWidth, mHeight), mBitmapPaint);
 
-        if(!hideCursor){
-            Log.d(TAG, "onDraw: ???!!!!!!!!!!!!!!!!!!!1"+hideCursor);
+        if (!hideCursor) {
+            Log.d(TAG, "onDraw: ???!!!!!!!!!!!!!!!!!!!1" + hideCursor);
 //
-            if(mLeftSelectPoint.x != 0 || mLeftSelectPoint.y != 0){
+            if (mLeftSelectPoint.x != 0 || mLeftSelectPoint.y != 0) {
                 Log.d(TAG, "onDraw: draw cursor");
                 canvas.drawBitmap(mLeftBitmap, mLeftSelectPoint.x - mLeftBitmapRadius,
                         mLeftSelectPoint.y - mLeftBitmapRadius, mBitmapPaint);
             }
         }
     }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         mWidth = bitmapTemp.getWidth();
@@ -96,10 +98,10 @@ public class ColorPicker extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        Log.d(TAG, "onTouchEvent: "+ hideCursor);
+        Log.d(TAG, "onTouchEvent: " + hideCursor);
         float x = event.getX();
         float y = event.getY();
-        Log.d("hello", "onTouchEvent: "+x+" and "+y);
+        Log.d("hello", "onTouchEvent: " + x + " and " + y);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
@@ -122,6 +124,7 @@ public class ColorPicker extends View {
                 invalidate();
                 hideCursor = false;
         }
+        getParent().requestDisallowInterceptTouchEvent(true);
         return true;
     }
 
@@ -135,17 +138,17 @@ public class ColorPicker extends View {
     }
 
 
-    private void getRGB(){
-        int pixel = bitmapTemp.getPixel((int)mLeftSelectPoint.x, (int)mLeftSelectPoint.y);
+    private void getRGB() {
+        int pixel = bitmapTemp.getPixel((int) mLeftSelectPoint.x, (int) mLeftSelectPoint.y);
         int r = Color.red(pixel);
         int g = Color.green(pixel);
         int b = Color.blue(pixel);
         int a = Color.alpha(pixel);
-        Log.d("shit", "getRGB: "+r+" "+g+" "+b+" "+a+" ");
+        Log.d("shit", "getRGB: " + r + " " + g + " " + b + " " + a + " ");
         colorStr = "#" + toBrowserHexValue(r) + toBrowserHexValue(g)
                 + toBrowserHexValue(b);
         //十六进制的颜色字符串。
-        colorcode= ( a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+        colorcode = (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
 
         if (onColorBackListener != null) {
             onColorBackListener.onColorBack(a, r, g, b);
@@ -169,7 +172,7 @@ public class ColorPicker extends View {
 //        Log.d(TAG, "onDetachedFromWindow: ");
 //        mLeftSelectPoint.x = 0;
 //        mLeftSelectPoint.y = 0;
-        
+
     }
 
     private void proofLeft(float x, float y) {
@@ -241,9 +244,9 @@ public class ColorPicker extends View {
         }
     }
 
-    private int twoSpotGetLine(float x1,float y1,float x2,float y2){
-        double line2 = Math.pow((x1-x2),2) + Math.pow((y1-y2),2);
-        return (int)Math.abs(Math.sqrt(line2));
+    private int twoSpotGetLine(float x1, float y1, float x2, float y2) {
+        double line2 = Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2);
+        return (int) Math.abs(Math.sqrt(line2));
     }
 
     public String getColorStr() {
@@ -258,15 +261,15 @@ public class ColorPicker extends View {
         public void onColorBack(int a, int r, int g, int b);
     }
 
-    public int getColorcode(){
+    public int getColorcode() {
         return colorcode;
     }
 
-    public boolean movecursor(){
+    public boolean movecursor() {
         return true;
     }
 
-    public void hideCursor(){
+    public void hideCursor() {
         hideCursor = true;
     }
 }

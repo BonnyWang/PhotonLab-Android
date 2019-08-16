@@ -10,6 +10,14 @@ public class explore_item_Class {
     public final static int CREATIVE = 0b01;
     public final static int TUTORIAL = 0b10;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @IntDef({CREATIVE, TUTORIAL})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Category {
@@ -17,6 +25,11 @@ public class explore_item_Class {
     }
 
     private String link;
+
+    private String imageLink;
+    private String title;
+    private int category = 0x00;
+    private String description;
 
     public void setLink(String link) {
         this.link = link;
@@ -29,10 +42,6 @@ public class explore_item_Class {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    private String imageLink;
-    private String title;
-    private int category = 0x00;
 
     public String getLink() {
         return link;

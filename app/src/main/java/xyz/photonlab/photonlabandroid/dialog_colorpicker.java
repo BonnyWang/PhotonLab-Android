@@ -2,25 +2,28 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import xyz.photonlab.photonlabandroid.R;
+import java.util.Objects;
 
 
 public class dialog_colorpicker extends DialogFragment {
@@ -29,10 +32,8 @@ public class dialog_colorpicker extends DialogFragment {
     private Button closeBt;
     private Button setBt;
     private Button addFavBt;
-    private TextView tv_rgb;
     static String colorStr;
     static int colorcode;
-    Fragment fragment_Control;
     EditText rValue;
     EditText gValue;
     EditText bValue;
@@ -42,8 +43,11 @@ public class dialog_colorpicker extends DialogFragment {
     static int whichOne;
 
 
-    int rgbValue;
     dialog_colorpicker.colorPick_Listener mlistener;
+    private boolean showAddFav = true;
+
+    public dialog_colorpicker() {
+    }
 
 
     static dialog_colorpicker newInstance(int which) {
@@ -52,10 +56,9 @@ public class dialog_colorpicker extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (getDialog() != null && getDialog().getWindow() != null)
-            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.fragment_colorpicker_layout, container, false);
         rValue = view.findViewById(R.id.editTextR);
         rValue.setText("0");
@@ -78,6 +81,7 @@ public class dialog_colorpicker extends DialogFragment {
                 }
             }
         });
+
 
         gValue = view.findViewById(R.id.editTextG);
         gValue.setText("0");
@@ -125,66 +129,70 @@ public class dialog_colorpicker extends DialogFragment {
 
 
         //tv=(TextView)view.findViewById(R.id.tv_info);
-        closeBt = (Button) view.findViewById(R.id.close);
+        closeBt = view.findViewById(R.id.close);
 
-        closeBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                //getParentFragment().getChildFragmentManager().popBackStack();
-            }
+        closeBt.setOnClickListener(v -> {
+            dismiss();
+            //getParentFragment().getChildFragmentManager().popBackStack();
         });
 
-        addFavBt = (Button) view.findViewById(R.id.AddFavColor);
+        addFavBt = view.findViewById(R.id.AddFavColor);
 
-        addFavBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mlistener.getRGB(colorcode, whichOne);
-                dismiss();
-            }
+        if (!showAddFav) {
+            this.addFavBt.setVisibility(View.GONE);
+        }
+
+        addFavBt.setOnClickListener(v -> {
+            mlistener.getRGB(colorcode, whichOne);
+            dismiss();
         });
 
-        setBt = (Button) view.findViewById(R.id.setColorButton);
-        setBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        setBt = view.findViewById(R.id.setColorButton);
+        setBt.setOnClickListener(v -> {
 
-                mlistener.beSet(colorcode, whichOne);
-                dismiss();
+            mlistener.beSet(colorcode, whichOne);
+            dismiss();
 
-            }
         });
 
-        colorDisk = (ColorPicker) view.findViewById(R.id.colorDisk);
-        colorDisk.setOnColorBackListener(new ColorPicker.OnColorBackListener() {
-            @Override
-            public void onColorBack(int a, int r, int g, int b) {
+        colorDisk = view.findViewById(R.id.colorDisk);
+        colorDisk.setOnColorBackListener((a, r, g, b) -> {
 //                tv.setText("R：" + r + "\nG：" + g + "\nB：" + b + "\n" + colorDisk.getColorStr());
 //                tv.setTextColor(Color.argb(a, r, g, b));
 
-                rValue.setText(String.valueOf(r));
-                gValue.setText(String.valueOf(g));
-                bValue.setText(String.valueOf(b));
+            rValue.setText(String.valueOf(r));
+            gValue.setText(String.valueOf(g));
+            bValue.setText(String.valueOf(b));
 
-                setButton_Color(colorDisk.getColorStr());
-                colorStr = colorDisk.getColorStr();
-                colorcode = colorDisk.getColorcode();
-            }
-
-
+            setButton_Color(colorDisk.getColorStr());
+            colorStr = colorDisk.getColorStr();
+            colorcode = colorDisk.getColorcode();
         });
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return view;
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        WindowManager.LayoutParams params = Objects.requireNonNull(getDialog().getWindow()).getAttributes();
+//        params.width = FrameLayout.LayoutParams.MATCH_PARENT;
+//        params.height = FrameLayout.LayoutParams.MATCH_PARENT;
+//        getDialog().getWindow().setAttributes(params);
+//    }
+
     @Override
-    public void onResume() {
-        super.onResume();
-        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
-        params.width = FrameLayout.LayoutParams.MATCH_PARENT;
-        params.height = FrameLayout.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            DisplayMetrics dm = new DisplayMetrics();
+            Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(dm);
+            window.setLayout((int) (dm.widthPixels * 0.95), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+    }
+
+    public void dismissAddFav() {
+        this.showAddFav = false;
     }
 
     public interface colorPick_Listener {

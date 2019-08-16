@@ -102,6 +102,13 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 ft5.replace(R.id.container, mfragment_layout).addToBackStack(null);
                 ft5.commit();
                 break;
+            case 3:
+                FragmentSchedule fragmentSchedule = new FragmentSchedule();
+                FragmentTransaction fragmentScheduleTx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                fragmentScheduleTx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                fragmentScheduleTx.replace(R.id.container, fragmentSchedule).addToBackStack(null);
+                fragmentScheduleTx.commit();
+                break;
             case 4:
                 FragmentSmartHome smartHome = new FragmentSmartHome();
                 FragmentTransaction ftSh = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
@@ -110,7 +117,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 ftSh.commit();
                 break;
             case 5:
-                fragment_motion_detect mfragment_motion_detect = fragment_motion_detect.getInstance();
+                fragment_motion_detect mfragment_motion_detect = new fragment_motion_detect();
                 FragmentTransaction ft2 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft2.replace(R.id.container, mfragment_motion_detect).addToBackStack(null);

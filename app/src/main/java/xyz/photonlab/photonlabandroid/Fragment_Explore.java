@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -79,21 +82,27 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         rv.setLayoutManager(llm);
         rv.setNestedScrollingEnabled(false);
         spinnerMenu = view.findViewById(R.id.spinnerExplore);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
-                R.array.Explore_Menu, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
+//                R.array.Explore_Menu, android.R.layout.simple_spinner_item);
+//        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SimpleCheckableAdapter spinnerAdapter = new SimpleCheckableAdapter(getResources().getStringArray(R.array.Explore_Menu));
         spinnerMenu.setAdapter(spinnerAdapter);
         initializeData();
 
-        explore_RvAdapter adapter = new explore_RvAdapter(bexplores, this, thisone, false);
-
-        rv.setAdapter(adapter);
+//        explore_RvAdapter adapter = new explore_RvAdapter(bexplores, this, thisone, false);
+//
+//        rv.setAdapter(adapter);
 
         spinnerMenu.setSelection(0);
 
         spinnerMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                ((TextView) view).setText("");
+
+                spinnerAdapter.setChecked(position);
+
                 if (position == 0) {
                     explore_RvAdapter adapter0 = new explore_RvAdapter(bexplores, mOnNoteListner, thisone, true);
                     rv.setAdapter(adapter0);
@@ -152,6 +161,12 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
                         item.setLink(map.get("link"));
                         item.setTitle(map.get("title"));
                         String category = map.get("category");
+                        String describe = map.get("description");
+
+                        if (describe != null) {
+                            item.setDescription(describe);
+                        }
+
                         if (category != null && category.equals("Creative")) {
                             item.addCategory(explore_item_Class.CREATIVE);
                         }

@@ -48,7 +48,7 @@
     <string name="Motion_Detect">Motion Detect</string>
     <string name="Time_Delay">Time Delay</string>
     <string name="timeDialog">00:00:00</string>
-    <string name="Themes_Trigger">Themes Trigger</string>
+    <string name="Themes_Trigger">Themes Tigger</string>
     <string name="Trigger_Name">Sky</string>
     <string name="Download_Theme">Download Themes</string>
     <string name="Next">Next</string>
@@ -90,4 +90,8 @@
     <string name="download_firmware">Download Firmware</string>
     <string name="current_version">Current Version</string>
     <string name="firmware_version">1.0.0</string>
+    <string name="Color_trigger">Color Tigger</string>
+    <string name="schedules">Schedules</string>
+    <string name="m_switch">Switch</string>
+    <string name="repeat">Repeat</string>
 </resources>

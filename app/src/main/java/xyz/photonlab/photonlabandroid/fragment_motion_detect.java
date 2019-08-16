@@ -1,7 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -24,19 +24,27 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 
 
-public class fragment_motion_detect extends FullScreenFragment {
+public class fragment_motion_detect extends FullScreenFragment implements dialog_colorpicker.colorPick_Listener {
 
+
+    public static final int COLOR_TRIGGER = 0b01;
+    public static final int THEME_TRIGGER = 0b10;
+
+    TinyDB tinyDB;
 
     final Context context = getContext();
+    ConstraintLayout timeContainer, colorContainer, themeContainer;
     LinearLayout mainContainer;
     TextView tvCallDial;
     Button backButton;
     Switch swMotion;
     TextView currentThemeTip;
+    CardView colorShower;
 
     Calendar initialdate = Calendar.getInstance();
 
@@ -46,15 +54,7 @@ public class fragment_motion_detect extends FullScreenFragment {
 
     static Date settedDate = null;
 
-    private static fragment_motion_detect single_instance;
-
-
-    public static fragment_motion_detect getInstance() {
-        if (single_instance == null)
-            single_instance = new fragment_motion_detect();
-
-        return single_instance;
-    }
+    private int currentMotionDetect = THEME_TRIGGER;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,19 @@ public class fragment_motion_detect extends FullScreenFragment {
         swMotion = view.findViewById(R.id.swMotion);
         mainContainer = view.findViewById(R.id.main_container);
         currentThemeTip = view.findViewById(R.id.tvTriggerName);
+        timeContainer = view.findViewById(R.id.time_delay);
+        colorContainer = view.findViewById(R.id.switch_color);
+        colorShower = view.findViewById(R.id.color_shower);
+        themeContainer = view.findViewById(R.id.theme);
+
+        timeContainer.setOnClickListener(v -> pvTime.show());
+
+        colorContainer.setOnClickListener(v -> {
+            dialog_colorpicker newFragment = dialog_colorpicker.newInstance(0);
+            newFragment.dismissAddFav();
+            newFragment.setListener(fragment_motion_detect.this);
+            newFragment.show(getChildFragmentManager(), "dialog");
+        });
 
         final TinyDB tinyDB = new TinyDB(getContext());
 
@@ -79,17 +92,14 @@ public class fragment_motion_detect extends FullScreenFragment {
 
         initialize();
 
-        swMotion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    swCheck = 1;
-                    tinyDB.putInt("swCheck", swCheck);
+        swMotion.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                swCheck = 1;
+                tinyDB.putInt("swCheck", swCheck);
 
-                } else {
-                    swCheck = 0;
-                    tinyDB.putInt("swCheck", swCheck);
-                }
+            } else {
+                swCheck = 0;
+                tinyDB.putInt("swCheck", swCheck);
             }
         });
 
@@ -117,34 +127,28 @@ public class fragment_motion_detect extends FullScreenFragment {
                 .setDate(initialdate)
                 .build();
 
-        tvCallDial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pvTime.show();
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
-
-        mainContainer.findViewById(R.id.switch_detect).setOnClickListener(v -> {
-
-        });
-
-        mainContainer.findViewById(R.id.time_delay).setOnClickListener(v -> {
-
-        });
+        backButton.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
 
         mainContainer.findViewById(R.id.theme).setOnClickListener(v -> {
-            ActivityOptions options = ActivityOptions.makeCustomAnimation(getContext(), R.anim.float_up, R.anim.float_down);
             Intent i = new Intent(getContext(), SelectMotionThemeActivity.class);
-            ((Activity) getContext()).startActivityForResult(i, 0);
+            startActivityForResult(i, 0);
         });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Select Theme Back", "");
+        if (data == null)
+            return;
+        int themeIndex = data.getIntExtra("themeIndex", -1);
+        if (themeIndex != -1) {
+            themeContainer.setAlpha(1f);
+            colorContainer.setAlpha(0.5f);
+            tinyDB.putInt("currentMotionDetect", this.currentMotionDetect);
+            tinyDB.putInt("motionDetectThemeIndex", themeIndex);
+        }
     }
 
     @Override
@@ -165,8 +169,17 @@ public class fragment_motion_detect extends FullScreenFragment {
     }
 
     private void initialize() {
-        TinyDB tinyDB = new TinyDB(this.getContext());
+        tinyDB = new TinyDB(this.getContext());
         timeDelay = new ArrayList<>();
+
+        if (tinyDB.getInt("currentMotionDetect") == COLOR_TRIGGER) {
+            this.colorContainer.setAlpha(1f);
+            this.themeContainer.setAlpha(0.5f);
+        }
+
+        if (tinyDB.getInt("motionDetectColor") != -1) {
+            colorShower.setCardBackgroundColor(tinyDB.getInt("motionDetectColor"));
+        }
 
         if (tinyDB.getInt("swCheck") == -1) {
             swCheck = 0;
@@ -198,17 +211,19 @@ public class fragment_motion_detect extends FullScreenFragment {
         }
     }
 
+    @Override
+    public int getRGB(int rgbValue, int which) {
+        return 0;
+    }
+
+    @Override
+    public void beSet(int rgbValue, int which) {
+        this.colorShower.setCardBackgroundColor(rgbValue);
+        this.colorContainer.setAlpha(1f);
+        this.themeContainer.setAlpha(0.5f);
+        this.currentMotionDetect = COLOR_TRIGGER;
+        tinyDB.putInt("currentMotionDetect", this.currentMotionDetect);
+        tinyDB.putInt("motionDetectColor", rgbValue);
+    }
 }
-
-
-//Useless Code for the default TimePicker
-
-//timePickerDialog = new TimePickerDialog(getContext(), onTimeSetListener,8, 60, true);
-// timePickerDialog.show();
-//        onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-//            @Override
-//            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                timePickerDialog.dismiss();
-//            }
-//        };
 

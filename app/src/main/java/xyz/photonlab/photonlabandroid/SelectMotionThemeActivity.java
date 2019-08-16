@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +11,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +50,9 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
         TextView textView = view.findViewById(R.id.theme_item);
         textView.setTextColor(Color.BLACK);
         Session.getInstance().setCurrentThemeIndex(this, i);
+        Intent intent = new Intent();
+        intent.putExtra("themeIndex", i);
+        setResult(0, intent);
         finish();
     }
 
