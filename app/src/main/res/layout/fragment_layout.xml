@@ -11,10 +11,10 @@
     tools:context=".fragment_layout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@android:color/transparent"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
+        android:background="@android:color/transparent"
         android:elevation="4dp"
         android:orientation="horizontal">
 
@@ -80,8 +80,6 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:clickable="true"
-            android:focusable="true"
             android:id="@+id/step0_btns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,12 +88,12 @@
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/round_card"
+            android:clickable="true"
+            android:clipToPadding="false"
             android:elevation="4dp"
+            android:focusable="true"
             android:paddingTop="25dp"
-            android:paddingBottom="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintLeft_toRightOf="parent">
+            android:paddingBottom="25dp">
 
             <Button
                 android:id="@+id/btAddHex"
@@ -113,6 +111,7 @@
                 android:id="@+id/btNext"
                 android:layout_width="@dimen/Set_Button_Width"
                 android:layout_height="@dimen/Set_Button_Height"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/set_background"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="@string/Next"
@@ -120,7 +119,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_node_num"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -136,6 +135,20 @@
                 app:layout_constraintHorizontal_bias="0.85"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <TextView
+                android:drawablePadding="6dp"
+                android:gravity="center"
+                android:drawableStart="@drawable/setting_item_wifi"
+                android:drawableTint="#717171"
+                android:id="@+id/tv_node_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_light_matched"
+                android:textColor="#717171"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
             <Button
                 android:id="@+id/btRotate"
                 android:layout_width="30dp"
@@ -150,16 +163,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
-            android:visibility="gone"
-            android:layout_marginBottom="50dp"
-            android:layout_gravity="bottom|center"
             android:id="@+id/step1_next"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/round_btn"
             android:contentDescription="@string/Done"
             android:elevation="4dp"
             android:scaleType="fitXY"
-            android:src="@drawable/arrow_righ" />
+            android:src="@drawable/arrow_righ"
+            android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

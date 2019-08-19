@@ -41,6 +41,8 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
+import static io.reactivex.subjects.UnicastSubject.create;
+
 public class FragmentPair extends Fragment {
 
     private Animation in, out;
@@ -209,9 +211,10 @@ public class FragmentPair extends Fragment {
                     .setTitle("Please Open Your Location Service")
                     .setIcon(R.drawable.lightbulb)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.go_to_location, (dialog1, which) -> {
-                        getActivity().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }).create();
+                    .setPositiveButton(R.string.go_to_location, (dialog1, which) -> getActivity().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                    .setNegativeButton("Cancel", (dialog1, which) ->
+                            dialog1.dismiss())
+                    .create();
             dialog.show();
         }
     }

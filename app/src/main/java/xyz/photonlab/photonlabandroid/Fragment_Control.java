@@ -8,6 +8,7 @@ import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,10 +33,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
@@ -235,7 +239,20 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
         allContainer.setOnTouchListener(new SlideListener(true));
         singleContainer.setOnTouchListener(new SlideListener(true));
+
+        seekBar.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                Log.i("requestColorChange", "==============================");
+                float[] hsv = new float[3];
+                Color.colorToHSV(currentColor0, hsv);
+                hsv[2] = hsv[2] * brightness_value / 100;
+                requestColorChange(Color.HSVToColor(hsv), true);
+            }
+            return false;
+        });
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 String progressStr = progress + "%";
@@ -252,6 +269,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
 
         });
@@ -276,7 +294,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 tvOff.setVisibility(View.GONE);
                 sun.setColorFilter(0xffffd41f);
                 tinyDB.putInt("Power", 1);
-                Request request = new Request.Builder().url(" http://xxx.xxx.xxx.xxx/on").build();
+                Request request = new Request.Builder().url(" http://" + Session.getInstance().getLocalIP(getContext()) +
+                        "/power/on").build();
                 new NetworkHelper().connect(request);
             } else {
                 pop_out.setDuration(8 * brightness_value);
@@ -294,7 +313,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
                 tinyDB.putInt("Power", 0);
                 powerBack.setCardBackgroundColor(getResources().getColor(R.color.seekBar_Default, null));
-                Request request = new Request.Builder().url(" http://xxx.xxx.xxx.xxx/off").build();
+                Request request = new Request.Builder().url(" http://" + Session.getInstance().getLocalIP(getContext()) + "/power/off").build();
                 new NetworkHelper().connect(request);
             }
         });
@@ -445,10 +464,21 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         int blue = (color & 0x0000ff);
         String url;
         if (global)
-            url = "http://" + Session.getInstance().getLocalIP(getContext()) + "/setall?r=" + red + "&g=" + green + "&b=" + blue;
-        else
-            url = "http://" + Session.getInstance().getLocalIP(getContext()) + "/setsingle?r=" + red + "&g=" + green + "&b=" + blue
-                    + "&paneladdress=" + "paneladdress";
+            url = "http://" + Session.getInstance().getLocalIP(getContext())
+                    + "/mode/all?red="
+                    + red + "&green="
+                    + green + "&blue="
+                    + blue + "&brightness="
+                    + ((int) (brightness_value / 100.0 * 253 + 2));
+        else {
+            Light light = null;
+            if (lightStage != null)
+                light = lightStage.getCurrentLight();
+            if (light == null)
+                return;
+            url = "http://" + Session.getInstance().getLocalIP(getContext()) + "/mode/single?red=" + red + "&green=" + green + "&blue=" + blue
+                    + "&node=" + light.getNum() + "&brightness=255";
+        }
         Request request = new Request.Builder().get()
                 .url(url)
                 .build();
@@ -626,10 +656,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             seekBar.setProgress(100);
             seekBar.getProgressDrawable().setTint(rgbValue);
             currentColor0 = rgbValue;
-            float[] hsv = new float[3];
-            Color.colorToHSV(currentColor0, hsv);
-            hsv[2] = hsv[2] * brightness_value / 100;
-            requestColorChange(Color.HSVToColor(hsv), true);
+            requestColorChange(currentColor0, true);
         } else {
             group1.clearCheck();
             group2.clearCheck();

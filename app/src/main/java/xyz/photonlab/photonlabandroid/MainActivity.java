@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     };
 
-    private void createOrReplaceFragment(int i) {
+    private synchronized void createOrReplaceFragment(int i) {
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         //if fragment is null, create and add to container
         if (fragments[i] == null) {

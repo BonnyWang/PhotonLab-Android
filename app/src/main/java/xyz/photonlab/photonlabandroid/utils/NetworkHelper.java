@@ -1,5 +1,7 @@
 package xyz.photonlab.photonlabandroid.utils;
 
+import android.util.Log;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -20,16 +22,21 @@ public class NetworkHelper {
     }
 
     public void connect(Request request) {
+        this.connect(request, client);
+    }
 
+    public void connect(Request request, OkHttpClient client) {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull final IOException e) {
+                Log.e("request error", e.getMessage());
                 if (callback != null)
                     callback.onFailed(e.getMessage());
             }
 
             @Override
             public void onResponse(@NotNull final Call call, @NotNull final Response response) {
+                Log.i("request success", response.toString());
                 if (callback != null)
                     callback.onSuccess(response);
             }

@@ -18,7 +18,7 @@ public class Light implements Serializable {
 
     int currentColor;
 
-    private int num = -1;//-1 for not set yet
+    private long num = -1;//-1 for not set yet
 
     static float RADIUS = 100f;
     private static final float deg60 = (float) Math.PI / 3;
@@ -180,11 +180,11 @@ public class Light implements Serializable {
             originDirection = this.direction;
     }
 
-    public int getNum() {
+    public long getNum() {
         return num;
     }
 
-    public void setNum(int num) {
+    public void setNum(long num) {
         this.num = num;
     }
 

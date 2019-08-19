@@ -1,8 +1,8 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +26,7 @@ import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
 
+@SuppressLint("SetTextI18n")
 public class fragment_system extends FullScreenFragment {
 
     Button btBack;
@@ -54,7 +55,7 @@ public class fragment_system extends FullScreenFragment {
         View view = inflater.inflate(R.layout.fragment_system, container, false);
 
         btBack = view.findViewById(R.id.backButton_System);
-        btBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
+        btBack.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
 
         pairState = view.findViewById(R.id.pair_state);
         pairState.setOnClickListener((v) -> {
@@ -97,42 +98,15 @@ public class fragment_system extends FullScreenFragment {
         });
 
         reset_container = view.findViewById(R.id.reset_container);
-        reset_container.setOnClickListener(v -> {
-            if (!ipAddr.equals("")) {//has device
-                NetworkHelper helper = new NetworkHelper();
-                Request req = new Request.Builder()
-                        .url("http://" + ipAddr + "/reset?secret=000000")
-                        .build();
-                helper.setCallback(new NetworkCallback() {
-                    @Override
-                    public void onSuccess(Response response) {
-                        ipAddr = "";
-                        tinyDB.putString("LocalIp", "");
-                        Session.getInstance().setLocalIP("");
-                        Activity activity = getActivity();
-                        if (activity != null)
-                            activity.runOnUiThread(() -> {
-                                        Toast.makeText(getContext(), "Reset Succeed", Toast.LENGTH_SHORT).show();
-                                        pairState.performClick();
-                                    }
-                            );
-
-                    }
-
-                    @Override
-                    public void onFailed(String msg) {
-                        Activity activity = getActivity();
-                        if (activity != null)
-                            activity.runOnUiThread(() ->
-                                    Toast.makeText(getContext(), "Reset Failed:" + msg, Toast.LENGTH_LONG).show());
-                        Log.e("reset error", msg);
-                    }
-                });
-                helper.connect(req);
-            } else {
-                Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
-            }
-        });
+        final AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle("Are you sure to reset?")
+                .setIcon(R.drawable.lightbulb)
+                .setCancelable(false)
+                .setPositiveButton("Confirm", (dialog1, which) -> resetHardware())
+                .setNegativeButton("Cancel", (dialog1, which) ->
+                        dialog1.dismiss())
+                .create();
+        reset_container.setOnClickListener(v -> dialog.show());
         loading = view.findViewById(R.id.pair_state_load);
         tvDeviceName = view.findViewById(R.id.tvDeviceName);
         firmware_upadate = view.findViewById(R.id.firmware_update);
@@ -145,6 +119,43 @@ public class fragment_system extends FullScreenFragment {
         });
 
         return view;
+    }
+
+    private void resetHardware() {
+        if (!ipAddr.equals("")) {//has device
+            NetworkHelper helper = new NetworkHelper();
+            Request req = new Request.Builder()
+                    .url("http://" + ipAddr + "/reset?secret=000000")
+                    .build();
+            helper.setCallback(new NetworkCallback() {
+                @Override
+                public void onSuccess(Response response) {
+                    ipAddr = "";
+                    tinyDB.putString("LocalIp", "");
+                    Session.getInstance().setLocalIP("");
+                    Activity activity = getActivity();
+                    if (activity != null)
+                        activity.runOnUiThread(() -> {
+                                    Toast.makeText(getContext(), "Reset Succeed", Toast.LENGTH_SHORT).show();
+                                    pairState.performClick();
+                                }
+                        );
+
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    Activity activity = getActivity();
+                    if (activity != null)
+                        activity.runOnUiThread(() ->
+                                Toast.makeText(getContext(), "Reset Failed:" + msg, Toast.LENGTH_LONG).show());
+                    Log.e("reset error", msg);
+                }
+            });
+            helper.connect(req);
+        } else {
+            Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

@@ -54,6 +54,7 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
         View view = inflater.inflate(R.layout.fragment_explore_indiv_v2, container, false);
         btShare = view.findViewById(R.id.button3);
         wvexplore = view.findViewById(R.id.wvexplore);
+        wvexplore.clearCache(true);
         wvexplore.loadUrl(link);
         wvexplore.getSettings().setJavaScriptEnabled(true);
         wvexplore.getSettings().setDomStorageEnabled(true);

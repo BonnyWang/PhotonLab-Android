@@ -156,7 +156,7 @@ public class Session {
                         else
                             light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
                         light.setDirection(o.getInt("direction"), false);
-                        light.setNum(o.getInt("num"));
+                        light.setNum(o.getLong("num"));
                         if (plane) {
                             light.setPlane(true);
                             if (light instanceof MotherLight)

@@ -100,6 +100,7 @@ public class LightStage extends View implements Serializable {
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         performClick();
+
         float x = motionEvent.getX();
         float y = motionEvent.getY();
         float positionX = x - offsetX;
@@ -158,10 +159,12 @@ public class LightStage extends View implements Serializable {
                             + (bound.top + offsetY) + "," + (bound.right + offsetX) + ","
                             + (bound.bottom + offsetY) + "]");
                     if (bound.width() < screenArea.width()) {
-                        if (bound.left + offsetX < 0)
+                        if (bound.left + offsetX < 0) {
                             offsetX = -bound.left;
-                        if (bound.right + offsetX > screenArea.right)
+                        }
+                        if (bound.right + offsetX > screenArea.right) {
                             offsetX = screenArea.right - bound.right;
+                        }
                     } else {
                         if (bound.left + offsetX > 0)
                             offsetX = -bound.left;
@@ -370,6 +373,13 @@ public class LightStage extends View implements Serializable {
             if (!light.isLitUp())
                 return false;
         return true;
+    }
+
+    public Light getCurrentLight() {
+        for (Light light : lights)
+            if (light.isChecked())
+                return light;
+        return null;
     }
 
     public interface OnViewCreatedListener {
