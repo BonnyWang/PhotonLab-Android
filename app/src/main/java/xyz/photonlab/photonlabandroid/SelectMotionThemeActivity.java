@@ -29,8 +29,8 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_select_motion_theme);
         list = findViewById(R.id.list);
         if (Session.getInstance().isDarkMode(this)) {
@@ -38,8 +38,10 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
             ((TextView) findViewById(R.id.title_tv)).setTextColor(Theme.Dark.SELECTED_TEXT);
             findViewById(R.id.button).setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
             getWindow().setStatusBarColor(Theme.Dark.MAIN_BACKGROUND);
+            getWindow().setNavigationBarColor(Theme.Dark.MAIN_BACKGROUND);
         } else {
             getWindow().setStatusBarColor(Theme.Normal.MAIN_BACKGROUND);
+            getWindow().setNavigationBarColor(Theme.Normal.MAIN_BACKGROUND);
         }
         Session.getInstance().requestTheme(this);
         System.out.println(Session.getInstance());
@@ -72,6 +74,12 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
             TextView view = list.getChildAt(i).findViewById(R.id.theme_item);
             view.setTextColor(getResources().getColor(R.color.light_gray, getTheme()));
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 }
 
@@ -120,4 +128,5 @@ class ThemeAdapter extends BaseAdapter {
         }
         return view;
     }
+
 }

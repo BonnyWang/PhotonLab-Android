@@ -6,12 +6,12 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:paddingBottom="40dp"
         android:id="@+id/scrollable"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
 
         <Button
             android:id="@+id/close"
@@ -25,8 +25,8 @@
 
         <xyz.photonlab.photonlabandroid.ColorPicker
             android:id="@+id/colorDisk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp" />
@@ -92,12 +92,12 @@
             android:layout_marginEnd="32dp"
             android:background="@drawable/set_background_no_size"
             android:elevation="0dp"
-            android:text="@string/Set"
-            android:textColor="#bdbdbd"
-            android:textAllCaps="false"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:textSize="18sp"/>
+            android:text="@string/Set"
+            android:textAllCaps="false"
+            android:textColor="#bdbdbd"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/AddFavColor"
@@ -109,17 +109,17 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/set_background_no_size"
             android:elevation="0dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:text="@string/Add_to_Favorite"
             android:textAllCaps="false"
             android:textColor="#bdbdbd"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
             android:textSize="18sp" />
 
         <View
 
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </ScrollView>

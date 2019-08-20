@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,7 +40,6 @@ public class Fragment_Theme extends Fragment
     ArrayList<theme_Class> mfavoriteTheme;
     ArrayList<theme_Class> sweetTheme;
     ImageView imageView_Card;
-    Fragment theme_Individual;
     Spinner spinnerMenu;
     View btn_no_more;
     RvAdapter.OnNoteListener mOnNoteListener = this;
@@ -142,7 +142,6 @@ public class Fragment_Theme extends Fragment
         Session.getInstance().addOnThemeChangeListener(this);
         initTheme(Session.getInstance().isDarkMode(getContext()));
         return view;
-
     }
 
 
@@ -267,16 +266,21 @@ public class Fragment_Theme extends Fragment
     @Override
     public void initTheme(boolean dark) {
         Class<? extends Theme.ThemeColors> colors;
-        if (dark)
+        if (dark) {
+            ((CardView) btn_no_more.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#505154"));
             colors = Theme.Dark.class;
-        else
+        } else {
+            ((CardView) btn_no_more.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#f5f5f5"));
             colors = Theme.Normal.class;
+        }
         try {
             spinnerMenu.setBackgroundTintList(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
             tv_title.setTextColor(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         rv.setAdapter(new RvAdapter(mtheme, this));
+        spinnerMenu.setSelection(0);
     }
 }

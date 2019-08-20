@@ -26,7 +26,8 @@ public class Theme {
     public static class Dark extends ThemeColors {
         public static final int MAIN_BACKGROUND = Color.parseColor("#2C2D31");
         public static final int SELECTED_TEXT = Color.parseColor("#ffffff");
-        public static final int UNSELECTED_TEXT = Color.parseColor("#5a5a5a");
+        public static final int UNSELECTED_TEXT = Color.parseColor("#6a6a6a");
+        public static final int CARD_BACKGROUND = Color.parseColor("#2E2F33");
         public static final int TITLE = Color.parseColor("#ffffff");
     }
 

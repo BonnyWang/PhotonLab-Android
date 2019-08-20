@@ -242,6 +242,9 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         try {
             spinnerMenu.setBackgroundTintList(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
             tv_title.setTextColor(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+            adapter = new explore_RvAdapter(bexplores, mOnNoteListner, thisone, true);
+            rv.setAdapter(adapter);
+            spinnerMenu.setSelection(0);
         } catch (Exception e) {
             e.printStackTrace();
         }

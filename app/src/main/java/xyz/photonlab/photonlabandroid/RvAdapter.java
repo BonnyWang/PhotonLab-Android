@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,22 +62,24 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
         return mthemes.size() + 1;
     }
 
+    @NonNull
     @Override
-    public RvAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public RvAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View v;
         if (viewType == R.layout.cardview) {
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview, viewGroup, false);
+            if (Session.getInstance().isDarkMode(v.getContext())) {
+                ((CardView) v.findViewById(R.id.cv)).setCardBackgroundColor(Theme.Dark.CARD_BACKGROUND);
+                ((TextView) v.findViewById(R.id.add_Theme)).setTextColor(Theme.Dark.SELECTED_TEXT);
+                ((TextView) v.findViewById(R.id.textView3)).setTextColor(Theme.Dark.UNSELECTED_TEXT);
+            }
         } else {
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.button_theme, viewGroup, false);
             if (Session.getInstance().isDarkMode(v.getContext())) {
                 ((CardView) v.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#505154"));
-            } else {
-                ((CardView) v.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Theme.Normal.MAIN_BACKGROUND);
             }
         }
-        MyViewHolder myViewHolder = new MyViewHolder(v, mOnNoteListener);
-
-        return myViewHolder;
+        return new MyViewHolder(v, mOnNoteListener);
     }
 
     @Override

@@ -188,8 +188,8 @@
 
             <ImageView
                 android:id="@+id/router"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="344dp"
+                android:layout_height="230dp"
                 android:layout_marginTop="40dp"
                 android:contentDescription="@string/Pairing"
                 android:src="@drawable/rounter"

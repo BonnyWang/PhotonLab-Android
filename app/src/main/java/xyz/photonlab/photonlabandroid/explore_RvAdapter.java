@@ -7,12 +7,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.model.explore_item_Class;
 
 public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.MyViewHolder> {
@@ -33,6 +36,13 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
             bimageView = itemView.findViewById(R.id.ivExplore);
             title = itemView.findViewById(R.id.title);
             desc = itemView.findViewById(R.id.tv_desc);
+            if (Session.getInstance().isDarkMode(v.getContext())) {
+                if (title != null)
+                    title.setTextColor(Theme.Dark.SELECTED_TEXT);
+                if (desc != null)
+                    desc.setTextColor(Theme.Dark.UNSELECTED_TEXT);
+                ((CardView) itemView.findViewById(R.id.cv)).setCardBackgroundColor(Theme.Dark.CARD_BACKGROUND);
+            }
             this.bonNoteListener = bonNoteListener;
             v.setOnClickListener(this);
         }

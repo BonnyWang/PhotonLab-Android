@@ -82,6 +82,10 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     private int colorSelected;
     private int colorUnselected;
     private CardView seekBarContainer;
+    private View divider;
+
+    private int powerCheckedColor = Color.parseColor("#67D96A");
+    private int powerUnCheckedColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                              Bundle savedInstanceState) {
         DisplayMetrics dm = new DisplayMetrics();
         //check the screen
+        powerUnCheckedColor = getResources().getColor(R.color.seekBar_Default, null);
         if (getContext() != null) {
             WindowManager windowManager = (WindowManager) getContext().getSystemService(WINDOW_SERVICE);
             windowManager.getDefaultDisplay().getMetrics(dm);
@@ -285,7 +290,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         power.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 pop_enter.setDuration(8 * brightness_value);
-                powerBack.setCardBackgroundColor(Color.parseColor("#67D96A"));
+                powerBack.setCardBackgroundColor(powerCheckedColor);
                 seekBar.getProgressDrawable().setTint(currentColor0);
                 seekBar.setVisibility(View.VISIBLE);
                 if (isFirst) {
@@ -316,7 +321,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 tvOff.setVisibility(View.VISIBLE);
                 sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
                 tinyDB.putInt("Power", 0);
-                powerBack.setCardBackgroundColor(getResources().getColor(R.color.seekBar_Default, null));
+                powerBack.setCardBackgroundColor(powerUnCheckedColor);
                 Request request = new Request.Builder().url(" http://" + Session.getInstance().getLocalIP(getContext()) + "/power/off").build();
                 new NetworkHelper().connect(request);
             }
@@ -570,7 +575,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         add1 = contentView.findViewById(R.id.AddColor00);
         seekBarContainer = contentView.findViewById(R.id.seek_container);
         tvOff = contentView.findViewById(R.id.progress_off_tip);
-
+        divider = contentView.findViewById(R.id.divider);
         radioButtons0 = new RadioButton[4];
         radioButtons1 = new RadioButton[9];
 
@@ -695,21 +700,37 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         Class<? extends Theme.ThemeColors> colors;
         if (dark) {
             colors = Theme.Dark.class;
+            powerCheckedColor = Color.parseColor("#67D96A");
+            powerUnCheckedColor = Color.parseColor("#505154");
             seekBarContainer.setCardBackgroundColor(Color.parseColor("#505154"));
-        } else
-        {
+            sun.setImageResource(R.drawable.ic_moon);
+        } else {
             colors = Theme.Normal.class;
+            sun.setImageResource(R.drawable.bright_sun);
             seekBarContainer.setCardBackgroundColor(Color.parseColor("#ffededed"));
+            powerCheckedColor = Color.parseColor("#67D96A");
+            powerUnCheckedColor = getResources().getColor(R.color.seekBar_Default, null);
         }
         try {
-            lightStage.setBackgroundColor(colors.getField("MAIN_BACKGROUND").getInt(null));
+            if (lightStage != null)
+                lightStage.setBackgroundColor(colors.getField("MAIN_BACKGROUND").getInt(null));
             this.colorSelected = colors.getField("SELECTED_TEXT").getInt(null);
             this.colorUnselected = colors.getField("UNSELECTED_TEXT").getInt(null);
-            tvToAll.setTextColor(colorSelected);
-            tvToSingle.setTextColor(colorUnselected);
-            tvToAll.performClick();
+            divider.setBackgroundColor(colors.getField("UNSELECTED_TEXT").getInt(null));
+            if (isAll) {
+                tvToAll.setTextColor(colorSelected);
+                tvToSingle.setTextColor(colorUnselected);
+            } else {
+                tvToAll.setTextColor(colorUnselected);
+                tvToSingle.setTextColor(colorSelected);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (power.isChecked()) {
+            powerBack.setCardBackgroundColor(powerCheckedColor);
+        } else {
+            powerBack.setCardBackgroundColor(powerUnCheckedColor);
         }
     }
 

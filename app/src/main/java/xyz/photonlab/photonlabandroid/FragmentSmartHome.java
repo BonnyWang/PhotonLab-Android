@@ -62,6 +62,7 @@ public class FragmentSmartHome extends Fragment {
         if (Session.getInstance().isDarkMode(getContext())) {
             exit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
             help.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            ((CardView)view.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#505154"));
         }
     }
 

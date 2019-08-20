@@ -177,7 +177,10 @@ public class dialog_colorpicker extends DialogFragment {
             gValue.setTextColor(Theme.Dark.SELECTED_TEXT);
             bValue.setTextColor(Theme.Dark.SELECTED_TEXT);
         }
-
+        if (Session.getInstance().isDarkMode(getContext())){
+            setBt.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
+            addFavBt.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
+        }
         return view;
     }
 

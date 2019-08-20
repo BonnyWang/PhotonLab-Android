@@ -123,14 +123,16 @@ public class fragment_layout extends Fragment {
         });
 
         next.setOnClickListener(v -> {
-            if (lightNums.size() == 0) {
-                Toast.makeText(getContext(), "Unable To get Node info", Toast.LENGTH_SHORT).show();
-                return;
-            }
             if (lightStage.getLights().size() > 0 && lightStage.getUselessLightNum() == 0) {
                 session.saveLayoutToLocal(getContext(), lightStage);
                 if (listener != null)
                     listener.onSavedLayout(true);
+
+                if (lightNums.size() != lightStage.getLights().size()) {//check the num between ui and physic
+                    Toast.makeText(getContext(), "Incorrect Node Num!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 step0BtnsParent.setVisibility(View.GONE);
                 step1Next.setVisibility(View.VISIBLE);
                 step0BtnsParent.startAnimation(out);
@@ -138,7 +140,6 @@ public class fragment_layout extends Fragment {
                 tip.setText(R.string.select_the_lit_light);
                 lightStage.denyMove();
                 lightStage.enterSetupMode();
-
                 //after layout Request you will receive a num
                 currentNum = 0;
                 nextLight(0);
@@ -213,6 +214,8 @@ public class fragment_layout extends Fragment {
 
 
     private void nextLight(int index) {
+        if (index > lightNums.size() - 1 || index < 0)//avoid illegal parameter
+            return;
 
         NetworkHelper helper = new NetworkHelper();
         Request request = new Request.Builder()

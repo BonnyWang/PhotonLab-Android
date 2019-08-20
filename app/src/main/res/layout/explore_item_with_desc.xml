@@ -29,7 +29,6 @@
                 android:id="@+id/ivExplore"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="#008F0F0F"
                 android:contentDescription="@string/title_Theme"
                 android:scaleType="centerInside"
                 app:layout_constraintDimensionRatio="1:1"

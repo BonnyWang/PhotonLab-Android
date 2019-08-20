@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
+        app:cardElevation="8dp"
         app:cardUseCompatPadding="true"
         app:contentPadding="0dp"
         android:layout_marginLeft="15dp"
@@ -61,7 +61,6 @@
                 android:id="@+id/imageView_Card"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:background="#008F0F0F"
                 android:contentDescription="@string/title_Theme"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/gradientcolor1" />

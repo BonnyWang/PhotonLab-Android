@@ -8,8 +8,10 @@ import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -110,24 +112,22 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fade_scale_in, R.anim.fade_scale_out);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-
-        setContentView(R.layout.activity_main);
-
-        container = findViewById(R.id.MainContainer);
-        container.setVisibility(View.GONE);
-        navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         //show welcome
+
         FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
         ft0.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
         ft0.replace(R.id.container, start_anim).addToBackStack(null);
         ft0.commit();
+        setContentView(R.layout.activity_main);
+        container = findViewById(R.id.MainContainer);
+        container.setVisibility(View.GONE);
+        navView = findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
         //checkPermission
@@ -176,10 +176,14 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         if (isDark) {
             colors = Theme.Dark.class;
             navView.setItemIconTintList(getResources().getColorStateList(R.color.bottom_nav_selector_dark, null));
+            int s = getWindow().getDecorView().getSystemUiVisibility();
+            getWindow().getDecorView().setSystemUiVisibility(s & (~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
+            getWindow().setNavigationBarColor(Theme.Dark.MAIN_BACKGROUND);
         } else {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             colors = Theme.Normal.class;
-
             navView.setItemIconTintList(getResources().getColorStateList(R.color.bottom_nav_selector, null));
+            getWindow().setNavigationBarColor(Theme.Normal.MAIN_BACKGROUND);
         }
         try {
             getWindow().setStatusBarColor(colors.getField("MAIN_BACKGROUND").getInt(null));
@@ -230,6 +234,12 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     public void goMain() {
         Log.i("goMain", "try to go control fragment");
         navView.setSelectedItemId(R.id.navigation_home);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.fade_scale_in, R.anim.fade_scale_out);
     }
 }
 
