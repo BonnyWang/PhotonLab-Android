@@ -10,6 +10,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
+
 class MyDivider extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
@@ -18,7 +21,10 @@ class MyDivider extends RecyclerView.ItemDecoration {
 
     private final Rect mBounds = new Rect();
 
+    private Context context;
+
     public MyDivider(Context context) {
+        this.context = context;
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
@@ -33,7 +39,8 @@ class MyDivider extends RecyclerView.ItemDecoration {
         canvas.save();
         int left;
         int right;
-
+        if (Session.getInstance().isDarkMode(context))
+            mDivider.setTint(Theme.Dark.SELECTED_TEXT);
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);

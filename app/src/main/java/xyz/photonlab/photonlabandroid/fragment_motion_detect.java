@@ -3,6 +3,8 @@ package xyz.photonlab.photonlabandroid;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.view.TimePickerView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +31,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 
 public class fragment_motion_detect extends FullScreenFragment implements dialog_colorpicker.colorPick_Listener {
@@ -133,6 +138,19 @@ public class fragment_motion_detect extends FullScreenFragment implements dialog
             Intent i = new Intent(getContext(), SelectMotionThemeActivity.class);
             startActivityForResult(i, 0);
         });
+        if (Session.getInstance().isDarkMode(getContext())) {
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            ((TextView) view.findViewById(R.id.textView2)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvTime)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvThemeTrigger)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.color_title)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.textView2)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvTriggerName)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvCallDialog)).setTextColor(Theme.Dark.UNSELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvMotion)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            view.findViewById(R.id.divider).setBackgroundColor(Theme.Dark.UNSELECTED_TEXT);
+            backButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+        }
         return view;
     }
 

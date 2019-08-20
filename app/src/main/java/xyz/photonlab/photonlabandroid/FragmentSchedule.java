@@ -2,6 +2,8 @@ package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import java.util.Calendar;
 import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 /**
  * created by kio on 2019/08/15 15:27
@@ -89,6 +92,18 @@ public class FragmentSchedule extends Fragment implements dialog_colorpicker.col
                 .isDialog(true)
                 .setDate(Calendar.getInstance())
                 .build();
+        if (Session.getInstance().isDarkMode(getContext())) {
+            contentView.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            ((TextView) contentView.findViewById(R.id.tvMotion)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) contentView.findViewById(R.id.tvTime)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) contentView.findViewById(R.id.tvRepeat)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) contentView.findViewById(R.id.textView2)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) contentView.findViewById(R.id.tvThemeTrigger)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) contentView.findViewById(R.id.color_title)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) contentView.findViewById(R.id.tvTriggerName)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            contentView.findViewById(R.id.divider).setBackgroundColor(Theme.Dark.UNSELECTED_TEXT);
+            exit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+        }
     }
 
     private void addViewEvent() {

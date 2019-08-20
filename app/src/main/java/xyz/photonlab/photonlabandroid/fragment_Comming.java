@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import xyz.photonlab.photonlabandroid.R;
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 
 public class fragment_Comming extends FullScreenFragment {
@@ -44,7 +46,8 @@ public class fragment_Comming extends FullScreenFragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
+        if (Session.getInstance().isDarkMode(getContext()))
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
         return view;
     }
 

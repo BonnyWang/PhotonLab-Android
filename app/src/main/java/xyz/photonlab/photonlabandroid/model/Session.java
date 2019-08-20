@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,12 +32,16 @@ public class Session {
     private ArrayList<theme_Class> sweetTheme;
     private String localIP = "";
     private boolean permissionFlag = true;
+    private boolean darkMode = false;
 
     private int currentThemeIndex = -1;
+
+    private ArrayList<OnThemeChangeListener> onThemeChangeListeners = new ArrayList<>();
 
     private Session() {
 
     }
+
 
     public synchronized static Session getInstance() {
         if (instance == null)
@@ -86,7 +92,7 @@ public class Session {
         }
 
         sweetTheme = new ArrayList<>();
-        sweetTheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d, "Photonlab", "Sweet sweet"));
+        sweetTheme.add(mtheme.get(1));
     }
 
     public ArrayList<theme_Class> getMtheme() {
@@ -238,4 +244,34 @@ public class Session {
     public boolean isPermissionFlag() {
         return permissionFlag;
     }
+
+    public boolean isDarkMode(Context context) {
+        TinyDB db = new TinyDB(context);
+        if (db.getBoolean("darkMode"))
+            darkMode = true;
+        return darkMode;
+    }
+
+    public void setDarkMode(Context context, boolean darkMode) {
+        this.darkMode = darkMode;
+        TinyDB db = new TinyDB(context);
+        db.putBoolean("darkMode", darkMode);
+    }
+
+    public interface OnThemeChangeListener {
+        void initTheme(boolean dark);
+    }
+
+    public void addOnThemeChangeListener(@NonNull OnThemeChangeListener listener) {
+        this.onThemeChangeListeners.add(listener);
+    }
+
+    public synchronized void notifyThemeChange(Context context) {
+        boolean flag = isDarkMode(context);
+        for (OnThemeChangeListener listener :
+                onThemeChangeListeners) {
+            listener.initTheme(flag);
+        }
+    }
+
 }

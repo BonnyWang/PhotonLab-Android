@@ -95,4 +95,5 @@
     <string name="m_switch">Switch</string>
     <string name="repeat">Repeat</string>
     <string name="no_light_matched">Panels Detected: 0</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>

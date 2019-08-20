@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import xyz.photonlab.photonlabandroid.R;
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
 
     private OnNoteListener mOnNoteListener;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CardView cv;
         TextView textView;
@@ -30,9 +33,9 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
 
         public MyViewHolder(View v, OnNoteListener onNoteListener) {
             super(v);
-            cv = (CardView)itemView.findViewById(R.id.cv);
+            cv = (CardView) itemView.findViewById(R.id.cv);
             textView = (TextView) itemView.findViewById(R.id.add_Theme);
-            imageView_Card = (ImageView)itemView.findViewById(R.id.imageView_Card);
+            imageView_Card = (ImageView) itemView.findViewById(R.id.imageView_Card);
 //            add_Theme=(Button)itemView.findViewById(R.id.plus_Theme);
 
 
@@ -48,44 +51,47 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
 
     List<theme_Class> mthemes;
 
-    public RvAdapter(List<theme_Class> mthemes, OnNoteListener onNoteListener){
+    public RvAdapter(List<theme_Class> mthemes, OnNoteListener onNoteListener) {
         this.mthemes = mthemes;
         this.mOnNoteListener = onNoteListener;
     }
 
     @Override
     public int getItemCount() {
-        return mthemes.size()+1;
+        return mthemes.size() + 1;
     }
 
     @Override
     public RvAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v;
-        if(viewType == R.layout.cardview){
+        if (viewType == R.layout.cardview) {
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview, viewGroup, false);
-        }
-
-        else {
+        } else {
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.button_theme, viewGroup, false);
+            if (Session.getInstance().isDarkMode(v.getContext())) {
+                ((CardView) v.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#505154"));
+            } else {
+                ((CardView) v.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Theme.Normal.MAIN_BACKGROUND);
+            }
         }
-        MyViewHolder myViewHolder = new MyViewHolder(v , mOnNoteListener);
+        MyViewHolder myViewHolder = new MyViewHolder(v, mOnNoteListener);
 
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int i) {
-        if(i == mthemes.size()) {
+        if (i == mthemes.size()) {
 //            holder.add_Theme.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
 //                    Log.d("yes", "onClick: yes");
 //                }
 //            });
-        }
-        else{
+        } else {
             holder.textView.setText(mthemes.get(i).name);
-            holder.imageView_Card.setImageDrawable(mthemes.get(i).getGradientDrawablt());}
+            holder.imageView_Card.setImageDrawable(mthemes.get(i).getGradientDrawablt());
+        }
     }
 
     @Override
@@ -93,7 +99,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public interface OnNoteListener{
+    public interface OnNoteListener {
         void onNoteClick(int position);
     }
 

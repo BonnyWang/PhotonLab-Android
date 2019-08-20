@@ -62,7 +62,6 @@
             android:id="@+id/pair_step_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/backGround"
             android:visibility="visible">
 
             <androidx.cardview.widget.CardView
@@ -270,7 +269,6 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
             android:animateLayoutChanges="true"
-            android:background="@color/backGround"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/progressBar"
             app:layout_constraintTop_toBottomOf="@id/linearLayout">
@@ -348,7 +346,6 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="40dp"
             android:animateLayoutChanges="true"
-            android:background="@color/backGround"
             android:visibility="gone">
 
             <ImageView

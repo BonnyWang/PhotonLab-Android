@@ -1,10 +1,12 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -12,12 +14,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import xyz.photonlab.photonlabandroid.R;
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class fragement_theme_individual extends Fragment {
@@ -51,7 +58,7 @@ public class fragement_theme_individual extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ;
+
         View view = inflater.inflate(R.layout.fragement_theme_individual_layout, container, false);
         ListView lv = (ListView) view.findViewById(R.id.info_list);
 
@@ -73,24 +80,14 @@ public class fragement_theme_individual extends Fragment {
         setButton_Background.setCornerRadius(30);
         setButton_Background.setSize(1000, 50);
         setButton.setBackground(setButton_Background);
-        setButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: Data Transfer Back-End -Bonny
+        setButton.setOnClickListener(v -> {
+            //TODO: Data Transfer Back-End -Bonny
 
-            }
         });
 
 
         backButton = view.findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        backButton.setOnClickListener(v -> getActivity().finish());
 
 
         favorite = view.findViewById(R.id.favorite);
@@ -100,20 +97,19 @@ public class fragement_theme_individual extends Fragment {
             favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border, null));
         }
 
-        favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    isFavorite = true;
-                    favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite, null));
-                    mlistener.Addavorite(mtheme);
-                } else {
-                    favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border, null));
-                    mlistener.RemoveFavorite(mtheme);
-                    isFavorite = false;
-                }
+        favorite.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                isFavorite = true;
+                favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite, null));
+                mlistener.Addavorite(mtheme);
+            } else {
+                favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border, null));
+                mlistener.RemoveFavorite(mtheme);
+                isFavorite = false;
             }
         });
+        if (Session.getInstance().isDarkMode(getContext()))
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
         return view;
     }
 
@@ -124,14 +120,13 @@ public class fragement_theme_individual extends Fragment {
     }
 
     public interface themeIndivListener {
-        public theme_Class Addavorite(theme_Class current);
+        theme_Class Addavorite(theme_Class current);
 
-        public theme_Class RemoveFavorite(theme_Class currrent);
+        theme_Class RemoveFavorite(theme_Class currrent);
     }
 
     public void setListener(themeIndivListener mlistener) {
         this.mlistener = mlistener;
     }
-
 
 }

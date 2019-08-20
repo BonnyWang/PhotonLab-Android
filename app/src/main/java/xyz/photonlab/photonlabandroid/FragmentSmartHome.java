@@ -2,16 +2,14 @@ package xyz.photonlab.photonlabandroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.transition.Transition;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,11 +21,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.SmartHomeItem;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 public class FragmentSmartHome extends Fragment {
 
@@ -45,7 +44,10 @@ public class FragmentSmartHome extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Button exit = view.findViewById(R.id.backButton_Coming);
         Button help = view.findViewById(R.id.button3);
-
+        if (Session.getInstance().isDarkMode(getContext())) {
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            ((TextView) view.findViewById(R.id.ComingSoon)).setTextColor(Theme.Dark.SELECTED_TEXT);
+        }
         help.setOnClickListener(v -> {
             Activity activity = getActivity();
             if (activity != null) {
@@ -57,6 +59,10 @@ public class FragmentSmartHome extends Fragment {
         exit.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
         initData();
         initRecyclerView();
+        if (Session.getInstance().isDarkMode(getContext())) {
+            exit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            help.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+        }
     }
 
     private void initData() {

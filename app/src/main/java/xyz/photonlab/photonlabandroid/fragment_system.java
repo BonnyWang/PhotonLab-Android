@@ -3,6 +3,8 @@ package xyz.photonlab.photonlabandroid;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import java.util.Objects;
 
 import okhttp3.Request;
 import okhttp3.Response;
+import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
@@ -34,6 +38,7 @@ public class fragment_system extends FullScreenFragment {
     ProgressBar loading;
 
     ConstraintLayout pairState, reset_container, firmware_upadate;
+    Switch switch_dark_mode;
     TextView tvDeviceName;
 
     TinyDB tinyDB;
@@ -56,6 +61,13 @@ public class fragment_system extends FullScreenFragment {
 
         btBack = view.findViewById(R.id.backButton_System);
         btBack.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
+        switch_dark_mode = view.findViewById(R.id.switch_dark_mode);
+        switch_dark_mode.setChecked(Session.getInstance().isDarkMode(getContext()));
+        switch_dark_mode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Session.getInstance().setDarkMode(getContext(), isChecked);
+            Session.getInstance().notifyThemeChange(getContext());
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+        });
 
         pairState = view.findViewById(R.id.pair_state);
         pairState.setOnClickListener((v) -> {
@@ -117,7 +129,15 @@ public class fragment_system extends FullScreenFragment {
             tx.replace(R.id.container, new FragmentFirmwareUpdate()).addToBackStack(null);
             tx.commit();
         });
-
+        if (Session.getInstance().isDarkMode(getContext())) {
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            ((TextView) view.findViewById(R.id.tvDeviceName)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tv_dark_mode)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvDeviceName1)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvReset)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            ((TextView) view.findViewById(R.id.tvSystem)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            btBack.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+        }
         return view;
     }
 

@@ -2,6 +2,8 @@ package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,6 +16,9 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 
 public class fragment_explore_indiv extends Fragment implements View.OnTouchListener {
@@ -73,6 +78,13 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
         tvTitle.setText(title);
 
         wvexplore.setWebViewClient(new MyWebViewClient());
+        if (Session.getInstance().isDarkMode(getContext())) {
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            tvTitle.setTextColor(Theme.Dark.SELECTED_TEXT);
+            view.findViewById(R.id.tool_bar).setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            btBack.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            btShare.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+        }
         return view;
     }
 

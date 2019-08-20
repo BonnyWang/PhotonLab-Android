@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,14 +33,16 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.model.explore_item_Class;
 
 
-public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNoteListener {
+public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNoteListener, Session.OnThemeChangeListener {
 
     Context context;
     ArrayList<explore_item_Class> bexplores;
-
+    TextView tv_title;
     Spinner spinnerMenu;
     RecyclerView rv;
     explore_RvAdapter adapter;
@@ -78,6 +81,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
 
 
         rv = view.findViewById(R.id.rvExplore);
+        tv_title = view.findViewById(R.id.tvExplore);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
         rv.setNestedScrollingEnabled(false);
@@ -132,6 +136,8 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
             }
         });
 
+        Session.getInstance().addOnThemeChangeListener(this);
+        initTheme(Session.getInstance().isDarkMode(getContext()));
         return view;
 
     }
@@ -191,8 +197,34 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
 
     @Override
     public void onNoteClick(int position) {
-        fragment_explore_indiv bfgExplore = new fragment_explore_indiv(bexplores.get(position).getLink(),
-                bexplores.get(position).getTitle());
+        explore_item_Class explore_item_class = null;
+        if (spinnerMenu.getSelectedItemPosition() == 0)
+            explore_item_class = bexplores.get(position);
+        else if (spinnerMenu.getSelectedItemPosition() == 1) {
+            int sum = 0;
+            for (int i = 0; i < bexplores.size(); i++) {
+                if (bexplores.get(i).isCreative()) {
+                    if (sum == position) {
+                        explore_item_class = bexplores.get(i);
+                    }
+                    sum++;
+                }
+            }
+        } else {
+            int sum = 0;
+            for (int i = 0; i < bexplores.size(); i++) {
+                if (bexplores.get(i).isTutorial()) {
+                    if (sum == position) {
+                        explore_item_class = bexplores.get(i);
+                    }
+                    sum++;
+                }
+            }
+        }
+        if (explore_item_class == null)
+            return;
+        fragment_explore_indiv bfgExplore = new fragment_explore_indiv(explore_item_class.getLink(),
+                explore_item_class.getTitle());
         FragmentTransaction ftindiv = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         ftindiv.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ftindiv.replace(R.id.container, bfgExplore).addToBackStack(null);
@@ -200,6 +232,20 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
     }
 
 
+    @Override
+    public void initTheme(boolean dark) {
+        Class<? extends Theme.ThemeColors> colors;
+        if (dark)
+            colors = Theme.Dark.class;
+        else
+            colors = Theme.Normal.class;
+        try {
+            spinnerMenu.setBackgroundTintList(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+            tv_title.setTextColor(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

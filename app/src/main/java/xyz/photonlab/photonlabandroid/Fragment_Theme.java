@@ -2,6 +2,8 @@ package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,12 +25,13 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 
 public class Fragment_Theme extends Fragment
         implements RvAdapter.OnNoteListener,
         fragement_theme_individual.themeIndivListener,
-        fragment_theme_Download.fdlListener {
+        fragment_theme_Download.fdlListener, Session.OnThemeChangeListener {
 
     private final static String TAG = "Fragment_Theme";
     Context context;
@@ -40,7 +43,7 @@ public class Fragment_Theme extends Fragment
     Spinner spinnerMenu;
     View btn_no_more;
     RvAdapter.OnNoteListener mOnNoteListener = this;
-
+    TextView tv_title;
     fragment_theme_Download.fdlListener mfdlListener = this;
 
     ArrayList<Integer> favOrder = new ArrayList<>();
@@ -50,6 +53,7 @@ public class Fragment_Theme extends Fragment
     RecyclerView rv;
 
     int dlThemeNo;
+    private int position = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +79,7 @@ public class Fragment_Theme extends Fragment
         rv.setNestedScrollingEnabled(false);
         imageView_Card = view.findViewById(R.id.imageView_Card);
         btn_no_more = view.findViewById(R.id.btn_no_more);
-
+        tv_title = view.findViewById(R.id.message);
         spinnerMenu = view.findViewById(R.id.spinnerThemes);
 //        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
 //                R.array.theme_Menu, android.R.layout.simple_spinner_item);
@@ -135,63 +139,12 @@ public class Fragment_Theme extends Fragment
             }
         });
 
-
-//        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-//        User user = new User("Bonny", "Bonny.y.gardy@gmail.com");
-//
-//        database.child("users").child("0").setValue(user);
-//
-//        theme_Class thistheme = mtheme.get(1);
-//        database.child("mtheme").setValue(thistheme);
+        Session.getInstance().addOnThemeChangeListener(this);
+        initTheme(Session.getInstance().isDarkMode(getContext()));
         return view;
 
     }
 
-//    private void initializeData() {
-//
-//        TinyDB tinyDB = new TinyDB(getContext());
-//
-//        mtheme = new ArrayList<>();
-//        mtheme.add(new theme_Class("Spring", 0xff009e00, 0xfffcee21, "Photonlab", "Home Happy Sunset"));
-//        mtheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d, "Photonlab", "Sweet sweet"));
-//        mtheme.add(new theme_Class("Sky", 0xff00b7ff, 0xff00ffee, "Photonlab", "Blue Blue"));
-//        mtheme.add(new theme_Class("Neon Glow", 0xff00ffa1, 0xff00ffff, "Photonlab", "High"));
-//
-//
-//        //Use for clear the database
-////        for(int i = 0; i <= dlThemeNo; i++ ) {
-////           tinyDB.remove("dlTheme" + i);
-////            Log.d(TAG, "initializeData: Hi");
-////
-////        }
-////
-////        tinyDB.remove("dlThemeNo");
-//        //
-//
-//        dlThemeNo = tinyDB.getInt("dlThemeNo");
-//        if (tinyDB.getInt("dlThemeNo") != -1) {
-//            for (int i = 0; i <= dlThemeNo; i++) {
-//                mtheme.add(tinyDB.getObject("dlTheme" + i, theme_Class.class));
-//            }
-//            Log.d(TAG, "initializeData: Hi");
-//        }
-//
-//        mfavoriteTheme = new ArrayList<>();
-//        favOrder = new ArrayList<>();
-//
-//
-//        if (tinyDB.getListInt("favOrder").size() != 0) {
-//            favOrder = tinyDB.getListInt("favOrder");
-//            for (int i = 0; i < favOrder.size(); i++) {
-//                mfavoriteTheme.add(mtheme.get(favOrder.get(i)));
-//                Log.d(TAG, "initializeData: tinydb");
-//            }
-//        }
-//
-//
-//        sweetTheme = new ArrayList<>();
-//        sweetTheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d, "Photonlab", "Sweet sweet"));
-//    }
 
     private void updateButtonTypeForRv() {
         int count = Objects.requireNonNull(rv.getAdapter()).getItemCount();
@@ -271,14 +224,20 @@ public class Fragment_Theme extends Fragment
                 isFavorite = true;
             }
 
-            String name = current.getName();
-            int[] gradient = current.getColors();
-            theme_Individual = new fragement_theme_individual(current, isFavorite);
-            ((fragement_theme_individual) theme_Individual).setListener(this);
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-            ft.replace(R.id.container, theme_Individual).addToBackStack(null);
-            ft.commit();
+            Intent i = new Intent(this.context, ThemeDetailActivity.class);
+            i.putExtra("current", mtheme.indexOf(current));
+            this.position = mtheme.indexOf(current);
+            startActivityForResult(i, 0);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 0) {
+            Addavorite(Session.getInstance().getMtheme().get(position));
+        } else if (resultCode == 1) {
+            RemoveFavorite(Session.getInstance().getMtheme().get(position));
         }
     }
 
@@ -305,4 +264,19 @@ public class Fragment_Theme extends Fragment
     }
 
 
+    @Override
+    public void initTheme(boolean dark) {
+        Class<? extends Theme.ThemeColors> colors;
+        if (dark)
+            colors = Theme.Dark.class;
+        else
+            colors = Theme.Normal.class;
+        try {
+            spinnerMenu.setBackgroundTintList(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+            tv_title.setTextColor(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        rv.setAdapter(new RvAdapter(mtheme, this));
+    }
 }

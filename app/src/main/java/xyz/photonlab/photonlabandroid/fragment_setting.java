@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,12 +28,16 @@ import java.util.List;
 import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 
-public class fragment_setting extends Fragment implements SettingRvAdapter.OnNoteListener {
+public class fragment_setting extends Fragment implements SettingRvAdapter.OnNoteListener, Session.OnThemeChangeListener {
 
     Context context;
     List<setting_Content> mSettings;
+    TextView tv_setting;
+    Button person;
+    RecyclerView rv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,15 +51,19 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        final RecyclerView rv = view.findViewById(R.id.setRV);
+        rv = view.findViewById(R.id.setRV);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
 
         initializeData();
 
         SettingRvAdapter adapter = new SettingRvAdapter(mSettings, this);
-        rv.addItemDecoration(new MyDivider(getContext()));
+        rv.addItemDecoration(new MyDivider(Objects.requireNonNull(getContext())));
         rv.setAdapter(adapter);
+        tv_setting = view.findViewById(R.id.Setting);
+        person = view.findViewById(R.id.person);
+        Session.getInstance().addOnThemeChangeListener(this);
+        initTheme(Session.getInstance().isDarkMode(getContext()));
         return view;
     }
 
@@ -153,6 +164,24 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
 
         }
 
+    }
+
+    @Override
+    public void initTheme(boolean dark) {
+        Class<? extends Theme.ThemeColors> colors;
+        if (dark)
+            colors = Theme.Dark.class;
+        else
+            colors = Theme.Normal.class;
+        try {
+            person.setBackgroundTintList(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+            tv_setting.setTextColor(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+            rv.setAdapter(new SettingRvAdapter(mSettings, this));
+            rv.removeItemDecoration(rv.getItemDecorationAt(0));
+            rv.addItemDecoration(new MyDivider(Objects.requireNonNull(getContext())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

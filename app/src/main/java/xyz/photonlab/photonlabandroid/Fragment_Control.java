@@ -35,6 +35,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.time.Duration;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -42,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
@@ -50,7 +52,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
 
 
-public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener, fragment_layout.OnSavedLayoutListener, LightStage.OnLightCheckedChangeListener {
+public class Fragment_Control extends Fragment implements dialog_colorpicker.colorPick_Listener, fragment_layout.OnSavedLayoutListener, LightStage.OnLightCheckedChangeListener, Session.OnThemeChangeListener {
 
     private TinyDB tinyDB;
 
@@ -62,7 +64,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     private int progress;
 
     private ConstraintLayout allContainer, singleContainer;
-    private TextView tvToAll, tvToSingle, brightness, brightnessStatic, tvGotoSetup, tvOff;
+    private TextView tvToAll, tvToSingle, brightness, tvGotoSetup, tvOff;
     private CardView powerBack;
     private ToggleButton power;
     private ImageView sun;
@@ -77,13 +79,13 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     private Animation slide_in_left, slide_out_right, slide_out_left, slide_in_right, pop_enter, pop_out;
     private int brightness_value;
     private boolean isFirst = false;
+    private int colorSelected;
+    private int colorUnselected;
+    private CardView seekBarContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Session.getInstance().getLocalIP(getContext()).equals("")) {
-            Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void refreshLightStage() {
@@ -121,7 +123,9 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             pop_enter = AnimationUtils.loadAnimation(getContext(), R.anim.pop_enter);
             pop_out = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
         }
-
+        if (Session.getInstance().getLocalIP(getContext()).equals("")) {
+            Toast.makeText(getContext(), "Please Pair First", Toast.LENGTH_SHORT).show();
+        }
         isAll = true;
         tinyDB = new TinyDB(getContext());
         final View contentView = inflater.inflate(R.layout.fragment_control_layout_v2, container, false);
@@ -152,6 +156,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             radioButtons0[0].performClick();
         }
         singleContainer.setVisibility(View.GONE);
+        Session.getInstance().addOnThemeChangeListener(this);
+        initTheme(Session.getInstance().isDarkMode(getContext()));
         return contentView;
     }
 
@@ -290,7 +296,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                     seekBar.startAnimation(pop_enter);
                 }
                 brightness.setVisibility(View.VISIBLE);
-                brightnessStatic.setVisibility(View.VISIBLE);
                 tvOff.setVisibility(View.GONE);
                 sun.setColorFilter(0xffffd41f);
                 tinyDB.putInt("Power", 1);
@@ -308,7 +313,6 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                     vibrator.vibrate(50);
                 }
                 brightness.setVisibility(View.GONE);
-                brightnessStatic.setVisibility(View.GONE);
                 tvOff.setVisibility(View.VISIBLE);
                 sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
                 tinyDB.putInt("Power", 0);
@@ -443,6 +447,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         Session.getInstance().saveLayoutToLocal(getContext(), lightStage);
     }
 
+
     private void setColor(int checkedOrder) {
         currentColor0 = setCheckedColor(checkedOrder);
         if (power.isChecked()) {
@@ -537,15 +542,15 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             singleContainer.startAnimation(slide_in_right);
             allContainer.setVisibility(View.GONE);
             singleContainer.setVisibility(View.VISIBLE);
-            tvToSingle.setTextColor(getResources().getColor(R.color.text_selected, null));
-            tvToAll.setTextColor(getResources().getColor(R.color.text_normal, null));
+            tvToSingle.setTextColor(colorSelected);
+            tvToAll.setTextColor(colorUnselected);
         } else {
             allContainer.startAnimation(slide_in_left);
             singleContainer.startAnimation(slide_out_right);
             allContainer.setVisibility(View.VISIBLE);
             singleContainer.setVisibility(View.GONE);
-            tvToAll.setTextColor(getResources().getColor(R.color.text_selected, null));
-            tvToSingle.setTextColor(getResources().getColor(R.color.text_normal, null));
+            tvToAll.setTextColor(colorSelected);
+            tvToSingle.setTextColor(colorUnselected);
         }
         isAll = !isAll;
     }
@@ -563,8 +568,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         seekBar = contentView.findViewById(R.id.seekBar_brightness);
         add0 = contentView.findViewById(R.id.AddColor);
         add1 = contentView.findViewById(R.id.AddColor00);
-
-        brightnessStatic = contentView.findViewById(R.id.brightness_tip);
+        seekBarContainer = contentView.findViewById(R.id.seek_container);
         tvOff = contentView.findViewById(R.id.progress_off_tip);
 
         radioButtons0 = new RadioButton[4];
@@ -683,6 +687,29 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             group2.clearCheck();
         for (RadioButton button : radioButtons1) {
             button.setBackground(null);
+        }
+    }
+
+    @Override
+    public void initTheme(boolean dark) {
+        Class<? extends Theme.ThemeColors> colors;
+        if (dark) {
+            colors = Theme.Dark.class;
+            seekBarContainer.setCardBackgroundColor(Color.parseColor("#505154"));
+        } else
+        {
+            colors = Theme.Normal.class;
+            seekBarContainer.setCardBackgroundColor(Color.parseColor("#ffededed"));
+        }
+        try {
+            lightStage.setBackgroundColor(colors.getField("MAIN_BACKGROUND").getInt(null));
+            this.colorSelected = colors.getField("SELECTED_TEXT").getInt(null);
+            this.colorUnselected = colors.getField("UNSELECTED_TEXT").getInt(null);
+            tvToAll.setTextColor(colorSelected);
+            tvToSingle.setTextColor(colorUnselected);
+            tvToAll.performClick();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

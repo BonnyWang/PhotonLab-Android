@@ -2,6 +2,8 @@ package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -28,6 +30,7 @@ import java.util.Objects;
 import okhttp3.Request;
 import okhttp3.Response;
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 import xyz.photonlab.photonlabandroid.views.Light;
@@ -76,9 +79,8 @@ public class fragment_layout extends Fragment {
         out = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
         initView(view);
         addViewEvent();
-
+        lightNums = new ArrayList<>();
         if (!session.getLocalIP(getContext()).equals("")) {//try to load light num info
-            lightNums = new ArrayList<>();
             NetworkHelper helper = new NetworkHelper();
             Request request = new Request.Builder().url("http://" + session.getLocalIP(getContext()) + "/nodes?_t=" + System.currentTimeMillis())
                     .get().build();
@@ -121,6 +123,10 @@ public class fragment_layout extends Fragment {
         });
 
         next.setOnClickListener(v -> {
+            if (lightNums.size() == 0) {
+                Toast.makeText(getContext(), "Unable To get Node info", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (lightStage.getLights().size() > 0 && lightStage.getUselessLightNum() == 0) {
                 session.saveLayoutToLocal(getContext(), lightStage);
                 if (listener != null)
@@ -195,6 +201,14 @@ public class fragment_layout extends Fragment {
         step1Next = contentView.findViewById(R.id.step1_next);
         done = contentView.findViewById(R.id.done);
         tv_node_num = contentView.findViewById(R.id.tv_node_num);
+        if (Session.getInstance().isDarkMode(getContext())) {
+            contentView.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            ((TextView) contentView.findViewById(R.id.tvLayout)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            tv_node_num.setTextColor(Theme.Dark.UNSELECTED_TEXT);
+            step0BtnsParent.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            exit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            done.setTextColor(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+        }
     }
 
 

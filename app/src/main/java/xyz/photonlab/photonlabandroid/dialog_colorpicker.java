@@ -25,6 +25,9 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
+
 
 public class dialog_colorpicker extends DialogFragment {
     private ColorPicker colorDisk = null;
@@ -168,17 +171,16 @@ public class dialog_colorpicker extends DialogFragment {
             colorStr = colorDisk.getColorStr();
             colorcode = colorDisk.getColorcode();
         });
+        if (Session.getInstance().isDarkMode(getContext())) {
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            rValue.setTextColor(Theme.Dark.SELECTED_TEXT);
+            gValue.setTextColor(Theme.Dark.SELECTED_TEXT);
+            bValue.setTextColor(Theme.Dark.SELECTED_TEXT);
+        }
+
         return view;
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        WindowManager.LayoutParams params = Objects.requireNonNull(getDialog().getWindow()).getAttributes();
-//        params.width = FrameLayout.LayoutParams.MATCH_PARENT;
-//        params.height = FrameLayout.LayoutParams.MATCH_PARENT;
-//        getDialog().getWindow().setAttributes(params);
-//    }
 
     @Override
     public void onStart() {

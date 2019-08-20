@@ -12,11 +12,11 @@
     <!-- TODO: Update blank fragment layout -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:clickable="true"
-        android:focusable="true"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -50,12 +50,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:clickable="true"
-        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginTop="?android:attr/actionBarSize"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title">
 
@@ -103,35 +103,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-            <!--<ImageView-->
-            <!--android:id="@+id/ivDevice"-->
-            <!--android:layout_width="32dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/arrow_right"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/tvDeviceMac"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/No_Device"-->
-            <!--android:gravity="end"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--android:textColor = "#383838"-->
-            <!--android:textSize="18sp"-->
-            <!--/>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:clickable="true"
-            android:focusable="true"
             android:id="@+id/firmware_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:orientation="horizontal"
             android:padding="15dp">
@@ -218,6 +197,51 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dark_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+
+            <ImageView
+                android:id="@+id/iv_dark_mode"
+                android:layout_width="40dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:src="@drawable/bright_sun"
+                android:tint="#717171"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_dark_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/dark_mode"
+                android:textAlignment="center"
+                android:textColor="#383838"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_dark_mode"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/switch_dark_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:theme="@style/SCBSwitch"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </LinearLayout>
 

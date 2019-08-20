@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
+
 public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyViewHolder> {
     private SettingRvAdapter.OnNoteListener mOnNoteListener;
 
@@ -28,6 +31,9 @@ public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyVi
             textView = itemView.findViewById(R.id.SettingSub);
             titleIcon = itemView.findViewById(R.id.title_icon);
             this.onNoteListener = onNoteListener;
+            if (Session.getInstance().isDarkMode(v.getContext())) {
+                textView.setTextColor(Theme.Dark.SELECTED_TEXT);
+            }
             v.setOnClickListener(this);
         }
 
@@ -53,8 +59,7 @@ public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyVi
     @Override
     public SettingRvAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.setting_item, viewGroup, false);
-        MyViewHolder myViewHolder = new MyViewHolder(v, mOnNoteListener);
-        return myViewHolder;
+        return new MyViewHolder(v, mOnNoteListener);
     }
 
     @Override

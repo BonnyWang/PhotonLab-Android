@@ -71,22 +71,17 @@ public class LightStage extends View implements Serializable {
                 offsetY = screenArea.centerY() - bound.centerY();
             }
         }
-        setBackgroundColor(Color.RED);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        paint.setColor(getResources().getColor(R.color.backGround, null));
-        canvas.drawRect(screenArea, paint);
-        paint.setColor(Color.GREEN);
         for (Light light : lights) {
             light.update(lights);
             light.draw(canvas);
         }
         for (Dot dot : dots) {
             dot.update();
-            //dot.draw(canvas);
         }
         invalidate();
     }

@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import xyz.photonlab.photonlabandroid.R;
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 
 public class fragment_start_anim extends Fragment {
@@ -20,11 +23,13 @@ public class fragment_start_anim extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_start_anim_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_start_anim_layout, container, false);
+        if (Session.getInstance().isDarkMode(getContext()))
+            view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+        return view;
     }
-
 
 }

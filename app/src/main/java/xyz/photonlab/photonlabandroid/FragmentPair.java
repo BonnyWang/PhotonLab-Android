@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 import okhttp3.Request;
 import okhttp3.Response;
 import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
@@ -337,7 +339,17 @@ public class FragmentPair extends Fragment {
         tvErrorHelp = contentView.findViewById(R.id.tvErrorHelp);
         faile_container = contentView.findViewById(R.id.stepFailed);
         try_again_btn = contentView.findViewById(R.id.btTryAgain);
-
+        if (Session.getInstance().isDarkMode(getContext())) {
+            contentView.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
+            ((TextView) contentView.findViewById(R.id.title_tip)).setTextColor(Theme.Dark.SELECTED_TEXT);
+            et_wifi_password.setTextColor(Theme.Dark.SELECTED_TEXT);
+            et_wifi_password.setHintTextColor(Theme.Dark.SELECTED_TEXT);
+            exit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            doneButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            mask.setBackgroundColor(Color.parseColor("#88333333"));
+            contentView.findViewById(R.id.step1_divider).setBackgroundColor(Theme.Dark.UNSELECTED_TEXT);
+            contentView.findViewById(R.id.step2_div).setBackgroundColor(Theme.Dark.UNSELECTED_TEXT);
+        }
     }
 
     @Override
