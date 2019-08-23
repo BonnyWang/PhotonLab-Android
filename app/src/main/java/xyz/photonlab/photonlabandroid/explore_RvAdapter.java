@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
                 if (title != null)
                     title.setTextColor(Theme.Dark.SELECTED_TEXT);
                 if (desc != null)
-                    desc.setTextColor(Theme.Dark.UNSELECTED_TEXT);
+                    desc.setTextColor(Color.parseColor("#888888"));
                 ((CardView) itemView.findViewById(R.id.cv)).setCardBackgroundColor(Theme.Dark.CARD_BACKGROUND);
             }
             this.bonNoteListener = bonNoteListener;

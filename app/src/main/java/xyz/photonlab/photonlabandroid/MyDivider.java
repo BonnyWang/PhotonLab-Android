@@ -10,6 +10,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import javax.xml.transform.sax.TemplatesHandler;
+
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
@@ -41,6 +43,8 @@ class MyDivider extends RecyclerView.ItemDecoration {
         int right;
         if (Session.getInstance().isDarkMode(context))
             mDivider.setTint(Theme.Dark.SELECTED_TEXT);
+        else
+            mDivider.setTint(Theme.Normal.SELECTED_TEXT);
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
@@ -64,12 +68,12 @@ class MyDivider extends RecyclerView.ItemDecoration {
                 right = arrowLocation[0] + arrow.getMeasuredWidth();
                 mDivider.setBounds(left, top - child.getMeasuredHeight() - 49, right, top - child.getMeasuredHeight() - 46);
                 mDivider.draw(canvas);
-            } else if (i == 2 || i == 6) {
+            } else if (i == 3 || i == 7) {
                 left = titleLocation[0];
                 right = arrowLocation[0] + arrow.getMeasuredWidth();
                 mDivider.setBounds(left, top - 49, right, bottom - 49);
                 mDivider.draw(canvas);
-            } else if (i == 9) {
+            } else if (i == 10) {
                 left = iconLocation[0];
                 right = arrowLocation[0] + arrow.getMeasuredWidth();
                 mDivider.setBounds(left, top - 49, right, bottom - 49);
@@ -89,7 +93,7 @@ class MyDivider extends RecyclerView.ItemDecoration {
         }
         outRect.set(0, 0, 0, 0);
         int position = parent.indexOfChild(view);
-        if (position == 2 || position == 6 || position == 9) {
+        if (position == 3 || position == 7 || position == 10) {
             outRect.set(0, 0, 0, 100);
         }
     }

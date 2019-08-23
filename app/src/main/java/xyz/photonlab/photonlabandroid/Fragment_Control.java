@@ -86,6 +86,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
     private int powerCheckedColor = Color.parseColor("#67D96A");
     private int powerUnCheckedColor;
+    private View contentView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,7 +134,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         }
         isAll = true;
         tinyDB = new TinyDB(getContext());
-        final View contentView = inflater.inflate(R.layout.fragment_control_layout_v2, container, false);
+        this.contentView = inflater.inflate(R.layout.fragment_control_layout_v2, container, false);
         initView(contentView);
         addViewEvent();
 
@@ -163,6 +164,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         singleContainer.setVisibility(View.GONE);
         Session.getInstance().addOnThemeChangeListener(this);
         initTheme(Session.getInstance().isDarkMode(getContext()));
+        Session.getInstance().registerOnLayoutSaveListener(this);
         return contentView;
     }
 
@@ -289,6 +291,16 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
 
         power.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
+                contentView.findViewById(R.id.colors_1).setAlpha(1f);
+                contentView.findViewById(R.id.groups_container).setAlpha(1f);
+                add0.setEnabled(true);
+                add1.setEnabled(true);
+                for (RadioButton bt : radioButtons0) {
+                    bt.setEnabled(true);
+                }
+                for (RadioButton bt : radioButtons1) {
+                    bt.setEnabled(true);
+                }
                 pop_enter.setDuration(8 * brightness_value);
                 powerBack.setCardBackgroundColor(powerCheckedColor);
                 seekBar.getProgressDrawable().setTint(currentColor0);
@@ -304,10 +316,18 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 tvOff.setVisibility(View.GONE);
                 sun.setColorFilter(0xffffd41f);
                 tinyDB.putInt("Power", 1);
-                Request request = new Request.Builder().url(" http://" + Session.getInstance().getLocalIP(getContext()) +
-                        "/power/on").build();
-                new NetworkHelper().connect(request);
+                requestColorChange(currentColor0, true);
             } else {
+                Objects.requireNonNull(getView()).findViewById(R.id.colors_1).setAlpha(0.45f);
+                Objects.requireNonNull(getView()).findViewById(R.id.groups_container).setAlpha(0.45f);
+                add0.setEnabled(false);
+                add1.setEnabled(false);
+                for (RadioButton bt : radioButtons0) {
+                    bt.setEnabled(false);
+                }
+                for (RadioButton bt : radioButtons1) {
+                    bt.setEnabled(false);
+                }
                 pop_out.setDuration(8 * brightness_value);
                 seekBar.setVisibility(View.GONE);
                 if (isFirst) {
@@ -322,8 +342,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
                 sun.setColorFilter(getResources().getColor(R.color.seekBar_Default, null));
                 tinyDB.putInt("Power", 0);
                 powerBack.setCardBackgroundColor(powerUnCheckedColor);
-                Request request = new Request.Builder().url(" http://" + Session.getInstance().getLocalIP(getContext()) + "/power/off").build();
-                new NetworkHelper().connect(request);
+                requestColorChange(Color.BLACK, true);
             }
         });
 
@@ -370,7 +389,11 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
             newFragment.show(getChildFragmentManager(), "dialog");
         });
         group1.setOnCheckedChangeListener((group, checkedId) -> {
-            Log.i("checked change count", "");
+            if (checkedId == -1)
+                return;
+            if (!((RadioButton) contentView.findViewById(checkedId)).isChecked())
+                return;
+            Log.i("checked change count", checkedId + "");
             for (int i = 5; i < 9; i++) {
                 radioButtons1[i].setChecked(false);
             }
@@ -402,6 +425,10 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         });
 
         group2.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == -1)
+                return;
+            if (!((RadioButton) contentView.findViewById(checkedId)).isChecked())
+                return;
             for (int i = 0; i < 5; i++) {
                 radioButtons1[i].setChecked(false);
             }

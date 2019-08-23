@@ -3,13 +3,8 @@ package xyz.photonlab.photonlabandroid;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,6 +64,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
     public void initializeData() {
         mSettings = new ArrayList<>();
         mSettings.add(new setting_Content("Pairing", R.drawable.setting_item_wifi));
+        mSettings.add(new setting_Content("Devices", R.drawable.lightbulb));
         mSettings.add(new setting_Content("System", R.drawable.ic_settings_setting));
         mSettings.add(new setting_Content("Layout Manager", R.drawable.ic_setting_poly));
         //====================
@@ -100,45 +95,52 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 break;
 
             case 1:
-                fragment_system mfragment_system = new fragment_system();
-                FragmentTransaction ft6 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                ft6.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-                ft6.replace(R.id.container, mfragment_system).addToBackStack(null);
-                ft6.commit();
+                FragmentDevice fragmentDevice = new FragmentDevice();
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.container, fragmentDevice).addToBackStack(null)
+                        .commit();
                 break;
             case 2:
+                fragment_system mfragment_system = new fragment_system();
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.container, mfragment_system).addToBackStack(null)
+                        .commit();
+                break;
+            case 3:
                 fragment_layout mfragment_layout = new fragment_layout();
                 FragmentTransaction ft5 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 ft5.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft5.replace(R.id.container, mfragment_layout).addToBackStack(null);
                 ft5.commit();
                 break;
-            case 3:
+            case 4:
                 FragmentSchedule fragmentSchedule = new FragmentSchedule();
                 FragmentTransaction fragmentScheduleTx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 fragmentScheduleTx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 fragmentScheduleTx.replace(R.id.container, fragmentSchedule).addToBackStack(null);
                 fragmentScheduleTx.commit();
                 break;
-            case 4:
+            case 5:
                 FragmentSmartHome smartHome = new FragmentSmartHome();
                 FragmentTransaction ftSh = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 ftSh.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ftSh.replace(R.id.container, smartHome).addToBackStack(null);
                 ftSh.commit();
                 break;
-            case 5:
+            case 6:
                 fragment_motion_detect mfragment_motion_detect = new fragment_motion_detect();
                 FragmentTransaction ft2 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft2.replace(R.id.container, mfragment_motion_detect).addToBackStack(null);
                 ft2.commit();
                 break;
-            case 7:
+            case 8:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/gMS8dfWuBtd58TEM7"));
                 startActivity(browserIntent);
                 break;
-            case 8:
+            case 9:
                 Intent mailIntent = new Intent(Intent.ACTION_SEND);
                 mailIntent.setType("text/plain");
                 mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@phontonlab.xyz"});
@@ -146,7 +148,7 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 mailIntent.putExtra(Intent.EXTRA_TEXT, "");
                 startActivity(Intent.createChooser(mailIntent, "Send Mail"));
                 break;
-            case 9:
+            case 10:
                 FragmentAbout fragmentAbout = new FragmentAbout();
                 FragmentTransaction txAbout = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 txAbout.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);

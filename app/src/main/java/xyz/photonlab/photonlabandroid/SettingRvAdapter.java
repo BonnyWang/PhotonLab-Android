@@ -66,9 +66,9 @@ public class SettingRvAdapter extends RecyclerView.Adapter<SettingRvAdapter.MyVi
     public void onBindViewHolder(@NonNull SettingRvAdapter.MyViewHolder holder, int i) {
         holder.textView.setText(mSettings.get(i).getSubtitle());
         holder.titleIcon.setImageResource(mSettings.get(i).getIconRes());
-        if (i < 3) {
+        if (i < 4) {
             holder.titleIcon.getDrawable().setTint(Color.parseColor("#64b5f6"));
-        } else if (i < 7) {
+        } else if (i < 8) {
             holder.titleIcon.getDrawable().setTint(Color.parseColor("#ce93d8"));
         } else {
             holder.titleIcon.getDrawable().setTint(Color.parseColor("#b0bec5"));

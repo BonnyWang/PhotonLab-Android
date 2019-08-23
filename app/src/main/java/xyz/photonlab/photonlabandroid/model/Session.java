@@ -18,6 +18,7 @@ import java.util.List;
 
 import xyz.photonlab.photonlabandroid.ColorfulThemeClass;
 import xyz.photonlab.photonlabandroid.TinyDB;
+import xyz.photonlab.photonlabandroid.fragment_layout;
 import xyz.photonlab.photonlabandroid.theme_Class;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
@@ -37,6 +38,8 @@ public class Session {
     private int currentThemeIndex = -1;
 
     private ArrayList<OnThemeChangeListener> onThemeChangeListeners = new ArrayList<>();
+    private ArrayList<fragment_layout.OnSavedLayoutListener> onSavedLayoutListeners = new ArrayList<>();
+    private String mac;
 
     private Session() {
 
@@ -128,6 +131,13 @@ public class Session {
         return currentThemeIndex;
     }
 
+    public String getMac(Context context) {
+        if (this.mac == null) {
+            mac = new TinyDB(context).getString("lightMac");
+        }
+        return mac;
+    }
+
     public void setCurrentThemeIndex(Context c, int currentThemeIndex) {
         if (currentThemeIndex > mtheme.size() || currentThemeIndex < 0)
             throw new IllegalArgumentException();
@@ -202,6 +212,9 @@ public class Session {
             Log.e("save", lightStage.toString());
             writer.flush();
             writer.close();
+            for (fragment_layout.OnSavedLayoutListener listener : onSavedLayoutListeners) {
+                listener.onSavedLayout(true);
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -258,6 +271,12 @@ public class Session {
         db.putBoolean("darkMode", darkMode);
     }
 
+    public void saveLightMac(Context c, String mac) {
+        TinyDB db = new TinyDB(c);
+        db.putString("lightMac", mac);
+        this.mac = mac;
+    }
+
     public interface OnThemeChangeListener {
         void initTheme(boolean dark);
     }
@@ -272,6 +291,10 @@ public class Session {
                 onThemeChangeListeners) {
             listener.initTheme(flag);
         }
+    }
+
+    public void registerOnLayoutSaveListener(fragment_layout.OnSavedLayoutListener listener) {
+        this.onSavedLayoutListeners.add(listener);
     }
 
 }

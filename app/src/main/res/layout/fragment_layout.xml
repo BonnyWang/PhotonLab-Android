@@ -47,6 +47,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
+            android:id="@+id/button3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="15dp"
+            android:autoLink="web"
+            android:background="@drawable/ic_help"
+            android:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
             android:id="@+id/done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,13 +148,13 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:drawablePadding="6dp"
-                android:gravity="center"
-                android:drawableStart="@drawable/setting_item_wifi"
-                android:drawableTint="#717171"
                 android:id="@+id/tv_node_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/setting_item_wifi"
+                android:drawablePadding="6dp"
+                android:drawableTint="#717171"
+                android:gravity="center"
                 android:text="@string/no_light_matched"
                 android:textColor="#717171"
                 app:layout_constraintBottom_toBottomOf="parent"

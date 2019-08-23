@@ -2,8 +2,6 @@ package xyz.photonlab.photonlabandroid.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,15 +15,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import xyz.photonlab.photonlabandroid.R;
-
 import static xyz.photonlab.photonlabandroid.views.Light.RADIUS;
 
 public class LightStage extends View implements Serializable {
 
     private RectF screenArea, bound = new RectF();
     private List<Light> lights;
-    private Paint paint = new Paint();
     private OnViewCreatedListener onViewCreatedListener;
     private boolean movable = true;
     public static float offsetX, offsetY;

@@ -96,4 +96,8 @@
     <string name="repeat">Repeat</string>
     <string name="no_light_matched">Panels Detected: 0</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="Device">Devices</string>
+    <string name="refresh">Refresh</string>
+    <string name="ip_address">IP Address</string>
+    <string name="mac_address">MAC Address</string>
 </resources>

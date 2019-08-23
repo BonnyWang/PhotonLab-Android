@@ -74,7 +74,7 @@ public class FragmentSmartHome extends Fragment {
                 "https://www.amazon.com/gp/help/customer/display.html?nodeId=G201549510"));
         data.add(new SmartHomeItem("IFTTT", Color.parseColor("#000000"),
                 "https://help.ifttt.com/hc/en-us/articles/115010158167-How-does-IFTTT-work-"));
-        data.add(new SmartHomeItem("YouTube", Color.parseColor("#F70000"),
+        data.add(new SmartHomeItem("ConnectYouTube", Color.parseColor("#F70000"),
                 "https://photonlab.xyz/help.html"));
 
     }

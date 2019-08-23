@@ -1,9 +1,12 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Service;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -23,6 +26,9 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -59,6 +65,7 @@ public class fragment_layout extends Fragment {
     private Light checkedLight;
 
     private ArrayList<Long> lightNums;
+    private Button help;
 
     public void setListener(OnSavedLayoutListener listener) {
         this.listener = listener;
@@ -89,13 +96,11 @@ public class fragment_layout extends Fragment {
                 public void onSuccess(Response response) {
                     try {
                         String nodesStr = Objects.requireNonNull(response.body()).string().trim();
-                        Log.i("nodes", nodesStr);
-                        nodesStr = nodesStr.replaceAll("[\\[\\]]", "");
-                        Log.i("nodes2", nodesStr);
-                        String[] nodeArray = nodesStr.split(",");
-                        for (String s : nodeArray) {
-                            Log.i("node3", s);
-                            lightNums.add(Long.parseLong(s));
+
+                        JSONObject jsonResp = new JSONObject(nodesStr);
+                        JSONArray nodeArray = jsonResp.getJSONArray("nodes");
+                        for (int i = 0; i < nodeArray.length(); i++) {
+                            lightNums.add(nodeArray.getLong(i));
                         }
 
                         Objects.requireNonNull(getActivity()).runOnUiThread(() -> tv_node_num.setText("Panels Detected: " + lightNums.size()));
@@ -117,6 +122,14 @@ public class fragment_layout extends Fragment {
     }
 
     private void addViewEvent() {
+
+        help.setOnClickListener(v -> {
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://photonlab.xyz/help.html")));
+            }
+        });
+
         exit.setOnClickListener(v -> {
             if (activity != null)
                 activity.getSupportFragmentManager().popBackStack();
@@ -165,6 +178,7 @@ public class fragment_layout extends Fragment {
                     Toast.makeText(getContext(), "You are all set!", Toast.LENGTH_SHORT).show();
                     session.saveLayoutToLocal(getContext(), lightStage);
                     done.setVisibility(View.VISIBLE);
+                    help.setVisibility(View.GONE);
                 } else {
                     step1Next.setEnabled(false);
                     currentNum++;
@@ -202,13 +216,15 @@ public class fragment_layout extends Fragment {
         step1Next = contentView.findViewById(R.id.step1_next);
         done = contentView.findViewById(R.id.done);
         tv_node_num = contentView.findViewById(R.id.tv_node_num);
+        help = contentView.findViewById(R.id.button3);
         if (Session.getInstance().isDarkMode(getContext())) {
             contentView.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
             ((TextView) contentView.findViewById(R.id.tvLayout)).setTextColor(Theme.Dark.SELECTED_TEXT);
             tv_node_num.setTextColor(Theme.Dark.UNSELECTED_TEXT);
             step0BtnsParent.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
             exit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
-            done.setTextColor(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            done.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
+            help.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
         }
     }
 
@@ -244,7 +260,7 @@ public class fragment_layout extends Fragment {
         helper.connect(request);
     }
 
-    interface OnSavedLayoutListener {
+    public interface OnSavedLayoutListener {
         void onSavedLayout(boolean saved);
     }
 

@@ -34,7 +34,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -129,8 +133,33 @@ public class FragmentPair extends Fragment {
         yes.setOnClickListener(v -> {
             String currentSsid = getWifiInfo();
             if (currentSsid != null && currentSsid.startsWith("ElementLight-")) {
-                tellLightTheWifiInfo();
                 mask.setVisibility(View.VISIBLE);
+                //todo get the gate way mac
+                NetworkHelper helper = new NetworkHelper();
+                Request request =
+                        new Request.Builder().url("http://" + current_gateway_ip + "/mac").build();
+                helper.setCallback(new NetworkCallback() {
+                    @Override
+                    public void onSuccess(Response response) {
+                        try {
+                            JSONObject jsonResult = new JSONObject(Objects.requireNonNull(response.body()).string());
+                            String mac = jsonResult.getString("mac");
+                            Log.i("Light Mac", mac);
+                            Session.getInstance().saveLightMac(getContext(), mac);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        tellLightTheWifiInfo();
+                    }
+
+                    @Override
+                    public void onFailed(String msg) {
+                        //ignore
+                        tellLightTheWifiInfo();
+                    }
+                });
+                helper.connect(request);
             } else {
                 Toast.makeText(getContext(), "Not connected to the light", Toast.LENGTH_SHORT).show();
             }
@@ -290,6 +319,7 @@ public class FragmentPair extends Fragment {
         Log.i("CurrentWifiState", wifiManager.getWifiState() + "");
         if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
             int ipInt = wifiManager.getDhcpInfo().gateway;
+
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < 4; i++) {
                 // 每 8 位为一段，这里取当前要处理的最高位的位置
