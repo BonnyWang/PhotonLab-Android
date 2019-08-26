@@ -121,9 +121,11 @@
 
             <Button
                 android:id="@+id/btNext"
-                android:layout_width="@dimen/Set_Button_Width"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/Set_Button_Height"
                 android:layout_marginBottom="12dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:background="@drawable/set_background"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="@string/Next"

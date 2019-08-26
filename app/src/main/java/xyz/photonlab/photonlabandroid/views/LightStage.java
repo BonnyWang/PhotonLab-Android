@@ -143,11 +143,6 @@ public class LightStage extends View implements Serializable {
                     offsetY += y - tempY;
                     tempX = x;
                     tempY = y;
-                    Log.i("offsetX", offsetX + "");
-                    Log.i("offsetY", offsetY + "");
-                    Log.i("boundRender", "[" + (bound.left + offsetX) + ","
-                            + (bound.top + offsetY) + "," + (bound.right + offsetX) + ","
-                            + (bound.bottom + offsetY) + "]");
                     if (bound.width() < screenArea.width()) {
                         if (bound.left + offsetX < 0) {
                             offsetX = -bound.left;
@@ -347,7 +342,6 @@ public class LightStage extends View implements Serializable {
         }
         float r = RADIUS * 4;
         bound = new RectF(left - r, top - r, right + r, bottom + r);
-        Log.i("bound", bound.toString());
     }
 
     public void enterSetupMode() {

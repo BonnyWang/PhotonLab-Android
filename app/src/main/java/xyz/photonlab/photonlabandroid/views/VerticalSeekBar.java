@@ -36,7 +36,6 @@ public class VerticalSeekBar extends SeekBar {
         c.rotate(-90);
         //将旋转后的视图移动回来
         c.translate(-getHeight(),0);
-        Log.i("getHeight()",getHeight()+"");
         super.onDraw(c);
     }
 
@@ -55,11 +54,8 @@ public class VerticalSeekBar extends SeekBar {
                 i=getMax() - (int) (getMax() * event.getY() / getHeight());
                 //设置进度
                 setProgress(i);
-                Log.i("Progress",getProgress()+"");
                 //每次拖动SeekBar都会调用
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
-                Log.i("getWidth()",getWidth()+"");
-                Log.i("getHeight()",getHeight()+"");
                 break;
 
             case MotionEvent.ACTION_CANCEL:

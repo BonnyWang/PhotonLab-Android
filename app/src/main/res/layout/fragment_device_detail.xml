@@ -48,6 +48,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <Button
+                android:layout_marginEnd="15dp"
+                android:id="@+id/refresh"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/rotate_right_black_24dp"
+                android:backgroundTint="@color/colorPrimary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,11 +129,11 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
-            android:background="@color/Light_Grey"
+            android:background="#e2e2e2"
             app:layout_constraintTop_toBottomOf="@id/mac_container" />
 
         <Button
-            android:id="@+id/refresh"
+            android:id="@+id/research"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -131,26 +141,46 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/round_normal"
             android:backgroundTint="@color/colorPrimary"
+            android:foreground="?attr/selectableItemBackground"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/refresh"
+            android:text="@string/research"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@id/divider" />
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/round_normal"
+            android:backgroundTint="#fe9949"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/Reset"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/research" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#88858585"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:progressTint="@color/colorPrimary" />
+            android:progressTint="@color/yellow" />
     </LinearLayout>
 </FrameLayout>

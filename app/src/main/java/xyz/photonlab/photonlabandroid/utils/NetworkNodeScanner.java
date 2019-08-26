@@ -5,13 +5,9 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -35,11 +31,12 @@ public class NetworkNodeScanner {
     private volatile int overNum = 0;
     private ArrayList<String> reachableIps;
 
-    private Map<String, String> ipToMac;
+    private Map<String, String> mapToIp;
 
 
-    private static ExecutorService threadPool = Executors.newFixedThreadPool(100);
+    private ExecutorService threadPool = Executors.newFixedThreadPool(5);
     private boolean hasNext = true;
+    private OnSearchFinishedListener mListener;
 
     public NetworkNodeScanner(InetAddress superNet, InetAddress subMask) throws UnknownHostException {
         byte[] superNetBytes = superNet.getAddress();
@@ -54,7 +51,7 @@ public class NetworkNodeScanner {
         this.endAddress = InetAddress.getByAddress(endAddressB).getHostAddress();
         this.currentAddress = InetAddress.getByAddress(startAddressB).getHostAddress();
         reachableIps = new ArrayList<>();
-        ipToMac = new HashMap<>();
+        mapToIp = new HashMap<>();
 
         Log.i(TAG, "end address" + endAddress);
         Log.i(TAG, "current address" + currentAddress);
@@ -67,7 +64,7 @@ public class NetworkNodeScanner {
             threadPool.execute(() -> {
                 try {
                     Log.i(TAG, s + " 2:" + System.currentTimeMillis());
-                    if (InetAddress.getByName(s).isReachable(1000)) {
+                    if (InetAddress.getByName(s).isReachable(200)) {
                         Log.e(TAG, s + ":" + InetAddress.getByName(s).getHostName());
                         reachableIps.add(s);
                     }
@@ -97,6 +94,11 @@ public class NetworkNodeScanner {
                     wrapIpToMacMap();
 
                     Log.i(TAG, "Reachable IP&MAC :" + reachableIps);
+                    for (String ips : reachableIps) {
+                        if (mapToIp.get(ips) != null)
+                            Log.i(TAG, String.format("%30s  ||  %30s", ips, mapToIp.get(ips)));
+                    }
+                    mListener.onSearchFinished(mapToIp);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -118,13 +120,18 @@ public class NetworkNodeScanner {
                     String mac = matcherMac.group();
                     if (mac.equals("00:00:00:00:00:00"))
                         continue;
-                    ipToMac.put(ip, mac);
+                    mapToIp.put(ip, mac);
+                    mapToIp.put(mac, ip);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void setOnScanFinishedListener(OnSearchFinishedListener listener) {
+        this.mListener = listener;
     }
 
     private synchronized void nextAddress() {
@@ -153,8 +160,8 @@ public class NetworkNodeScanner {
                 tokens[3];
     }
 
-    public static void main(String[] args) throws UnknownHostException {
-        new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"), InetAddress.getByName("255.255.255.0")).scan();
+    public interface OnSearchFinishedListener {
+        void onSearchFinished(Map<String, String> macToIp);
     }
 
 }

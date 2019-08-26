@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
     android:clickable="true"
-    android:focusable="true"
-    tools:context=".Fragment_Control">
+    android:focusable="true">
 
 
     <ImageView
         android:id="@+id/topCircle"
         android:layout_width="800dp"
         android:layout_height="800dp"
+        android:contentDescription="@string/app_name"
         android:rotation="-60"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,15 +44,14 @@
         android:layout_height="35dp"
         android:layout_marginStart="25dp"
         android:background="@drawable/back_button"
+        android:backgroundTint="@color/colorWhite"
         android:clickable="true"
         android:focusable="true"
-        android:backgroundTint="@color/colorWhite"
         android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/themeName" />
 
     <ListView
-        android:listSelector="@android:color/transparent"
         android:id="@+id/info_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -63,6 +61,7 @@
         android:layout_marginBottom="15dp"
         android:divider="@null"
         android:dividerHeight="0dp"
+        android:listSelector="@android:color/transparent"
         android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@+id/setbutton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,8 +92,8 @@
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="18dp"
         android:background="@drawable/favorite_border"
-        android:textOff=" "
-        android:textOn=" "
+        android:textOff="@string/empty"
+        android:textOn="@string/empty"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

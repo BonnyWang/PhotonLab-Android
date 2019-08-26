@@ -347,9 +347,7 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         });
 
         tvGotoSetup.setOnClickListener(v -> {
-            //TODO: need to add sth -Bonny
             fragment_layout mfragment_layout = new fragment_layout();
-            mfragment_layout.setListener(this);
             FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
             ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
             ftl.replace(R.id.container, mfragment_layout).addToBackStack(null);

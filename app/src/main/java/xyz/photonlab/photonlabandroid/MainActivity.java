@@ -3,15 +3,12 @@ package xyz.photonlab.photonlabandroid;
 import android.Manifest;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.transition.Fade;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -136,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         tinyDB = new TinyDB(getBaseContext());
 
         //init fragments
-        fragments[0] = new Fragment_Control();
+        fragments[0] = new FragmentControlV2();
 
         runnable = () -> {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -158,10 +155,8 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
 
         myRef.setValue("Hello, World!");
 
-        if (tinyDB.getString("LocalIp").equals("")) {
-
+        if (!Session.getInstance().getLocalIP(this).equals("")) {
             Toast.makeText(this, "Please Pair First", Toast.LENGTH_SHORT).show();
-
         }
 
         Session.setShake(BitmapFactory.decodeResource(getResources(), R.drawable.shake));

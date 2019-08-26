@@ -165,10 +165,10 @@
             </androidx.cardview.widget.CardView>
 
             <LinearLayout
-                android:alpha="0.45"
                 android:id="@+id/colors_1"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:alpha="0.45"
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@id/powerCard_c"
@@ -184,55 +184,55 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked"
-                        android:button="@drawable/oval" />
+                        android:button="@drawable/oval"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_blue"
-                        android:button="@drawable/ovalblue" />
+                        android:button="@drawable/ovalblue"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_orange"
-                        android:button="@drawable/ovalorange" />
+                        android:button="@drawable/ovalorange"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple" />
+                        android:button="@drawable/ovalpurple"
+                        android:enabled="false" />
                 </RadioGroup>
 
                 <Button
-                    android:enabled="false"
                     android:id="@+id/AddColor"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/add_color_24dp"
-                    android:backgroundTint="#C8C8C8" />
+                    android:backgroundTint="#C8C8C8"
+                    android:enabled="false" />
             </LinearLayout>
 
             <LinearLayout
@@ -260,6 +260,8 @@
                         android:layout_height="46dp"
                         android:layout_gravity="center"
                         android:background="@drawable/power_button"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:textOff=""
                         android:textOn="" />
                 </androidx.cardview.widget.CardView>
@@ -269,10 +271,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
             android:id="@+id/single_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/content_container"
@@ -307,10 +309,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:alpha="0.45"
                 android:id="@+id/groups_container"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:alpha="0.45"
                 android:gravity="center"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -326,113 +328,113 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton01"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked"
-                        android:button="@drawable/oval" />
+                        android:button="@drawable/oval"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton02"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_blue"
-                        android:button="@drawable/ovalblue" />
+                        android:button="@drawable/ovalblue"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton03"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_orange"
-                        android:button="@drawable/ovalorange" />
+                        android:button="@drawable/ovalorange"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton04"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple" />
+                        android:button="@drawable/ovalpurple"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton05"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple" />
+                        android:button="@drawable/ovalpurple"
+                        android:enabled="false" />
                 </RadioGroup>
 
                 <RadioGroup
-                    android:enabled="false"
                     android:id="@+id/radioGroup00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:enabled="false"
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton06"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked"
-                        android:button="@drawable/oval" />
+                        android:button="@drawable/oval"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton07"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_blue"
-                        android:button="@drawable/ovalblue" />
+                        android:button="@drawable/ovalblue"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton08"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_orange"
-                        android:button="@drawable/ovalorange" />
+                        android:button="@drawable/ovalorange"
+                        android:enabled="false" />
 
                     <RadioButton
-                        android:enabled="false"
                         android:id="@+id/rButton09"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple" />
+                        android:button="@drawable/ovalpurple"
+                        android:enabled="false" />
 
                     <Button
-                        android:enabled="false"
                         android:id="@+id/AddColor00"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/add_color_24dp"
-                        android:backgroundTint="#C8C8C8" />
+                        android:backgroundTint="#C8C8C8"
+                        android:enabled="false" />
                 </RadioGroup>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -233,6 +233,7 @@ public class Fragment_Theme extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("result code", resultCode + "");
         if (resultCode == 0) {
             Addavorite(Session.getInstance().getMtheme().get(position));
         } else if (resultCode == 1) {

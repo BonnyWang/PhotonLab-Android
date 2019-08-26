@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,8 +33,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.gson.JsonObject;
-
 import org.json.JSONObject;
 
 import java.util.Objects;
@@ -46,8 +43,6 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
-
-import static io.reactivex.subjects.UnicastSubject.create;
 
 public class FragmentPair extends Fragment {
 
@@ -92,6 +87,7 @@ public class FragmentPair extends Fragment {
         out = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left);
         findView(view);
         addViewEvent();
+        step2_container.setVisibility(View.GONE);
     }
 
     @Override
@@ -101,7 +97,7 @@ public class FragmentPair extends Fragment {
 
     private void addViewEvent() {
         exit.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().popBackStack();
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
             cleanEditTextProblems();
         });
 
@@ -215,6 +211,7 @@ public class FragmentPair extends Fragment {
         activity = null;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
         super.onStart();
@@ -263,15 +260,17 @@ public class FragmentPair extends Fragment {
             @Override
             public void onSuccess(Response response) {
                 try {
-                    String respStr = response.body().string();
+                    String respStr = Objects.requireNonNull(response.body()).string();
                     Log.i("response", respStr);
                     JSONObject respObj = new JSONObject(respStr);
                     if (!respObj.getBoolean("status"))
                         throw new RuntimeException();
                     String localIp = respObj.getString("ip");
+                    String mac = respObj.getString("mac");
                     Session.getInstance().setLocalIP(localIp);
                     new TinyDB(getContext()).putString("LocalIp", localIp);
                     Log.i("LocalIp", localIp);
+                    new TinyDB(getContext()).putString("lightMac", mac);
                     runOnUIThread(() -> toSuccess());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -315,7 +314,7 @@ public class FragmentPair extends Fragment {
     }
 
     private String getWifiInfo() {
-        WifiManager wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) Objects.requireNonNull(getContext()).getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Log.i("CurrentWifiState", wifiManager.getWifiState() + "");
         if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
             int ipInt = wifiManager.getDhcpInfo().gateway;
@@ -390,7 +389,7 @@ public class FragmentPair extends Fragment {
     }
 
     private void cleanEditTextProblems() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
         }

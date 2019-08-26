@@ -46,10 +46,8 @@ public class FragmentDevice extends Fragment implements DeviceAdapter.OnItemClic
 
     private void initData() {
         devices = new ArrayList<>();
-        devices.add(new Device("Device-01", "192.168.1.101", "48:78:3e:1a"));
-        devices.add(new Device("Device-02", "192.168.1.101", "48:78:3e:1a"));
-        devices.add(new Device("Device-03", "192.168.1.101", "48:78:3e:1a"));
-        devices.add(new Device("Device-04", "192.168.1.101", "48:78:3e:1a"));
+        if (!Session.getInstance().getLocalIP(getContext()).equals(""))
+            devices.add(new Device("Default Device", Session.getInstance().getLocalIP(getContext()), new TinyDB(getContext()).getString("lightMac")));
         this.rv_devices_adapter = new DeviceAdapter(devices, this);
         rv_devices.setAdapter(rv_devices_adapter);
     }
@@ -108,7 +106,11 @@ class DeviceAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_device_item, parent, false);
+        View itemView;
+        if (viewType == VIEW_TYPE_NO_DEVICE)
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_adpter_no_device_item, parent, false);
+        else
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_device_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -117,11 +119,17 @@ class DeviceAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if (position != 0 || devices.size() != 0) {
             holder.deviceTitle.setText(devices.get(position).getName());
-            if (this.darkMode)
+            if (darkMode)
                 holder.deviceTitle.setTextColor(Theme.Dark.SELECTED_TEXT);
+            else
+                holder.deviceTitle.setTextColor(Theme.Normal.SELECTED_TEXT);
             holder.itemView.setOnClickListener(v -> listener.onItemClick(position));
         } else {
             holder.deviceTitle.setText("No Device");
+            if (darkMode)
+                holder.deviceTitle.setTextColor(Theme.Dark.UNSELECTED_TEXT);
+            else
+                holder.deviceTitle.setTextColor(Theme.Normal.UNSELECTED_TEXT);
         }
     }
 

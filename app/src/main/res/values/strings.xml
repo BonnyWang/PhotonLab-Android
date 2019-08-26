@@ -100,4 +100,6 @@
     <string name="refresh">Refresh</string>
     <string name="ip_address">IP Address</string>
     <string name="mac_address">MAC Address</string>
+    <string name="research">Research</string>
+    <string name="empty" />
 </resources>

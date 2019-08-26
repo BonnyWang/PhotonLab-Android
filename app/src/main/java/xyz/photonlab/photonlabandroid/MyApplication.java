@@ -18,11 +18,11 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        try {
-            new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"), InetAddress.getByName("255.255.255.0")).scan();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"), InetAddress.getByName("255.255.255.0")).scan();
+//        } catch (UnknownHostException e) {
+//            e.printStackTrace();
+//        }
 //        String[] ips = new String[]{
 //                "192.168.1.1",
 //                "192.168.1.101",

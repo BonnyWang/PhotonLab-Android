@@ -160,34 +160,56 @@ public class Session {
             JSONObject src = new JSONObject(json);
             JSONArray lights = src.getJSONArray("lights");
             LightStage finalStage = stage;
-            stage.setOnViewCreatedListener(() -> {
-                try {
-                    finalStage.getLights().clear();
-                    finalStage.getDots().clear();
-                    for (int i = 0; i < lights.length(); i++) {
-                        Light light;
-                        JSONObject o = lights.getJSONObject(i);
-                        if (i == 0)
-                            light = new MotherLight(context, (float) o.getDouble("x"), (float) o.getDouble("y"));
-                        else
-                            light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
-                        light.setDirection(o.getInt("direction"), false);
-                        light.setNum(o.getLong("num"));
-                        if (plane) {
-                            light.setPlane(true);
-                            if (light instanceof MotherLight)
-                                ((MotherLight) light).preventIcon();
-                        }
-                        light.setPlaneColor(o.getInt("plane_color"));
-                        finalStage.addLight(light);
+            try {
+                finalStage.getLights().clear();
+                finalStage.getDots().clear();
+                for (int i = 0; i < lights.length(); i++) {
+                    Light light;
+                    JSONObject o = lights.getJSONObject(i);
+                    if (i == 0)
+                        light = new MotherLight(context, (float) o.getDouble("x"), (float) o.getDouble("y"));
+                    else
+                        light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
+                    light.setDirection(o.getInt("direction"), false);
+                    light.setNum(o.getLong("num"));
+                    if (plane) {
+                        light.setPlane(true);
+                        if (light instanceof MotherLight)
+                            ((MotherLight) light).preventIcon();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    light.setPlaneColor(o.getInt("plane_color"));
+                    finalStage.addLight(light);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            stage.setOnViewCreatedListener(() -> {
+//                try {
+//                    finalStage.getLights().clear();
+//                    finalStage.getDots().clear();
+//                    for (int i = 0; i < lights.length(); i++) {
+//                        Light light;
+//                        JSONObject o = lights.getJSONObject(i);
+//                        if (i == 0)
+//                            light = new MotherLight(context, (float) o.getDouble("x"), (float) o.getDouble("y"));
+//                        else
+//                            light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
+//                        light.setDirection(o.getInt("direction"), false);
+//                        light.setNum(o.getLong("num"));
+//                        if (plane) {
+//                            light.setPlane(true);
+//                            if (light instanceof MotherLight)
+//                                ((MotherLight) light).preventIcon();
+//                        }
+//                        light.setPlaneColor(o.getInt("plane_color"));
+//                        finalStage.addLight(light);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             });
-
-
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
             stage = null;
         }
@@ -212,9 +234,6 @@ public class Session {
             Log.e("save", lightStage.toString());
             writer.flush();
             writer.close();
-            for (fragment_layout.OnSavedLayoutListener listener : onSavedLayoutListeners) {
-                listener.onSavedLayout(true);
-            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,6 +242,12 @@ public class Session {
             if (writer != null) {
                 writer.close();
             }
+        }
+    }
+
+    public void notifyLayoutChanged() {
+        for (fragment_layout.OnSavedLayoutListener listener : onSavedLayoutListeners) {
+            listener.onSavedLayout(true);
         }
     }
 
@@ -279,6 +304,7 @@ public class Session {
 
     public interface OnThemeChangeListener {
         void initTheme(boolean dark);
+
     }
 
     public void addOnThemeChangeListener(@NonNull OnThemeChangeListener listener) {

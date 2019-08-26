@@ -38,6 +38,7 @@ public class fragement_theme_individual extends Fragment {
     theme_Class mtheme;
     Button backButton;
     ToggleButton favorite;
+    int resultCode = -1;
 
     themeIndivListener mlistener;
 
@@ -87,14 +88,19 @@ public class fragement_theme_individual extends Fragment {
 
 
         backButton = view.findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> getActivity().finish());
+        backButton.setOnClickListener(v -> {
+            getActivity().setResult(resultCode);
+            getActivity().finish();
+        });
 
 
         favorite = view.findViewById(R.id.favorite);
         if (isFavorite) {
             favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite, null));
+            resultCode = 0;
         } else {
             favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border, null));
+            resultCode = 1;
         }
 
         favorite.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -102,10 +108,12 @@ public class fragement_theme_individual extends Fragment {
                 isFavorite = true;
                 favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite, null));
                 mlistener.Addavorite(mtheme);
+                resultCode = 0;
             } else {
                 favorite.setBackgroundDrawable(getResources().getDrawable(R.drawable.favorite_border, null));
                 mlistener.RemoveFavorite(mtheme);
                 isFavorite = false;
+                resultCode = 1;
             }
         });
         if (Session.getInstance().isDarkMode(getContext()))

@@ -39,6 +39,7 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
+import xyz.photonlab.photonlabandroid.utils.NetworkNodeScanner;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 
@@ -48,14 +49,11 @@ public class fragment_layout extends Fragment {
 
     private FragmentActivity activity;
 
-    private OnSavedLayoutListener listener;
-
     private Animation in, out;
 
     private Session session;
     private LightStage lightStage;
-    @SuppressWarnings("local")
-    private LinearLayout mainStage;
+
     private Button exit, add, rotate, delete, next, done;
     private ConstraintLayout step0BtnsParent;
     private ImageButton step1Next;
@@ -66,10 +64,6 @@ public class fragment_layout extends Fragment {
 
     private ArrayList<Long> lightNums;
     private Button help;
-
-    public void setListener(OnSavedLayoutListener listener) {
-        this.listener = listener;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -138,13 +132,18 @@ public class fragment_layout extends Fragment {
         next.setOnClickListener(v -> {
             if (lightStage.getLights().size() > 0 && lightStage.getUselessLightNum() == 0) {
                 session.saveLayoutToLocal(getContext(), lightStage);
-                if (listener != null)
-                    listener.onSavedLayout(true);
-
+                session.notifyLayoutChanged();
                 if (lightNums.size() != lightStage.getLights().size()) {//check the num between ui and physic
                     Toast.makeText(getContext(), "Incorrect Node Num!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                NetworkHelper helper = new NetworkHelper();
+                Request request = new Request.Builder()
+                        .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/"
+                                + "mode/all?red=0&green=0&blue=0&brightness=0")
+                        .build();
+                helper.connect(request);
 
                 step0BtnsParent.setVisibility(View.GONE);
                 step1Next.setVisibility(View.VISIBLE);
@@ -177,6 +176,7 @@ public class fragment_layout extends Fragment {
                 if (lightStage.allLitUp()) {
                     Toast.makeText(getContext(), "You are all set!", Toast.LENGTH_SHORT).show();
                     session.saveLayoutToLocal(getContext(), lightStage);
+                    session.notifyLayoutChanged();
                     done.setVisibility(View.VISIBLE);
                     help.setVisibility(View.GONE);
                 } else {
@@ -191,6 +191,7 @@ public class fragment_layout extends Fragment {
             boolean flag = session.saveLayoutToLocal(getContext(), lightStage);
             if (flag) {
                 Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+                session.notifyLayoutChanged();
             } else {
                 Toast.makeText(getContext(), "Save Error", Toast.LENGTH_SHORT).show();
             }
@@ -204,7 +205,7 @@ public class fragment_layout extends Fragment {
             lightStage = new LightStage(getContext());
         }
         lightStage.requireCenter();
-        mainStage = contentView.findViewById(R.id.layoutContainer);
+        LinearLayout mainStage = contentView.findViewById(R.id.layoutContainer);
         mainStage.addView(lightStage);
         step0BtnsParent = contentView.findViewById(R.id.step0_btns);
         exit = contentView.findViewById(R.id.btBackLayout);
