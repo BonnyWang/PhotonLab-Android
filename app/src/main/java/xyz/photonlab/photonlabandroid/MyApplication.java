@@ -18,6 +18,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        TinyDB db = new TinyDB(this);
 //        try {
 //            new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"), InetAddress.getByName("255.255.255.0")).scan();
 //        } catch (UnknownHostException e) {

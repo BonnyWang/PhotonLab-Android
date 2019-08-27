@@ -46,7 +46,7 @@ public class FragmentDevice extends Fragment implements DeviceAdapter.OnItemClic
 
     private void initData() {
         devices = new ArrayList<>();
-        if (!Session.getInstance().getLocalIP(getContext()).equals(""))
+        if (!Session.getInstance().getMac(getContext()).equals(""))
             devices.add(new Device("Default Device", Session.getInstance().getLocalIP(getContext()), new TinyDB(getContext()).getString("lightMac")));
         this.rv_devices_adapter = new DeviceAdapter(devices, this);
         rv_devices.setAdapter(rv_devices_adapter);

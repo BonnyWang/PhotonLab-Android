@@ -136,7 +136,7 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
             //TODO Add SubMask
             mask.setVisibility(View.VISIBLE);
             try {
-                NetworkNodeScanner scanner = new NetworkNodeScanner(InetAddress.getByName(Session.getInstance().getLocalIP(getContext())),
+                NetworkNodeScanner scanner = new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"),
                         InetAddress.getByName("255.255.255.0"));
                 scanner.setOnScanFinishedListener(this);
                 scanner.scan();
@@ -204,9 +204,10 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
             activity.runOnUiThread(() -> {
                 mask.setVisibility(View.GONE);
                 String newIp = macToIp.get(new TinyDB(getContext()).getString("lightMac").toLowerCase());
-                if (newIp!=null){
+                if (newIp != null) {
                     tv_ip.setText(newIp);
                     Session.getInstance().setLocalIP(newIp);
+                    new TinyDB(getContext()).putString("localIp", newIp);
                     Log.i("Device Search Again", newIp);
                 }
             });

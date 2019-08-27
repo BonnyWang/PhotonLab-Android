@@ -19,7 +19,7 @@
     <string name="G">G</string>
     <string name="B">B</string>
     <string name="Settings">Settings</string>
-    <string name="PhotonLab_V"> v1.0.1</string>
+    <string name="PhotonLab_V"> v1.2.0</string>
     <string name="Pairing">Pairing Devices</string>
     <string name="Pair_Instruction1">1.Go to system Wi-Fi</string>
     <string name="Pair_Instruction2">2. Connect "ElementLight-xx"</string>

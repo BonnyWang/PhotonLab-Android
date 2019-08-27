@@ -109,7 +109,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         addViewEvent();
         initialize();
         initTheme(session.isDarkMode(getContext()));
-        Log.i(TAG,"light num " + lightStage.getLights().size());
     }
 
     private void initView(View contentView) {
@@ -551,14 +550,17 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     }
 
     private void requestGroupColorChange(int color, int brightness) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = hsv[2] * ((float) brightness) / 100f;
+        color = Color.HSVToColor(255, hsv);
         int r = Color.red(color);
         int g = Color.green(color);
         int b = Color.blue(color);
         String url = "http://" + session.getLocalIP(getContext()) + "/" + "mode" + "/all"
                 + "?red=" + r
                 + "&green=" + g
-                + "&blue=" + b
-                + "&brightness=" + brightness;
+                + "&blue=" + b;
         Log.i(TAG, url);
         NetworkHelper helper = new NetworkHelper();
         Request request = new Request.Builder()
@@ -569,6 +571,10 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     }
 
     private void requestSingleColorChange(int color, int brightness, long num) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = hsv[2] * ((float) brightness) / 100f;
+        color = Color.HSVToColor(255, hsv);
         int r = Color.red(color);
         int g = Color.green(color);
         int b = Color.blue(color);
@@ -576,7 +582,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
                 + "?red=" + r
                 + "&green=" + g
                 + "&blue=" + b
-                + "&brightness=" + brightness
                 + "&node=" + num;
         Log.i(TAG, url);
         NetworkHelper helper = new NetworkHelper();

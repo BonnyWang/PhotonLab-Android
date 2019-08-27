@@ -6,8 +6,8 @@ android {
         applicationId "xyz.photonlab.photonlabandroid"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.1"
+        versionCode 7
+        versionName "1.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -28,11 +28,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'app/libs', include: ['*.aar'])
-
-//    implementation(name:'fing-kit', ext:'aar') {
-//        transitive=true
-//    }
-
     implementation 'com.lijiankun24:shadowlayout:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'

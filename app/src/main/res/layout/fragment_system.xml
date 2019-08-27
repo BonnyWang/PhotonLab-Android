@@ -69,6 +69,7 @@
 
 
             <ImageView
+                android:contentDescription="@string/app_name"
                 android:id="@+id/ivlight"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
@@ -117,6 +118,7 @@
 
 
             <ImageView
+                android:contentDescription="@string/app_name"
                 android:id="@+id/ivlight1"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
@@ -142,6 +144,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:contentDescription="@string/app_name"
                 android:id="@+id/ivResetArrow1"
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"
@@ -163,6 +166,7 @@
             android:padding="15dp">
 
             <ImageView
+                android:contentDescription="@string/app_name"
                 android:id="@+id/ivReset"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
@@ -189,6 +193,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:contentDescription="@string/app_name"
                 android:id="@+id/ivResetArrow"
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"
@@ -207,11 +212,12 @@
 
 
             <ImageView
+                android:contentDescription="@string/app_name"
                 android:id="@+id/iv_dark_mode"
                 android:layout_width="40dp"
                 android:layout_height="26dp"
                 android:layout_weight="1"
-                android:src="@drawable/bright_sun"
+                android:src="@drawable/ic_moon"
                 android:tint="#717171"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
