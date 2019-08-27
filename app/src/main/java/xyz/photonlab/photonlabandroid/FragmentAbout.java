@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ public class FragmentAbout extends Fragment {
         policy = view.findViewById(R.id.clPrivacy);
         policy.setOnClickListener(v ->
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.photonlab.xyz/privacypolicy.html"))));
-        Button btBack = view.findViewById(R.id.backButton_System);
+        ImageButton btBack = view.findViewById(R.id.backButton_System);
         btBack.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
         if (Session.getInstance().isDarkMode(getContext())) {
             view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);

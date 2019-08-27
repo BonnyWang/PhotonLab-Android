@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,8 +43,8 @@ public class FragmentSmartHome extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button exit = view.findViewById(R.id.backButton_Coming);
-        Button help = view.findViewById(R.id.button3);
+        ImageButton exit = view.findViewById(R.id.backButton_Coming);
+        ImageButton help = view.findViewById(R.id.button3);
         if (Session.getInstance().isDarkMode(getContext())) {
             view.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
             ((TextView) view.findViewById(R.id.ComingSoon)).setTextColor(Theme.Dark.SELECTED_TEXT);

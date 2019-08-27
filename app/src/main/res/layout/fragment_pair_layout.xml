@@ -15,13 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
-        <Button
+        <ImageButton
+            android:foreground="?selectableItemBackground"
+            android:contentDescription="@string/app_name"
             android:id="@+id/backButton_pair"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/back_button"
-            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:padding="15dp"
+            android:src="@drawable/back_button"
+            android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

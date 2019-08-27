@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,7 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 public class dialog_colorpicker extends DialogFragment {
     private ColorPicker colorDisk = null;
     private TextView tv;
-    private Button closeBt;
+    private ImageButton closeBt;
     private Button setBt;
     private Button addFavBt;
     static String colorStr;
@@ -177,7 +178,7 @@ public class dialog_colorpicker extends DialogFragment {
             gValue.setTextColor(Theme.Dark.SELECTED_TEXT);
             bValue.setTextColor(Theme.Dark.SELECTED_TEXT);
         }
-        if (Session.getInstance().isDarkMode(getContext())){
+        if (Session.getInstance().isDarkMode(getContext())) {
             setBt.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
             addFavBt.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
         }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -42,7 +43,7 @@ public class FragmentSchedule extends Fragment implements dialog_colorpicker.col
     private Switch schedule_switch, repeat_switch;
     private TextView tv_time, tv_theme;
     private CardView color_shower;
-    private Button exit;
+    private ImageButton exit;
     private TimePickerView timePickerView;
 
     //models

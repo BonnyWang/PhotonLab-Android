@@ -23,14 +23,17 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <Button
+            <ImageButton
+
+                android:foreground="?selectableItemBackground"
                 android:id="@+id/exit"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="15dp"
-                android:background="@drawable/back_button"
-                android:backgroundTint="@color/colorPrimary"
-                android:text=""
+                android:layout_width="?actionBarSize"
+                android:layout_height="?actionBarSize"
+                android:padding="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/back_button"
+                android:tint="@color/colorPrimary"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -48,16 +51,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:layout_marginEnd="15dp"
+            <ImageButton
+                android:foreground="?selectableItemBackground"
+                android:padding="15dp"
                 android:id="@+id/refresh"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="?actionBarSize"
+                android:layout_height="?actionBarSize"
+                android:background="@android:color/transparent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@drawable/rotate_right_black_24dp"
-                android:backgroundTint="@color/colorPrimary" />
+                android:src="@drawable/rotate_right_black_24dp"
+                android:tint="@color/colorPrimary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

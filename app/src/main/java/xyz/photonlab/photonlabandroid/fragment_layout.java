@@ -54,7 +54,8 @@ public class fragment_layout extends Fragment {
     private Session session;
     private LightStage lightStage;
 
-    private Button exit, add, rotate, delete, next, done;
+    private ImageButton exit;
+    private Button add, rotate, delete, next, done;
     private ConstraintLayout step0BtnsParent;
     private ImageButton step1Next;
     private TextView tip, tv_node_num;
@@ -63,7 +64,7 @@ public class fragment_layout extends Fragment {
     private Light checkedLight;
 
     private ArrayList<Long> lightNums;
-    private Button help;
+    private ImageButton help;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

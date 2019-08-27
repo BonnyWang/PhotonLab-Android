@@ -14,13 +14,17 @@
         android:clickable="true"
         android:focusable="true">
 
-        <Button
+        <ImageButton
+            android:contentDescription="@string/app_name"
+            android:foreground="?selectableItemBackground"
             android:id="@+id/backButton_Coming"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/back_button"
-            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:padding="15dp"
+            android:src="@drawable/back_button"
+            android:tint="@color/colorPrimary"
             android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,14 +43,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
+            android:foreground="?selectableItemBackground"
+            android:contentDescription="@string/app_name"
             android:id="@+id/button3"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/ic_help"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:padding="15dp"
+            android:src="@drawable/ic_help"
             android:autoLink="web"
-            android:backgroundTint="@color/colorPrimary"
+            android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

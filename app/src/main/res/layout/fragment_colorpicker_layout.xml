@@ -13,15 +13,18 @@
         android:orientation="vertical"
         android:paddingBottom="40dp">
 
-        <Button
+        <ImageButton
             android:id="@+id/close"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="end"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/ic_close_black_24dp"
-            android:backgroundTint="#aaaaaa" />
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:cropToPadding="false"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_close_black_24dp"
+            android:tint="#aaaaaa" />
 
         <xyz.photonlab.photonlabandroid.ColorPicker
             android:id="@+id/colorDisk"

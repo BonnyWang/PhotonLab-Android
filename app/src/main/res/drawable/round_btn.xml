@@ -6,4 +6,10 @@
             <solid android:color="@color/colorPrimaryDark"/>
         </shape>
     </item>
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <size android:height="50dp" android:width="50dp"/>
+            <solid android:color="#2D5A8F"/>
+        </shape>
+    </item>
 </selector>

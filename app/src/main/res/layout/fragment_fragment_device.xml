@@ -17,13 +17,17 @@
         android:clickable="true"
         android:focusable="true">
 
-        <Button
+        <ImageButton
+            android:foreground="?selectableItemBackground"
+            android:padding="15dp"
+            android:contentDescription="@string/app_name"
             android:id="@+id/exit"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/back_button"
-            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/back_button"
+            android:tint="@color/colorPrimary"
             android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

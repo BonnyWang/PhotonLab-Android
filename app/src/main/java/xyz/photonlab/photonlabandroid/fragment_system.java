@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 @SuppressLint("SetTextI18n")
 public class fragment_system extends FullScreenFragment {
 
-    Button btBack;
+    ImageButton btBack;
 
     ProgressBar loading;
 

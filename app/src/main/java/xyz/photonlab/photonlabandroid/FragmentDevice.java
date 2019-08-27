@@ -1,11 +1,13 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +27,7 @@ public class FragmentDevice extends Fragment implements DeviceAdapter.OnItemClic
 
     private ArrayList<Device> devices;
 
-    private Button bt_exit;
+    private ImageButton bt_exit;
     private RecyclerView rv_devices;
     private DeviceAdapter rv_devices_adapter;
 
@@ -126,10 +128,9 @@ class DeviceAdapter extends RecyclerView.Adapter<MyViewHolder> {
             holder.itemView.setOnClickListener(v -> listener.onItemClick(position));
         } else {
             holder.deviceTitle.setText("No Device");
-            if (darkMode)
+            if (darkMode) {
                 holder.deviceTitle.setTextColor(Theme.Dark.UNSELECTED_TEXT);
-            else
-                holder.deviceTitle.setTextColor(Theme.Normal.UNSELECTED_TEXT);
+            }
         }
     }
 

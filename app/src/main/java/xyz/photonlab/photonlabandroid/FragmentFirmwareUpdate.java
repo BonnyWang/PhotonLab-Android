@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 
 class FragmentFirmwareUpdate extends Fragment {
 
-    private Button btn_exit;
+    private ImageButton btn_exit;
 
     @Nullable
     @Override
