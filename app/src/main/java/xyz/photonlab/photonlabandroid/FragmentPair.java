@@ -21,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +47,7 @@ import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 public class FragmentPair extends Fragment {
 
     private Animation in, out;
-    private ImageButton exit;
+    private Button exit;
     private ProgressBar progressBar;
     private String wifi_ssid, wifi_password, current_gateway_ip;
     private ConstraintLayout mask;
