@@ -93,6 +93,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     ArrayList<Integer> colorsQueueSingle = new ArrayList<>();
     int currentGroupColor = Color.TRANSPARENT;
     int sunUnselectedColor;
+    Vibrator vibrator;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -105,6 +106,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        vibrator = (Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE);
         initView(view);
         addViewEvent();
         initialize();
@@ -181,7 +183,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             switchMainView(new Animation[]{anim_slide_out_left, anim_slide_in_right});
         });
         cl_single.setOnTouchListener(new SlideListener(true));
-        Vibrator vibrator = (Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE);
         cv_power_back.setOnClickListener(view -> {
             tb_power.setChecked(!tb_power.isChecked());
             vibrator.vibrate(50);
@@ -335,7 +336,25 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             toggleSingle(true);
         }
         if (tinyDB.getInt("colorGroupIndex") != -1) {
-            radioButtonsGroup[tinyDB.getInt("colorGroupIndex")].performClick();
+            int index = tinyDB.getInt("colorGroupIndex");
+            //radioButtonsGroup[index].setChecked(true);
+            currentGroupColor = colorsQueueGroup.get(index);
+            tinyDB.putInt("colorGroup", currentGroupColor);
+            tinyDB.putInt("colorGroupIndex", index);
+            radioButtonsGroup[index].setChecked(true);
+            sb_brightness.setProgressTintList(ColorStateList.valueOf(currentGroupColor));
+//            requestGroupColorChange(currentGroupColor, brightness);
+//            requestGroupColorChange(currentGroupColor, brightness);
+            if (lightStage != null) {
+                Log.i(TAG, lightStage + "|for");
+                List<Light> lights = lightStage.getLights();
+                if (lights != null) {
+                    for (Light light : lights) {
+                        light.setPlaneColor(currentGroupColor);
+                    }
+                }
+                session.saveLayoutToLocal(getContext(), lightStage);
+            }
         }
 
         if (tinyDB.getInt("colorGroup") == -1) {
@@ -457,9 +476,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tinyDB.putInt("colorGroupIndex", 3);
             colorsQueueGroup.remove(0);
             colorsQueueGroup.add(rgbValue);
-            radioButtonsGroup[3].performClick();
+            radioButtonsGroup[3].setChecked(true);
             refreshGroupRadioButtons();
-            requestGroupColorChange(rgbValue, brightness);
         } else {
             if (lightStage != null) {
                 beSet(rgbValue, which);
@@ -567,6 +585,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
                 .url(url)
                 .get()
                 .build();
+        Log.w(TAG, "Group Color Change");
         helper.connect(request, new OkHttpClient.Builder().readTimeout(10, TimeUnit.MILLISECONDS).build());
     }
 
@@ -589,6 +608,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
                 .url(url)
                 .get()
                 .build();
+        Log.w(TAG, "Single Color Change");
         helper.connect(request, new OkHttpClient.Builder().readTimeout(10, TimeUnit.MILLISECONDS).build());
     }
 
@@ -654,7 +674,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tinyDB.putInt("colorGroupIndex", index);
             sb_brightness.setProgressTintList(ColorStateList.valueOf(currentGroupColor));
             requestGroupColorChange(currentGroupColor, brightness);
-            requestGroupColorChange(currentGroupColor, brightness);
+            vibrator.vibrate(50);
+
             if (lightStage != null) {
                 Log.i(TAG, lightStage + "|for");
                 List<Light> lights = lightStage.getLights();
@@ -688,6 +709,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
                 session.saveLayoutToLocal(getContext(), lightStage);
                 if (lightStage.getCurrentLight() != null) {
                     requestSingleColorChange(colorsQueueSingle.get(index), 100, lightStage.getCurrentLight().getNum());
+                    vibrator.vibrate(50);
                 }
             }
         }

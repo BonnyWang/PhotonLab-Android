@@ -18,17 +18,17 @@
         android:focusable="true">
 
         <ImageButton
-            android:foreground="?selectableItemBackground"
-            android:padding="15dp"
-            android:contentDescription="@string/app_name"
             android:id="@+id/exit"
             android:layout_width="?actionBarSize"
             android:layout_height="?actionBarSize"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:foreground="?selectableItemBackground"
+            android:padding="15dp"
             android:scaleType="fitXY"
             android:src="@drawable/back_button"
-            android:tint="@color/colorPrimary"
             android:text=""
+            android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,4 +54,43 @@
         android:layout_height="match_parent"
         android:overScrollMode="never" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pair_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/noLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/No_Device"
+                android:textColor="@color/Light_Grey"
+                android:textSize="45sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvGotoSetup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/go_to_pair"
+                android:textColor="@color/Light_Grey"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

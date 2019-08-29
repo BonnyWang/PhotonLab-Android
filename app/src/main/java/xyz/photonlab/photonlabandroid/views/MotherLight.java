@@ -16,8 +16,6 @@ import static xyz.photonlab.photonlabandroid.views.LightStage.offsetX;
 import static xyz.photonlab.photonlabandroid.views.LightStage.offsetY;
 
 public class MotherLight extends Light {
-
-    private Bitmap shake;
     private Paint paint;
     private Matrix matrix;
     private boolean showShake = true;
@@ -30,9 +28,6 @@ public class MotherLight extends Light {
     public MotherLight(Context context, float x, float y) {
         this(x, y);
         Log.i("shakeContext", context.toString());
-        Bitmap src = Session.getShake();
-        shake = Bitmap.createScaledBitmap(src, (int) RADIUS, (int) RADIUS, false);
-        Log.i("shakeBitmap", shake + "");
         paint = new Paint();
         matrix = new Matrix();
     }
@@ -48,11 +43,11 @@ public class MotherLight extends Light {
     @Override
     void draw(Canvas canvas) {
         super.draw(canvas);
-        if (shake != null && showShake) {
+        if (LightStage.shake != null && showShake) {
             matrix.reset();
             matrix.postRotate(60 * (originDirection - 1), (int) (0.5 * RADIUS), (int) (0.5 * RADIUS));
             matrix.postTranslate(x + offsetX - 0.5f * RADIUS, y + offsetY - 0.5f * RADIUS);
-            canvas.drawBitmap(shake, matrix, paint);
+            canvas.drawBitmap(LightStage.shake, matrix, paint);
         }
     }
 

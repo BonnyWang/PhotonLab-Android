@@ -1,30 +1,37 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import xyz.photonlab.photonlabandroid.R;
-import xyz.photonlab.photonlabandroid.model.Session;
-import xyz.photonlab.photonlabandroid.model.Theme;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import xyz.photonlab.photonlabandroid.model.MyTheme;
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
+import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
+
+import static android.content.Context.VIBRATOR_SERVICE;
 
 
 public class fragement_theme_individual extends Fragment {
@@ -35,17 +42,18 @@ public class fragement_theme_individual extends Fragment {
     ImageView topCircle;
     TextView title;
     Button setButton;
-    theme_Class mtheme;
+    MyTheme mtheme;
     Button backButton;
     ToggleButton favorite;
     int resultCode = -1;
 
+    Vibrator vibrator;
     themeIndivListener mlistener;
 
     boolean isFavorite;
 
-    public fragement_theme_individual(theme_Class mtheme, boolean isFavorite) {
-        this.gradient = mtheme.getColors();
+    public fragement_theme_individual(MyTheme mtheme, boolean isFavorite) {
+        this.gradient = mtheme.getGradientColors();
         this.themeName = mtheme.getName();
         this.mtheme = mtheme;
         this.isFavorite = isFavorite;
@@ -57,12 +65,12 @@ public class fragement_theme_individual extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragement_theme_individual_layout, container, false);
-        ListView lv = (ListView) view.findViewById(R.id.info_list);
-
+        ListView lv = view.findViewById(R.id.info_list);
+        vibrator = (Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE);
         initializeData();
         theme_Content_Adapter adapter = new theme_Content_Adapter(getActivity(), R.layout.theme_info_item, items);
         lv.setAdapter(adapter);
@@ -81,9 +89,71 @@ public class fragement_theme_individual extends Fragment {
         setButton_Background.setCornerRadius(30);
         setButton_Background.setSize(1000, 50);
         setButton.setBackground(setButton_Background);
+        OkHttpClient client = new OkHttpClient.Builder().readTimeout(10, TimeUnit.MILLISECONDS).build();
         setButton.setOnClickListener(v -> {
-            //TODO: Data Transfer Back-End -Bonny
+            String url = "http://" + Session.getInstance().getLocalIP(getContext()) + "/mode/theme?number=";
+            url += mtheme.getNumber() + "&variables=";
 
+            JSONObject object = new JSONObject();
+            for (int i = 0; i < mtheme.getVars().length; i++) {
+                try {
+                    object.put("var" + (i + 1), mtheme.getVars()[i]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            url += object.toString();
+//            switch (mtheme.getName()) {
+//                case "Spring":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=2&variables={\"var1\":0,\"var2\":255,\"var3\":0,\"var4\":100,\"var5\":120,\"var6\":0,\"var7\":20}";
+//                    break;
+//                case "Rainbow":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=11&variables={\"var1\":30,\"var2\":2}";
+//                    break;
+//                case "Rainbow-Rainbow":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=12&variables={\"var1\":40,\"var2\":2}";
+//                    break;
+//                case "Fizzy Peach":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=13&variables={\"var1\":100,\"var2\":20,\"var3\":20}";
+//                    break;
+//                case "Neon Glow":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=6&variables={\"var1\":0,\"var2\":0,\"var3\":0,\"var4\":0,\"var5\":255,\"var6\":161,\"var7\":20}";
+//                    break;
+//                case "Tri Impulse":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=10&variables={\"var1\":255,\"var2\":0,\"var3\":0,\"var4\":0,\"var5\":0,\"var6\":255,\"var7\":15}";
+//                    break;
+//                case "Ocean Blue":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=17&variables={\"var1\":13,\"var2\":20,\"var3\":222,\"var4\":0,\"var5\":15,\"var6\":20,\"var7\":100}";
+//                    break;
+//                case "Purple Lake":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=3&variables={\"var1\":153,\"var2\":0,\"var3\":255,\"var4\":43,\"var5\":0,\"var6\":17,\"var7\":20}";
+//                    break;
+//                case "Fresh Papaya":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=5&variables={\"var1\":50,\"var2\":0,\"var3\":3,\"var4\":248,\"var5\":187,\"var6\":34,\"var7\":20}";
+//                    break;
+//                case "Ultramarine":
+//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
+//                            + "/mode/theme?number=5&variables={\"var1\":50,\"var2\":0,\"var3\":3,\"var4\":248,\"var5\":187,\"var6\":34,\"var7\":20}";
+//                    break;
+//                default:
+//                    return;
+//            }
+            vibrator.vibrate(50);
+            NetworkHelper helper = new NetworkHelper();
+
+            Request request = new Request.Builder().url(url).build();
+            Log.i("Themes", url);
+            helper.connect(request, client);
         });
 
 
@@ -128,9 +198,9 @@ public class fragement_theme_individual extends Fragment {
     }
 
     public interface themeIndivListener {
-        theme_Class Addavorite(theme_Class current);
+        void Addavorite(MyTheme current);
 
-        theme_Class RemoveFavorite(theme_Class currrent);
+        void RemoveFavorite(MyTheme currrent);
     }
 
     public void setListener(themeIndivListener mlistener) {

@@ -16,10 +16,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.photonlab.photonlabandroid.ColorfulThemeClass;
 import xyz.photonlab.photonlabandroid.TinyDB;
 import xyz.photonlab.photonlabandroid.fragment_layout;
-import xyz.photonlab.photonlabandroid.theme_Class;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 import xyz.photonlab.photonlabandroid.views.MotherLight;
@@ -28,14 +26,10 @@ public class Session {
 
     private static Session instance;
     private static Bitmap shake;
-    private ArrayList<theme_Class> mtheme;
-    private ArrayList<theme_Class> mfavoriteTheme;
-    private ArrayList<theme_Class> sweetTheme;
+    private ArrayList<MyTheme> allThemes;
     private String localIP = "";
     private boolean permissionFlag = true;
     private boolean darkMode = false;
-
-    private int currentThemeIndex = -1;
 
     private ArrayList<OnThemeChangeListener> onThemeChangeListeners = new ArrayList<>();
     private ArrayList<fragment_layout.OnSavedLayoutListener> onSavedLayoutListeners = new ArrayList<>();
@@ -61,74 +55,114 @@ public class Session {
     }
 
     public void requestTheme(Context context) {
-        if (mtheme == null && mfavoriteTheme == null && sweetTheme == null) {
+        if (allThemes == null) {
+            allThemes = new ArrayList<>();
             loadTheme(context);
         }
     }
 
     private void loadTheme(Context context) {
-        TinyDB tinyDB = new TinyDB(context);
+        //read the file
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(context.openFileInput("themes")))) {
+            //dynamic themes
+            String data = reader.readLine();
+            JSONArray jThemes = new JSONArray(data);
+            for (int i = 0; i < jThemes.length(); i++) {
+                JSONObject jTheme = jThemes.getJSONObject(i);
+                JSONArray jGradientColor = jTheme.getJSONArray("gradientColors");
+                JSONArray jVars = jTheme.getJSONArray("vars");
+                int[] gradientColor = new int[jGradientColor.length()];
+                int[] vars = new int[jVars.length()];
+                for (int j = 0; j < jGradientColor.length(); j++) {
+                    gradientColor[j] = jGradientColor.getInt(j);
+                }
+                for (int j = 0; j < jVars.length(); j++) {
+                    vars[j] = jVars.getInt(j);
+                }
 
-        mtheme = new ArrayList<>();
-        mtheme.add(new theme_Class("Spring", 0xff009e00, 0xfffcee21, "Photonlab", "Home Happy Sunset"));
-        mtheme.add(new theme_Class("Fizzy Peach", 0xfff24645, 0xffebc08d, "Photonlab", "Sweet sweet"));
-        mtheme.add(new theme_Class("Sky", 0xff00b7ff, 0xff00ffee, "Photonlab", "Blue Blue"));
-        mtheme.add(new theme_Class("Neon Glow", 0xff00ffa1, 0xff00ffff, "Photonlab", "High"));
-        mtheme.add(new ColorfulThemeClass("Rainbow", 0, 0, "Photonlab", "Honey"));
-
-        int dlThemeNo = tinyDB.getInt("dlThemeNo");
-        if (tinyDB.getInt("dlThemeNo") != -1) {
-            for (int i = 0; i <= dlThemeNo; i++) {
-                mtheme.add(tinyDB.getObject("dlTheme" + i, theme_Class.class));
+                MyTheme myTheme = new MyTheme(
+                        jTheme.getString("creater"),
+                        jTheme.getString("mood"),
+                        jTheme.getString("name"),
+                        jTheme.getInt("number"),
+                        gradientColor,
+                        vars,
+                        jTheme.getBoolean("fav"),
+                        jTheme.getBoolean("music"));
+                allThemes.add(myTheme);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //static themes
+            allThemes.clear();
+            Log.i("Session", "Generate Themes");
+            allThemes.add(new MyTheme("Photonlab",
+                    "Home Happy Sunset",
+                    "Spring",
+                    2, new int[]{0xff009e00, 0xfffcee21}, new int[]{0, 255, 0, 100, 120, 0, 20}, false, false));
+            allThemes.add(new MyTheme("Photonlab",
+                    "Honey",
+                    "Tri Impulse",
+                    10, new int[]{0xffff0000, 0xff0000ff}, new int[]{255, 0, 0, 0, 0, 255, 15}, false, false));
+            allThemes.add(new MyTheme("Photonlab",
+                    "Sweet sweet",
+                    "Fizzy Peach",
+                    13, new int[]{0xfff24645, 0xffebc08d}, new int[]{100, 20, 20}, false, true));
+            allThemes.add(new MyTheme("Photonlab",
+                    "High",
+                    "Neon Glow",
+                    6, new int[]{0xff00ffa1, 0xff00ffff}, new int[]{255, 0, 0, 0, 0, 255, 15}, false, false));
+            allThemes.add(new MyTheme("Photonlab",
+                    "Honey",
+                    "Rainbow",
+                    11, new int[]{0xfff72323, 0xfff7ec23, 0xff27f723, 0xff232ef7, 0xfff023f7}, new int[]{40, 2}, false, false));
+            allThemes.add(new MyTheme("Photonlab",
+                    "Honey",
+                    "Rainbow-Rainbow",
+                    12, new int[]{0xfff72323, 0xfff7ec23, 0xff27f723, 0xff232ef7, 0xfff023f7}, new int[]{40, 2}, false, false));
+            saveTheme(context);
         }
+    }
 
-        mfavoriteTheme = new ArrayList<>();
-        List<Integer> favOrder;
+    public void saveTheme(Context context) {
+        try (PrintWriter writer = new PrintWriter(context.openFileOutput("themes", Context.MODE_PRIVATE))) {
+            JSONArray jArray = new JSONArray();
+            for (int n = 0; n < allThemes.size(); n++) {
+                MyTheme theme = allThemes.get(n);
+                JSONObject jTheme = new JSONObject();
+                jTheme.put("creater", theme.getCreater());
+                jTheme.put("mood", theme.getMood());
+                jTheme.put("name", theme.getName());
+                jTheme.put("number", theme.getNumber());
+                jTheme.put("fav", theme.isFavorite());
+                jTheme.put("music", theme.isMusic());
 
+                JSONArray jGradientColors = new JSONArray();
+                JSONArray jVars = new JSONArray();
 
-        if (tinyDB.getListInt("favOrder").size() != 0) {
-            favOrder = tinyDB.getListInt("favOrder");
-            for (int i = 0; i < favOrder.size(); i++) {
-                mfavoriteTheme.add(mtheme.get(favOrder.get(i)));
+                int[] gradientColors = theme.getGradientColors();
+                int[] vars = theme.getVars();
+
+                for (int i : gradientColors) {
+                    jGradientColors.put(i);
+                }
+                for (int i : vars) {
+                    jVars.put(i);
+                }
+                jTheme.put("gradientColors", jGradientColors);
+                jTheme.put("vars", jVars);
+                jArray.put(jTheme);
             }
+            Log.e("Themes", jArray.toString());
+            writer.println(jArray);
+            writer.flush();
+        } catch (Exception e) {
+            Log.e("SESSION", "Theme Save Error");
         }
-
-        sweetTheme = new ArrayList<>();
-        sweetTheme.add(mtheme.get(1));
     }
 
-    public ArrayList<theme_Class> getMtheme() {
-        return mtheme;
-    }
-
-    public void setMtheme(ArrayList<theme_Class> mtheme) {
-        this.mtheme = mtheme;
-    }
-
-    public ArrayList<theme_Class> getMfavoriteTheme() {
-        return mfavoriteTheme;
-    }
-
-    public void setMfavoriteTheme(ArrayList<theme_Class> mfavoriteTheme) {
-        this.mfavoriteTheme = mfavoriteTheme;
-    }
-
-    public ArrayList<theme_Class> getSweetTheme() {
-        return sweetTheme;
-    }
-
-    public void setSweetTheme(ArrayList<theme_Class> sweetTheme) {
-        this.sweetTheme = sweetTheme;
-    }
-
-    public int getCurrentThemeIndex(Context context) {
-        if (currentThemeIndex == -1) {
-            TinyDB tinyDB = new TinyDB(context);
-            int dbIndex = tinyDB.getInt("current_theme_index");
-            currentThemeIndex = dbIndex == -1 ? 0 : dbIndex;
-        }
-        return currentThemeIndex;
+    public ArrayList<MyTheme> getAllThemes() {
+        return allThemes;
     }
 
     public String getMac(Context context) {
@@ -136,14 +170,6 @@ public class Session {
             mac = new TinyDB(context).getString("lightMac");
         }
         return mac;
-    }
-
-    public void setCurrentThemeIndex(Context c, int currentThemeIndex) {
-        if (currentThemeIndex > mtheme.size() || currentThemeIndex < 0)
-            throw new IllegalArgumentException();
-        TinyDB tinyDB = new TinyDB(c);
-        tinyDB.putInt("current_theme_index", currentThemeIndex);
-        this.currentThemeIndex = currentThemeIndex;
     }
 
     public LightStage requireLayoutStage(Context context, boolean plane) {
@@ -183,31 +209,7 @@ public class Session {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            stage.setOnViewCreatedListener(() -> {
-//                try {
-//                    finalStage.getLights().clear();
-//                    finalStage.getDots().clear();
-//                    for (int i = 0; i < lights.length(); i++) {
-//                        Light light;
-//                        JSONObject o = lights.getJSONObject(i);
-//                        if (i == 0)
-//                            light = new MotherLight(context, (float) o.getDouble("x"), (float) o.getDouble("y"));
-//                        else
-//                            light = new Light((float) o.getDouble("x"), (float) o.getDouble("y"));
-//                        light.setDirection(o.getInt("direction"), false);
-//                        light.setNum(o.getLong("num"));
-//                        if (plane) {
-//                            light.setPlane(true);
-//                            if (light instanceof MotherLight)
-//                                ((MotherLight) light).preventIcon();
-//                        }
-//                        light.setPlaneColor(o.getInt("plane_color"));
-//                        finalStage.addLight(light);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-            });
+
         } catch (
                 Exception e) {
             e.printStackTrace();
@@ -304,7 +306,6 @@ public class Session {
 
     public interface OnThemeChangeListener {
         void initTheme(boolean dark);
-
     }
 
     public void addOnThemeChangeListener(@NonNull OnThemeChangeListener listener) {

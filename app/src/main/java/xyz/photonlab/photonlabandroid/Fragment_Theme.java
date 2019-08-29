@@ -1,6 +1,5 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -11,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import xyz.photonlab.photonlabandroid.model.MyTheme;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
@@ -34,11 +34,10 @@ public class Fragment_Theme extends Fragment
         fragement_theme_individual.themeIndivListener,
         fragment_theme_Download.fdlListener, Session.OnThemeChangeListener {
 
-    private final static String TAG = "Fragment_Theme";
     Context context;
-    ArrayList<theme_Class> mtheme;
-    ArrayList<theme_Class> mfavoriteTheme;
-    ArrayList<theme_Class> sweetTheme;
+    ArrayList<MyTheme> mtheme;
+    ArrayList<MyTheme> mfavoriteTheme;
+    ArrayList<MyTheme> sweetTheme;
     ImageView imageView_Card;
     Spinner spinnerMenu;
     View btn_no_more;
@@ -46,29 +45,13 @@ public class Fragment_Theme extends Fragment
     TextView tv_title;
     fragment_theme_Download.fdlListener mfdlListener = this;
 
-    ArrayList<Integer> favOrder = new ArrayList<>();
-
-    @SuppressLint("StaticFieldLeak")
-    private static Fragment_Theme single_instance = null;
     RecyclerView rv;
 
     int dlThemeNo;
     private int position = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    public static Fragment_Theme getInstance() {
-        if (single_instance == null)
-            single_instance = new Fragment_Theme();
-
-        return single_instance;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         context = getContext();
@@ -81,19 +64,22 @@ public class Fragment_Theme extends Fragment
         btn_no_more = view.findViewById(R.id.btn_no_more);
         tv_title = view.findViewById(R.id.message);
         spinnerMenu = view.findViewById(R.id.spinnerThemes);
-//        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context,
-//                R.array.theme_Menu, android.R.layout.simple_spinner_item);
-
         SimpleCheckableAdapter spinnerAdapter = new SimpleCheckableAdapter(getResources().getStringArray(R.array.theme_Menu));
-
-        // spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_item);
-
         spinnerMenu.setAdapter(spinnerAdapter);
 
         Session.getInstance().requestTheme(getContext());
-        mfavoriteTheme = Session.getInstance().getMfavoriteTheme();
-        mtheme = Session.getInstance().getMtheme();
-        sweetTheme = Session.getInstance().getSweetTheme();
+        mtheme = Session.getInstance().getAllThemes();
+
+        sweetTheme = new ArrayList<>();
+        mfavoriteTheme = new ArrayList<>();
+
+        for (MyTheme item : mtheme) {
+            if (item.isFavorite())
+                mfavoriteTheme.add(item);
+            if (item.isMusic())
+                sweetTheme.add(item);
+        }
+
 
         final RvAdapter adapter = new RvAdapter(mtheme, this);
 
@@ -135,7 +121,6 @@ public class Fragment_Theme extends Fragment
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-//                ((TextView)view).setText(null);
             }
         });
 
@@ -175,54 +160,38 @@ public class Fragment_Theme extends Fragment
 
 
     @Override
-    public theme_Class Addavorite(theme_Class current) {
-        if (!mfavoriteTheme.contains(current)) {
-            mfavoriteTheme.add(current);
-            TinyDB tinyDB = new TinyDB(getContext());
-            favOrder.add(mtheme.indexOf(current));
-            tinyDB.putListInt("favOrder", favOrder);
-        }
-
-
-        if (spinnerMenu.getSelectedItemPosition() == 1) {
-            RvAdapter adapterInAddF = new RvAdapter(mfavoriteTheme, this);
-            rv.setAdapter(adapterInAddF);
-        }
-
-        return current;
+    public void Addavorite(MyTheme current) {
+        if (mfavoriteTheme.contains(current))
+            return;
+        mfavoriteTheme.add(current);
+        current.setFavorite(true);
+        Session.getInstance().saveTheme(getContext());
     }
 
     @Override
-    public theme_Class RemoveFavorite(theme_Class current) {
+    public void RemoveFavorite(MyTheme current) {
+        if (!mfavoriteTheme.contains(current))
+            return;
         mfavoriteTheme.remove(current);
-        favOrder.remove((Object) mtheme.indexOf(current));
-        TinyDB tinyDB = new TinyDB(getContext());
-        tinyDB.putListInt("favOrder", favOrder);
+        current.setFavorite(false);
         if (spinnerMenu.getSelectedItemPosition() == 1) {
             RvAdapter adapterInRemF = new NoAddRvAdapter(mfavoriteTheme, this);
             rv.setAdapter(adapterInRemF);
             updateButtonTypeForRv();
         }
-
-        return current;
+        Session.getInstance().saveTheme(getContext());
     }
 
-    private void gotoIndiv(ArrayList<theme_Class> themeList, int position) {
-        boolean isFavorite = false;
+    private void gotoIndiv(ArrayList<MyTheme> themeList, int position) {
 
         if (position == themeList.size()) {
             fragment_theme_Download mfragment_theme_download = new fragment_theme_Download(mfdlListener, mtheme);
-            FragmentTransaction fttd = getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction fttd = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
             fttd.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
             fttd.replace(R.id.container, mfragment_theme_download).addToBackStack(null);
             fttd.commit();
         } else {
-            theme_Class current = themeList.get(position);
-
-            if (mfavoriteTheme.contains(current)) {
-                isFavorite = true;
-            }
-
+            MyTheme current = themeList.get(position);
             Intent i = new Intent(this.context, ThemeDetailActivity.class);
             i.putExtra("current", mtheme.indexOf(current));
             this.position = mtheme.indexOf(current);
@@ -235,31 +204,24 @@ public class Fragment_Theme extends Fragment
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("result code", resultCode + "");
         if (resultCode == 0) {
-            Addavorite(Session.getInstance().getMtheme().get(position));
+            Addavorite(mtheme.get(position));
         } else if (resultCode == 1) {
-            RemoveFavorite(Session.getInstance().getMtheme().get(position));
+            RemoveFavorite(mtheme.get(position));
         }
     }
 
     //add the downloaded themeicon
     @Override
-    public theme_Class dlTheme(theme_Class theme) {
+    public MyTheme dlTheme(MyTheme theme) {
         TinyDB tinyDB = new TinyDB(getContext());
-
         //add to the number each time
         dlThemeNo = tinyDB.getInt("dlThemeNo") + 1;
-
-        tinyDB.putInt("dlThemeNo", dlThemeNo);
-        tinyDB.putObject("dlTheme" + dlThemeNo, theme);
-
-
         mtheme.add(theme);
 
-        //write a function for update the adapter
-        //TODO: need to consider the menu selction
         RvAdapter rvAdapter = new RvAdapter(mtheme, mOnNoteListener);
         rv.setAdapter(rvAdapter);
 
+        Session.getInstance().saveTheme(getContext());
         return theme;
     }
 

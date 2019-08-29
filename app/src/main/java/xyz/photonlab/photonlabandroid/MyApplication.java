@@ -3,11 +3,6 @@ package xyz.photonlab.photonlabandroid;
 import android.app.Application;
 import android.util.Log;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import xyz.photonlab.photonlabandroid.utils.NetworkNodeScanner;
-
 /**
  * created by KIO on 2019/8/20
  */
@@ -18,7 +13,8 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        TinyDB db = new TinyDB(this);
+//        TinyDB db = new TinyDB(this);
+//        db.putString("lightMac","30:ae:a4:cc:06:f8");
 //        try {
 //            new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"), InetAddress.getByName("255.255.255.0")).scan();
 //        } catch (UnknownHostException e) {

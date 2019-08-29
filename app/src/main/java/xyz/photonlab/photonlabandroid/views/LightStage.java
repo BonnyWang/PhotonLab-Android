@@ -1,10 +1,11 @@
 package xyz.photonlab.photonlabandroid.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,10 +16,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import xyz.photonlab.photonlabandroid.model.Session;
+
 import static xyz.photonlab.photonlabandroid.views.Light.RADIUS;
 
 public class LightStage extends View implements Serializable {
-
+    public static Bitmap shake;
     private RectF screenArea, bound = new RectF();
     private List<Light> lights;
     private OnViewCreatedListener onViewCreatedListener;
@@ -51,6 +54,7 @@ public class LightStage extends View implements Serializable {
         lights = new ArrayList<>();
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -58,6 +62,8 @@ public class LightStage extends View implements Serializable {
         this.screenArea.right = getMeasuredWidth();
         this.screenArea.bottom = getMeasuredHeight();
         RADIUS = this.screenArea.width() / 20;
+        Bitmap src = Session.getShake();
+        shake = Bitmap.createScaledBitmap(src, (int) RADIUS, (int) RADIUS, false);
         if (this.onViewCreatedListener != null)
             this.onViewCreatedListener.onViewCreated();
         if (needCenter && getMotherLight() != null) {
@@ -66,6 +72,14 @@ public class LightStage extends View implements Serializable {
                 offsetY = screenArea.centerY() - bound.centerY();
             }
         }
+
+        this.dots.clear();
+
+        for (Light light : lights) {
+            generateDot(light);
+            settleLight(light);
+        }
+
     }
 
     @Override
@@ -354,7 +368,7 @@ public class LightStage extends View implements Serializable {
 
     public boolean allLitUp() {
         for (Light light : lights)
-            if (!light.isLitUp())
+            if (!light.isLitted())
                 return false;
         return true;
     }

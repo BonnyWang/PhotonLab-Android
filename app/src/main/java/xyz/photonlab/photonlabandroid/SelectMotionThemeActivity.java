@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,13 +18,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.photonlab.photonlabandroid.model.MyTheme;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
 public class SelectMotionThemeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ListView list;
-    List<theme_Class> data = new ArrayList<>();
+    List<MyTheme> data = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +45,14 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
         }
         Session.getInstance().requestTheme(this);
         System.out.println(Session.getInstance());
-        data.addAll(Session.getInstance().getMtheme());
+        data.addAll(Session.getInstance().getAllThemes());
 
-        list.setAdapter(new ThemeAdapter(this, data));
+        int currentThemeIndex = new TinyDB(this).getInt("currentTheme");
+
+        if (currentThemeIndex == -1)
+            currentThemeIndex = 0;
+
+        list.setAdapter(new ThemeAdapter(this, data, currentThemeIndex));
 
         list.setOnItemClickListener(this);
 
@@ -62,7 +67,7 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
         clearChecked();
         TextView textView = view.findViewById(R.id.theme_item);
         textView.setTextColor(ThemeAdapter.colorSelected);
-        Session.getInstance().setCurrentThemeIndex(this, i);
+        new TinyDB(this).putInt("currentTheme", i);
         Intent intent = new Intent();
         intent.putExtra("themeIndex", i);
         setResult(0, intent);
@@ -85,14 +90,16 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
 
 class ThemeAdapter extends BaseAdapter {
 
+    private final int currentThemeIndex;
     private Activity c;
-    private List<theme_Class> data;
+    private List<MyTheme> data;
 
     static int colorSelected = Color.BLACK;
     static int colorUnselected = Color.parseColor("#999999");
 
-    ThemeAdapter(Activity c, List<theme_Class> data) {
+    ThemeAdapter(Activity c, List<MyTheme> data, int currentThemeIndex) {
         this.c = c;
+        this.currentThemeIndex = currentThemeIndex;
         this.data = data;
         if (Session.getInstance().isDarkMode(c)) {
             colorSelected = Theme.Dark.SELECTED_TEXT;
@@ -121,7 +128,7 @@ class ThemeAdapter extends BaseAdapter {
         view = c.getLayoutInflater().inflate(R.layout.theme_items, null);
         TextView textView = view.findViewById(R.id.theme_item);
         textView.setText(data.get(i).getName());
-        if (i == Session.getInstance().getCurrentThemeIndex(c)) {
+        if (i == currentThemeIndex) {
             textView.setTextColor(colorSelected);
         } else {
             textView.setTextColor(colorUnselected);

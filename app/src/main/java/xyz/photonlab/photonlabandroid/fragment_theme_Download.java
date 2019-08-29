@@ -1,20 +1,17 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,28 +20,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
+import xyz.photonlab.photonlabandroid.model.MyTheme;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link fragment_theme_Download.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link fragment_theme_Download#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlListener {
 
 
     static final String TAG = "fTheme_DownLoad";
-    ArrayList<theme_Class> themeDownload;
-    ArrayList<theme_Class> mtheme;
+    ArrayList<MyTheme> themeDownload;
+    ArrayList<MyTheme> mtheme;
     RecyclerView rv;
     Button btdlDone;
 
@@ -54,7 +43,7 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
     fdlListener mfdlListener;
 
 
-    public fragment_theme_Download(fdlListener mfdlListener, ArrayList<theme_Class> mtheme) {
+    public fragment_theme_Download(fdlListener mfdlListener, ArrayList<MyTheme> mtheme) {
         this.mfdlListener = mfdlListener;
         this.mtheme = mtheme;
     }
@@ -70,17 +59,12 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_theme__download, container, false);
 
-        rv = (RecyclerView) view.findViewById(R.id.rvDownloadTheme);
+        rv = view.findViewById(R.id.rvDownloadTheme);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
 
         btdlDone = view.findViewById(R.id.btdldone);
-        btdlDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        btdlDone.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
         themeDownload = new ArrayList<>();
 
@@ -92,9 +76,34 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                GenericTypeIndicator<ArrayList<theme_Class>> t = new GenericTypeIndicator<ArrayList<theme_Class>>() {
+                GenericTypeIndicator<ArrayList<HashMap<String, Object>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, Object>>>() {
                 };
-                themeDownload = dataSnapshot.getValue(t);
+                ArrayList<HashMap<String, Object>> srcData = dataSnapshot.getValue(t);
+                if (srcData != null)
+                    for (int i = 0; i < srcData.size(); i++) {
+                        MyTheme item = new MyTheme();
+                        item.setCreater(((String) srcData.get(i).get("creater")));
+                        item.setMood(((String) srcData.get(i).get("mood")));
+                        item.setName(((String) srcData.get(i).get("name")));
+                        item.setNumber(((int) ((long) srcData.get(i).get("number"))));
+
+                        ArrayList ag = (ArrayList) srcData.get(i).get("gradientColors");
+                        ArrayList av = (ArrayList) srcData.get(i).get("vars");
+
+                        int[] ig = new int[Objects.requireNonNull(ag).size()];
+                        int[] iv = new int[Objects.requireNonNull(av).size()];
+
+                        for (int j = 0; j < ig.length; j++) {
+                            ig[j] = Color.parseColor(ag.get(j) + "");
+                        }
+                        for (int j = 0; j < iv.length; j++) {
+                            iv[j] = ((int) (long) av.get(j));
+                        }
+                        item.setGradientColors(ig);
+                        item.setVars(iv);
+                        themeDownload.add(item);
+                    }
+
                 adapter = new dlLoadedAdapter(themeDownload, mlistener, mtheme);
                 rv.setAdapter(adapter);
                 Log.d(TAG, "Value is: ");
@@ -128,7 +137,7 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
     }
 
     interface fdlListener {
-        public theme_Class dlTheme(theme_Class theme);
+        MyTheme dlTheme(MyTheme theme);
     }
 
 }

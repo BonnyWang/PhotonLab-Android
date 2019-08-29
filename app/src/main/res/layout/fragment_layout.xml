@@ -50,6 +50,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:scaleX="1.1"
+            android:scaleY="1.1"
             android:foreground="?selectableItemBackground"
             android:contentDescription="@string/app_name"
             android:id="@+id/button3"
@@ -111,16 +113,18 @@
             android:clipToPadding="false"
             android:elevation="4dp"
             android:focusable="true"
-            android:paddingTop="25dp"
+            android:paddingTop="11dp"
             android:paddingBottom="25dp">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btAddHex"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/ic_layout_add"
-                android:backgroundTint="#8D8D8D"
+                android:src="@drawable/ic_layout_add"
+                android:tint="#8D8D8D"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/No_Device"
                 app:layout_constraintBottom_toTopOf="@id/btNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.15"
@@ -144,17 +148,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btDelete"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/ic_layout_delete"
+                android:scaleType="fitXY"
+                android:padding="14dp"
+                android:src="@drawable/ic_layout_delete"
+                android:background="@android:color/transparent"
                 android:backgroundTint="#8D8D8D"
                 app:layout_constraintBottom_toTopOf="@id/btNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.85"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="@string/app_name" />
 
             <TextView
                 android:id="@+id/tv_node_num"
@@ -169,14 +177,17 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
-
-            <Button
+            <ImageButton
                 android:id="@+id/btRotate"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/ic_layout_rotate"
-                android:backgroundTint="#8D8D8D"
+                android:src="@drawable/ic_layout_rotate"
+                android:scaleType="fitCenter"
+                android:padding="14dp"
+                android:tint="#8D8D8D"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/No_Device"
                 app:layout_constraintBottom_toTopOf="@id/btNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"

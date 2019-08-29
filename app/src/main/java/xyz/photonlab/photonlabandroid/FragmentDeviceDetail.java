@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +39,8 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
 
     private TextView fragment_title, tv_ip, tv_mac;
     private LinearLayout mask;
-    private Button bt_exit, bt_refresh, bt_research, bt_reset;
+    private Button bt_research, bt_reset;
+    private ImageButton bt_exit, bt_refresh;
 
     private Device device;
 
@@ -84,8 +86,8 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
         bt_exit.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
 
         bt_refresh.setOnClickListener(v -> {
-            mask.setVisibility(View.VISIBLE);
             if (!Session.getInstance().getLocalIP(getContext()).equals("")) {
+                mask.setVisibility(View.VISIBLE);
                 NetworkHelper helper = new NetworkHelper();
                 Request request = new Request.Builder()
                         .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/ip")
@@ -119,9 +121,6 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
             }
         });
 
-        bt_research.setOnClickListener(v -> {
-
-        });
         final AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle("Are you sure to reset?")
                 .setIcon(R.drawable.lightbulb)
@@ -207,8 +206,8 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
                 if (newIp != null) {
                     tv_ip.setText(newIp);
                     Session.getInstance().setLocalIP(newIp);
-                    new TinyDB(getContext()).putString("localIp", newIp);
-                    Log.i("Device Search Again", newIp);
+                    new TinyDB(getContext()).putString("LocalIp", newIp);
+                    Log.i("Device Search Completed", newIp);
                 }
             });
         }

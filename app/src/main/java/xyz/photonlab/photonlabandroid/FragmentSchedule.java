@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -145,7 +144,7 @@ public class FragmentSchedule extends Fragment implements dialog_colorpicker.col
         session.requestTheme(getContext());
 
         if (tinyDB.getInt("scheduleThemeIndex") != -1)
-            tv_theme.setText(session.getMtheme().get(tinyDB.getInt("scheduleThemeIndex")).getName());
+            tv_theme.setText(session.getAllThemes().get(tinyDB.getInt("scheduleThemeIndex")).getName());
         if (tinyDB.getInt("scheduleColor") != -1)
             color_shower.setCardBackgroundColor(tinyDB.getInt("scheduleColor"));
     }
@@ -162,7 +161,7 @@ public class FragmentSchedule extends Fragment implements dialog_colorpicker.col
             color_container.setAlpha(0.5f);
             tinyDB.putInt("currentScheduleType", fragment_motion_detect.THEME_TRIGGER);
             tinyDB.putInt("scheduleThemeIndex", themeIndex);
-            tv_theme.setText(session.getMtheme().get(themeIndex).getName());
+            tv_theme.setText(session.getAllThemes().get(themeIndex).getName());
         }
     }
 

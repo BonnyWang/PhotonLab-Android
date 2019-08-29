@@ -3,8 +3,10 @@ package xyz.photonlab.photonlabandroid;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.photonlab.photonlabandroid.model.MyTheme;
+
 public class dlLoadedAdapter extends dlRvAdapter {
-    public dlLoadedAdapter(List<theme_Class> mdlthemes, dlListener mlistener, ArrayList<theme_Class> mthemes) {
+    public dlLoadedAdapter(List<MyTheme> mdlthemes, dlListener mlistener, ArrayList<MyTheme> mthemes) {
         super(mdlthemes, mlistener, mthemes);
     }
 

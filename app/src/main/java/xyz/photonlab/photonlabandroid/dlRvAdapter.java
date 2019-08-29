@@ -1,15 +1,11 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.content.res.Resources;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.photonlab.photonlabandroid.model.MyTheme;
+
 public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> {
 
-    List<theme_Class> mdlthemes;
+    List<MyTheme> mdlthemes;
     dlListener mlistener;
-    ArrayList<theme_Class> mtheme;
+    ArrayList<MyTheme> mtheme;
 
     boolean btPress;
 
@@ -38,12 +36,12 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
         ToggleButton btDownload;
         dlListener mlistener;
 
-        public MyViewHolder(View v,  dlListener listener, int bottom) {
+        public MyViewHolder(View v, dlListener listener, int bottom) {
             super(v);
-            if(bottom == 0){
-                cv = (CardView)itemView.findViewById(R.id.dlcv);
+            if (bottom == 0) {
+                cv = (CardView) itemView.findViewById(R.id.dlcv);
                 textView = (TextView) itemView.findViewById(R.id.dlThemeName);
-                imageView_Card = (ImageView)itemView.findViewById(R.id.dlimageView_Card);
+                imageView_Card = (ImageView) itemView.findViewById(R.id.dlimageView_Card);
                 btDownload = itemView.findViewById(R.id.btDownload);
 
                 this.mlistener = listener;
@@ -53,19 +51,18 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
                 btDownload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if(isChecked){
+                        if (isChecked) {
                             mlistener.dlPosition(getAdapterPosition());
 
 
-
-                            ScaleAnimation animate = new ScaleAnimation(0.5f,1,0.5f,1,
-                                    btDownload.getWidth()*0.5f,btDownload.getHeight()*0.5f);
+                            ScaleAnimation animate = new ScaleAnimation(0.5f, 1, 0.5f, 1,
+                                    btDownload.getWidth() * 0.5f, btDownload.getHeight() * 0.5f);
                             animate.setDuration(300);
                             btDownload.startAnimation(animate);
-                            btDownload.setBackground(res.getDrawable(R.drawable.check,null));
+                            btDownload.setBackground(res.getDrawable(R.drawable.check, null));
                             //only be pressed once
                             btDownload.setClickable(false);
-                        }else{
+                        } else {
 
                         }
                     }
@@ -74,7 +71,7 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
                 btDownload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!btDownload.isPressed()) {
+                        if (!btDownload.isPressed()) {
 
                         }
                     }
@@ -85,15 +82,14 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
     }
 
 
-
     // Provide a suitable constructor (depends on the kind of dataset)
-    public dlRvAdapter(List<theme_Class> mdlthemes, dlListener mlistener, ArrayList<theme_Class> mtheme) {
+    public dlRvAdapter(List<MyTheme> mdlthemes, dlListener mlistener, ArrayList<MyTheme> mtheme) {
         this.mdlthemes = mdlthemes;
         this.mlistener = mlistener;
         this.mtheme = new ArrayList<>();
         this.mtheme = mtheme;
-        for(int i = 0; i < mtheme.size(); i++){
-            Log.d(TAG, "dlRvAdapter: "+mtheme.get(i).getName());
+        for (int i = 0; i < mtheme.size(); i++) {
+            Log.d(TAG, "dlRvAdapter: " + mtheme.get(i).getName());
         }
     }
 
@@ -103,16 +99,15 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
                                                        int viewType) {
         // create a new view
         View v;
-        if(viewType == R.layout.dlcardview){
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.dlcardview,parent, false);
-            MyViewHolder vh = new MyViewHolder(v, mlistener,0);
+        if (viewType == R.layout.dlcardview) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.dlcardview, parent, false);
+            MyViewHolder vh = new MyViewHolder(v, mlistener, 0);
             return vh;
-        }else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar,parent, false);
-            MyViewHolder vh = new MyViewHolder(v, mlistener,1);
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar, parent, false);
+            MyViewHolder vh = new MyViewHolder(v, mlistener, 1);
             return vh;
         }
-
 
 
     }
@@ -123,18 +118,17 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        if(position == mdlthemes.size()){
+        if (position == mdlthemes.size()) {
 
-        }else {
+        } else {
             Resources res = holder.itemView.getContext().getResources();
             holder.textView.setText(mdlthemes.get(position).getName());
-            holder.imageView_Card.setImageDrawable(mdlthemes.get(position).getGradientDrawablt());
+            holder.imageView_Card.setImageDrawable(mdlthemes.get(position).getGradientDrawable());
             Log.d(TAG, "onBindViewHolder: This run?");
 
             holder.btDownload.setChecked(false);
 
-            theme_Class temp = new theme_Class();
-            temp = mdlthemes.get(position);
+            MyTheme temp = mdlthemes.get(position);
 
             for (int i = 0; i < mtheme.size(); i++) {
                 if (mtheme.get(i).getName().equals(temp.getName())) {
@@ -172,7 +166,7 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
         return (position == mdlthemes.size()) ? R.layout.progressbar : R.layout.dlcardview;
     }
 
-    interface dlListener{
+    interface dlListener {
         int dlPosition(int position);
     }
 

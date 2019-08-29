@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -27,10 +28,10 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
     String title;
 
     WebView wvexplore;
-    Button btBack;
+    ImageButton btBack;
     TextView tvTitle;
     ConstraintLayout topBox;
-    Button btShare;
+    ImageButton btShare;
 
     public fragment_explore_indiv(String link, String title) {
 

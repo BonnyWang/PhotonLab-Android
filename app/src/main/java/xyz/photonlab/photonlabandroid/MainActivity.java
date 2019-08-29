@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -23,12 +24,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
+import xyz.photonlab.photonlabandroid.views.Light;
 
 //added for Fragment -Bonny
 
 public class MainActivity extends AppCompatActivity implements Session.OnThemeChangeListener {
     //implements fragment_Pair.pairing_Listener
     private final String TAG = "MainActivity";
+
+    private int defaultNavColor = 0;
 
     int whichanim = 0;
 
@@ -130,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         //checkPermission
         getPermissions();
 
+        defaultNavColor = getWindow().getNavigationBarColor();
+
         tinyDB = new TinyDB(getBaseContext());
 
         //init fragments
@@ -155,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
 
         myRef.setValue("Hello, World!");
 
-        if (!Session.getInstance().getLocalIP(this).equals("")) {
+        if (Session.getInstance().getLocalIP(this).equals("")) {
             Toast.makeText(this, "Please Pair First", Toast.LENGTH_SHORT).show();
         }
 
@@ -173,12 +179,12 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
             navView.setItemIconTintList(getResources().getColorStateList(R.color.bottom_nav_selector_dark, null));
             int s = getWindow().getDecorView().getSystemUiVisibility();
             getWindow().getDecorView().setSystemUiVisibility(s & (~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
-            getWindow().setNavigationBarColor(Theme.Dark.MAIN_BACKGROUND);
+            getWindow().setNavigationBarColor(0xff1f1f1f);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             colors = Theme.Normal.class;
             navView.setItemIconTintList(getResources().getColorStateList(R.color.bottom_nav_selector, null));
-            getWindow().setNavigationBarColor(Theme.Normal.MAIN_BACKGROUND);
+            getWindow().setNavigationBarColor(this.defaultNavColor);
         }
         try {
             getWindow().setStatusBarColor(colors.getField("MAIN_BACKGROUND").getInt(null));

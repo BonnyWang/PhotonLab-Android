@@ -196,7 +196,7 @@ public class Light implements Serializable {
         this.litUp = 0;
     }
 
-    public boolean isLitUp() {
+    public boolean isLitted() {
         return litUp == 1;
     }
 }

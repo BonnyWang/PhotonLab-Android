@@ -39,7 +39,6 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
-import xyz.photonlab.photonlabandroid.utils.NetworkNodeScanner;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 
@@ -54,8 +53,8 @@ public class fragment_layout extends Fragment {
     private Session session;
     private LightStage lightStage;
 
-    private ImageButton exit;
-    private Button add, rotate, delete, next, done;
+    private ImageButton exit, add, rotate, delete;
+    private Button next, done;
     private ConstraintLayout step0BtnsParent;
     private ImageButton step1Next;
     private TextView tip, tv_node_num;
@@ -136,15 +135,15 @@ public class fragment_layout extends Fragment {
                 session.notifyLayoutChanged();
                 if (lightNums.size() != lightStage.getLights().size()) {//check the num between ui and physic
                     Toast.makeText(getContext(), "Incorrect Node Num!", Toast.LENGTH_SHORT).show();
-                    return;
+                    //return;
                 }
 
-                NetworkHelper helper = new NetworkHelper();
-                Request request = new Request.Builder()
-                        .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/"
-                                + "mode/all?red=0&green=0&blue=0&brightness=0")
-                        .build();
-                helper.connect(request);
+//                NetworkHelper helper = new NetworkHelper();
+//                Request request = new Request.Builder()
+//                        .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/"
+//                                + "mode/all?red=0&green=0&blue=0&brightness=0")
+//                        .build();
+//                helper.connect(request);
 
                 step0BtnsParent.setVisibility(View.GONE);
                 step1Next.setVisibility(View.VISIBLE);
@@ -170,10 +169,10 @@ public class fragment_layout extends Fragment {
         lightStage.setOnLightCheckedChangeListener(light -> this.checkedLight = light);
         Vibrator vibrator = (Vibrator) (Objects.requireNonNull(getActivity()).getSystemService(Service.VIBRATOR_SERVICE));
         step1Next.setOnClickListener(v -> {
-            if (checkedLight != null && !checkedLight.isLitUp() && lightNums.size() > 0) {
+            vibrator.vibrate(50);
+            if (checkedLight != null && !checkedLight.isLitted() && lightNums.size() > 0) {
                 checkedLight.setNum(lightNums.get(currentNum));
                 checkedLight.litUp();
-                vibrator.vibrate(50);
                 if (lightStage.allLitUp()) {
                     Toast.makeText(getContext(), "You are all set!", Toast.LENGTH_SHORT).show();
                     session.saveLayoutToLocal(getContext(), lightStage);
@@ -181,7 +180,6 @@ public class fragment_layout extends Fragment {
                     done.setVisibility(View.VISIBLE);
                     help.setVisibility(View.GONE);
                 } else {
-                    step1Next.setEnabled(false);
                     currentNum++;
                     nextLight(currentNum);
                 }
@@ -238,32 +236,20 @@ public class fragment_layout extends Fragment {
         NetworkHelper helper = new NetworkHelper();
         Request request = new Request.Builder()
                 .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/mode/single?node="
-                        + lightNums.get(index) + "&red=100&green=100&blue=100&brightness=255")
+                        + lightNums.get(index) + "&red=100&green=100&blue=100")
                 .get().build();
-        helper.setCallback(new NetworkCallback() {
-            @Override
-            public void onSuccess(Response response) {
-                try {
-                    Log.i("nextLightLitUp", Objects.requireNonNull(response.body()).string());
-                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> step1Next.setEnabled(true));
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> step1Next.setEnabled(true));
-                }
-            }
-
-            @Override
-            public void onFailed(String msg) {
-                Log.e("nextLightLitUp failed", msg);
-                Objects.requireNonNull(getActivity()).runOnUiThread(() -> step1Next.setEnabled(true));
-            }
-        });
         helper.connect(request);
+        Log.i("HHH", "sss");
     }
 
     public interface OnSavedLayoutListener {
         void onSavedLayout(boolean saved);
+    }
+
+    private void runOnUiThread(Runnable runnable) {
+        Activity activity = getActivity();
+        if (activity != null)
+            activity.runOnUiThread(runnable);
     }
 
 }

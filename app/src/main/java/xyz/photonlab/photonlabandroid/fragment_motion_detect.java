@@ -1,6 +1,5 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -10,7 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -21,8 +20,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.view.TimePickerView;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class fragment_motion_detect extends FullScreenFragment implements dialog
     ConstraintLayout timeContainer, colorContainer, themeContainer;
     LinearLayout mainContainer;
     TextView tvCallDial;
-    Button backButton;
+    ImageButton backButton;
     Switch swMotion;
     TextView currentThemeTip;
     CardView colorShower;
@@ -151,6 +148,11 @@ public class fragment_motion_detect extends FullScreenFragment implements dialog
             view.findViewById(R.id.divider).setBackgroundColor(Theme.Dark.UNSELECTED_TEXT);
             backButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
         }
+
+        view.findViewById(R.id.time_delay).setOnClickListener(v -> {
+            //TODO Add Network Request
+        });
+
         return view;
     }
 
@@ -174,9 +176,11 @@ public class fragment_motion_detect extends FullScreenFragment implements dialog
         super.onResume();
         Log.e("viewCreated", "motion_detect");
         Session.getInstance().requestTheme(getContext());
-        int currentThemeIndex = Session.getInstance().getCurrentThemeIndex(getContext());
+        int currentThemeIndex = new TinyDB(getContext()).getInt("CurrentTheme");
+        if (currentThemeIndex == -1)
+            currentThemeIndex = 0;
         if (currentThemeTip != null)
-            currentThemeTip.setText(Session.getInstance().getMtheme().get(currentThemeIndex).getName());
+            currentThemeTip.setText(Session.getInstance().getAllThemes().get(currentThemeIndex).getName());
     }
 
     private String getTime(Date date) {//可根据需要自行截取数据显示

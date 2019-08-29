@@ -1,7 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import xyz.photonlab.photonlabandroid.R;
+import xyz.photonlab.photonlabandroid.model.MyTheme;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
@@ -50,9 +49,9 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
         }
     }
 
-    List<theme_Class> mthemes;
+    List<MyTheme> mthemes;
 
-    public RvAdapter(List<theme_Class> mthemes, OnNoteListener onNoteListener) {
+    public RvAdapter(List<MyTheme> mthemes, OnNoteListener onNoteListener) {
         this.mthemes = mthemes;
         this.mOnNoteListener = onNoteListener;
     }
@@ -92,8 +91,8 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
 //                }
 //            });
         } else {
-            holder.textView.setText(mthemes.get(i).name);
-            holder.imageView_Card.setImageDrawable(mthemes.get(i).getGradientDrawablt());
+            holder.textView.setText(mthemes.get(i).getName());
+            holder.imageView_Card.setImageDrawable(mthemes.get(i).getGradientDrawable());
         }
     }
 
