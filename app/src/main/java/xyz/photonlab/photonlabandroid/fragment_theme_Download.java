@@ -94,7 +94,12 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
                         int[] iv = new int[Objects.requireNonNull(av).size()];
 
                         for (int j = 0; j < ig.length; j++) {
-                            ig[j] = Color.parseColor(ag.get(j) + "");
+                            Log.i("#Color", ag.get(j) + "");
+                            try {
+                                ig[j] = Color.parseColor(ag.get(j) + "");
+                            } catch (Exception e) {
+                                ig[j] = 0xffffffff;
+                            }
                         }
                         for (int j = 0; j < iv.length; j++) {
                             iv[j] = ((int) (long) av.get(j));

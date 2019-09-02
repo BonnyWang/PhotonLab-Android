@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -24,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
-import xyz.photonlab.photonlabandroid.views.Light;
 
 //added for Fragment -Bonny
 
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         return false;
     };
 
-    private synchronized void createOrReplaceFragment(int i) {
+    private void createOrReplaceFragment(int i) {
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         //if fragment is null, create and add to container
         if (fragments[i] == null) {
@@ -88,27 +86,16 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
             }
             tx.add(R.id.fgm, fragments[i]);
         }
-
-        //add animation
         if (i > whichanim) {
-            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         }
         if (i < whichanim) {
-            tx.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+            tx.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
         }
-
-        //hide other fragment and show current fragment
-        for (int j = 0; j < 4; j++) {
-            if (i == j) {
-                tx.show(fragments[j]);
-            } else {
-                if (fragments[j] != null)
-                    tx.hide(fragments[j]);
-            }
-        }
-
-        whichanim = i;
+        tx.hide(fragments[whichanim]);
+        tx.show(fragments[i]);
         tx.commit();
+        whichanim = i;
     }
 
     @Override
@@ -140,16 +127,12 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
 
         //init fragments
         fragments[0] = new FragmentControlV2();
-
         runnable = () -> {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.remove(start_anim);
-            for (Fragment fragment : fragments) {
-                if (fragment != null) {
-                    ft.add(R.id.fgm, fragment);
-                }
-            }
-            ft.commitAllowingStateLoss();
+            if (!fragments[0].isAdded())
+                ft.add(R.id.fgm, fragments[0]);
+            ft.commit();
             Log.i(TAG, "fragment created");
             container.setVisibility(View.VISIBLE);
         };
@@ -195,11 +178,6 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -241,6 +219,11 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.fade_scale_in, R.anim.fade_scale_out);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(null);
     }
 }
 

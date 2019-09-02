@@ -135,7 +135,7 @@ public class fragment_layout extends Fragment {
                 session.notifyLayoutChanged();
                 if (lightNums.size() != lightStage.getLights().size()) {//check the num between ui and physic
                     Toast.makeText(getContext(), "Incorrect Node Num!", Toast.LENGTH_SHORT).show();
-                    //return;
+                    return;
                 }
 
 //                NetworkHelper helper = new NetworkHelper();
