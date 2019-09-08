@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,7 +74,7 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 GenericTypeIndicator<ArrayList<HashMap<String, Object>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, Object>>>() {
@@ -82,7 +83,7 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
                 if (srcData != null)
                     for (int i = 0; i < srcData.size(); i++) {
                         MyTheme item = new MyTheme();
-                        item.setCreater(((String) srcData.get(i).get("creater")));
+                        item.setCreater(((String) srcData.get(i).get("creator")));
                         item.setMood(((String) srcData.get(i).get("mood")));
                         item.setName(((String) srcData.get(i).get("name")));
                         item.setNumber(((int) ((long) srcData.get(i).get("number"))));
@@ -109,7 +110,7 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
                         themeDownload.add(item);
                     }
 
-                adapter = new dlLoadedAdapter(themeDownload, mlistener, mtheme);
+                adapter = new dlLoadedAdapter(themeDownload, mlistener, mtheme, Session.getInstance().isDarkMode(getContext()));
                 rv.setAdapter(adapter);
                 Log.d(TAG, "Value is: ");
             }
@@ -121,7 +122,7 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
             }
         });
 
-        adapter = new dlRvAdapter(themeDownload, mlistener, mtheme);
+        adapter = new dlRvAdapter(themeDownload, mlistener, mtheme, Session.getInstance().isDarkMode(getContext()));
         rv.setAdapter(adapter);
 
 

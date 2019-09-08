@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,8 +31,6 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 public class MainActivity extends AppCompatActivity implements Session.OnThemeChangeListener {
     //implements fragment_Pair.pairing_Listener
     private final String TAG = "MainActivity";
-
-    private int defaultNavColor = 0;
 
     int whichanim = 0;
 
@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     };
 
     private void createOrReplaceFragment(int i) {
+        if (i == whichanim)
+            return;
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         //if fragment is null, create and add to container
         if (fragments[i] == null) {
@@ -84,13 +86,13 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
                     Log.e(TAG, "Current Fragment index is not support!");
                     throw new IllegalArgumentException();
             }
-            tx.add(R.id.fgm, fragments[i]);
+            tx.add(R.id.fgm, fragments[i], i + "");
         }
         if (i > whichanim) {
-            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         }
         if (i < whichanim) {
-            tx.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+            tx.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
         }
         tx.hide(fragments[whichanim]);
         tx.show(fragments[i]);
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_scale_in, R.anim.fade_scale_out);
+
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -121,20 +124,29 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         //checkPermission
         getPermissions();
 
-        defaultNavColor = getWindow().getNavigationBarColor();
-
         tinyDB = new TinyDB(getBaseContext());
 
-        //init fragments
-        fragments[0] = new FragmentControlV2();
         runnable = () -> {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
             ft.remove(start_anim);
+            if (savedInstanceState != null) {
+                for (int i = 0; i < 4; i++) {
+                    fragments[i] = manager.getFragment(savedInstanceState, i + "");
+                    if (fragments[i] != null && !fragments[i].isHidden()) {
+                        whichanim = i;
+                    }
+                }
+            }
+            //init fragments
+            if (fragments[0] == null)
+                fragments[0] = new FragmentControlV2();
             if (!fragments[0].isAdded())
-                ft.add(R.id.fgm, fragments[0]);
-            ft.commit();
+                ft.add(R.id.fgm, fragments[0], 0 + "");
+
             Log.i(TAG, "fragment created");
             container.setVisibility(View.VISIBLE);
+            ft.commit();
         };
 
         handler.postDelayed(runnable, 3000);
@@ -167,11 +179,12 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             colors = Theme.Normal.class;
             navView.setItemIconTintList(getResources().getColorStateList(R.color.bottom_nav_selector, null));
-            getWindow().setNavigationBarColor(this.defaultNavColor);
+            getWindow().setNavigationBarColor(0xffcccccc);
         }
         try {
             getWindow().setStatusBarColor(colors.getField("MAIN_BACKGROUND").getInt(null));
             getWindow().getDecorView().setBackgroundColor(colors.getField("MAIN_BACKGROUND").getInt(null));
+            Log.i(TAG, getWindow().getNavigationBarColor() + "");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -223,7 +236,11 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(null);
+        for (int i = 0; i < 4; i++)
+            if (fragments[i] != null) {
+                getSupportFragmentManager().putFragment(outState, i + "", fragments[i]);
+            }
+        super.onSaveInstanceState(outState);
     }
 }
 

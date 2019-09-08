@@ -488,8 +488,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
         Color.colorToHSV(currentColor0, hsv);
         hsv[2] = hsv[2] * brightness_value / 100;
         requestColorChange(Color.HSVToColor(hsv), true);
-        checked0.setStroke(5, setCheckedColor(checkedOrder));
-        radioButtons0[checkedOrder].setBackground(checked0);
+        checked0.setStroke(10, setCheckedColor(checkedOrder));
+        //radioButtons0[checkedOrder].setBackground(checked0);
     }
 
     private void requestColorChange(int color, boolean global) {
@@ -523,8 +523,8 @@ public class Fragment_Control extends Fragment implements dialog_colorpicker.col
     public void setColor0(int checkedOrder) {
         //all radio selected color
         currentColor1 = setCheckedColor0(checkedOrder);
-        checked1.setStroke(5, setCheckedColor0(checkedOrder));
-        radioButtons1[checkedOrder].setBackground(checked1);
+        checked1.setStroke(10, setCheckedColor0(checkedOrder));
+        //radioButtons1[checkedOrder].setBackground(checked1);
         requestColorChange(currentColor1, false);
     }
 

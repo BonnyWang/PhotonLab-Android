@@ -534,11 +534,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tinyDB.putInt("color" + i, colorsQueueGroup.get(i));
             Objects.requireNonNull(radioButtonsGroup[i].getButtonDrawable())
                     .setTint(colorsQueueGroup.get(i));
-            Log.i(TAG, radioButtonsGroup[i].getBackground() + "");
-            StateListDrawable drawable = (StateListDrawable) radioButtonsGroup[i].getBackground();
-            Drawable checkedDrawable = ((DrawableContainer.DrawableContainerState) Objects.requireNonNull(drawable.getConstantState())).getChild(1);
-            ((GradientDrawable) checkedDrawable).setStroke(2, colorsQueueGroup.get(i));
-            ((GradientDrawable) checkedDrawable).setSize(px, px);
         }
     }
 
@@ -552,11 +547,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tinyDB.putInt("color0" + i, colorsQueueSingle.get(i));
             Objects.requireNonNull(radioButtonsSingle[i].getButtonDrawable())
                     .setTint(colorsQueueSingle.get(i));
-            Log.i(TAG, radioButtonsSingle[i].getBackground() + "");
-            StateListDrawable drawable = (StateListDrawable) radioButtonsSingle[i].getBackground();
-            Drawable checkedDrawable = ((DrawableContainer.DrawableContainerState) Objects.requireNonNull(drawable.getConstantState())).getChild(1);
-            ((GradientDrawable) checkedDrawable).setStroke(2, colorsQueueSingle.get(i));
-            ((GradientDrawable) checkedDrawable).setSize(px, px);
         }
     }
 

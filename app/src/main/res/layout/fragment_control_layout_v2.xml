@@ -189,7 +189,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked"
+                        android:background="@android:color/transparent"
                         android:button="@drawable/oval"
                         android:enabled="false" />
 
@@ -199,8 +199,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_blue"
-                        android:button="@drawable/ovalblue"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <RadioButton
@@ -209,8 +209,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_orange"
-                        android:button="@drawable/ovalorange"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <RadioButton
@@ -219,8 +219,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
                 </RadioGroup>
 
@@ -271,10 +271,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="gone"
             android:id="@+id/single_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/content_container"
@@ -333,7 +333,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked"
+                        android:background="@android:color/transparent"
                         android:button="@drawable/oval"
                         android:enabled="false" />
 
@@ -343,8 +343,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_blue"
-                        android:button="@drawable/ovalblue"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <RadioButton
@@ -353,8 +353,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_orange"
-                        android:button="@drawable/ovalorange"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <RadioButton
@@ -363,8 +363,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <RadioButton
@@ -373,8 +373,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
                 </RadioGroup>
 
@@ -392,7 +392,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked"
+                        android:background="@android:color/transparent"
                         android:button="@drawable/oval"
                         android:enabled="false" />
 
@@ -402,8 +402,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_blue"
-                        android:button="@drawable/ovalblue"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <RadioButton
@@ -412,8 +412,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_orange"
-                        android:button="@drawable/ovalorange"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <RadioButton
@@ -422,8 +422,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/checked_purple"
-                        android:button="@drawable/ovalpurple"
+                        android:background="@android:color/transparent"
+                        android:button="@drawable/oval"
                         android:enabled="false" />
 
                     <Button

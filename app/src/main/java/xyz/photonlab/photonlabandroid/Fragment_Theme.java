@@ -92,11 +92,8 @@ public class Fragment_Theme extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                try {
+                if (view != null)
                     ((TextView) view).setText(null);
-                } catch (Exception ignored) {
-                }
-
                 spinnerAdapter.setChecked(position);
 
                 Log.i("position", position + "");

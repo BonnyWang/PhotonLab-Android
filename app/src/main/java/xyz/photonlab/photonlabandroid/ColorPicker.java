@@ -176,7 +176,7 @@ public class ColorPicker extends View {
     }
 
     private void proofLeft(float x, float y) {
-        int r = bitmapTemp.getWidth() / 2 - mLeftBitmapRadius / 2;//圆半径
+        int r = bitmapTemp.getWidth() / 2 - mLeftBitmapRadius;//圆半径
         //北
         PointF N = new PointF(initX, initY - r);//北
         PointF S = new PointF(initX, initY + r);//南

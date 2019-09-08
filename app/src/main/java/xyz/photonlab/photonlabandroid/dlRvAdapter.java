@@ -1,6 +1,7 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.photonlab.photonlabandroid.model.MyTheme;
+import xyz.photonlab.photonlabandroid.model.Session;
+import xyz.photonlab.photonlabandroid.model.Theme;
 
 public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> {
 
+    private final boolean isDark;
     List<MyTheme> mdlthemes;
     dlListener mlistener;
     ArrayList<MyTheme> mtheme;
@@ -30,50 +34,52 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
     private static final String TAG = "dlRvAdapter";
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
+        private final boolean isDark;
         CardView cv;
         TextView textView;
         ImageView imageView_Card;
         ToggleButton btDownload;
         dlListener mlistener;
 
-        public MyViewHolder(View v, dlListener listener, int bottom) {
+        public MyViewHolder(View v, dlListener listener, int bottom, boolean isDark) {
             super(v);
+            this.isDark = isDark;
             if (bottom == 0) {
-                cv = (CardView) itemView.findViewById(R.id.dlcv);
-                textView = (TextView) itemView.findViewById(R.id.dlThemeName);
-                imageView_Card = (ImageView) itemView.findViewById(R.id.dlimageView_Card);
+                cv = itemView.findViewById(R.id.dlcv);
+                textView = itemView.findViewById(R.id.dlThemeName);
+                imageView_Card = itemView.findViewById(R.id.dlimageView_Card);
                 btDownload = itemView.findViewById(R.id.btDownload);
 
                 this.mlistener = listener;
 
                 final Resources res = v.getContext().getResources();
 
-                btDownload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            mlistener.dlPosition(getAdapterPosition());
+                if (isDark) {
+                    cv.setCardBackgroundColor(Theme.Dark.CARD_BACKGROUND);
+                    itemView.findViewById(R.id.dl_top).setBackgroundColor(Theme.Dark.CARD_BACKGROUND);
+                    textView.setTextColor(Theme.Dark.SELECTED_TEXT);
+                }
+
+                btDownload.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        mlistener.dlPosition(getAdapterPosition());
 
 
-                            ScaleAnimation animate = new ScaleAnimation(0.5f, 1, 0.5f, 1,
-                                    btDownload.getWidth() * 0.5f, btDownload.getHeight() * 0.5f);
-                            animate.setDuration(300);
-                            btDownload.startAnimation(animate);
-                            btDownload.setBackground(res.getDrawable(R.drawable.check, null));
-                            //only be pressed once
-                            btDownload.setClickable(false);
-                        } else {
+                        ScaleAnimation animate = new ScaleAnimation(0.5f, 1, 0.5f, 1,
+                                btDownload.getWidth() * 0.5f, btDownload.getHeight() * 0.5f);
+                        animate.setDuration(300);
+                        btDownload.startAnimation(animate);
+                        btDownload.setBackground(res.getDrawable(R.drawable.check, null));
+                        //only be pressed once
+                        btDownload.setClickable(false);
+                    } else {
 
-                        }
                     }
                 });
 
-                btDownload.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!btDownload.isPressed()) {
+                btDownload.setOnClickListener(v1 -> {
+                    if (!btDownload.isPressed()) {
 
-                        }
                     }
                 });
             }
@@ -83,11 +89,12 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public dlRvAdapter(List<MyTheme> mdlthemes, dlListener mlistener, ArrayList<MyTheme> mtheme) {
+    public dlRvAdapter(List<MyTheme> mdlthemes, dlListener mlistener, ArrayList<MyTheme> mtheme, boolean isDark) {
         this.mdlthemes = mdlthemes;
         this.mlistener = mlistener;
         this.mtheme = new ArrayList<>();
         this.mtheme = mtheme;
+        this.isDark = isDark;
         for (int i = 0; i < mtheme.size(); i++) {
             Log.d(TAG, "dlRvAdapter: " + mtheme.get(i).getName());
         }
@@ -101,11 +108,11 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
         View v;
         if (viewType == R.layout.dlcardview) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.dlcardview, parent, false);
-            MyViewHolder vh = new MyViewHolder(v, mlistener, 0);
+            MyViewHolder vh = new MyViewHolder(v, mlistener, 0, isDark);
             return vh;
         } else {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar, parent, false);
-            MyViewHolder vh = new MyViewHolder(v, mlistener, 1);
+            MyViewHolder vh = new MyViewHolder(v, mlistener, 1, isDark);
             return vh;
         }
 
@@ -142,13 +149,6 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
                 }
             }
         }
-
-        //Why this one cannot work here?
-//        if (mtheme.contains(temp)){
-//            holder.btDownload.getBackground().setTint(0xff000000);
-//            Log.d(TAG, "onBindViewHolder: Y not contained");
-//        }
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -152,11 +151,6 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                                     runOnUiThread(() -> {
                                         progressBar.setVisibility(View.GONE);
                                         Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
-                                        Drawable drawable = Objects.requireNonNull(getView())
-                                                .findViewById(R.id.time_delay).getForeground();
-                                        Objects.requireNonNull(getView()).findViewById(R.id.switch_detect).setAlpha(1f);
-//                                        Objects.requireNonNull(getView())
-//                                                .findViewById(R.id.switch_detect).setForeground(drawable);
                                     });
                                 } else {
                                     runOnUiThread(() -> {
@@ -190,7 +184,7 @@ class FirmwareUpdateIndividualFragment extends Fragment {
             public void onFailed(String msg) {
                 runOnUiThread(() -> {
                     Toast.makeText(getContext(), "Can't get any response", Toast.LENGTH_SHORT).show();
-                    Objects.requireNonNull(getView()).findViewById(R.id.up_to_date).setVisibility(View.VISIBLE);
+//                    Objects.requireNonNull(getView()).findViewById(R.id.up_to_date).setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 });
             }
