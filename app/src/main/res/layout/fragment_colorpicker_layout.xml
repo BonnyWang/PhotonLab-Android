@@ -1,128 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:background="@color/backGround"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollable"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingBottom="40dp">
 
-    <LinearLayout
-        android:id="@+id/scrollable"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/close"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="end"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:cropToPadding="false"
+        android:padding="16dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_layout_delete"
+        android:tint="#aaaaaa" />
+
+    <xyz.photonlab.photonlabandroid.ColorPicker
+        android:id="@+id/colorDisk"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linput"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingBottom="40dp">
+        android:layout_marginTop="60dp"
+        android:visibility="visible">
 
-        <ImageButton
-            android:id="@+id/close"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="end"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/app_name"
-            android:cropToPadding="false"
-            android:padding="10dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_close_black_24dp"
-            android:tint="#aaaaaa" />
-
-        <xyz.photonlab.photonlabandroid.ColorPicker
-            android:id="@+id/colorDisk"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:visibility="visible">
-
-            <EditText
-                android:id="@+id/editTextR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:background="@drawable/rgb_edittext"
-                android:backgroundTint="#fcb9b8"
-                android:ems="3"
-                android:gravity="center"
-                android:inputType="numberSigned"
-                android:padding="5dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/editTextG"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/rgb_edittext"
-                android:backgroundTint="#d3f0d2"
-                android:ems="3"
-                android:gravity="center"
-                android:inputType="numberSigned"
-                android:padding="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/editTextB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="32dp"
-                android:background="@drawable/rgb_edittext"
-                android:backgroundTint="#c1d4f1"
-                android:ems="3"
-                android:gravity="center"
-                android:inputType="numberSigned"
-                android:padding="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/setColorButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="32dp"
-            android:background="@drawable/set_background_no_size"
-            android:elevation="0dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="@string/Set"
-            android:textAllCaps="false"
-            android:textColor="#bdbdbd"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/AddFavColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/set_background_no_size"
-            android:elevation="0dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="@string/Add_to_Favorite"
-            android:textAllCaps="false"
-            android:textColor="#bdbdbd"
-            android:textSize="18sp" />
-
-        <View
-
+        <EditText
+            android:id="@+id/editTextR"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/rgb_edittext"
+            android:backgroundTint="#fcb9b8"
+            android:ems="3"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-</ScrollView>
+        <EditText
+            android:id="@+id/editTextG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/rgb_edittext"
+            android:backgroundTint="#d3f0d2"
+            android:ems="3"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rgb_edittext"
+            android:backgroundTint="#c1d4f1"
+            android:ems="3"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/setColorButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/set_background_no_size"
+        android:elevation="0dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="@string/Set"
+        android:textAllCaps="false"
+        android:textColor="#bdbdbd"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/AddFavColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/set_background_no_size"
+        android:elevation="0dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="@string/Add_to_Favorite"
+        android:textAllCaps="false"
+        android:textColor="#bdbdbd"
+        android:textSize="18sp" />
+
+    <View
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

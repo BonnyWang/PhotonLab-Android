@@ -2,10 +2,8 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -13,15 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
@@ -30,7 +25,7 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
 
-public class dialog_colorpicker extends DialogFragment {
+public class dialog_colorpicker extends Fragment {
     private ColorPicker colorDisk = null;
     private TextView tv;
     private ImageButton closeBt;
@@ -62,7 +57,6 @@ public class dialog_colorpicker extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.fragment_colorpicker_layout, container, false);
         rValue = view.findViewById(R.id.editTextR);
         rValue.setText("0");
@@ -136,7 +130,9 @@ public class dialog_colorpicker extends DialogFragment {
         closeBt = view.findViewById(R.id.close);
 
         closeBt.setOnClickListener(v -> {
-            dismiss();
+            if (getFragmentManager() != null) {
+                getFragmentManager().popBackStack();
+            }
             //getParentFragment().getChildFragmentManager().popBackStack();
         });
 
@@ -148,22 +144,23 @@ public class dialog_colorpicker extends DialogFragment {
 
         addFavBt.setOnClickListener(v -> {
             mlistener.getRGB(colorcode, whichOne);
-            dismiss();
+            if (getFragmentManager() != null) {
+                getFragmentManager().popBackStack();
+            }
         });
 
         setBt = view.findViewById(R.id.setColorButton);
         setBt.setOnClickListener(v -> {
 
             mlistener.beSet(colorcode, whichOne);
-            dismiss();
+            if (getFragmentManager() != null) {
+                getFragmentManager().popBackStack();
+            }
 
         });
 
         colorDisk = view.findViewById(R.id.colorDisk);
         colorDisk.setOnColorBackListener((a, r, g, b) -> {
-//                tv.setText("R：" + r + "\nG：" + g + "\nB：" + b + "\n" + colorDisk.getColorStr());
-//                tv.setTextColor(Color.argb(a, r, g, b));
-
             rValue.setText(String.valueOf(r));
             gValue.setText(String.valueOf(g));
             bValue.setText(String.valueOf(b));
@@ -186,16 +183,16 @@ public class dialog_colorpicker extends DialogFragment {
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Window window = getDialog().getWindow();
-        if (window != null) {
-            DisplayMetrics dm = new DisplayMetrics();
-            Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(dm);
-            window.setLayout((int) (dm.widthPixels * 0.95), ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Window window = getDialog().getWindow();
+//        if (window != null) {
+//            DisplayMetrics dm = new DisplayMetrics();
+//            Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(dm);
+//            window.setLayout((int) (dm.widthPixels * 0.95), ViewGroup.LayoutParams.WRAP_CONTENT);
+//        }
+//    }
 
     public void dismissAddFav() {
         this.showAddFav = false;

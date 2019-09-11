@@ -23,7 +23,7 @@ import xyz.photonlab.photonlabandroid.model.Device;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
-public class FragmentDevice extends Fragment implements DeviceAdapter.OnItemClickListener {
+public class FragmentDevice extends NormalStatusBarFragment implements DeviceAdapter.OnItemClickListener {
 
     private ArrayList<Device> devices;
 

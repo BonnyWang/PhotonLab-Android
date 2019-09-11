@@ -106,4 +106,8 @@
     <string name="main_controller">Main Controller</string>
     <string name="light_panel">Light Panels</string>
     <string name="current_version_is_up_to_date">Current version is up to date :)</string>
+    <string name="pairing">Pairing</string>
+    <string name="other_utils">Other Utilities</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="feedback">Feedback</string>
 </resources>

@@ -45,7 +45,7 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
-public class FragmentPair extends Fragment {
+public class FragmentPair extends NormalStatusBarFragment {
 
     private Animation in, out;
     private ImageButton exit;

@@ -44,7 +44,7 @@ import xyz.photonlab.photonlabandroid.views.LightStage;
 
 
 @SuppressLint("SetTextI18n")
-public class fragment_layout extends Fragment {
+public class fragment_layout extends NormalStatusBarFragment {
 
     private FragmentActivity activity;
 

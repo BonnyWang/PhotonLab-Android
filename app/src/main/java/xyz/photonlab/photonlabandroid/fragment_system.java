@@ -22,7 +22,7 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 
 
 @SuppressLint("SetTextI18n")
-public class fragment_system extends FullScreenFragment {
+public class fragment_system extends NormalStatusBarFragment {
 
     ImageButton btBack;
 

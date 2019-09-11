@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -32,6 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
@@ -259,10 +261,20 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         }
 
         bt_add_color_group.setOnClickListener(v -> {
-            dialog_colorpicker newFragment = dialog_colorpicker.newInstance(0);
-            newFragment.setListener(this);
-            newFragment.show(getChildFragmentManager(), "dialog");
+            FragmentManager manager = getFragmentManager();
+            if (manager != null) {
+                Log.i(TAG, "addViewEvent: ");
+                dialog_colorpicker colorpicker = dialog_colorpicker.newInstance(0);
+                colorpicker.setListener(this);
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
+                        .replace(R.id.container, colorpicker)
+                        .addToBackStack(null)
+                        .commit();
+            }
+
         });
+
 
         tv_go_to_layout.setOnClickListener(v -> {
             fragment_layout fragmentLayout = new fragment_layout();
@@ -273,9 +285,17 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         });
 
         bt_add_color_single.setOnClickListener(v -> {
-            dialog_colorpicker newFragment = dialog_colorpicker.newInstance(1);
-            newFragment.setListener(this);
-            newFragment.show(getChildFragmentManager(), "dialog");
+            FragmentManager manager = getFragmentManager();
+            if (manager != null) {
+                dialog_colorpicker colorpicker = dialog_colorpicker.newInstance(1);
+                colorpicker.setListener(this);
+                Log.i(TAG, "addViewEvent: ");
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
+                        .replace(R.id.container, colorpicker)
+                        .addToBackStack(null)
+                        .commit();
+            }
         });
 
         for (RadioButton button : radioButtonsSingle) {

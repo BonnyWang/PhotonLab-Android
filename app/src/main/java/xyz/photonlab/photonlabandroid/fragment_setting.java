@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -9,29 +10,59 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
 
-public class fragment_setting extends Fragment implements SettingRvAdapter.OnNoteListener, Session.OnThemeChangeListener {
+public class fragment_setting extends Fragment implements Session.OnThemeChangeListener {
 
-    Context context;
-    List<setting_Content> mSettings;
+    Activity mActivity;
     TextView tv_setting;
     Button person;
-    RecyclerView rv;
+
+    ImageView titleBack;
+    CardView cards1, cards2, cards3;
+    TextView[] tvs;
+    View[] menuItems;
+
+
+    private final int[] tvsId = new int[]{
+            R.id.SettingSub_1,
+            R.id.SettingSub_2,
+            R.id.SettingSub_3,
+            R.id.SettingSub_4,
+            R.id.SettingSub_5,
+            R.id.SettingSub_6,
+            R.id.SettingSub_7,
+            R.id.SettingSub_8,
+            R.id.SettingSub_9,
+            R.id.SettingSub_10,
+            R.id.SettingSub_11
+    };
+
+    private final int[] itemIds = new int[]{
+            R.id.set_item_Paring,
+            R.id.set_item_Devices,
+            R.id.set_item_System,
+            R.id.set_item_Layout,
+            R.id.set_item_Schedules,
+            R.id.set_item_SmartHome,
+            R.id.set_item_motion,
+            R.id.set_item_other,
+            R.id.set_item_Feedback,
+            R.id.set_item_Contact,
+            R.id.set_item_About,
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,17 +74,23 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        View view = inflater.inflate(R.layout.fragment_setting_v2, container, false);
 
-        rv = view.findViewById(R.id.setRV);
-        LinearLayoutManager llm = new LinearLayoutManager(context);
-        rv.setLayoutManager(llm);
+        titleBack = view.findViewById(R.id.title_back);
+        cards1 = view.findViewById(R.id.set_group_1);
+        cards2 = view.findViewById(R.id.set_group_2);
+        cards3 = view.findViewById(R.id.set_group_3);
 
-        initializeData();
+        tvs = new TextView[tvsId.length];
+        menuItems = new View[itemIds.length];
 
-        SettingRvAdapter adapter = new SettingRvAdapter(mSettings, this);
-        rv.addItemDecoration(new MyDivider(Objects.requireNonNull(getContext())));
-        rv.setAdapter(adapter);
+        for (int i = 0; i < tvsId.length; i++) {
+            tvs[i] = view.findViewById(tvsId[i]);
+            menuItems[i] = view.findViewById(itemIds[i]);
+            int finalI = i;
+            menuItems[i].setOnClickListener(v -> this.onNoteClick(finalI));
+        }
+
         tv_setting = view.findViewById(R.id.Setting);
         person = view.findViewById(R.id.person);
         Session.getInstance().addOnThemeChangeListener(this);
@@ -61,24 +98,6 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         return view;
     }
 
-    public void initializeData() {
-        mSettings = new ArrayList<>();
-        mSettings.add(new setting_Content("Pairing", R.drawable.setting_item_wifi));
-        mSettings.add(new setting_Content("Devices", R.drawable.lightbulb));
-        mSettings.add(new setting_Content("System", R.drawable.ic_settings_setting));
-        mSettings.add(new setting_Content("Layout Manager", R.drawable.ic_setting_poly));
-        //====================
-        mSettings.add(new setting_Content("Schedules", R.drawable.setting_item_schedules));
-        mSettings.add(new setting_Content("Smart Home", R.drawable.setting_item_smarthome));
-        mSettings.add(new setting_Content("Motion Detect", R.drawable.ic_settings_motion));
-        mSettings.add(new setting_Content("Other Utilities", R.drawable.ic_settings_tool));
-        //====================
-        mSettings.add(new setting_Content("Feedback", R.drawable.setting_item_feedback));
-        mSettings.add(new setting_Content("Contact Support", R.drawable.setting_item_contact));
-        mSettings.add(new setting_Content("About", R.drawable.setting_item_about));
-    }
-
-    @Override
     public void onNoteClick(int position) {
         switch (position) {
             case 0:
@@ -157,12 +176,11 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
                 break;
 
             default:
-                fragment_Comming fragment_comming = new fragment_Comming(mSettings.get(position).subtitle);
+                fragment_Comming fragment_comming = new fragment_Comming("Other Utilities");
                 FragmentTransaction ft1 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 ft1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft1.replace(R.id.container, fragment_comming).addToBackStack(null);
                 ft1.commit();
-
 
         }
 
@@ -176,14 +194,41 @@ public class fragment_setting extends Fragment implements SettingRvAdapter.OnNot
         else
             colors = Theme.Normal.class;
         try {
-            person.setBackgroundTintList(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
-            tv_setting.setTextColor(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
-            rv.setAdapter(new SettingRvAdapter(mSettings, this));
-            rv.removeItemDecoration(rv.getItemDecorationAt(0));
-            rv.addItemDecoration(new MyDivider(Objects.requireNonNull(getContext())));
+
+            cards1.setCardBackgroundColor(ColorStateList.valueOf(colors.getField("CARD_BACKGROUND").getInt(null)));
+            cards2.setCardBackgroundColor(ColorStateList.valueOf(colors.getField("CARD_BACKGROUND").getInt(null)));
+            cards3.setCardBackgroundColor(ColorStateList.valueOf(colors.getField("CARD_BACKGROUND").getInt(null)));
+
+            for (TextView tv : tvs) {
+                tv.setTextColor(ColorStateList.valueOf(colors.getField("TITLE").getInt(null)));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = getActivity();
+        if (mActivity != null)
+            onHiddenChanged(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            if (Session.getInstance().isDarkMode(mActivity))
+                mActivity.getWindow().setStatusBarColor(Theme.Dark.MAIN_BACKGROUND);
+            else
+                mActivity.getWindow().setStatusBarColor(Theme.Normal.MAIN_BACKGROUND);
+        } else {
+            mActivity.getWindow().setStatusBarColor(0xff82cae8);
+        }
+    }
+
 }
 

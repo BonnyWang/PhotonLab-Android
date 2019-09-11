@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -31,7 +32,7 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
 
-public class fragment_motion_detect extends FullScreenFragment implements dialog_colorpicker.colorPick_Listener {
+public class fragment_motion_detect extends NormalStatusBarFragment implements dialog_colorpicker.colorPick_Listener {
 
 
     public static final int COLOR_TRIGGER = 0b01;
@@ -81,10 +82,17 @@ public class fragment_motion_detect extends FullScreenFragment implements dialog
         timeContainer.setOnClickListener(v -> pvTime.show());
 
         colorContainer.setOnClickListener(v -> {
-            dialog_colorpicker newFragment = dialog_colorpicker.newInstance(0);
-            newFragment.dismissAddFav();
-            newFragment.setListener(fragment_motion_detect.this);
-            newFragment.show(getChildFragmentManager(), "dialog");
+            FragmentManager manager = getFragmentManager();
+            if (manager != null) {
+                dialog_colorpicker colorpicker = dialog_colorpicker.newInstance(0);
+                colorpicker.setListener(this);
+                colorpicker.dismissAddFav();
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
+                        .add(R.id.container, colorpicker)
+                        .addToBackStack(null)
+                        .commit();
+            }
         });
 
         final TinyDB tinyDB = new TinyDB(getContext());

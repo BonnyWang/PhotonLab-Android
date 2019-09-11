@@ -20,6 +20,7 @@ public class Theme {
         public static final int MAIN_BACKGROUND = Color.parseColor("#FAFAFA");
         public static final int SELECTED_TEXT = Color.parseColor("#4a4a4a");
         public static final int UNSELECTED_TEXT = Color.parseColor("#ededed");
+        public static final int CARD_BACKGROUND = Color.parseColor("#FAFAFA");
         public static final int TITLE = Color.parseColor("#000000");
     }
 

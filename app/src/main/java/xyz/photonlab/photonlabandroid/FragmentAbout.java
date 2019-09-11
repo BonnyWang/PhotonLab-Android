@@ -22,7 +22,7 @@ import java.util.Objects;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
-public class FragmentAbout extends Fragment {
+public class FragmentAbout extends NormalStatusBarFragment {
 
     ConstraintLayout policy;
 

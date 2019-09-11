@@ -29,7 +29,7 @@ import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.SmartHomeItem;
 import xyz.photonlab.photonlabandroid.model.Theme;
 
-public class FragmentSmartHome extends Fragment {
+public class FragmentSmartHome extends NormalStatusBarFragment {
 
     private RecyclerView recyclerView;
     private ArrayList<SmartHomeItem> data;
