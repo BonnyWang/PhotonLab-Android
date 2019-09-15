@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -75,44 +76,48 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                GenericTypeIndicator<ArrayList<HashMap<String, Object>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, Object>>>() {
-                };
-                ArrayList<HashMap<String, Object>> srcData = dataSnapshot.getValue(t);
-                if (srcData != null)
-                    for (int i = 0; i < srcData.size(); i++) {
-                        MyTheme item = new MyTheme();
-                        item.setCreater(((String) srcData.get(i).get("creator")));
-                        item.setMood(((String) srcData.get(i).get("mood")));
-                        item.setName(((String) srcData.get(i).get("name")));
-                        item.setNumber(((int) ((long) srcData.get(i).get("number"))));
 
-                        ArrayList ag = (ArrayList) srcData.get(i).get("gradientColors");
-                        ArrayList av = (ArrayList) srcData.get(i).get("vars");
 
-                        int[] ig = new int[Objects.requireNonNull(ag).size()];
-                        int[] iv = new int[Objects.requireNonNull(av).size()];
+                try {
+                    GenericTypeIndicator<ArrayList<HashMap<String, Object>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, Object>>>() {
+                    };
+                    ArrayList<HashMap<String, Object>> srcData = dataSnapshot.getValue(t);
+                    if (srcData != null)
+                        for (int i = 0; i < srcData.size(); i++) {
+                            MyTheme item = new MyTheme();
+                            item.setCreater(((String) srcData.get(i).get("creator")));
+                            item.setMood(((String) srcData.get(i).get("mood")));
+                            item.setName(((String) srcData.get(i).get("name")));
+                            item.setNumber(((int) ((long) srcData.get(i).get("number"))));
 
-                        for (int j = 0; j < ig.length; j++) {
-                            Log.i("#Color", ag.get(j) + "");
-                            try {
-                                ig[j] = Color.parseColor(ag.get(j) + "");
-                            } catch (Exception e) {
-                                ig[j] = 0xffffffff;
+                            ArrayList ag = (ArrayList) srcData.get(i).get("gradientColors");
+                            ArrayList av = (ArrayList) srcData.get(i).get("vars");
+
+                            int[] ig = new int[Objects.requireNonNull(ag).size()];
+                            int[] iv = new int[Objects.requireNonNull(av).size()];
+
+                            for (int j = 0; j < ig.length; j++) {
+                                Log.i("#Color", ag.get(j) + "");
+                                try {
+                                    ig[j] = Color.parseColor(ag.get(j) + "");
+                                } catch (Exception e) {
+                                    ig[j] = 0xffffffff;
+                                }
                             }
+                            for (int j = 0; j < iv.length; j++) {
+                                iv[j] = ((int) (long) av.get(j));
+                            }
+                            item.setGradientColors(ig);
+                            item.setVars(iv);
+                            themeDownload.add(item);
                         }
-                        for (int j = 0; j < iv.length; j++) {
-                            iv[j] = ((int) (long) av.get(j));
-                        }
-                        item.setGradientColors(ig);
-                        item.setVars(iv);
-                        themeDownload.add(item);
-                    }
 
-                adapter = new dlLoadedAdapter(themeDownload, mlistener, mtheme, Session.getInstance().isDarkMode(getContext()));
-                rv.setAdapter(adapter);
-                Log.d(TAG, "Value is: ");
+                    adapter = new dlLoadedAdapter(themeDownload, mlistener, mtheme, Session.getInstance().isDarkMode(getContext()));
+                    rv.setAdapter(adapter);
+                    Log.d(TAG, "Value is: ");
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Server Data Error!", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

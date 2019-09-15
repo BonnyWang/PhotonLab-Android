@@ -1,18 +1,19 @@
 package xyz.photonlab.photonlabandroid;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -26,6 +27,7 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 public class FirmwareUpdateFragment extends Fragment {
 
     private ConstraintLayout mainContainer, panelContainer;
+    private FragmentActivity mActivity;
 
 
     @Override
@@ -44,14 +46,14 @@ public class FirmwareUpdateFragment extends Fragment {
         panelContainer = view.findViewById(R.id.dark_mode);
 
         mainContainer.setOnClickListener(v -> {
-            FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            FragmentTransaction tx = mActivity.getSupportFragmentManager().beginTransaction();
             tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             tx.replace(R.id.container, new FirmwareUpdateIndividualFragment(FirmwareUpdateIndividualFragment.FragmentType.MAIN)).addToBackStack(null);
             tx.commit();
         });
 
         panelContainer.setOnClickListener(v -> {
-            FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            FragmentTransaction tx = mActivity.getSupportFragmentManager().beginTransaction();
             tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             tx.replace(R.id.container, new FirmwareUpdateIndividualFragment(FirmwareUpdateIndividualFragment.FragmentType.PANEL)).addToBackStack(null);
             tx.commit();
@@ -70,5 +72,11 @@ public class FirmwareUpdateFragment extends Fragment {
             ((TextView) getView().findViewById(R.id.tvDeviceName1)).setTextColor(Theme.Dark.SELECTED_TEXT);
             ((TextView) getView().findViewById(R.id.tvSystem)).setTextColor(Theme.Dark.SELECTED_TEXT);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mActivity = getActivity();
     }
 }

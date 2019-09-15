@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -179,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             colors = Theme.Normal.class;
             navView.setItemIconTintList(getResources().getColorStateList(R.color.bottom_nav_selector, null));
-            getWindow().setNavigationBarColor(0xffcccccc);
+            getWindow().setNavigationBarColor(0xffebebeb);
         }
         try {
             getWindow().setStatusBarColor(colors.getField("MAIN_BACKGROUND").getInt(null));
@@ -226,6 +225,11 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     public void goMain() {
         Log.i("goMain", "try to go control fragment");
         navView.setSelectedItemId(R.id.navigation_home);
+        if (Session.getInstance().isDarkMode(this)) {
+            getWindow().setStatusBarColor(Theme.Dark.MAIN_BACKGROUND);
+        } else {
+            getWindow().setStatusBarColor(Theme.Normal.MAIN_BACKGROUND);
+        }
     }
 
     @Override

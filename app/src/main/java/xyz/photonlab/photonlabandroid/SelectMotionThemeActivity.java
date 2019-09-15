@@ -38,10 +38,10 @@ public class SelectMotionThemeActivity extends AppCompatActivity implements Adap
             ((TextView) findViewById(R.id.title_tv)).setTextColor(Theme.Dark.SELECTED_TEXT);
             findViewById(R.id.button).setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
             getWindow().setStatusBarColor(Theme.Dark.MAIN_BACKGROUND);
-            getWindow().setNavigationBarColor(Theme.Dark.MAIN_BACKGROUND);
+            getWindow().setNavigationBarColor(0xff1f1f1f);
         } else {
             getWindow().setStatusBarColor(Theme.Normal.MAIN_BACKGROUND);
-            getWindow().setNavigationBarColor(Theme.Normal.MAIN_BACKGROUND);
+            getWindow().setNavigationBarColor(0xffebebeb);
         }
         Session.getInstance().requestTheme(this);
         System.out.println(Session.getInstance());

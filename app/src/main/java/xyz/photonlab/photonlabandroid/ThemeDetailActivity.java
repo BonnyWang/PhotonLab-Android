@@ -36,7 +36,7 @@ public class ThemeDetailActivity extends AppCompatActivity implements fragement_
         if (Session.getInstance().isDarkMode(this))
             getWindow().setNavigationBarColor(0xff1f1f1f);
         else {
-            getWindow().setNavigationBarColor(0xffcccccc);
+            getWindow().setNavigationBarColor(0xffebebeb);
         }
     }
 

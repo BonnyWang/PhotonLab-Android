@@ -1,8 +1,8 @@
 package xyz.photonlab.photonlabandroid;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +34,9 @@ import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
 class FirmwareUpdateIndividualFragment extends Fragment {
+
+    private FragmentActivity mActivity;
+    private View mView;
 
     public enum FragmentType {
         MAIN,
@@ -56,13 +60,14 @@ class FirmwareUpdateIndividualFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.mView = view;
         initView(view);
         addViewEvent();
         if (mType == FragmentType.MAIN) {
             refreshCurrentVersion();
         } else {
             refreshPanelsDetected();
-            Objects.requireNonNull(getView()).findViewById(R.id.switch_detect).setAlpha(1f);
+            mView.findViewById(R.id.switch_detect).setAlpha(1f);
         }
     }
 
@@ -98,22 +103,22 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                 .setNegativeButton("Cancel", (dialog1, which) ->
                         dialog1.dismiss())
                 .create();
-        btn_exit.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
-        Objects.requireNonNull(getView()).findViewById(R.id.switch_detect).setOnClickListener(v -> {
+        btn_exit.setOnClickListener(v -> mActivity.getSupportFragmentManager().popBackStack());
+        mView.findViewById(R.id.switch_detect).setOnClickListener(v -> {
             if (v.getAlpha() != 1f)
                 return;
             dialog.show();
         });
-        Objects.requireNonNull(getView()).findViewById(R.id.time_delay).setOnClickListener(v -> {
+        mView.findViewById(R.id.time_delay).setOnClickListener(v -> {
             if (mType == FragmentType.MAIN) {
                 refreshCurrentVersion();
-                Objects.requireNonNull(getView()).findViewById(R.id.switch_detect).setAlpha(0.5f);
-                Objects.requireNonNull(getView()).findViewById(R.id.up_to_date).setVisibility(View.GONE);
+                mView.findViewById(R.id.switch_detect).setAlpha(0.5f);
+                mView.findViewById(R.id.up_to_date).setVisibility(View.GONE);
             } else {
                 refreshPanelsDetected();
             }
             progressBar.setVisibility(View.VISIBLE);
-            Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog).setVisibility(View.GONE);
+            mView.findViewById(R.id.tvCallDialog).setVisibility(View.GONE);
         });
     }
 
@@ -130,9 +135,9 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                 try {
                     String s = Objects.requireNonNull(response.body()).string();
                     JSONObject jRes = new JSONObject(s);
-                    runOnUiThread(() -> {
+                    mActivity.runOnUiThread(() -> {
                         try {
-                            ((TextView) Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog)).setText(jRes.getString("version"));
+                            ((TextView) mView.findViewById(R.id.tvCallDialog)).setText(jRes.getString("version"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -148,14 +153,14 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                             Log.i("Cloud Version", cloudVersion);
                             try {
                                 if (!jRes.getString("version").equals(cloudVersion)) {
-                                    runOnUiThread(() -> {
+                                    mActivity.runOnUiThread(() -> {
                                         progressBar.setVisibility(View.GONE);
-                                        Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                                        mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
                                     });
                                 } else {
-                                    runOnUiThread(() -> {
-                                        Objects.requireNonNull(getView()).findViewById(R.id.up_to_date).setVisibility(View.VISIBLE);
-                                        Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                                    mActivity.runOnUiThread(() -> {
+                                        mView.findViewById(R.id.up_to_date).setVisibility(View.VISIBLE);
+                                        mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
                                         progressBar.setVisibility(View.GONE);
                                     });
                                 }
@@ -166,8 +171,8 @@ class FirmwareUpdateIndividualFragment extends Fragment {
 
                         @Override
                         public void onFailed(String msg) {
-                            runOnUiThread(() -> {
-                                Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                            mActivity.runOnUiThread(() -> {
+                                mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
                                 progressBar.setVisibility(View.GONE);
                             });
                         }
@@ -182,9 +187,8 @@ class FirmwareUpdateIndividualFragment extends Fragment {
 
             @Override
             public void onFailed(String msg) {
-                runOnUiThread(() -> {
+                mActivity.runOnUiThread(() -> {
                     Toast.makeText(getContext(), "Can't get any response", Toast.LENGTH_SHORT).show();
-//                    Objects.requireNonNull(getView()).findViewById(R.id.up_to_date).setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 });
             }
@@ -206,10 +210,10 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                         String nodesStr = Objects.requireNonNull(response.body()).string().trim();
                         JSONObject jsonResp = new JSONObject(nodesStr);
                         JSONArray nodeArray = jsonResp.getJSONArray("nodes");
-                        runOnUiThread(() -> {
+                        mActivity.runOnUiThread(() -> {
                             progressBar.setVisibility(View.GONE);
-                            Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
-                            ((TextView) Objects.requireNonNull(getView()).findViewById(R.id.tvCallDialog)).setText(nodeArray.length() + "");
+                            mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                            ((TextView) mView.findViewById(R.id.tvCallDialog)).setText(nodeArray.length() + "");
                         });
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -238,10 +242,9 @@ class FirmwareUpdateIndividualFragment extends Fragment {
         }
     }
 
-    private void runOnUiThread(Runnable runnable) {
-        Activity activity = getActivity();
-        if (activity != null)
-            activity.runOnUiThread(runnable);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mActivity = getActivity();
     }
-
 }

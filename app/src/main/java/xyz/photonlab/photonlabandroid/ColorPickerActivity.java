@@ -166,6 +166,12 @@ public class ColorPickerActivity extends AppCompatActivity {
             addFavBt.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
         }
 
+        if (Session.getInstance().isDarkMode(this))
+            getWindow().setNavigationBarColor(0xff1f1f1f);
+        else {
+            getWindow().setNavigationBarColor(0xffebebeb);
+        }
+
     }
 
     public void rgb_reading(View view) {

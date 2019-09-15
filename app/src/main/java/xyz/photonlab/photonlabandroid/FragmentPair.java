@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -73,6 +72,7 @@ public class FragmentPair extends NormalStatusBarFragment {
     private Button try_again_btn;
     private TextView tvErrorHelp;
     private AppCompatActivity activity;
+    private boolean flag = true;
 
     @Nullable
     @Override
@@ -98,6 +98,7 @@ public class FragmentPair extends NormalStatusBarFragment {
 
     private void addViewEvent() {
         exit.setOnClickListener(v -> {
+            flag = true;
             Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
             cleanEditTextProblems();
         });
@@ -166,22 +167,19 @@ public class FragmentPair extends NormalStatusBarFragment {
         doneButton.setOnClickListener((v) -> exit.performClick());
         try_again_btn.setOnClickListener((v) -> {
             progressBar.setVisibility(View.VISIBLE);
-            activity.getSupportFragmentManager().popBackStackImmediate();
-
-            //Reload to new fragment -bbb
-            FragmentPair fragment_pair = new FragmentPair();
-            Log.i("pairFragment", activity + "");
-            FragmentTransaction ft0 = activity.getSupportFragmentManager().beginTransaction();
-            ft0.replace(R.id.container, fragment_pair).addToBackStack(null);
-            ft0.commit();
+            faile_container.setVisibility(View.GONE);
+            step1_container.setVisibility(View.VISIBLE);
+            doneButton.setVisibility(View.GONE);
+            faile_container.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_right));
         });
 
         goMainButton.setOnClickListener(v -> {
             Activity activity = getActivity();
             if (activity instanceof MainActivity) {
-                ((MainActivity) activity).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                ((MainActivity) activity).getSupportFragmentManager().popBackStack();
                 ((MainActivity) activity).goMain();
             }
+            flag = false;
         });
 
         goLayoutButton.setOnClickListener(v -> {
@@ -189,8 +187,7 @@ public class FragmentPair extends NormalStatusBarFragment {
                 return;
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction tx = fragmentManager.beginTransaction();
-            fragmentManager.popBackStack();
-            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             tx.replace(R.id.container, new fragment_layout()).addToBackStack(null);
             tx.commit();
         });
@@ -208,8 +205,8 @@ public class FragmentPair extends NormalStatusBarFragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
-        activity = null;
+        if (this.flag)
+            super.onDetach();
     }
 
     @SuppressLint("SetTextI18n")
@@ -396,4 +393,5 @@ public class FragmentPair extends NormalStatusBarFragment {
         }
         et_wifi_password.clearFocus();
     }
+
 }
