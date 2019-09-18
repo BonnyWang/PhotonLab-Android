@@ -55,7 +55,7 @@ public class FirmwareUpdateFragment extends Fragment {
         panelContainer.setOnClickListener(v -> {
             FragmentTransaction tx = mActivity.getSupportFragmentManager().beginTransaction();
             tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-            tx.replace(R.id.container, new FirmwareUpdateIndividualFragment(FirmwareUpdateIndividualFragment.FragmentType.PANEL)).addToBackStack(null);
+            tx.replace(R.id.container, new fragment_Comming("Light Panels")).addToBackStack(null);
             tx.commit();
         });
 

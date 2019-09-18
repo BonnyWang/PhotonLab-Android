@@ -4,60 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_Comming"
     android:background="@color/backGround"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    tools:context=".fragment_Comming">
 
-    <!-- TODO: Update blank fragment layout -->
-    <Button
-        android:id="@+id/backButton_Coming"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
-        android:background="@drawable/back_button"
-        android:backgroundTint="@color/colorPrimary"
-        android:text=""
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/ComingSoon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Pairing"
-        android:textColor="#555555"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp" />
+        <!-- TODO: Update blank fragment layout -->
+        <ImageButton
+            android:id="@+id/backButton_Coming"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:foreground="?selectableItemBackground"
+            android:padding="15dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/back_button"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/ComingSoon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Pairing"
+            android:textColor="#555555"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="375dp"
         android:layout_height="480dp"
         android:src="@drawable/coming"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ComingSoon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.3"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top"
+        app:layout_constraintVertical_bias="0.3" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Coming_Soon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.7"
         android:textColor="@color/Light_Grey"
         android:textSize="36sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

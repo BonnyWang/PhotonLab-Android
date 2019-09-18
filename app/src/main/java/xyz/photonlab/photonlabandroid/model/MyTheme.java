@@ -9,7 +9,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
  * created by KIO on 2019/8/28
  */
 @IgnoreExtraProperties
-public class MyTheme {
+public class MyTheme implements Comparable<MyTheme> {
 
     private String creater;
     private String mood;
@@ -108,5 +108,10 @@ public class MyTheme {
 
     public void setMusic(boolean music) {
         this.music = music;
+    }
+
+    @Override
+    public int compareTo(MyTheme o) {
+        return name.compareTo(o.getName());
     }
 }

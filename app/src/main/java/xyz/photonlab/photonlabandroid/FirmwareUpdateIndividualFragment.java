@@ -33,7 +33,7 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 
-class FirmwareUpdateIndividualFragment extends Fragment {
+public class FirmwareUpdateIndividualFragment extends Fragment {
 
     private FragmentActivity mActivity;
     private View mView;
@@ -67,7 +67,6 @@ class FirmwareUpdateIndividualFragment extends Fragment {
             refreshCurrentVersion();
         } else {
             refreshPanelsDetected();
-            mView.findViewById(R.id.switch_detect).setAlpha(1f);
         }
     }
 
@@ -76,7 +75,7 @@ class FirmwareUpdateIndividualFragment extends Fragment {
     private void initView(@NonNull View contentView) {
         this.btn_exit = contentView.findViewById(R.id.backButton);
         progressBar = contentView.findViewById(R.id.load);
-        if (Session.getInstance().isDarkMode(getContext())) {
+        if (Session.getInstance().isDarkMode(mActivity)) {
             contentView.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
             ((TextView) contentView.findViewById(R.id.textView2)).setTextColor(Theme.Dark.SELECTED_TEXT);
             ((TextView) contentView.findViewById(R.id.current_version)).setTextColor(Theme.Dark.SELECTED_TEXT);
@@ -94,7 +93,7 @@ class FirmwareUpdateIndividualFragment extends Fragment {
     }
 
     private void addViewEvent() {
-        final AlertDialog dialog = new AlertDialog.Builder(getContext())
+        final AlertDialog dialog = new AlertDialog.Builder(mActivity)
                 .setTitle("Notice")
                 .setMessage("Are you sure to update the firmware? This process might take a while.")
                 .setIcon(R.drawable.lightbulb)
@@ -110,22 +109,22 @@ class FirmwareUpdateIndividualFragment extends Fragment {
             dialog.show();
         });
         mView.findViewById(R.id.time_delay).setOnClickListener(v -> {
+            mView.findViewById(R.id.switch_detect).setAlpha(0.5f);
+            mView.findViewById(R.id.up_to_date).setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            mView.findViewById(R.id.tvCallDialog).setVisibility(View.GONE);
             if (mType == FragmentType.MAIN) {
                 refreshCurrentVersion();
-                mView.findViewById(R.id.switch_detect).setAlpha(0.5f);
-                mView.findViewById(R.id.up_to_date).setVisibility(View.GONE);
             } else {
                 refreshPanelsDetected();
             }
-            progressBar.setVisibility(View.VISIBLE);
-            mView.findViewById(R.id.tvCallDialog).setVisibility(View.GONE);
         });
     }
 
     private void refreshCurrentVersion() {
         NetworkHelper helper = new NetworkHelper();
         Request request = new Request.Builder()
-                .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/ota/core/version")
+                .url("http://" + Session.getInstance().getLocalIP(mActivity) + "/ota/core/version")
                 .build();
 
         helper.setCallback(new NetworkCallback() {
@@ -144,7 +143,7 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                     });
 
                     NetworkHelper helper1 = new NetworkHelper();
-                    Request request1 = new Request.Builder().url("http://tonylabs-oss.oss-cn-shanghai.aliyuncs.com/elementlight_esp32_master.bin").get().build();
+                    Request request1 = new Request.Builder().url("https://elementlight-us-west.oss-us-west-1.aliyuncs.com/elementlight_esp32_master.bin").get().build();
 
                     helper1.setCallback(new NetworkCallback() {
                         @Override
@@ -169,9 +168,12 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                             }
                         }
 
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void onFailed(String msg) {
                             mActivity.runOnUiThread(() -> {
+                                mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                                mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
                                 mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
                                 progressBar.setVisibility(View.GONE);
                             });
@@ -185,11 +187,13 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onFailed(String msg) {
                 mActivity.runOnUiThread(() -> {
-                    Toast.makeText(getContext(), "Can't get any response", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, "Can't get any response", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
+                    mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
                 });
             }
         });
@@ -198,14 +202,15 @@ class FirmwareUpdateIndividualFragment extends Fragment {
     }
 
     private void refreshPanelsDetected() {
-        if (!Session.getInstance().getLocalIP(getContext()).equals("")) {//try to load light num info
+        if (!Session.getInstance().getLocalIP(mActivity).equals("")) {//try to load light num info
             NetworkHelper helper = new NetworkHelper();
-            Request request = new Request.Builder().url("http://" + Session.getInstance().getLocalIP(getContext()) + "/nodes?_t=" + System.currentTimeMillis())
+            Request request = new Request.Builder().url("http://" + Session.getInstance().getLocalIP(mActivity) + "/nodes?_t=" + System.currentTimeMillis())
                     .get().build();
             helper.setCallback(new NetworkCallback() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onSuccess(Response response) {
+                    Log.i("FirmwareIndividual", "onSuccess: ");
                     try {
                         String nodesStr = Objects.requireNonNull(response.body()).string().trim();
                         JSONObject jsonResp = new JSONObject(nodesStr);
@@ -217,15 +222,31 @@ class FirmwareUpdateIndividualFragment extends Fragment {
                         });
                     } catch (Exception e) {
                         e.printStackTrace();
+                        mActivity.runOnUiThread(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                            ((TextView) mView.findViewById(R.id.tvCallDialog)).setText("0");
+                        });
                     }
                 }
 
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onFailed(String msg) {
                     Log.e("nodes get failed", msg);
+                    mActivity.runOnUiThread(() -> {
+                        progressBar.setVisibility(View.GONE);
+                        mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                        ((TextView) mView.findViewById(R.id.tvCallDialog)).setText("0");
+                    });
                 }
             });
             helper.connect(request);
+        } else {
+            Toast.makeText(mActivity, "No Devices", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.GONE);
+            mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+            ((TextView) mView.findViewById(R.id.tvCallDialog)).setText("0");
         }
     }
 
@@ -234,11 +255,11 @@ class FirmwareUpdateIndividualFragment extends Fragment {
         if (mType == FragmentType.MAIN) {
             NetworkHelper helper = new NetworkHelper();
             helper.connect(new Request.Builder()
-                    .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/ota/core/update?secret=000000").build());
+                    .url("http://" + Session.getInstance().getLocalIP(mActivity) + "/ota/core/update?secret=000000").build());
         } else {
             NetworkHelper helper = new NetworkHelper();
             helper.connect(new Request.Builder()
-                    .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/ota/slave/update?secret=000000").build());
+                    .url("http://" + Session.getInstance().getLocalIP(mActivity) + "/ota/slave/update?secret=000000").build());
         }
     }
 

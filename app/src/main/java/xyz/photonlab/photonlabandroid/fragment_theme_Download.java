@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,10 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +25,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -43,6 +46,8 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
     dlRvAdapter.dlListener mlistener = this;
 
     fdlListener mfdlListener;
+    private View view;
+    private FragmentActivity mActivity;
 
 
     public fragment_theme_Download(fdlListener mfdlListener, ArrayList<MyTheme> mtheme) {
@@ -57,16 +62,24 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_theme__download, container, false);
+        view = inflater.inflate(R.layout.fragment_theme__download, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view1, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Context context = getContext();
 
         rv = view.findViewById(R.id.rvDownloadTheme);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
 
         btdlDone = view.findViewById(R.id.btdldone);
-        btdlDone.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
+        btdlDone.setOnClickListener(v -> mActivity.getSupportFragmentManager().popBackStack());
 
         themeDownload = new ArrayList<>();
 
@@ -76,14 +89,14 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
-                try {
-                    GenericTypeIndicator<ArrayList<HashMap<String, Object>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, Object>>>() {
-                    };
-                    ArrayList<HashMap<String, Object>> srcData = dataSnapshot.getValue(t);
-                    if (srcData != null)
-                        for (int i = 0; i < srcData.size(); i++) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                GenericTypeIndicator<ArrayList<HashMap<String, Object>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, Object>>>() {
+                };
+                ArrayList<HashMap<String, Object>> srcData = dataSnapshot.getValue(t);
+                if (srcData != null)
+                    for (int i = 0; i < srcData.size(); i++) {
+                        try {
                             MyTheme item = new MyTheme();
                             item.setCreater(((String) srcData.get(i).get("creator")));
                             item.setMood(((String) srcData.get(i).get("mood")));
@@ -110,18 +123,24 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
                             item.setGradientColors(ig);
                             item.setVars(iv);
                             themeDownload.add(item);
+                        } catch (Exception e) {
+                            Log.e("Theme Download", "Server Data Error!");
                         }
 
+                    }
+                try {
+                    Collections.sort(themeDownload);
                     adapter = new dlLoadedAdapter(themeDownload, mlistener, mtheme, Session.getInstance().isDarkMode(getContext()));
                     rv.setAdapter(adapter);
                     Log.d(TAG, "Value is: ");
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), "Server Data Error!", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
+
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
@@ -137,7 +156,6 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
             ((TextView) view.findViewById(R.id.tvDownloadTheme)).setTextColor(Theme.Dark.TITLE);
         }
 
-        return view;
     }
 
     @Override
@@ -148,7 +166,12 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
     }
 
     interface fdlListener {
-        MyTheme dlTheme(MyTheme theme);
+        void dlTheme(MyTheme theme);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = getActivity();
+    }
 }

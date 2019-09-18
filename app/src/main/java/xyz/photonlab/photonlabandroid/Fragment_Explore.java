@@ -134,7 +134,7 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         });
 
         Session.getInstance().addOnThemeChangeListener(this);
-        initTheme(Session.getInstance().isDarkMode(getContext()));
+        initTheme(Session.getInstance().isDarkMode(context));
         return view;
 
     }
@@ -151,45 +151,42 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                try {
-                    GenericTypeIndicator<ArrayList<Map<String, String>>> t = new GenericTypeIndicator<ArrayList<Map<String, String>>>() {
-                    };
-                    bexplores = new ArrayList<>();
-                    ArrayList<Map<String, String>> src = dataSnapshot.getValue(t);
+                GenericTypeIndicator<ArrayList<Map<String, String>>> t = new GenericTypeIndicator<ArrayList<Map<String, String>>>() {
+                };
+                bexplores = new ArrayList<>();
+                ArrayList<Map<String, String>> src = dataSnapshot.getValue(t);
 
-                    if (src != null)
-                        for (Map<String, String> map : src) {
-                            explore_item_Class item = new explore_item_Class();
-                            bexplores.add(item);
-                            item.setImageLink(map.get("imageLink"));
-                            item.setLink(map.get("link"));
-                            item.setTitle(map.get("title"));
-                            String category = map.get("category");
-                            String describe = map.get("description");
+                if (src != null)
+                    for (Map<String, String> map : src) {
+                        explore_item_Class item = new explore_item_Class();
+                        bexplores.add(item);
+                        item.setImageLink(map.get("imageLink"));
+                        item.setLink(map.get("link"));
+                        item.setTitle(map.get("title"));
+                        String category = map.get("category");
+                        String describe = map.get("description");
 
-                            if (describe != null) {
-                                item.setDescription(describe);
-                            }
-
-                            if (category != null && category.equals("Creative")) {
-                                item.addCategory(explore_item_Class.CREATIVE);
-                            }
-                            if (category != null && category.equals("Tutorial")) {
-                                item.addCategory(explore_item_Class.TUTORIAL);
-                            }
+                        if (describe != null) {
+                            item.setDescription(describe);
                         }
-                    adapter = new explore_RvAdapter(bexplores, mOnNoteListner, thisone, true);
-                    rv.setAdapter(adapter);
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Server Data Error!", Toast.LENGTH_LONG).show();
-                }
+
+                        if (category != null && category.equals("Creative")) {
+                            item.addCategory(explore_item_Class.CREATIVE);
+                        }
+                        if (category != null && category.equals("Tutorial")) {
+                            item.addCategory(explore_item_Class.TUTORIAL);
+                        }
+                    }
+                adapter = new explore_RvAdapter(bexplores, mOnNoteListner, thisone, true);
+                rv.setAdapter(adapter);
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
-                Toast.makeText(getContext(), "Failed to access server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Failed to access server", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -250,9 +247,3 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
         }
     }
 }
-
-
-
-
-
-

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.MyTheme;
@@ -80,6 +81,7 @@ public class Fragment_Theme extends Fragment
                 sweetTheme.add(item);
         }
 
+        Collections.sort(mtheme);
 
         final RvAdapter adapter = new RvAdapter(mtheme, this);
 
@@ -209,7 +211,7 @@ public class Fragment_Theme extends Fragment
 
     //add the downloaded themeicon
     @Override
-    public MyTheme dlTheme(MyTheme theme) {
+    public void dlTheme(MyTheme theme) {
         TinyDB tinyDB = new TinyDB(getContext());
         //add to the number each time
         dlThemeNo = tinyDB.getInt("dlThemeNo") + 1;
@@ -219,7 +221,6 @@ public class Fragment_Theme extends Fragment
         rv.setAdapter(rvAdapter);
 
         Session.getInstance().saveTheme(getContext());
-        return theme;
     }
 
 

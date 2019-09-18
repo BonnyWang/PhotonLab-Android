@@ -28,6 +28,7 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
     List<MyTheme> mdlthemes;
     dlListener mlistener;
     ArrayList<MyTheme> mtheme;
+    ArrayList<Integer> downloadedIndex;
 
     boolean btPress;
 
@@ -92,12 +93,18 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
     public dlRvAdapter(List<MyTheme> mdlthemes, dlListener mlistener, ArrayList<MyTheme> mtheme, boolean isDark) {
         this.mdlthemes = mdlthemes;
         this.mlistener = mlistener;
-        this.mtheme = new ArrayList<>();
         this.mtheme = mtheme;
         this.isDark = isDark;
-        for (int i = 0; i < mtheme.size(); i++) {
-            Log.d(TAG, "dlRvAdapter: " + mtheme.get(i).getName());
+        downloadedIndex = new ArrayList<>();
+        for (int i = 0; i < mdlthemes.size(); i++) {
+            MyTheme temp2 = mdlthemes.get(i);
+            for (MyTheme temp : mtheme) {
+                if (temp.getName().trim().equals(temp2.getName().trim())) {
+                    downloadedIndex.add(i);
+                }
+            }
         }
+        Log.i(TAG, "dlRvAdapter: " + downloadedIndex);
     }
 
     // Create new views (invoked by the layout manager)
@@ -131,23 +138,16 @@ public class dlRvAdapter extends RecyclerView.Adapter<dlRvAdapter.MyViewHolder> 
             Resources res = holder.itemView.getContext().getResources();
             holder.textView.setText(mdlthemes.get(position).getName());
             holder.imageView_Card.setImageDrawable(mdlthemes.get(position).getGradientDrawable());
-            Log.d(TAG, "onBindViewHolder: This run?");
-
             holder.btDownload.setChecked(false);
 
-            MyTheme temp = mdlthemes.get(position);
-
-            for (int i = 0; i < mtheme.size(); i++) {
-                if (mtheme.get(i).getName().equals(temp.getName())) {
-
-                    Log.d(TAG, "onBindViewHolder: YYYY");
-                    //holder.btDownload.setChecked(true);
-
-                    holder.btDownload.setBackground(res.getDrawable(R.drawable.check, null));
-                    //only be pressed once
-                    holder.btDownload.setClickable(false);
-                }
+            if (downloadedIndex.contains(position)) {
+                holder.btDownload.setBackgroundDrawable(res.getDrawable(R.drawable.check, null));
+                holder.btDownload.setClickable(false);
+            } else {
+                holder.btDownload.setBackgroundDrawable(res.getDrawable(R.drawable.download_black, null));
+                holder.btDownload.setClickable(true);
             }
+
         }
     }
 

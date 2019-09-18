@@ -159,23 +159,14 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
                 Session.getInstance().setLocalIP("");
                 Activity activity = getActivity();
                 if (activity != null)
-                    activity.runOnUiThread(() -> {
-                                Toast.makeText(getContext(), "Reset Succeed", Toast.LENGTH_SHORT).show();
-                                mask.setVisibility(View.GONE);
-                            }
+                    activity.runOnUiThread(() -> mask.setVisibility(View.GONE)
                     );
 
             }
 
             @Override
             public void onFailed(String msg) {
-                Activity activity = getActivity();
-                if (activity != null)
-                    activity.runOnUiThread(() ->
-                    {
-                        Toast.makeText(getContext(), "Reset Failed:" + msg, Toast.LENGTH_LONG).show();
-                        mask.setVisibility(View.GONE);
-                    });
+                onSuccess(null);
                 Log.e("reset error", msg);
 
             }

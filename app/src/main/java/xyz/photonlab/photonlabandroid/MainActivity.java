@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate: YES");
         overridePendingTransition(R.anim.fade_scale_in, R.anim.fade_scale_out);
 
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
 
             Log.i(TAG, "fragment created");
             container.setVisibility(View.VISIBLE);
-            ft.commit();
+            ft.commitAllowingStateLoss();
         };
 
         handler.postDelayed(runnable, 3000);
@@ -239,6 +240,11 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         for (int i = 0; i < 4; i++)
             if (fragments[i] != null) {
@@ -246,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
             }
         super.onSaveInstanceState(outState);
     }
+
 }
 
 
