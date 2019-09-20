@@ -1,25 +1,28 @@
 package xyz.photonlab.photonlabandroid;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-
-import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
@@ -30,7 +33,8 @@ public class dialog_colorpicker extends Fragment {
     private TextView tv;
     private ImageButton closeBt;
     private Button setBt;
-    private Button addFavBt;
+    private ImageButton addFavBt;
+    private SeekBar sbColorTemp;
     static String colorStr;
     static int colorcode;
     EditText rValue;
@@ -58,6 +62,10 @@ public class dialog_colorpicker extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_colorpicker_layout, container, false);
+        sbColorTemp = view.findViewById(R.id.color_temp);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.color_seek_back);
+
         rValue = view.findViewById(R.id.editTextR);
         rValue.setText("0");
         rValue.addTextChangedListener(new TextWatcher() {
@@ -138,15 +146,11 @@ public class dialog_colorpicker extends Fragment {
 
         addFavBt = view.findViewById(R.id.AddFavColor);
 
-        if (!showAddFav) {
-            this.addFavBt.setVisibility(View.GONE);
-        }
 
         addFavBt.setOnClickListener(v -> {
             mlistener.getRGB(colorcode, whichOne);
-            if (getFragmentManager() != null) {
-                getFragmentManager().popBackStack();
-            }
+            addFavBt.setImageResource(R.drawable.favorite);
+            addFavBt.setBackgroundTintList(ColorStateList.valueOf(colorcode));
         });
 
         setBt = view.findViewById(R.id.setColorButton);
@@ -174,25 +178,62 @@ public class dialog_colorpicker extends Fragment {
             rValue.setTextColor(Theme.Dark.SELECTED_TEXT);
             gValue.setTextColor(Theme.Dark.SELECTED_TEXT);
             bValue.setTextColor(Theme.Dark.SELECTED_TEXT);
-        }
-        if (Session.getInstance().isDarkMode(getContext())) {
             setBt.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
             addFavBt.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
         }
+
+        if (!showAddFav) {
+            this.addFavBt.setVisibility(View.GONE);
+            LinearLayout.LayoutParams pr = (LinearLayout.LayoutParams) this.setBt.getLayoutParams();
+            pr.setMarginEnd(pr.getMarginStart());
+        }
+        Vibrator vibrator = null;
+        if (getContext() != null)
+            vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+
+        final Vibrator fVibrator = vibrator;
+
+        sbColorTemp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if ((progress == 0 || progress == 100) && fVibrator != null)
+                    fVibrator.vibrate(50);
+
+                colorDisk.hideCursor();
+                colorDisk.invalidate();
+
+                int color = bitmap.getPixel((int) ((bitmap.getWidth() - 1) * progress / 100f),
+                        bitmap.getHeight() / 2);
+
+                rValue.setText(String.valueOf(Color.red(color)));
+                gValue.setText(String.valueOf(Color.green(color)));
+                bValue.setText(String.valueOf(Color.blue(color)));
+
+                setButton_Color(getHexString(color));
+                colorStr = getHexString(color);
+                colorcode = color;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        addFavBt.setStateListAnimator(setBt.getStateListAnimator().clone());
         return view;
     }
 
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        Window window = getDialog().getWindow();
-//        if (window != null) {
-//            DisplayMetrics dm = new DisplayMetrics();
-//            Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(dm);
-//            window.setLayout((int) (dm.widthPixels * 0.95), ViewGroup.LayoutParams.WRAP_CONTENT);
-//        }
-//    }
+    private String getHexString(int color) {
+        String s = "#";
+        int colorStr = (color & 0xff000000) | (color & 0x00ff0000) | (color & 0x0000ff00) | (color & 0x000000ff);
+        s = s + Integer.toHexString(colorStr);
+        return s;
+    }
 
     public void dismissAddFav() {
         this.showAddFav = false;

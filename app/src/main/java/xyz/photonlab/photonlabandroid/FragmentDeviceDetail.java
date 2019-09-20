@@ -4,13 +4,9 @@ package xyz.photonlab.photonlabandroid;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +17,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import xyz.photonlab.photonlabandroid.model.Device;
@@ -35,14 +39,18 @@ import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 import xyz.photonlab.photonlabandroid.utils.NetworkNodeScanner;
 
-public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner.OnSearchFinishedListener {
+public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner.OnSearchFinishedListener, NetworkNodeScanner.OnSearchProgressChangedListener {
 
     private TextView fragment_title, tv_ip, tv_mac;
     private LinearLayout mask;
     private Button bt_research, bt_reset;
     private ImageButton bt_exit, bt_refresh;
+    private TextView tv_progress;
 
     private Device device;
+    private FragmentActivity mActivity;
+
+    private NetworkNodeScanner scanner;
 
     public FragmentDeviceDetail() {
         this.device = new Device("Unknown", "0.0.0.0", "00:00:00:00");
@@ -79,6 +87,7 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
         fragment_title = contentView.findViewById(R.id.tvDevice);
         bt_reset = contentView.findViewById(R.id.reset);
         bt_research = contentView.findViewById(R.id.research);
+        tv_progress = contentView.findViewById(R.id.tv_progress);
     }
 
     @SuppressLint("SetTextI18n")
@@ -86,11 +95,12 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
         bt_exit.setOnClickListener(v -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
 
         bt_refresh.setOnClickListener(v -> {
-            if (!Session.getInstance().getLocalIP(getContext()).equals("")) {
+            if (!Session.getInstance().getLocalIP(mActivity).equals("")) {
                 mask.setVisibility(View.VISIBLE);
+                tv_progress.setVisibility(View.GONE);
                 NetworkHelper helper = new NetworkHelper();
                 Request request = new Request.Builder()
-                        .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/ip")
+                        .url("http://" + Session.getInstance().getLocalIP(mActivity) + "/ip")
                         .get()
                         .build();
                 helper.connect(request);
@@ -121,7 +131,7 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
             }
         });
 
-        final AlertDialog dialog = new AlertDialog.Builder(getContext())
+        final AlertDialog dialog = new AlertDialog.Builder(mActivity)
                 .setTitle("Are you sure to reset?")
                 .setIcon(R.drawable.lightbulb)
                 .setCancelable(false)
@@ -132,22 +142,30 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
         bt_reset.setOnClickListener(v -> dialog.show());
 
         bt_research.setOnClickListener(v -> {
-            //TODO Add SubMask
             mask.setVisibility(View.VISIBLE);
+            tv_progress.setVisibility(View.VISIBLE);
+            tv_progress.setText("0%");
             try {
-                NetworkNodeScanner scanner = new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"),
+                scanner = new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"),
                         InetAddress.getByName("255.255.255.0"));
+                scanner.setOnSearchProgressChangedListener(this);
                 scanner.setOnScanFinishedListener(this);
                 scanner.scan();
             } catch (UnknownHostException e) {
                 e.printStackTrace();
+                mask.setVisibility(View.GONE);
             }
         });
     }
 
     private void resetHardware() {
+        if (Session.getInstance().getLocalIP(mActivity).equals("")) {
+            Toast.makeText(mActivity, "Current Device Unavailable", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mask.setVisibility(View.VISIBLE);
-        String ipAddr = Session.getInstance().getLocalIP(getContext());
+        tv_progress.setVisibility(View.GONE);
+        String ipAddr = Session.getInstance().getLocalIP(mActivity);
         NetworkHelper helper = new NetworkHelper();
         Request req = new Request.Builder()
                 .url("http://" + ipAddr + "/reset?secret=000000")
@@ -155,12 +173,15 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
         helper.setCallback(new NetworkCallback() {
             @Override
             public void onSuccess(Response response) {
-                new TinyDB(getContext()).putString("LocalIp", "");
+                new TinyDB(mActivity).putString("LocalIp", "");
                 Session.getInstance().setLocalIP("");
-                Activity activity = getActivity();
-                if (activity != null)
-                    activity.runOnUiThread(() -> mask.setVisibility(View.GONE)
-                    );
+                mActivity.runOnUiThread(() -> {
+                    mask.setVisibility(View.GONE);
+                    if (Session.getInstance().isDarkMode(mActivity))
+                        tv_ip.setTextColor(Theme.Dark.UNSELECTED_TEXT);
+                    else
+                        tv_ip.setTextColor(Theme.Normal.SELECTED_TEXT);
+                });
 
             }
 
@@ -171,11 +192,12 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
 
             }
         });
-        helper.connect(req);
+        OkHttpClient client = new OkHttpClient.Builder().readTimeout(2000, TimeUnit.MILLISECONDS).build();
+        helper.connect(req, client);
     }
 
     private void initTheme() {
-        if (Session.getInstance().isDarkMode(getContext())) {
+        if (Session.getInstance().isDarkMode(mActivity)) {
             Objects.requireNonNull(getView()).setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
             ((TextView) getView().findViewById(R.id.tvDevice)).setTextColor(Theme.Dark.SELECTED_TEXT);
             ((TextView) getView().findViewById(R.id.tv_ip_title)).setTextColor(Theme.Dark.SELECTED_TEXT);
@@ -189,18 +211,34 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
 
     @Override
     public void onSearchFinished(Map<String, String> macToIp) {
-        Activity activity = getActivity();
-        if (activity != null) {
-            activity.runOnUiThread(() -> {
-                mask.setVisibility(View.GONE);
-                String newIp = macToIp.get(new TinyDB(getContext()).getString("lightMac").toLowerCase());
-                if (newIp != null) {
-                    tv_ip.setText(newIp);
-                    Session.getInstance().setLocalIP(newIp);
-                    new TinyDB(getContext()).putString("LocalIp", newIp);
-                    Log.i("Device Search Completed", newIp);
-                }
-            });
-        }
+        mActivity.runOnUiThread(() -> {
+            mask.setVisibility(View.GONE);
+            String newIp = macToIp.get(new TinyDB(mActivity).getString("lightMac").toLowerCase());
+            if (newIp != null) {
+                tv_ip.setText(newIp);
+                Session.getInstance().setLocalIP(newIp);
+                new TinyDB(mActivity).putString("LocalIp", newIp);
+                Log.i("Device Search Completed", newIp);
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onProgressChanged(float progress) {
+        mActivity.runOnUiThread(() -> this.tv_progress.setText(String.format(Locale.ENGLISH, "%.2f", progress) + "%"));
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mActivity = getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        if (scanner != null)
+            scanner.stop();
+        super.onDetach();
     }
 }

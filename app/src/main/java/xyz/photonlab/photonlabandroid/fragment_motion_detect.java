@@ -80,7 +80,6 @@ public class fragment_motion_detect extends NormalStatusBarFragment implements d
         themeContainer = view.findViewById(R.id.theme);
 
         timeContainer.setOnClickListener(v -> pvTime.show());
-
         colorContainer.setOnClickListener(v -> {
             FragmentManager manager = getFragmentManager();
             if (manager != null) {
@@ -156,10 +155,6 @@ public class fragment_motion_detect extends NormalStatusBarFragment implements d
             view.findViewById(R.id.divider).setBackgroundColor(Theme.Dark.UNSELECTED_TEXT);
             backButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
         }
-
-        view.findViewById(R.id.time_delay).setOnClickListener(v -> {
-            //TODO Add Network Request
-        });
 
         return view;
     }

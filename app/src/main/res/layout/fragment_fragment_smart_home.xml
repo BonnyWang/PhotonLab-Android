@@ -15,17 +15,17 @@
         android:focusable="true">
 
         <ImageButton
-            android:contentDescription="@string/app_name"
-            android:foreground="?selectableItemBackground"
             android:id="@+id/backButton_Coming"
             android:layout_width="?actionBarSize"
             android:layout_height="?actionBarSize"
             android:background="@android:color/transparent"
-            android:scaleType="fitXY"
+            android:contentDescription="@string/app_name"
+            android:foreground="?selectableItemBackground"
             android:padding="15dp"
+            android:scaleType="fitXY"
             android:src="@drawable/back_button"
-            android:tint="@color/colorPrimary"
             android:text=""
+            android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,18 +44,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:scaleX="1.1"
-            android:scaleY="1.1"
-            android:foreground="?selectableItemBackground"
-            android:contentDescription="@string/app_name"
             android:id="@+id/button3"
             android:layout_width="?actionBarSize"
             android:layout_height="?actionBarSize"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            android:padding="15dp"
-            android:src="@drawable/ic_help"
             android:autoLink="web"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:foreground="?selectableItemBackground"
+            android:padding="15dp"
+            android:scaleType="fitXY"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
+            android:src="@drawable/ic_help"
             android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,9 +63,9 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:clipToPadding="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,17 +73,17 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:padding="3dp"
                 android:id="@+id/home_rView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
+                android:padding="3dp"
                 android:scrollbars="none" />
 
             <include
                 android:id="@+id/btn_no_more"
-                layout="@layout/button_no_more" />
+                layout="@layout/button_no_more_ele" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

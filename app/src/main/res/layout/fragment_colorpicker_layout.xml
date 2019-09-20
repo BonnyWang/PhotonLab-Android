@@ -8,23 +8,6 @@
     android:clipToPadding="false"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/close"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="end"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="22dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/app_name"
-        android:cropToPadding="false"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_layout_delete"
-        android:tint="#aaaaaa"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,26 +22,36 @@
             android:layout_gravity="center"
             android:layout_marginStart="32dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginEnd="32dp" />
 
-        <SeekBar
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="45dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/color_seek_back"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:progressDrawable="@android:color/transparent"
-            android:thumb="@drawable/color_seek_thumb" />
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:cardUseCompatPadding="false"
+            app:contentPadding="0dp">
+
+            <SeekBar
+                android:id="@+id/color_temp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_seek_back"
+                android:paddingStart="11.5dp"
+                android:paddingEnd="11.5dp"
+                android:progressDrawable="@android:color/transparent"
+                android:thumb="@drawable/color_seek_thumb" />
+        </androidx.cardview.widget.CardView>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="45dp"
             android:visibility="visible">
 
             <EditText
@@ -106,38 +99,60 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/setColorButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="32dp"
-            android:background="@drawable/set_background_no_size"
-            android:elevation="0dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="@string/Set"
-            android:textAllCaps="false"
-            android:textColor="#bdbdbd"
-            android:textSize="18sp" />
+            android:layout_marginTop="45dp"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/AddFavColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/set_background_no_size"
-            android:elevation="0dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="@string/Add_to_Favorite"
-            android:textAllCaps="false"
-            android:textColor="#bdbdbd"
-            android:textSize="18sp" />
+            <Button
+                android:id="@+id/setColorButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/set_background_no_size"
+                android:gravity="center"
+                android:text="@string/Set"
+                android:textAllCaps="false"
+                android:textColor="#bdbdbd"
+                android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/AddFavColor"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="30dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/set_background_no_size"
+                android:gravity="center"
+                android:src="@drawable/favorite_border"
+                android:text="@string/Set"
+                android:textAllCaps="false"
+                android:textColor="#bdbdbd"
+                android:textSize="18sp"
+                android:tint="#bdbdbd" />
+        </LinearLayout>
+
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/close"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="22dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:cropToPadding="false"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_layout_delete"
+        android:tint="#aaaaaa"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

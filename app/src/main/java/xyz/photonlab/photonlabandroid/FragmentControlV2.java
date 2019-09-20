@@ -2,13 +2,8 @@ package xyz.photonlab.photonlabandroid;
 
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -17,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -46,8 +41,10 @@ import okhttp3.Request;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
+import xyz.photonlab.photonlabandroid.views.DynamicLightSymbol;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
+import xyz.photonlab.photonlabandroid.views.WaveSeekBar;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -64,8 +61,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     TextView tv_group, tv_brightness, tv_off;
     CardView cv_power_back, cv_seek_back;
     ToggleButton tb_power;
-    ImageView iv_sun;
-    SeekBar sb_brightness;
+    DynamicLightSymbol iv_sun;
+    WaveSeekBar sb_brightness;
     RadioGroup rg_group;
     RadioButton[] radioButtonsGroup, radioButtonsSingle;
     Button bt_add_color_group;
@@ -166,10 +163,11 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
 
         anim_pop_enter = AnimationUtils.loadAnimation(getContext(), R.anim.pop_enter);
         anim_pop_out = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
+        anim_pop_out.setInterpolator(new AccelerateInterpolator());
 
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void addViewEvent() {
         //group
         tv_group.setOnClickListener(v -> {
@@ -216,24 +214,10 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             }
         });
 
-        sb_brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tv_brightness.setText(progress + "%");
-                brightness = progress;
-                tinyDB.putInt("Brightness", brightness);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+        sb_brightness.setOnProgressChangedListener(progress -> {
+            tv_brightness.setText(progress + "%");
+            brightness = progress;
+            tinyDB.putInt("Brightness", brightness);
         });
 
         sb_brightness.setOnTouchListener((v, event) -> {
@@ -362,7 +346,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tinyDB.putInt("colorGroup", currentGroupColor);
             tinyDB.putInt("colorGroupIndex", index);
             radioButtonsGroup[index].setChecked(true);
-            sb_brightness.setProgressTintList(ColorStateList.valueOf(currentGroupColor));
+            sb_brightness.setColor(currentGroupColor);
+            iv_sun.setColor(currentGroupColor);
 //            requestGroupColorChange(currentGroupColor, brightness);
 //            requestGroupColorChange(currentGroupColor, brightness);
             if (lightStage != null) {
@@ -379,11 +364,13 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
 
         if (tinyDB.getInt("colorGroup") == -1) {
             currentGroupColor = colorsQueueGroup.get(0);
-            sb_brightness.setProgressTintList(ColorStateList.valueOf(currentGroupColor));
+            sb_brightness.setColor(currentGroupColor);
+            iv_sun.setColor(currentGroupColor);
             radioButtonsGroup[0].setChecked(true);
         } else {
             currentGroupColor = tinyDB.getInt("colorGroup");
-            sb_brightness.setProgressTintList(ColorStateList.valueOf(tinyDB.getInt("colorGroup")));
+            sb_brightness.setColor(tinyDB.getInt("colorGroup"));
+            iv_sun.setColor(currentGroupColor);
         }
         refreshGroupRadioButtons();
         refreshLightStage();
@@ -413,14 +400,12 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         if (dark) {
             this.colorSelected = Theme.Dark.SELECTED_TEXT;
             this.colorUnselected = Theme.Dark.UNSELECTED_TEXT;
-            iv_sun.setImageResource(R.drawable.ic_moon);
             cv_seek_back.setCardBackgroundColor(Color.parseColor("#ff505154"));
             divider.setBackgroundColor(Theme.Dark.UNSELECTED_TEXT);
             sunUnselectedColor = Theme.Dark.UNSELECTED_TEXT;
         } else {
             this.colorSelected = Theme.Normal.SELECTED_TEXT;
             this.colorUnselected = Theme.Normal.UNSELECTED_TEXT;
-            iv_sun.setImageResource(R.drawable.bright_sun);
             cv_seek_back.setCardBackgroundColor(Color.parseColor("#ffededed"));
             divider.setBackgroundColor(Theme.Normal.UNSELECTED_TEXT);
             sunUnselectedColor = Theme.Normal.UNSELECTED_TEXT;
@@ -429,7 +414,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         tv_group.setTextColor(isGroup ? colorSelected : colorUnselected);
         tv_single.setTextColor(isGroup ? colorUnselected : colorSelected);
         boolean isPowerOn = tb_power.isChecked();
-        iv_sun.setColorFilter(isPowerOn ? 0xffffd41f : sunUnselectedColor);
         if (!isPowerOn)
             cv_power_back.setCardBackgroundColor(colorUnselected);
 
@@ -463,7 +447,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tv_off.setVisibility(View.GONE);
             sb_brightness.clearAnimation();
             sb_brightness.startAnimation(anim_pop_enter);
-            iv_sun.setColorFilter(0xffffd41f);
+            sb_brightness.active();
+            iv_sun.setColor(currentGroupColor);
             tinyDB.putInt("Power", 1);
             tv_brightness.setText(brightness + "%");
             cv_power_back.setCardBackgroundColor(0xff67d96a);
@@ -473,11 +458,12 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             bt_add_color_group.setEnabled(true);
             vg_radio_button_group_container.setAlpha(1f);
         } else {
-            iv_sun.setColorFilter(sunUnselectedColor);
+            iv_sun.setColor(sunUnselectedColor);
             sb_brightness.setVisibility(View.GONE);
             tv_brightness.setVisibility(View.GONE);
             tv_off.setVisibility(View.VISIBLE);
             sb_brightness.clearAnimation();
+            sb_brightness.active();
             sb_brightness.startAnimation(anim_pop_out);
             cv_power_back.setCardBackgroundColor(colorUnselected);
             for (RadioButton radioButton : radioButtonsGroup) {
@@ -520,7 +506,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             cv_power_back.setCardBackgroundColor(0xff67d96a);
             //clear selection
             rg_group.clearCheck();
-            sb_brightness.getProgressDrawable().setTint(rgbValue);
+            sb_brightness.setColor(rgbValue);
+            iv_sun.setColor(rgbValue);
             currentGroupColor = rgbValue;
             tinyDB.putInt("colorGroup", rgbValue);
             tinyDB.remove("colorGroupIndex");
@@ -639,6 +626,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         Log.i("lightChanged", light + "");
         rg_single[0].clearCheck();
         rg_single[1].clearCheck();
+        if (light != null)
+            vibrator.vibrate(50);
     }
 
     private class SlideListener implements View.OnTouchListener {
@@ -682,7 +671,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             currentGroupColor = colorsQueueGroup.get(index);
             tinyDB.putInt("colorGroup", currentGroupColor);
             tinyDB.putInt("colorGroupIndex", index);
-            sb_brightness.setProgressTintList(ColorStateList.valueOf(currentGroupColor));
+            sb_brightness.setColor(currentGroupColor);
+            iv_sun.setColor(currentGroupColor);
             requestGroupColorChange(currentGroupColor, brightness);
             vibrator.vibrate(50);
 

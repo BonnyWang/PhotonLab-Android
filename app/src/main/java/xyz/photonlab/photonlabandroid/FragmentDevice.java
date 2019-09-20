@@ -51,7 +51,12 @@ public class FragmentDevice extends NormalStatusBarFragment implements DeviceAda
         devices = new ArrayList<>();
         this.rv_devices_adapter = new DeviceAdapter(devices, this);
         if (!Session.getInstance().getMac(getContext()).equals("")) {
-            devices.add(new Device("Device01", Session.getInstance().getLocalIP(getContext()), new TinyDB(getContext()).getString("lightMac")));
+            String ip = Session.getInstance().getLocalIP(getContext());
+            if (ip.equals(""))
+                ip = "Reset";
+
+            devices.add(new Device("Device01", ip,
+                    new TinyDB(getContext()).getString("lightMac")));
             rv_devices.setAdapter(rv_devices_adapter);
         } else {
             rv_devices.setVisibility(View.GONE);

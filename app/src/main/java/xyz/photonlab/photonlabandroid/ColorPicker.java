@@ -14,8 +14,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import xyz.photonlab.photonlabandroid.R;
-
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
@@ -103,19 +101,10 @@ public class ColorPicker extends View {
         float x = event.getX();
         float y = event.getY();
         Log.d("hello", "onTouchEvent: " + x + " and " + y);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                proofLeft(x, y);
-                invalidate();
-                getRGB();
-                hideCursor = false;
-                break;
-            case MotionEvent.ACTION_UP:
-                getRGB();
-                invalidate();
-                hideCursor = false;
-        }
+        proofLeft(x, y);
+        invalidate();
+        getRGB();
+        hideCursor = false;
         getParent().requestDisallowInterceptTouchEvent(true);
         return true;
     }
@@ -133,15 +122,16 @@ public class ColorPicker extends View {
     private void getRGB() {
 
         float rate = bitmapTemp.getWidth() / (float) getWidth();
-        int mX = (int) (mLeftSelectPoint.x * rate) % bitmapTemp.getWidth();
-        int mY = (int) (mLeftSelectPoint.y * rate) % bitmapTemp.getHeight();
+
+        int mX = (int) (mLeftSelectPoint.x * rate);
+        int mY = (int) (mLeftSelectPoint.y * rate);
 
         int pixel = bitmapTemp.getPixel(mX, mY);
         int r = Color.red(pixel);
         int g = Color.green(pixel);
         int b = Color.blue(pixel);
         int a = Color.alpha(pixel);
-        Log.d("shit", "getRGB: " + r + " " + g + " " + b + " " + a + " ");
+
         colorStr = "#" + toBrowserHexValue(r) + toBrowserHexValue(g)
                 + toBrowserHexValue(b);
         //十六进制的颜色字符串。
@@ -165,73 +155,21 @@ public class ColorPicker extends View {
     }
 
     private void proofLeft(float x, float y) {
-        int r = getWidth() / 2 - mLeftBitmap.getWidth() / 2;//圆半径
-        //北
-        PointF N = new PointF(initX, initY - r);//北
-        PointF S = new PointF(initX, initY + r);//南
-        PointF W = new PointF(initX - r, initY);//西
-        PointF E = new PointF(initX + r, initY);//东
+        float r = getWidth() / 2f - mLeftBitmap.getWidth() / 2f;//圆半径
+        initX = getWidth() / 2;
+        initY = getHeight() / 2;
         int a = twoSpotGetLine(initX, initY, x, y);//圆心到点
 
         if (a < r) {//在圆内
             mLeftSelectPoint.x = x;
             mLeftSelectPoint.y = y;
         } else {
-            initX = getWidth() / 2;
-            initY = getHeight() / 2;
-            double angle = 0;
-            int b;
-            int newx = 0;
-            int newy = 0;
-            if (x > initX) {//二四象限 NE SE
-                if (y > initY) {//四象限 东南ES
-                    b = twoSpotGetLine(S.x, S.y, x, y);//南点到点
-                    double aoccos = (Math.pow(a, 2) + Math.pow(r, 2) - Math.pow(b, 2)) / (2 * a * r);
-                    angle = 90d - (Math.acos(aoccos) * (180 / Math.PI));//角度
-                    Log.e("getLeftColor", "角度东南ES a: " + a + ",b: " + b + ",c: " + r + ",angle:" + angle);
-                    if (angle % 90 == 0) {
-                        newx = initX;
-                        newy = initY + r;
-                    }
-                } else if (y < initY) {//二象限 北东EN
-                    b = twoSpotGetLine(E.x, E.y, x, y);//北点到点
-                    double aoccos = (Math.pow(a, 2) + Math.pow(r, 2) - Math.pow(b, 2)) / (2 * a * r);
-                    angle = 360d - (Math.acos(aoccos) * (180 / Math.PI));//角度
-                    Log.e("getLeftColor", "角度北东EN a: " + a + ",b: " + b + ",c: " + r + ",angle:" + angle);
-                    if (angle % 90 == 0) {
-                        newx = initX + r;
-                        newy = initY;
-                    }
-                }
-            } else {//一三象限
-                if (y > initY) {//一象限 西北WN
-                    b = twoSpotGetLine(W.x, W.y, x, y);//西点到点
-                    double aoccos = (Math.pow(a, 2) + Math.pow(r, 2) - Math.pow(b, 2)) / (2 * a * r);
-                    angle = 180d - (Math.acos(aoccos) * (180 / Math.PI));//角度
-                    Log.e("getLeftColor", "角度西北WN a: " + a + ",b: " + b + ",c: " + r + ",angle:" + angle);
-                    if (angle % 90 == 0) {
-                        newx = initX - r;
-                        newy = initY;
-                    }
-                } else if (y < initY) {//三象限 南西SW
-                    b = twoSpotGetLine(N.x, N.y, x, y);//东点到点
-                    double aoccos = (Math.pow(a, 2) + Math.pow(r, 2) - Math.pow(b, 2)) / (2 * a * r);
-                    angle = 270d - (Math.acos(aoccos) * (180 / Math.PI));//角度
-                    Log.e("getLeftColor", "角度南西SW a: " + a + ",b: " + b + ",c: " + r + ",angle:" + angle);
-                    if (angle % 90 == 0) {
-                        newx = initX;
-                        newy = initY - r;
-                    }
-                }
-            }
-            if (angle % 90 != 0) {
-                newx = (int) (initX + r * Math.cos(angle * Math.PI / 180));
-                newy = (int) (initY + r * Math.sin(angle * Math.PI / 180));
-            }
-            Log.e("getLeftColor", "新坐标 x: " + newx + ",y: " + newy);
-            mLeftSelectPoint.x = newx;
-            mLeftSelectPoint.y = newy;
+            float rate = r / twoSpotGetLine(x, y, initX, initY);
+            mLeftSelectPoint.x = (x - initX) * rate + initX;
+            mLeftSelectPoint.y = (y - initY) * rate + initY;
         }
+
+        Log.e((a <= r) + "", "nice");
     }
 
     private int twoSpotGetLine(float x1, float y1, float x2, float y2) {

@@ -37,6 +37,8 @@ public class NetworkNodeScanner {
     private ExecutorService threadPool = Executors.newFixedThreadPool(5);
     private boolean hasNext = true;
     private OnSearchFinishedListener mListener;
+    private OnSearchProgressChangedListener mProgressListener;
+    private boolean flag = true;
 
     public NetworkNodeScanner(InetAddress superNet, InetAddress subMask) throws UnknownHostException {
         byte[] superNetBytes = superNet.getAddress();
@@ -58,10 +60,12 @@ public class NetworkNodeScanner {
     }
 
     public void scan() {
-        while (hasNext) {
+        while (hasNext && flag) {
             nodeNum++;
             String s = currentAddress;
             threadPool.execute(() -> {
+                if (!flag)
+                    return;
                 try {
                     Log.i(TAG, s + " 2:" + System.currentTimeMillis());
                     if (InetAddress.getByName(s).isReachable(200)) {
@@ -71,6 +75,8 @@ public class NetworkNodeScanner {
                     Log.i(TAG, s + " 2:" + System.currentTimeMillis());
                     synchronized (NetworkNodeScanner.this) {
                         overNum++;
+                        if (this.mProgressListener != null)
+                            mProgressListener.onProgressChanged(overNum * 100 / (float) nodeNum);
                         Log.i(TAG, "Progress: " + (overNum * 100 / (float) nodeNum) + "%");
                         if (overNum == nodeNum) {
                             Log.i(TAG, "ping over,overNum and nodeNum:" + overNum);
@@ -160,8 +166,20 @@ public class NetworkNodeScanner {
                 tokens[3];
     }
 
+    public void setOnSearchProgressChangedListener(OnSearchProgressChangedListener listener) {
+        this.mProgressListener = listener;
+    }
+
+    public void stop() {
+        this.flag = false;
+    }
+
     public interface OnSearchFinishedListener {
         void onSearchFinished(Map<String, String> macToIp);
+    }
+
+    public interface OnSearchProgressChangedListener {
+        void onProgressChanged(float progress);
     }
 
 }

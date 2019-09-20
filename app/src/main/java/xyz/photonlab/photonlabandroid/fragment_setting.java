@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.Objects;
@@ -135,7 +136,9 @@ public class fragment_setting extends Fragment implements Session.OnThemeChangeL
                 ft5.commit();
                 break;
             case 4:
-                FragmentSchedule fragmentSchedule = new FragmentSchedule();
+                //todo remove the comment remark
+//                FragmentSchedule fragmentSchedule = new FragmentSchedule();
+                Fragment fragmentSchedule = new fragment_Comming("Schedule");
                 FragmentTransaction fragmentScheduleTx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 fragmentScheduleTx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 fragmentScheduleTx.replace(R.id.container, fragmentSchedule).addToBackStack(null);
@@ -149,7 +152,9 @@ public class fragment_setting extends Fragment implements Session.OnThemeChangeL
                 ftSh.commit();
                 break;
             case 6:
-                fragment_motion_detect mfragment_motion_detect = new fragment_motion_detect();
+                //todo remove the comment remark
+//                fragment_motion_detect mfragment_motion_detect = new fragment_motion_detect();
+                Fragment mfragment_motion_detect = new fragment_Comming("Motion Detect");
                 FragmentTransaction ft2 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 ft2.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft2.replace(R.id.container, mfragment_motion_detect).addToBackStack(null);
@@ -213,21 +218,6 @@ public class fragment_setting extends Fragment implements Session.OnThemeChangeL
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = getActivity();
-        if (mActivity != null)
-            onHiddenChanged(false);
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) {
-            if (Session.getInstance().isDarkMode(mActivity))
-                mActivity.getWindow().setStatusBarColor(Theme.Dark.MAIN_BACKGROUND);
-            else
-                mActivity.getWindow().setStatusBarColor(Theme.Normal.MAIN_BACKGROUND);
-        } else {
-            mActivity.getWindow().setStatusBarColor(0xff82cae8);
-        }
     }
 
 }

@@ -94,10 +94,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <xyz.photonlab.photonlabandroid.views.DynamicLightSymbol
+                android:rotation="90"
                 android:id="@+id/sun"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="20dp"
                 android:contentDescription="@string/app_name"
                 app:layout_constraintBottom_toTopOf="@id/seek_container"
@@ -124,17 +125,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/sun"
                 app:layout_constraintVertical_weight="3">
 
-                <xyz.photonlab.photonlabandroid.views.VerticalSeekBar
+                <xyz.photonlab.photonlabandroid.views.WaveSeekBar
                     android:id="@+id/seekBar_brightness"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                    android:progressDrawable="@drawable/seekbar_drawable_progress"
-                    android:thumb="@drawable/seekbar_drawable_thumb"
-                    android:thumbOffset="0dp"
-                    android:visibility="gone" />
+                   android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
