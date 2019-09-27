@@ -17,658 +17,668 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="6dp"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:fontFamily="@font/nunito_extrabold"
-                android:id="@+id/Setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:padding="10dp"
-                android:text="@string/Settings"
-                android:textColor="@color/colorWhite"
-                android:textSize="45dp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/person"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="45dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/ic_person"
-                android:backgroundTint="@color/colorWhite"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/set_group_1"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="8dp"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="10dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Setting">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                <TextView
+                    android:id="@+id/Setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/nunito_extrabold"
+                    android:text="@string/Settings"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="45dp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_Paring"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
+                <Button
+                    android:id="@+id/person"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/ic_person"
+                    android:backgroundTint="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageView
-                            android:id="@+id/title_icon_1"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/setting_item_wifi"
-                            android:tint="#64b5f6"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/pairing"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_1"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_1"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_Devices"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
-
-                        <ImageView
-                            android:id="@+id/title_icon_2"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/lightbulb"
-                            android:tint="#64b5f6"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/Device"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_2"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_2"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_System"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
-
-                        <ImageView
-                            android:id="@+id/title_icon_3"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/ic_settings_setting"
-                            android:tint="#64b5f6"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/System"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_3"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_3"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_Layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
-
-                        <ImageView
-                            android:id="@+id/title_icon_4"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/ic_setting_poly"
-                            android:tint="#64b5f6"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/Layout_Manager"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_4"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_4"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/set_group_2"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="8dp"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/set_group_1">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/set_group_1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginBottom="25dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardUseCompatPadding="false"
+                    app:contentPadding="10dp">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_Schedules"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/title_icon_5"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/setting_item_schedules"
-                            android:tint="#ce93d8"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_5"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_Paring"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/schedules"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_5"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_1"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/setting_item_wifi"
+                                android:tint="#64b5f6"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/pairing"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_1"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_5"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/arrow_1"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_SmartHome"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
-
-                        <ImageView
-                            android:id="@+id/title_icon_6"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/setting_item_smarthome"
-                            android:tint="#ce93d8"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_6"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_Devices"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/smart_home"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_6"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_2"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/lightbulb"
+                                android:tint="#64b5f6"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/Device"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_2"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_6"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/arrow_2"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_motion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
-
-                        <ImageView
-                            android:id="@+id/title_icon_7"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/ic_settings_motion"
-                            android:tint="#ce93d8"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_7"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_System"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/Motion_Detect"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_7"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_3"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/ic_settings_setting"
+                                android:tint="#64b5f6"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/System"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_3"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_7"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/arrow_3"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_other"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
-
-                        <ImageView
-                            android:id="@+id/title_icon_8"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/ic_settings_tool"
-                            android:tint="#ce93d8"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_8"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_Layout"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/other_utils"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_8"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_4"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/ic_setting_poly"
+                                android:tint="#64b5f6"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/Layout_Manager"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_4"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_8"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
+                            <ImageView
+                                android:id="@+id/arrow_4"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:paddingBottom="13dp"
-                android:id="@+id/set_group_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="8dp"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/set_group_2">
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/set_group_2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginBottom="25dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardUseCompatPadding="false"
+                    app:contentPadding="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/set_group_1">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_Feedback"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/title_icon_9"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/setting_item_feedback"
-                            android:tint="#b0bec5"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_9"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_Schedules"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/feedback"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_9"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_5"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/setting_item_schedules"
+                                android:tint="#ce93d8"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/schedules"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_5"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_9"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/arrow_5"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_Contact"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_SmartHome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_6"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/setting_item_smarthome"
+                                android:tint="#ce93d8"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/smart_home"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_6"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <ImageView
+                                android:id="@+id/arrow_6"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_motion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_7"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/ic_settings_motion"
+                                android:tint="#ce93d8"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/Motion_Detect"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_7"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <ImageView
+                                android:id="@+id/arrow_7"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_other"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_8"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/ic_settings_tool"
+                                android:tint="#ce93d8"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/other_utils"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_8"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <ImageView
+                                android:id="@+id/arrow_8"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/set_group_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginBottom="25dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardUseCompatPadding="false"
+                    app:contentPadding="10dp">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/title_icon_10"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#b0bec5"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/setting_item_contact"
-                            android:tint="#b0bec5"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_10"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_Feedback"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/contact_support"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_10"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_9"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/setting_item_feedback"
+                                android:tint="#b0bec5"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/feedback"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_9"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_10"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/arrow_9"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/set_item_About"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="15dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="15dp">
-
-                        <ImageView
-                            android:id="@+id/title_icon_11"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:backgroundTint="#717171"
-                            android:contentDescription="@string/app_name"
-                            android:foregroundTint="#717171"
-                            android:src="@drawable/setting_item_about"
-                            android:tint="#b0bec5"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/SettingSub_11"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_Contact"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/about"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/title_icon_11"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
+
+                            <ImageView
+                                android:id="@+id/title_icon_10"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#b0bec5"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/setting_item_contact"
+                                android:tint="#b0bec5"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/contact_support"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_10"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageView
-                            android:contentDescription="@string/Motion_Detect"
-                            android:id="@+id/arrow_11"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
+                            <ImageView
+                                android:id="@+id/arrow_10"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/set_item_About"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal"
+                            android:paddingStart="12dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="15dp">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/title_icon_11"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:backgroundTint="#717171"
+                                android:contentDescription="@string/app_name"
+                                android:foregroundTint="#717171"
+                                android:src="@drawable/setting_item_about"
+                                android:tint="#b0bec5"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/SettingSub_11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/about"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/title_icon_11"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <ImageView
+                                android:id="@+id/arrow_11"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/Motion_Detect"
+                                android:src="@drawable/arrow_right"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

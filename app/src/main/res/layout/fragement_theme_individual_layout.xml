@@ -1,101 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/background_light"
-    android:clickable="true"
-    android:focusable="true">
+    android:layout_height="match_parent">
 
-
-    <ImageView
-        android:id="@+id/topCircle"
-        android:layout_width="800dp"
-        android:layout_height="800dp"
-        android:contentDescription="@string/app_name"
-        android:rotation="-60"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.717"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.501"
-        app:srcCompat="@drawable/circlegradient" />
-
-    <TextView
-        android:id="@+id/themeName"
-        android:layout_width="227dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="35dp"
-        android:padding="10dp"
-        android:text="@string/title_Theme"
-        android:textColor="#FFFFFF"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
-
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="25dp"
-        android:background="@drawable/back_button"
-        android:backgroundTint="@color/colorWhite"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_light"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/themeName" />
+        android:visibility="visible">
 
-    <ListView
-        android:id="@+id/info_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@+id/setbutton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topCircle" />
 
-    <Button
-        android:id="@+id/setbutton"
+        <ImageView
+            android:id="@+id/topCircle"
+            android:layout_width="800dp"
+            android:layout_height="800dp"
+            android:contentDescription="@string/app_name"
+            android:rotation="-60"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.717"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.501"
+            app:srcCompat="@drawable/circlegradient" />
+
+        <TextView
+            android:id="@+id/themeName"
+            android:layout_width="227dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="35dp"
+            android:padding="10dp"
+            android:text="@string/title_Theme"
+            android:textColor="#FFFFFF"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="25dp"
+            android:background="@drawable/back_button"
+            android:backgroundTint="@color/colorWhite"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/themeName" />
+
+        <ListView
+            android:id="@+id/info_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:listSelector="@android:color/transparent"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toTopOf="@+id/setbutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topCircle" />
+
+        <Button
+            android:id="@+id/setbutton"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/set_background_no_size"
+            android:text="@string/Set"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/setSingle"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:rotation="90"
+            android:id="@+id/setSingle"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/set_background_no_size"
+            android:contentDescription="@android:string/no"
+            android:gravity="center"
+            android:src="@drawable/ic_poly2"
+            android:text="@string/Set"
+            android:scaleType="fitCenter"
+            android:textAllCaps="false"
+            android:textColor="#bdbdbd"
+            android:textSize="18sp"
+            android:padding="14dp"
+            android:tint="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/favorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="65dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/favorite_border"
+            android:textOff="@string/empty"
+            android:textOn="@string/empty"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/lights"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="40dp"
-        android:background="@drawable/set_background_no_size"
-        android:text="@string/Set"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-    <ToggleButton
-        android:id="@+id/favorite"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="65dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="18dp"
-        android:background="@drawable/favorite_border"
-        android:textOff="@string/empty"
-        android:textOn="@string/empty"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <ImageButton
+                android:id="@+id/exit"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="22dp"
+                android:layout_marginEnd="22dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name"
+                android:cropToPadding="false"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_layout_delete"
+                android:tint="#aaaaaa"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

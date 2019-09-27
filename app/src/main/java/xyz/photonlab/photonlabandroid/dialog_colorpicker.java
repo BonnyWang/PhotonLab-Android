@@ -31,7 +31,7 @@ import xyz.photonlab.photonlabandroid.model.Theme;
 public class dialog_colorpicker extends Fragment {
     private ColorPicker colorDisk = null;
     private TextView tv;
-    private ImageButton closeBt;
+    private ImageButton closeBt, switchBtn;
     private Button setBt;
     private ImageButton addFavBt;
     private SeekBar sbColorTemp;
@@ -136,7 +136,6 @@ public class dialog_colorpicker extends Fragment {
 
         //tv=(TextView)view.findViewById(R.id.tv_info);
         closeBt = view.findViewById(R.id.close);
-
         closeBt.setOnClickListener(v -> {
             if (getFragmentManager() != null) {
                 getFragmentManager().popBackStack();
@@ -149,7 +148,6 @@ public class dialog_colorpicker extends Fragment {
 
         addFavBt.setOnClickListener(v -> {
             mlistener.getRGB(colorcode, whichOne);
-            addFavBt.setImageResource(R.drawable.favorite);
             addFavBt.setBackgroundTintList(ColorStateList.valueOf(colorcode));
         });
 
@@ -225,6 +223,25 @@ public class dialog_colorpicker extends Fragment {
             }
         });
         addFavBt.setStateListAnimator(setBt.getStateListAnimator().clone());
+        switchBtn = view.findViewById(R.id.switchPan);
+        Bitmap defaultBitmap = colorDisk.getBitmapTemp();
+        Bitmap switchBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.colorpickercopy);
+
+        Bitmap defaultBitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.ring0);
+        Bitmap switchBitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.ring1);
+
+        switchBtn.setOnClickListener(v -> {
+            Bitmap current = colorDisk.getBitmapTemp();
+            if (current == defaultBitmap) {
+                colorDisk.setBitmapTemp(switchBitmap);
+                switchBtn.setImageBitmap(switchBitmap2);
+            } else {
+                colorDisk.setBitmapTemp(defaultBitmap);
+                switchBtn.setImageBitmap(defaultBitmap2);
+            }
+            colorDisk.hideCursor();
+            colorDisk.invalidate();
+        });
         return view;
     }
 

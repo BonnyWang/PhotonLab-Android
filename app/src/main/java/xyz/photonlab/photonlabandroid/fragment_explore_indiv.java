@@ -33,6 +33,9 @@ public class fragment_explore_indiv extends Fragment implements View.OnTouchList
     ConstraintLayout topBox;
     ImageButton btShare;
 
+    public fragment_explore_indiv() {
+    }
+
     public fragment_explore_indiv(String link, String title) {
 
         this.link = link;

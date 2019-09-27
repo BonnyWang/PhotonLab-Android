@@ -41,23 +41,24 @@ import xyz.photonlab.photonlabandroid.utils.NetworkNodeScanner;
 
 public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner.OnSearchFinishedListener, NetworkNodeScanner.OnSearchProgressChangedListener {
 
+    private String ip, mac, name;
     private TextView fragment_title, tv_ip, tv_mac;
     private LinearLayout mask;
     private Button bt_research, bt_reset;
     private ImageButton bt_exit, bt_refresh;
     private TextView tv_progress;
 
-    private Device device;
     private FragmentActivity mActivity;
 
     private NetworkNodeScanner scanner;
 
     public FragmentDeviceDetail() {
-        this.device = new Device("Unknown", "0.0.0.0", "00:00:00:00");
     }
 
     public FragmentDeviceDetail(@NonNull Device device) {
-        this.device = device;
+        this.ip = device.getIp();
+        this.mac = device.getMac();
+        this.name = device.getName();
     }
 
     @Override
@@ -73,9 +74,9 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
         initView(view);
         addViewEvent();
         initTheme();
-        tv_ip.setText(device.getIp());
-        tv_mac.setText(device.getMac());
-        fragment_title.setText(device.getName());
+        tv_ip.setText(ip);
+        tv_mac.setText(mac);
+        fragment_title.setText(name);
     }
 
     private void initView(View contentView) {

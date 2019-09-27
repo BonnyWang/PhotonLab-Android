@@ -30,6 +30,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="32dp"
+            android:visibility="gone"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:cardUseCompatPadding="false"
@@ -111,6 +112,7 @@
                 android:layout_height="52dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="0dp"
+                android:layout_marginBottom="30dp"
                 android:layout_weight="0.5"
                 android:background="@drawable/set_background_no_size"
                 android:gravity="center"
@@ -121,12 +123,11 @@
 
             <ImageButton
                 android:id="@+id/AddFavColor"
-                android:layout_width="0dp"
+                android:layout_width="52dp"
                 android:layout_height="52dp"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="30dp"
-                android:layout_weight="0.5"
                 android:background="@drawable/set_background_no_size"
                 android:gravity="center"
                 android:src="@drawable/favorite_border"
@@ -154,5 +155,21 @@
         android:src="@drawable/ic_layout_delete"
         android:tint="#aaaaaa"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/switchPan"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="22dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:cropToPadding="false"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ring0"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

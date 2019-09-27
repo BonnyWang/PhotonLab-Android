@@ -200,4 +200,12 @@ public class ColorPicker extends View {
     public void hideCursor() {
         hideCursor = true;
     }
+
+    public Bitmap getBitmapTemp() {
+        return bitmapTemp;
+    }
+
+    public void setBitmapTemp(Bitmap bitmapTemp) {
+        this.bitmapTemp = bitmapTemp;
+    }
 }

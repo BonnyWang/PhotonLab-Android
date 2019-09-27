@@ -15,8 +15,6 @@ public abstract class NormalStatusBarFragment extends Fragment {
 
     Activity mActivity;
 
-    int defaultColor = 0;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

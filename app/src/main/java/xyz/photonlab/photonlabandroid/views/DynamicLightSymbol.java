@@ -32,6 +32,7 @@ public class DynamicLightSymbol extends View {
 
     //目标
     private float dStrokeRadius, dStrokeWidth, dStrokeAlpha;
+    private boolean drawStroke;
 
     public DynamicLightSymbol(Context context) {
         super(context);
@@ -76,18 +77,20 @@ public class DynamicLightSymbol extends View {
         }
         path.close();
         canvas.drawPath(path, paint);
-        //绘制边框
-        paint.setStrokeWidth(strokeWidth);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setAlpha((int) strokeAlpha);
-        path.reset();
-        path.moveTo(cx + strokeRadius, cy);
-        for (int i = 1; i < 6; i++) {
-            path.lineTo(cx + strokeRadius * (float) Math.cos(i * Math.PI / 3),
-                    cy + strokeRadius * (float) Math.sin(i * Math.PI / 3));
+        if (this.drawStroke){
+            //绘制边框
+            paint.setStrokeWidth(strokeWidth);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setAlpha((int) strokeAlpha);
+            path.reset();
+            path.moveTo(cx + strokeRadius, cy);
+            for (int i = 1; i < 6; i++) {
+                path.lineTo(cx + strokeRadius * (float) Math.cos(i * Math.PI / 3),
+                        cy + strokeRadius * (float) Math.sin(i * Math.PI / 3));
+            }
+            path.close();
+            canvas.drawPath(path, paint);
         }
-        path.close();
-        canvas.drawPath(path, paint);
         invalidate();
         update();
     }
@@ -141,5 +144,9 @@ public class DynamicLightSymbol extends View {
 
     public void setInterpolator(TimeInterpolator mInterpolator) {
         this.mInterpolator = mInterpolator;
+    }
+
+    public void setDrawStroke(boolean drawStroke) {
+        this.drawStroke = drawStroke;
     }
 }

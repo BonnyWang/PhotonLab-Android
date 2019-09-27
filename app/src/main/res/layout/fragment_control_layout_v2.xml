@@ -95,12 +95,12 @@
             android:layout_height="match_parent">
 
             <xyz.photonlab.photonlabandroid.views.DynamicLightSymbol
-                android:rotation="90"
                 android:id="@+id/sun"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginTop="20dp"
                 android:contentDescription="@string/app_name"
+                android:rotation="90"
                 app:layout_constraintBottom_toTopOf="@id/seek_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -132,7 +132,7 @@
                     android:background="@android:color/transparent"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                   android:visibility="gone" />
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -220,17 +220,17 @@
                         android:background="@android:color/transparent"
                         android:button="@drawable/oval"
                         android:enabled="false" />
-                </RadioGroup>
 
-                <Button
-                    android:id="@+id/AddColor"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/add_color_24dp"
-                    android:backgroundTint="#C8C8C8"
-                    android:enabled="false" />
+                    <Button
+                        android:id="@+id/AddColor"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:alpha="0.6"
+                        android:background="@drawable/colorpicker"
+                        android:enabled="false" />
+                </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
@@ -426,12 +426,12 @@
 
                     <Button
                         android:id="@+id/AddColor00"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/add_color_24dp"
-                        android:backgroundTint="#C8C8C8"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:alpha="0.6"
+                        android:background="@drawable/colorpicker"
                         android:enabled="false" />
                 </RadioGroup>
             </LinearLayout>

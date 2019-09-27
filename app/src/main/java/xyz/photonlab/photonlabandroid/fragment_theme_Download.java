@@ -50,6 +50,13 @@ public class fragment_theme_Download extends Fragment implements dlRvAdapter.dlL
     private FragmentActivity mActivity;
 
 
+    public fragment_theme_Download() {
+        this.mfdlListener = theme -> {
+
+        };
+        this.mtheme = new ArrayList<>();
+    }
+
     public fragment_theme_Download(fdlListener mfdlListener, ArrayList<MyTheme> mtheme) {
         this.mfdlListener = mfdlListener;
         this.mtheme = mtheme;

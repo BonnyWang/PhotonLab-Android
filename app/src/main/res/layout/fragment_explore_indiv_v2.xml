@@ -65,7 +65,7 @@
                     android:layout_height="?actionBarSize"
                     android:background="@android:color/transparent"
                     android:padding="15dp"
-                    android:src="@drawable/ic_share"
+                    android:src="@drawable/ic_more"
                     android:tint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

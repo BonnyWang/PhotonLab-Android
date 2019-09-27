@@ -88,7 +88,11 @@ public class Fragment_Explore extends Fragment implements explore_RvAdapter.OnNo
 //        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         SimpleCheckableAdapter spinnerAdapter = new SimpleCheckableAdapter(getResources().getStringArray(R.array.Explore_Menu));
         spinnerMenu.setAdapter(spinnerAdapter);
-        initializeData();
+        try {
+            initializeData();
+        } catch (Exception e) {
+            Toast.makeText(context, "500 - Internal Server Error", Toast.LENGTH_SHORT).show();
+        }
 
 //        explore_RvAdapter adapter = new explore_RvAdapter(bexplores, this, thisone, false);
 //

@@ -126,7 +126,7 @@ public class FirmwareUpdateIndividualFragment extends Fragment {
         Request request = new Request.Builder()
                 .url("http://" + Session.getInstance().getLocalIP(mActivity) + "/ota/core/version")
                 .build();
-
+        mView.findViewById(R.id.up_to_date).setVisibility(View.GONE);
         helper.setCallback(new NetworkCallback() {
             @Override
             public void onSuccess(Response response) {
@@ -155,6 +155,7 @@ public class FirmwareUpdateIndividualFragment extends Fragment {
                                     mActivity.runOnUiThread(() -> {
                                         progressBar.setVisibility(View.GONE);
                                         mView.findViewById(R.id.tvCallDialog).setVisibility(View.VISIBLE);
+                                        mView.findViewById(R.id.up_to_date).setVisibility(View.VISIBLE);
                                     });
                                 } else {
                                     mActivity.runOnUiThread(() -> {

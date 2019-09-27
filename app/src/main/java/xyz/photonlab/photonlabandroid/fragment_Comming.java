@@ -22,6 +22,10 @@ public class fragment_Comming extends NormalStatusBarFragment {
 
     ImageButton back;
 
+    public fragment_Comming() {
+
+    }
+
     public fragment_Comming(String pageName) {
         this.pageName = pageName;
     }

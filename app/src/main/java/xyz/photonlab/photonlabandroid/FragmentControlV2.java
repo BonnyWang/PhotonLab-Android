@@ -414,8 +414,10 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         tv_group.setTextColor(isGroup ? colorSelected : colorUnselected);
         tv_single.setTextColor(isGroup ? colorUnselected : colorSelected);
         boolean isPowerOn = tb_power.isChecked();
-        if (!isPowerOn)
+        if (!isPowerOn) {
             cv_power_back.setCardBackgroundColor(colorUnselected);
+            iv_sun.setColor(colorUnselected);
+        }
 
     }
 
@@ -457,8 +459,10 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             }
             bt_add_color_group.setEnabled(true);
             vg_radio_button_group_container.setAlpha(1f);
+            iv_sun.setDrawStroke(true);
         } else {
             iv_sun.setColor(sunUnselectedColor);
+            iv_sun.setDrawStroke(false);
             sb_brightness.setVisibility(View.GONE);
             tv_brightness.setVisibility(View.GONE);
             tv_off.setVisibility(View.VISIBLE);
@@ -476,6 +480,8 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
 
     @Override
     public int getRGB(int rgbValue, int which) {
+        if (!tb_power.isChecked())
+            return rgbValue;
         rgbValue = rgbValue & 0x00ffffff | 0xff000000;
         if (which == 0) {
             beSet(rgbValue, which);
@@ -495,11 +501,13 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
                 radioButtonsSingle[8].setChecked(true);
             }
         }
-        return 0;
+        return rgbValue;
     }
 
     @Override
     public void beSet(int rgbValue, int which) {
+        if (!tb_power.isChecked())
+            return;
         rgbValue = rgbValue & 0x00ffffff | 0xff000000;
         if (which == 0) {
             tb_power.setChecked(true);

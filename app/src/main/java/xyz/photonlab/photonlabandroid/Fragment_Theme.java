@@ -216,6 +216,7 @@ public class Fragment_Theme extends Fragment
         //add to the number each time
         dlThemeNo = tinyDB.getInt("dlThemeNo") + 1;
         mtheme.add(theme);
+        Collections.sort(mtheme);
 
         RvAdapter rvAdapter = new RvAdapter(mtheme, mOnNoteListener);
         rv.setAdapter(rvAdapter);
@@ -228,10 +229,10 @@ public class Fragment_Theme extends Fragment
     public void initTheme(boolean dark) {
         Class<? extends Theme.ThemeColors> colors;
         if (dark) {
-            ((CardView) btn_no_more.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#505154"));
+            ((CardView) btn_no_more).setCardBackgroundColor(Color.parseColor("#505154"));
             colors = Theme.Dark.class;
         } else {
-            ((CardView) btn_no_more.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#f5f5f5"));
+            ((CardView) btn_no_more).setCardBackgroundColor(Color.parseColor("#f5f5f5"));
             colors = Theme.Normal.class;
         }
         try {

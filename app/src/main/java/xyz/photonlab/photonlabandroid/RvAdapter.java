@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,9 +34,9 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
 
         public MyViewHolder(View v, OnNoteListener onNoteListener) {
             super(v);
-            cv = (CardView) itemView.findViewById(R.id.cv);
-            textView = (TextView) itemView.findViewById(R.id.add_Theme);
-            imageView_Card = (ImageView) itemView.findViewById(R.id.imageView_Card);
+            cv = itemView.findViewById(R.id.cv);
+            textView = itemView.findViewById(R.id.add_Theme);
+            imageView_Card = itemView.findViewById(R.id.imageView_Card);
 //            add_Theme=(Button)itemView.findViewById(R.id.plus_Theme);
 
 

@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -33,12 +32,11 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
 
     int whichanim = 0;
 
-    Fragment start_anim = new fragment_start_anim();
+    private long timestamp;
+
     //Fragments
     Fragment[] fragments = new Fragment[4];
 
-    static Handler handler = new Handler();
-    static Runnable runnable;
 
     ConstraintLayout container;
 
@@ -103,53 +101,38 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate: YES");
-        overridePendingTransition(R.anim.fade_scale_in, R.anim.fade_scale_out);
+        overridePendingTransition(0, 0);
 
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        //show welcome
-
-        FragmentTransaction ft0 = getSupportFragmentManager().beginTransaction();
-        ft0.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-        ft0.replace(R.id.container, start_anim).addToBackStack(null);
-        ft0.commit();
         setContentView(R.layout.activity_main);
         container = findViewById(R.id.MainContainer);
         container.setVisibility(View.GONE);
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        FragmentManager manager = getSupportFragmentManager();
 
         //checkPermission
         getPermissions();
-
         tinyDB = new TinyDB(getBaseContext());
 
-        runnable = () -> {
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction ft = manager.beginTransaction();
-            ft.remove(start_anim);
-            if (savedInstanceState != null) {
-                for (int i = 0; i < 4; i++) {
-                    fragments[i] = manager.getFragment(savedInstanceState, i + "");
-                    if (fragments[i] != null && !fragments[i].isHidden()) {
-                        whichanim = i;
-                    }
-                }
+        if (savedInstanceState != null) {
+            whichanim = savedInstanceState.getInt("currentFragment");
+            for (int i = 0; i < 4; i++) {
+                fragments[i] = manager.getFragment(savedInstanceState, i + "");
             }
-            //init fragments
-            if (fragments[0] == null)
-                fragments[0] = new FragmentControlV2();
-            if (!fragments[0].isAdded())
-                ft.add(R.id.fgm, fragments[0], 0 + "");
-
-            Log.i(TAG, "fragment created");
-            container.setVisibility(View.VISIBLE);
-            ft.commitAllowingStateLoss();
-        };
-
-        handler.postDelayed(runnable, 3000);
+        }
+        FragmentTransaction ft = manager.beginTransaction();
+        //init fragments
+        if (fragments[0] == null)
+            fragments[0] = new FragmentControlV2();
+        if (!fragments[0].isAdded())
+            ft.add(R.id.fgm, fragments[0], 0 + "");
+        Log.i(TAG, "fragment created");
+        container.setVisibility(View.VISIBLE);
+        ft.commitAllowingStateLoss();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");
@@ -163,7 +146,10 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         Session.setShake(BitmapFactory.decodeResource(getResources(), R.drawable.shake));
 
         Session.getInstance().addOnThemeChangeListener(this);
+
         initTheme(Session.getInstance().isDarkMode(this));
+
+        this.timestamp = 0;
     }
 
     public void initTheme(boolean isDark) {
@@ -240,19 +226,32 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
-        for (int i = 0; i < 4; i++)
+        Log.w("MainActivity", "onSaveInstanceState: ");
+        for (int i = 0; i < 4; i++) {
             if (fragments[i] != null) {
                 getSupportFragmentManager().putFragment(outState, i + "", fragments[i]);
+                if (!fragments[i].isHidden()) {
+                    outState.putInt("currentFragment", i);
+                }
             }
+        }
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() <= 0) {
+            long now = System.currentTimeMillis();
+            if (now - timestamp > 3000) {
+                Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
+                timestamp = now;
+            } else
+                this.finish();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
 
 

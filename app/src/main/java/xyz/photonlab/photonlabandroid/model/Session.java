@@ -1,6 +1,7 @@
 package xyz.photonlab.photonlabandroid.model;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -11,9 +12,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import xyz.photonlab.photonlabandroid.TinyDB;
@@ -80,6 +83,7 @@ public class Session {
                     vars[j] = jVars.getInt(j);
                 }
 
+
                 MyTheme myTheme = new MyTheme(
                         jTheme.getString("creater"),
                         jTheme.getString("mood"),
@@ -89,6 +93,7 @@ public class Session {
                         vars,
                         jTheme.getBoolean("fav"),
                         jTheme.getBoolean("music"));
+                //avoid before theme remain
                 allThemes.add(myTheme);
             }
         } catch (Exception e) {
@@ -96,22 +101,6 @@ public class Session {
             //static themes
             allThemes.clear();
             Log.i("Session", "Generate Themes");
-            allThemes.add(new MyTheme("Photonlab",
-                    "Home Happy Sunset",
-                    "Spring",
-                    2, new int[]{0xff009e00, 0xfffcee21}, new int[]{0, 255, 0, 100, 120, 0, 20}, false, false));
-            allThemes.add(new MyTheme("Photonlab",
-                    "Honey",
-                    "Tri Impulse",
-                    10, new int[]{0xffff0000, 0xff0000ff}, new int[]{255, 0, 0, 0, 0, 255, 15}, false, false));
-            allThemes.add(new MyTheme("Photonlab",
-                    "Sweet sweet",
-                    "Fizzy Peach",
-                    13, new int[]{0xfff24645, 0xffebc08d}, new int[]{100, 20, 20}, false, true));
-            allThemes.add(new MyTheme("Photonlab",
-                    "High",
-                    "Neon Glow",
-                    6, new int[]{0xff00ffa1, 0xff00ffff}, new int[]{255, 0, 0, 0, 0, 255, 15}, false, false));
             allThemes.add(new MyTheme("Photonlab",
                     "Honey",
                     "Rainbow",
@@ -122,6 +111,21 @@ public class Session {
                     12, new int[]{0xfff72323, 0xfff7ec23, 0xff27f723, 0xff232ef7, 0xfff023f7}, new int[]{40, 2}, false, false));
             saveTheme(context);
         }
+
+        if (new TinyDB(context).getString("dataClear").equals("")) {
+            //delete before data
+            Iterator<MyTheme> iterator = allThemes.iterator();
+            while (iterator.hasNext()) {
+                MyTheme theme = iterator.next();
+                if (theme.getName().equals("Spring") || theme.getName().equals("Tri Impulse") ||
+                        theme.getName().equals("Fizzy Peach") || theme.getName().equals("Neon Glow")) {
+                    iterator.remove();
+                }
+            }
+            saveTheme(context);
+            new TinyDB(context).putString("dataClear", "Y");
+        }
+
     }
 
     public void saveTheme(Context context) {

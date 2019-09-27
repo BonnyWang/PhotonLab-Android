@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,43 +14,44 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp">
 
             <TextView
-                android:fontFamily="@font/nunito_extrabold"
-                android:textColor="@android:color/black"
                 android:id="@+id/tvExplore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:padding="10dp"
+                android:layout_marginStart="25dp"
+                android:fontFamily="@font/nunito_extrabold"
                 android:text="@string/Explore"
+                android:textColor="@android:color/black"
                 android:textSize="45sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
-                android:paddingLeft="-50dp"
                 android:id="@+id/spinnerExplore"
                 android:layout_width="28dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="28dp"
-                android:backgroundTint="#555"
+                android:layout_marginEnd="25dp"
                 android:background="@drawable/menu"
+                android:backgroundTint="#555"
                 android:dropDownVerticalOffset="25dp"
+                android:paddingLeft="-50dp"
                 android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="RtlHardcoded,RtlSymmetry" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvExplore"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:padding="3dp"/>
+            android:scrollbars="vertical" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
