@@ -41,6 +41,7 @@ import okhttp3.Request;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
+import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 import xyz.photonlab.photonlabandroid.views.DynamicLightSymbol;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
@@ -244,45 +245,54 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             button.setOnClickListener(new GroupColorSelectListener());
         }
 
-        bt_add_color_group.setOnClickListener(v -> {
-            FragmentManager manager = getFragmentManager();
-            if (manager != null) {
-                Log.i(TAG, "addViewEvent: ");
-                dialog_colorpicker colorpicker = dialog_colorpicker.newInstance(0);
-                colorpicker.setListener(this);
-                manager.beginTransaction()
-                        .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
-                        .replace(R.id.container, colorpicker)
-                        .addToBackStack(null)
-                        .commit();
-            }
-
-        });
-
-
-        tv_go_to_layout.setOnClickListener(v -> {
-            fragment_layout fragmentLayout = new fragment_layout();
-            FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
-            ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
-            ftl.replace(R.id.container, fragmentLayout).addToBackStack(null);
-            ftl.commit();
-        });
-
-        bt_add_color_single.setOnClickListener(v -> {
-            FragmentManager manager = getFragmentManager();
-            if (manager != null) {
-                dialog_colorpicker colorpicker = dialog_colorpicker.newInstance(1);
-                colorpicker.setListener(this);
-                Log.i(TAG, "addViewEvent: ");
-                manager.beginTransaction()
-                        .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
-                        .replace(R.id.container, colorpicker)
-                        .addToBackStack(null)
-                        .commit();
+        bt_add_color_group.setOnClickListener(new OnMultiClickListener() {
+            @Override
+            public void onMultiClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                if (manager != null) {
+                    Log.i(TAG, "addViewEvent: ");
+                    dialog_colorpicker colorpicker = dialog_colorpicker.newInstance(0);
+                    colorpicker.setListener(FragmentControlV2.this);
+                    manager.beginTransaction()
+                            .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
+                            .replace(R.id.container, colorpicker)
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
         });
 
-        for (RadioButton button : radioButtonsSingle) {
+
+        tv_go_to_layout.setOnClickListener(new OnMultiClickListener() {
+            @Override
+            public void onMultiClick(View v) {
+                fragment_layout fragmentLayout = new fragment_layout();
+                FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
+                ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
+                ftl.replace(R.id.container, fragmentLayout).addToBackStack(null);
+                ftl.commit();
+            }
+        });
+
+        bt_add_color_single.setOnClickListener(new OnMultiClickListener() {
+            @Override
+            public void onMultiClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                if (manager != null) {
+                    dialog_colorpicker colorpicker = dialog_colorpicker.newInstance(1);
+                    colorpicker.setListener(FragmentControlV2.this);
+                    Log.i(TAG, "addViewEvent: ");
+                    manager.beginTransaction()
+                            .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
+                            .replace(R.id.container, colorpicker)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+        });
+
+        for (
+                RadioButton button : radioButtonsSingle) {
             button.setOnClickListener(new SingleColorSelectListener());
         }
 

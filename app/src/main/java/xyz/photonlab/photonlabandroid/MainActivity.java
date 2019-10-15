@@ -8,6 +8,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
@@ -37,8 +43,17 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
     //Fragments
     Fragment[] fragments = new Fragment[4];
 
+    Animation slideInLeft, slideOutLeft, slideInRight, slideOutRight;
 
     ConstraintLayout container;
+    int[] ids = {
+            R.id.fgm1,
+            R.id.fgm2,
+            R.id.fgm3,
+            R.id.fgm4
+    };
+
+    FrameLayout[] containers;
 
     TinyDB tinyDB;
 
@@ -83,17 +98,21 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
                     Log.e(TAG, "Current Fragment index is not support!");
                     throw new IllegalArgumentException();
             }
-            tx.add(R.id.fgm, fragments[i], i + "");
+            tx.add(ids[i], fragments[i], i + "");
+            tx.commit();
         }
+        containers[i].clearAnimation();
+        containers[whichanim].clearAnimation();
+        containers[i].setVisibility(View.VISIBLE);
+        containers[whichanim].setVisibility(View.GONE);
         if (i > whichanim) {
-            tx.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            containers[i].startAnimation(slideInRight);
+            containers[whichanim].startAnimation(slideOutLeft);
         }
         if (i < whichanim) {
-            tx.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+            containers[i].startAnimation(slideInLeft);
+            containers[whichanim].startAnimation(slideOutRight);
         }
-        tx.hide(fragments[whichanim]);
-        tx.show(fragments[i]);
-        tx.commit();
         whichanim = i;
     }
 
@@ -102,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate: YES");
         overridePendingTransition(0, 0);
-
+        containers = new FrameLayout[4];
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -111,7 +130,10 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         container.setVisibility(View.GONE);
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
+        slideInLeft = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        slideOutLeft = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+        slideInRight = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
+        slideOutRight = AnimationUtils.loadAnimation(this, R.anim.slide_out_right);
         FragmentManager manager = getSupportFragmentManager();
 
         //checkPermission
@@ -129,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         if (fragments[0] == null)
             fragments[0] = new FragmentControlV2();
         if (!fragments[0].isAdded())
-            ft.add(R.id.fgm, fragments[0], 0 + "");
+            ft.add(R.id.fgm1, fragments[0], 0 + "");
         Log.i(TAG, "fragment created");
         container.setVisibility(View.VISIBLE);
         ft.commitAllowingStateLoss();
@@ -150,6 +172,11 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         initTheme(Session.getInstance().isDarkMode(this));
 
         this.timestamp = 0;
+
+        containers[0] = findViewById(R.id.fgm1);
+        containers[1] = findViewById(R.id.fgm2);
+        containers[2] = findViewById(R.id.fgm3);
+        containers[3] = findViewById(R.id.fgm4);
     }
 
     public void initTheme(boolean isDark) {

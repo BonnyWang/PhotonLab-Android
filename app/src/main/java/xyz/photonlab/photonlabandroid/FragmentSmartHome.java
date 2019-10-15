@@ -26,6 +26,7 @@ import java.util.Objects;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.SmartHomeItem;
 import xyz.photonlab.photonlabandroid.model.Theme;
+import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 
 public class FragmentSmartHome extends NormalStatusBarFragment {
 
@@ -61,7 +62,7 @@ public class FragmentSmartHome extends NormalStatusBarFragment {
         if (Session.getInstance().isDarkMode(getContext())) {
             exit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
             help.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EA7D38")));
-            ((CardView)view.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#505154"));
+            ((CardView) view.findViewById(R.id.plus_Theme_Card)).setCardBackgroundColor(Color.parseColor("#505154"));
         }
     }
 
@@ -134,7 +135,12 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.tv.setText(data.get(position).getTitle());
         holder.cardView.setCardBackgroundColor(data.get(position).getColor());
-        holder.cardView.setOnClickListener(v -> this.listener.onItemClick(v, position));
+        holder.cardView.setOnClickListener(new OnMultiClickListener() {
+            @Override
+            public void onMultiClick(View v) {
+                MyAdapter.this.listener.onItemClick(v, position);
+            }
+        });
         Log.i("holder", holder.toString());
     }
 

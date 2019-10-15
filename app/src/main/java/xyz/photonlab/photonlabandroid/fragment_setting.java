@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
+import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 
 
 public class fragment_setting extends Fragment implements Session.OnThemeChangeListener {
@@ -89,7 +90,12 @@ public class fragment_setting extends Fragment implements Session.OnThemeChangeL
             tvs[i] = view.findViewById(tvsId[i]);
             menuItems[i] = view.findViewById(itemIds[i]);
             int finalI = i;
-            menuItems[i].setOnClickListener(v -> this.onNoteClick(finalI));
+            menuItems[i].setOnClickListener(new OnMultiClickListener() {
+                @Override
+                public void onMultiClick(View v) {
+                    fragment_setting.this.onNoteClick(finalI);
+                }
+            });
         }
 
         tv_setting = view.findViewById(R.id.Setting);

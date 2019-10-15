@@ -12,23 +12,55 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:id="@+id/fgm"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/nav_container"
             app:layout_constraintTop_toTopOf="parent">
 
+            <FrameLayout
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/fgm1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        </FrameLayout>
+            <FrameLayout
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:id="@+id/fgm2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:id="@+id/fgm3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:id="@+id/fgm4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/nav_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:id="@+id/nav_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:layout_constraintRight_toRightOf="parent">
+
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/nav_view"
                 android:layout_width="match_parent"
@@ -42,6 +74,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:menu="@menu/bottom_nav_menu" />
         </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -222,6 +222,12 @@ public class Session {
         return stage;
     }
 
+    public void saveLayoutToLocal(Context context, Light light, int index) {
+        LightStage stage = loadLayoutFromLocal(context, true);
+        stage.getLights().set(index, light);
+        saveLayoutToLocal(context, stage);
+    }
+
     public boolean saveLayoutToLocal(Context context, LightStage stage) {
         PrintWriter writer = null;
         try {

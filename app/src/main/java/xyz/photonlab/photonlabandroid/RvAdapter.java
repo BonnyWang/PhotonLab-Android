@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import xyz.photonlab.photonlabandroid.model.MyTheme;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
+import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
 
     private OnNoteListener mOnNoteListener;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         CardView cv;
         TextView textView;
@@ -41,13 +42,14 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder> {
 
 
             this.onNoteListener = onNoteListener;
-            v.setOnClickListener(this);
+            v.setOnClickListener(new OnMultiClickListener() {
+                @Override
+                public void onMultiClick(View v) {
+                    onNoteListener.onNoteClick(getAdapterPosition());
+                }
+            });
         }
 
-        @Override
-        public void onClick(View v) {
-            onNoteListener.onNoteClick(getAdapterPosition());
-        }
     }
 
     List<MyTheme> mthemes;

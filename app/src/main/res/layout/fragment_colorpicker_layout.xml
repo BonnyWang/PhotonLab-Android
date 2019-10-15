@@ -6,23 +6,27 @@
     android:layout_height="match_parent"
     android:background="@color/backGround"
     android:clipToPadding="false"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
 
+    <xyz.photonlab.photonlabandroid.ColorPicker
+        android:id="@+id/colorDisk"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toTopOf="@id/controller"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
     <LinearLayout
+        android:id="@+id/controller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <xyz.photonlab.photonlabandroid.ColorPicker
-            android:id="@+id/colorDisk"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="32dp" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -140,36 +144,44 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/close"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="end"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="22dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/app_name"
-        android:cropToPadding="false"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_layout_delete"
-        android:tint="#aaaaaa"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageButton
-        android:id="@+id/switchPan"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="end"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="22dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/app_name"
-        android:cropToPadding="false"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ring0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="22dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:cropToPadding="false"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_layout_delete"
+            android:tint="#aaaaaa"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/switchPan"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="22dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:cropToPadding="false"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ring0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

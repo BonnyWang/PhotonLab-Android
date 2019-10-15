@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +46,7 @@ import xyz.photonlab.photonlabandroid.views.LightStage;
 import static android.content.Context.VIBRATOR_SERVICE;
 
 
-public class fragement_theme_individual extends Fragment implements LightStage.OnLightCheckedChangeListener {
+public class fragement_theme_individual extends Fragment implements LightStage.OnLightCheckedChangeListener, fragment_layout.OnSavedLayoutListener {
     List<theme_Content_Class> items = new ArrayList<>();
     int[] gradient;
     String themeName;
@@ -58,6 +59,7 @@ public class fragement_theme_individual extends Fragment implements LightStage.O
     ImageButton setSingle;
     ToggleButton favorite;
     int resultCode = -1;
+    LightStage stage;
 
     Vibrator vibrator;
     themeIndivListener mlistener;
@@ -213,7 +215,7 @@ public class fragement_theme_individual extends Fragment implements LightStage.O
 
         ConstraintLayout v1 = view.findViewById(R.id.frameLayout);
         FrameLayout v2 = view.findViewById(R.id.lights);
-        LightStage stage = Session.getInstance().requireLayoutStage(getContext(), true);
+
         setSingle.setOnClickListener(v -> {
             v2.setVisibility(View.VISIBLE);
             v2.startAnimation(in);
@@ -227,24 +229,23 @@ public class fragement_theme_individual extends Fragment implements LightStage.O
         if (Session.getInstance().isDarkMode(getContext())) {
             v1.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
             v2.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
-            setSingle.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.CARD_BACKGROUND));
         } else {
             v1.setBackgroundColor(Theme.Normal.MAIN_BACKGROUND);
             v2.setBackgroundColor(Theme.Normal.MAIN_BACKGROUND);
         }
-        if (stage == null) {
-            return view;
-        }
-        v2.addView(stage, 0);
         v2.setPadding(0, getStatusBarHeight(getContext()), 0, 0);
-        stage.requireCenter();
-        stage.denyMove();
-        stage.setOnLightCheckedChangeListener(this);
-        for (Light light : stage.getLights()) {
-            if (light != null) {
-                light.setPlaneColor(Color.rgb(200, 200, 200));
-            }
+        loadStage(v2);
+        view.findViewById(R.id.tvGotoSetup).setOnClickListener(v -> {
+            fragment_layout fragmentLayout = new fragment_layout();
+            FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
+            ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
+            ftl.replace(R.id.lights, fragmentLayout).addToBackStack(null);
+            ftl.commit();
+        });
+        if (stage != null) {
+            view.findViewById(R.id.content_container).setVisibility(View.GONE);
         }
+        Session.getInstance().registerOnLayoutSaveListener(this);
         return view;
     }
 
@@ -275,8 +276,37 @@ public class fragement_theme_individual extends Fragment implements LightStage.O
                     .url(url)
                     .build();
             helper.connect(request);
-            light.setPlaneColor(Color.RED);
+            try {
+                light.setPlaneColor(gradient[gradient.length - 1]);
+                Session.getInstance().saveLayoutToLocal(getContext(), light, stage.getLights().indexOf(light));
+                Session.getInstance().notifyLayoutChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public void onSavedLayout(boolean saved) {
+        Log.i("AddView", stage + ":" + saved);
+        if (saved && stage == null) {
+            try {
+                Objects.requireNonNull(getView()).findViewById(R.id.content_container).setVisibility(View.GONE);
+                loadStage(getView().findViewById(R.id.lights));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void loadStage(ViewGroup parent) {
+        stage = Session.getInstance().requireLayoutStage(getContext(), true);
+        if (stage == null)
+            return;
+        parent.addView(stage, 0);
+        stage.requireCenter();
+        stage.denyMove();
+        stage.setOnLightCheckedChangeListener(this);
     }
 
     public interface themeIndivListener {

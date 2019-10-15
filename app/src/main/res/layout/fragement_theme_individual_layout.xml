@@ -90,7 +90,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
-            android:rotation="90"
             android:id="@+id/setSingle"
             android:layout_width="52dp"
             android:layout_height="52dp"
@@ -99,13 +98,13 @@
             android:background="@drawable/set_background_no_size"
             android:contentDescription="@android:string/no"
             android:gravity="center"
+            android:padding="14dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_poly2"
             android:text="@string/Set"
-            android:scaleType="fitCenter"
             android:textAllCaps="false"
             android:textColor="#bdbdbd"
             android:textSize="18sp"
-            android:padding="14dp"
             android:tint="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
@@ -153,6 +152,39 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/groups_container"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="8">
+
+            <TextView
+                android:id="@+id/noLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/No_Layout"
+                android:textColor="@color/Light_Grey"
+                android:textSize="45sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvGotoSetup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/Go_to_setup"
+                android:textColor="@color/Light_Grey"
+                android:textStyle="bold" />
+        </LinearLayout>
     </FrameLayout>
 
 </FrameLayout>

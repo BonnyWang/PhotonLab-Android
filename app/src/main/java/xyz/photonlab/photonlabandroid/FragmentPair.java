@@ -36,7 +36,9 @@ import androidx.fragment.app.FragmentTransaction;
 import org.json.JSONObject;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import xyz.photonlab.photonlabandroid.model.Session;
@@ -72,7 +74,7 @@ public class FragmentPair extends NormalStatusBarFragment {
     private Button try_again_btn;
     private TextView tvErrorHelp;
     private AppCompatActivity activity;
-    private boolean flag = true;
+//    private boolean flag = true;
 
     @Nullable
     @Override
@@ -98,7 +100,7 @@ public class FragmentPair extends NormalStatusBarFragment {
 
     private void addViewEvent() {
         exit.setOnClickListener(v -> {
-            flag = true;
+//            flag = true;
             Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
             cleanEditTextProblems();
         });
@@ -179,7 +181,7 @@ public class FragmentPair extends NormalStatusBarFragment {
                 ((MainActivity) activity).getSupportFragmentManager().popBackStack();
                 ((MainActivity) activity).goMain();
             }
-            flag = false;
+//            flag = false;
         });
 
         goLayoutButton.setOnClickListener(v -> {
@@ -203,11 +205,11 @@ public class FragmentPair extends NormalStatusBarFragment {
             this.activity = (AppCompatActivity) context;
     }
 
-    @Override
-    public void onDetach() {
-        if (this.flag)
-            super.onDetach();
-    }
+//    @Override
+//    public void onDetach() {
+//        if (this.flag)
+//            super.onDetach();
+//    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -253,7 +255,8 @@ public class FragmentPair extends NormalStatusBarFragment {
                 .build();
         Log.i("tellLightWifiInfo", " http://" + current_gateway_ip
                 + "/join?ssid=" + wifi_ssid + "&password=" + wifi_password);
-        helper.connect(request);
+        OkHttpClient client = new OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS).build();
+        helper.connect(request, client);
         helper.setCallback(new NetworkCallback() {
             @Override
             public void onSuccess(Response response) {

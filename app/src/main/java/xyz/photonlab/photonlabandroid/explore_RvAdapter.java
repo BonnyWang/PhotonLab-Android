@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.model.explore_item_Class;
+import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 
 public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.MyViewHolder> {
 
@@ -25,7 +26,7 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
     Fragment_Explore fragment_explore;
     boolean loaded;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView bimageView;
         TextView title, desc;
@@ -45,14 +46,13 @@ public class explore_RvAdapter extends RecyclerView.Adapter<explore_RvAdapter.My
                 ((CardView) itemView.findViewById(R.id.cv)).setCardBackgroundColor(Theme.Dark.CARD_BACKGROUND);
             }
             this.bonNoteListener = bonNoteListener;
-            v.setOnClickListener(this);
+            v.setOnClickListener(new OnMultiClickListener() {
+                @Override
+                public void onMultiClick(View v) {
+                    bonNoteListener.onNoteClick(getAdapterPosition());
+                }
+            });
         }
-
-        @Override
-        public void onClick(View v) {
-            bonNoteListener.onNoteClick(getAdapterPosition());
-        }
-
     }
 
     ArrayList<explore_item_Class> bexplores;
