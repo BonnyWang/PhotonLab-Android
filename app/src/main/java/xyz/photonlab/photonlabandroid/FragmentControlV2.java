@@ -2,9 +2,10 @@ package xyz.photonlab.photonlabandroid;
 
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.util.TypedValue;
@@ -19,7 +20,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -38,8 +39,10 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
+import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 import xyz.photonlab.photonlabandroid.views.DynamicLightSymbol;
@@ -56,6 +59,9 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
 
 
     private static final String TAG = "FragmentControlV2";
+
+    LinearLayout ll_conn_tip;
+    Handler handler;
 
     //    group UI
     ConstraintLayout cl_group;
@@ -80,7 +86,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     RadioGroup[] rg_single;
 
     //animation
-    Animation anim_slide_in_left, anim_slide_out_right, anim_slide_out_left, anim_slide_in_right, anim_pop_enter, anim_pop_out;
+    Animation anim_slide_in_left, anim_slide_out_right, anim_slide_out_left, anim_slide_in_right, anim_pop_enter, anim_pop_out, anim_pop_enter2, anim_pop_out2;
 
 
     //models
@@ -94,6 +100,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     int currentGroupColor = Color.TRANSPARENT;
     int sunUnselectedColor;
     Vibrator vibrator;
+    private FragmentActivity mActivity;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -111,6 +118,76 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         addViewEvent();
         initialize();
         initTheme(session.isDarkMode(getContext()));
+        handler = new Handler();
+        if (!Session.getInstance().getLocalIP(getContext()).equals("")) {
+            tryConn();
+        } else {
+            ll_conn_tip.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void tryConn() {
+        showConnecting();
+        if (!Session.getInstance().getLocalIP(getContext()).equals("")) {
+            NetworkHelper helper = new NetworkHelper();
+            Request request = new Request.Builder()
+                    .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/ip")
+                    .get()
+                    .build();
+            helper.connect(request);
+            helper.setCallback(new NetworkCallback() {
+                @Override
+                public void onSuccess(Response response) {
+                    if (mActivity != null)
+                        mActivity.runOnUiThread(() -> {
+                            handler.postDelayed(() -> hideConnecting(), 2000);
+                            handler.postDelayed(() -> showConnected(), 2000);
+                        });
+                }
+
+                @Override
+                public void onFailed(String msg) {
+                    if (mActivity != null)
+                        mActivity.runOnUiThread(() -> {
+                            handler.postDelayed(() -> hideConnecting(), 2000);
+                            handler.postDelayed(() -> tryConn(), 12000);
+                        });
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mActivity = getActivity();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void showConnected() {
+        ll_conn_tip.setVisibility(View.VISIBLE);
+        ll_conn_tip.clearAnimation();
+        ll_conn_tip.startAnimation(anim_pop_enter);
+        ll_conn_tip.findViewById(R.id.conn_iv).setVisibility(View.VISIBLE);
+        ll_conn_tip.findViewById(R.id.conn_progress).setVisibility(View.GONE);
+        ((TextView) ll_conn_tip.findViewById(R.id.conn_tv)).setText("Devices Connected");
+        handler.postDelayed(() -> {
+            ll_conn_tip.clearAnimation();
+            ll_conn_tip.startAnimation(anim_pop_out);
+            ll_conn_tip.setVisibility(View.INVISIBLE);
+        }, 2000);
+    }
+
+    private void showConnecting() {
+        ll_conn_tip.setVisibility(View.VISIBLE);
+        ll_conn_tip.clearAnimation();
+        ll_conn_tip.startAnimation(anim_pop_enter);
+    }
+
+    private void hideConnecting() {
+        ll_conn_tip.clearAnimation();
+        ll_conn_tip.startAnimation(anim_pop_out);
+        ll_conn_tip.setVisibility(View.INVISIBLE);
     }
 
     private void initView(View contentView) {
@@ -155,6 +232,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         rg_single = new RadioGroup[2];
         rg_single[0] = contentView.findViewById(R.id.radioGroup0);
         rg_single[1] = contentView.findViewById(R.id.radioGroup00);
+        ll_conn_tip = contentView.findViewById(R.id.connect_container);
 
         //animations
         anim_slide_in_left = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
@@ -164,8 +242,9 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
 
         anim_pop_enter = AnimationUtils.loadAnimation(getContext(), R.anim.pop_enter);
         anim_pop_out = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
-        anim_pop_out.setInterpolator(new AccelerateInterpolator());
 
+        anim_pop_enter2 = AnimationUtils.loadAnimation(getContext(), R.anim.pop_enter);
+        anim_pop_out2 = AnimationUtils.loadAnimation(getContext(), R.anim.pop_out);
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -291,8 +370,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             }
         });
 
-        for (
-                RadioButton button : radioButtonsSingle) {
+        for (RadioButton button : radioButtonsSingle) {
             button.setOnClickListener(new SingleColorSelectListener());
         }
 
@@ -458,7 +536,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tv_brightness.setVisibility(View.VISIBLE);
             tv_off.setVisibility(View.GONE);
             sb_brightness.clearAnimation();
-            sb_brightness.startAnimation(anim_pop_enter);
+            sb_brightness.startAnimation(anim_pop_enter2);
             sb_brightness.active();
             iv_sun.setColor(currentGroupColor);
             tinyDB.putInt("Power", 1);
@@ -478,7 +556,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             tv_off.setVisibility(View.VISIBLE);
             sb_brightness.clearAnimation();
             sb_brightness.active();
-            sb_brightness.startAnimation(anim_pop_out);
+            sb_brightness.startAnimation(anim_pop_out2);
             cv_power_back.setCardBackgroundColor(colorUnselected);
             for (RadioButton radioButton : radioButtonsGroup) {
                 radioButton.setEnabled(false);

@@ -2,7 +2,6 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -124,56 +123,26 @@ public class fragement_theme_individual extends Fragment implements LightStage.O
             }
 
             url += object.toString();
-//            switch (mtheme.getName()) {
-//                case "Spring":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=2&variables={\"var1\":0,\"var2\":255,\"var3\":0,\"var4\":100,\"var5\":120,\"var6\":0,\"var7\":20}";
-//                    break;
-//                case "Rainbow":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=11&variables={\"var1\":30,\"var2\":2}";
-//                    break;
-//                case "Rainbow-Rainbow":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=12&variables={\"var1\":40,\"var2\":2}";
-//                    break;
-//                case "Fizzy Peach":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=13&variables={\"var1\":100,\"var2\":20,\"var3\":20}";
-//                    break;
-//                case "Neon Glow":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=6&variables={\"var1\":0,\"var2\":0,\"var3\":0,\"var4\":0,\"var5\":255,\"var6\":161,\"var7\":20}";
-//                    break;
-//                case "Tri Impulse":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=10&variables={\"var1\":255,\"var2\":0,\"var3\":0,\"var4\":0,\"var5\":0,\"var6\":255,\"var7\":15}";
-//                    break;
-//                case "Ocean Blue":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=17&variables={\"var1\":13,\"var2\":20,\"var3\":222,\"var4\":0,\"var5\":15,\"var6\":20,\"var7\":100}";
-//                    break;
-//                case "Purple Lake":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=3&variables={\"var1\":153,\"var2\":0,\"var3\":255,\"var4\":43,\"var5\":0,\"var6\":17,\"var7\":20}";
-//                    break;
-//                case "Fresh Papaya":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=5&variables={\"var1\":50,\"var2\":0,\"var3\":3,\"var4\":248,\"var5\":187,\"var6\":34,\"var7\":20}";
-//                    break;
-//                case "Ultramarine":
-//                    url = "http://" + Session.getInstance().getLocalIP(getContext())
-//                            + "/mode/theme?number=5&variables={\"var1\":50,\"var2\":0,\"var3\":3,\"var4\":248,\"var5\":187,\"var6\":34,\"var7\":20}";
-//                    break;
-//                default:
-//                    return;
-//            }
             vibrator.vibrate(50);
             NetworkHelper helper = new NetworkHelper();
 
             Request request = new Request.Builder().url(url).build();
             Log.i("Themes", url);
             helper.connect(request, client);
+            if (stage != null) {
+                List<Light> lights = stage.getLights();
+
+                try {
+                    for (Light light : lights) {
+                        light.setPlaneColor(gradient[gradient.length - 1]);
+                    }
+                    Session.getInstance().saveLayoutToLocal(getContext(), stage);
+                    Session.getInstance().notifyLayoutChanged();
+                    onSavedLayout(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
 
@@ -280,6 +249,8 @@ public class fragement_theme_individual extends Fragment implements LightStage.O
                 light.setPlaneColor(gradient[gradient.length - 1]);
                 Session.getInstance().saveLayoutToLocal(getContext(), light, stage.getLights().indexOf(light));
                 Session.getInstance().notifyLayoutChanged();
+
+                onSavedLayout(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

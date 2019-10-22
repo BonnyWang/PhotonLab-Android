@@ -19,18 +19,18 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:foreground="?selectableItemBackground"
             android:id="@+id/btBackLayout"
             android:layout_width="?actionBarSize"
             android:layout_height="?actionBarSize"
             android:background="@android:color/transparent"
-            android:scaleType="fitXY"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
             android:padding="15dp"
+            android:scaleType="fitXY"
             android:src="@drawable/back_button"
             android:tint="@color/colorPrimary"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="@string/app_name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,17 +50,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:scaleX="1.1"
-            android:scaleY="1.1"
-            android:foreground="?selectableItemBackground"
-            android:contentDescription="@string/app_name"
             android:id="@+id/button3"
             android:layout_width="?actionBarSize"
             android:layout_height="?actionBarSize"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            android:padding="15dp"
             android:autoLink="web"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:foreground="?selectableItemBackground"
+            android:padding="15dp"
+            android:scaleType="fitXY"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
             android:src="@drawable/ic_help"
             android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -121,10 +121,10 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
-                android:src="@drawable/ic_layout_add"
-                android:tint="#8D8D8D"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/No_Device"
+                android:src="@drawable/ic_layout_add"
+                android:tint="#8D8D8D"
                 app:layout_constraintBottom_toTopOf="@id/btNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.15"
@@ -134,9 +134,9 @@
                 android:id="@+id/btNext"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Set_Button_Height"
-                android:layout_marginBottom="12dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/set_background"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="@string/Next"
@@ -153,16 +153,16 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
-                android:scaleType="fitXY"
-                android:padding="14dp"
-                android:src="@drawable/ic_layout_delete"
                 android:background="@android:color/transparent"
                 android:backgroundTint="#8D8D8D"
+                android:contentDescription="@string/app_name"
+                android:padding="14dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_layout_delete"
                 app:layout_constraintBottom_toTopOf="@id/btNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.85"
-                app:layout_constraintStart_toStartOf="parent"
-                android:contentDescription="@string/app_name" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_node_num"
@@ -177,34 +177,63 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
+
             <ImageButton
                 android:id="@+id/btRotate"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
-                android:src="@drawable/ic_layout_rotate"
-                android:scaleType="fitCenter"
-                android:padding="14dp"
-                android:tint="#8D8D8D"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/No_Device"
+                android:padding="14dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_layout_rotate"
+                android:tint="#8D8D8D"
                 app:layout_constraintBottom_toTopOf="@id/btNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageButton
-            android:id="@+id/step1_next"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <LinearLayout
+            android:id="@+id/nextLight_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
-            android:layout_marginBottom="50dp"
-            android:background="@drawable/round_btn"
-            android:contentDescription="@string/Done"
-            android:elevation="4dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/arrow_righ"
-            android:visibility="gone" />
+            android:gravity="top|center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="100dp" />
+
+            <ImageButton
+                android:id="@+id/step1_next"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/round_btn"
+                android:contentDescription="@string/Done"
+                android:elevation="4dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/arrow_righ"
+                android:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/step1_resend"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/round_btn_red"
+                android:contentDescription="@string/Done"
+                android:elevation="4dp"
+                android:padding="4dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/reset"
+                android:tint="@color/colorWhite"
+                android:visibility="visible" />
+        </LinearLayout>
+
     </FrameLayout>
 </LinearLayout>

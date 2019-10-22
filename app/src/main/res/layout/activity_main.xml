@@ -12,45 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/fgm"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/nav_container"
             app:layout_constraintTop_toTopOf="parent">
 
-            <FrameLayout
-                android:clickable="true"
-                android:focusable="true"
-                android:id="@+id/fgm1"
+            <LinearLayout
+                android:id="@+id/fgm"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
 
-            <FrameLayout
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:clickable="true"
                 android:focusable="true"
-                android:visibility="gone"
-                android:id="@+id/fgm2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:orientation="horizontal" />
+        </FrameLayout>
 
-            <FrameLayout
-                android:clickable="true"
-                android:focusable="true"
-                android:visibility="gone"
-                android:id="@+id/fgm3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <FrameLayout
-                android:clickable="true"
-                android:focusable="true"
-                android:visibility="gone"
-                android:id="@+id/fgm4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/nav_container"

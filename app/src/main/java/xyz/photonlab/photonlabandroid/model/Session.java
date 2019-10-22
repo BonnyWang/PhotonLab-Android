@@ -283,8 +283,11 @@ public class Session {
         return localIP;
     }
 
-    public void setLocalIP(String localIP) {
+    public void setLocalIP(Context context, String localIP) {
         this.localIP = localIP;
+        Log.i("" + context, "setLocalIP: " + localIP);
+        if (context != null)
+            new TinyDB(context).putString("LocalIp", localIP);
     }
 
     public void setPermissionFlag(boolean permissionFlag) {

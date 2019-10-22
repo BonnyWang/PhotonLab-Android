@@ -24,7 +24,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONArray;
@@ -32,6 +31,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -53,10 +54,11 @@ public class fragment_layout extends NormalStatusBarFragment {
     private Session session;
     private LightStage lightStage;
 
+    private LinearLayout nextContainer;
     private ImageButton exit, add, rotate, delete;
     private Button next, done;
     private ConstraintLayout step0BtnsParent;
-    private ImageButton step1Next;
+    private ImageButton step1Next, resend;
     private TextView tip, tv_node_num;
 
     private int currentNum = 0;
@@ -138,23 +140,33 @@ public class fragment_layout extends NormalStatusBarFragment {
                     return;
                 }
 
-//                NetworkHelper helper = new NetworkHelper();
-//                Request request = new Request.Builder()
-//                        .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/"
-//                                + "mode/all?red=0&green=0&blue=0&brightness=0")
-//                        .build();
-//                helper.connect(request);
-
+                String url = "http://" + session.getLocalIP(getContext()) + "/" + "mode" + "/all"
+                        + "?red=" + 0
+                        + "&green=" + 0
+                        + "&blue=" + 0;
+                NetworkHelper helper = new NetworkHelper();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .get()
+                        .build();
+                helper.connect(request);
                 step0BtnsParent.setVisibility(View.GONE);
-                step1Next.setVisibility(View.VISIBLE);
+                nextContainer.setVisibility(View.VISIBLE);
                 step0BtnsParent.startAnimation(out);
-                step1Next.startAnimation(in);
+                nextContainer.startAnimation(in);
                 tip.setText(R.string.select_the_lit_light);
                 lightStage.denyMove();
                 lightStage.enterSetupMode();
                 //after layout Request you will receive a num
                 currentNum = 0;
-                nextLight(0);
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        nextLight(0);
+                        resend.setAlpha(1f);
+                        resend.setClickable(true);
+                    }
+                }, 1000);
             } else {
                 Toast.makeText(getContext(), "Layout Error", Toast.LENGTH_SHORT).show();
             }
@@ -179,13 +191,20 @@ public class fragment_layout extends NormalStatusBarFragment {
                     session.notifyLayoutChanged();
                     done.setVisibility(View.VISIBLE);
                     help.setVisibility(View.GONE);
+                    resend.setAlpha(0.5f);
+                    resend.setClickable(false);
+                    step1Next.setClickable(false);
+                    step1Next.setAlpha(0.5f);
                 } else {
                     currentNum++;
                     nextLight(currentNum);
                 }
             }
         });
-
+        resend.setOnClickListener(v -> {
+            vibrator.vibrate(50);
+            nextLight(currentNum);
+        });
         done.setOnClickListener(v -> {
             boolean flag = session.saveLayoutToLocal(getContext(), lightStage);
             if (flag) {
@@ -217,6 +236,8 @@ public class fragment_layout extends NormalStatusBarFragment {
         done = contentView.findViewById(R.id.done);
         tv_node_num = contentView.findViewById(R.id.tv_node_num);
         help = contentView.findViewById(R.id.button3);
+        resend = contentView.findViewById(R.id.step1_resend);
+        nextContainer = contentView.findViewById(R.id.nextLight_container);
         if (Session.getInstance().isDarkMode(getContext())) {
             contentView.setBackgroundColor(Theme.Dark.MAIN_BACKGROUND);
             ((TextView) contentView.findViewById(R.id.tvLayout)).setTextColor(Theme.Dark.SELECTED_TEXT);
@@ -233,23 +254,18 @@ public class fragment_layout extends NormalStatusBarFragment {
         if (index > lightNums.size() - 1 || index < 0)//avoid illegal parameter
             return;
 
+        String url = "http://" + Session.getInstance().getLocalIP(getContext()) + "/mode/single?node="
+                + lightNums.get(index) + "&red=100&green=100&blue=100";
         NetworkHelper helper = new NetworkHelper();
         Request request = new Request.Builder()
-                .url("http://" + Session.getInstance().getLocalIP(getContext()) + "/mode/single?node="
-                        + lightNums.get(index) + "&red=100&green=100&blue=100")
+                .url(url)
                 .get().build();
         helper.connect(request);
-        Log.i("HHH", "sss");
+        Log.i("HHH", url);
     }
 
     public interface OnSavedLayoutListener {
         void onSavedLayout(boolean saved);
-    }
-
-    private void runOnUiThread(Runnable runnable) {
-        Activity activity = getActivity();
-        if (activity != null)
-            activity.runOnUiThread(runnable);
     }
 
 }

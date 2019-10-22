@@ -104,7 +104,10 @@ public class LightStage extends View implements Serializable {
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         performClick();
-
+        if (lights == null)
+            return true;
+        if (lights.size() <= 0)
+            return true;
         float x = motionEvent.getX();
         float y = motionEvent.getY();
         float positionX = x - offsetX;

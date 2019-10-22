@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -147,8 +148,10 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
             tv_progress.setVisibility(View.VISIBLE);
             tv_progress.setText("0%");
             try {
-                scanner = new NetworkNodeScanner(InetAddress.getByName("192.168.1.1"),
-                        InetAddress.getByName("255.255.255.0"));
+                String gateWayIp = getGatewayIP();
+                String netMask = getNetMask();
+                scanner = new NetworkNodeScanner(InetAddress.getByName(gateWayIp),
+                        InetAddress.getByName(netMask));
                 scanner.setOnSearchProgressChangedListener(this);
                 scanner.setOnScanFinishedListener(this);
                 scanner.scan();
@@ -158,6 +161,50 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
             }
         });
     }
+
+    private String getNetMask() {
+        WifiManager manager = (WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        int ipInt = manager.getDhcpInfo().netmask;
+        Log.i("DeviceDetail", "getNetMask: " + ipInt);
+        if (ipInt == 0)
+            return "255.255.255.0";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            // 每 8 位为一段，这里取当前要处理的最高位的位置
+            int pos = i * 8;
+            // 取当前处理的 ip 段的值
+            int and = ipInt & (255 << pos);
+            // 将当前 ip 段转换为 0 ~ 255 的数字，注意这里必须使用无符号右移
+            stringBuilder.append(and >>> pos);
+            if (i != 3)
+                stringBuilder.append(".");
+        }
+        Log.i("DeviceDetail", "getNetMask: " + stringBuilder.toString());
+        return stringBuilder.toString();
+    }
+
+    private String getGatewayIP() {
+        WifiManager manager = (WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        int ipInt = manager.getDhcpInfo().gateway;
+        if (ipInt == 0)
+            return "192.168.1.1";
+        Log.i("DeviceDetail", "getNetMask: " + ipInt);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            // 每 8 位为一段，这里取当前要处理的最高位的位置
+            int pos = i * 8;
+            // 取当前处理的 ip 段的值
+            int and = ipInt & (255 << pos);
+            // 将当前 ip 段转换为 0 ~ 255 的数字，注意这里必须使用无符号右移
+            stringBuilder.append(and >>> pos);
+            if (i != 3)
+                stringBuilder.append(".");
+        }
+
+        Log.i("DeviceDetail", "gatewayIp: " + stringBuilder.toString());
+        return stringBuilder.toString();
+    }
+
 
     private void resetHardware() {
         if (Session.getInstance().getLocalIP(mActivity).equals("")) {
@@ -172,16 +219,14 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
                 .url("http://" + ipAddr + "/reset?secret=000000")
                 .build();
         helper.setCallback(new NetworkCallback() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onSuccess(Response response) {
                 new TinyDB(mActivity).putString("LocalIp", "");
-                Session.getInstance().setLocalIP("");
+                Session.getInstance().setLocalIP(getContext(), "");
                 mActivity.runOnUiThread(() -> {
                     mask.setVisibility(View.GONE);
-                    if (Session.getInstance().isDarkMode(mActivity))
-                        tv_ip.setTextColor(Theme.Dark.UNSELECTED_TEXT);
-                    else
-                        tv_ip.setTextColor(Theme.Normal.SELECTED_TEXT);
+                    tv_ip.setText("Reset");
                 });
 
             }
@@ -217,9 +262,9 @@ public class FragmentDeviceDetail extends Fragment implements NetworkNodeScanner
             String newIp = macToIp.get(new TinyDB(mActivity).getString("lightMac").toLowerCase());
             if (newIp != null) {
                 tv_ip.setText(newIp);
-                Session.getInstance().setLocalIP(newIp);
-                new TinyDB(mActivity).putString("LocalIp", newIp);
+                Session.getInstance().setLocalIP(getContext(), newIp);
                 Log.i("Device Search Completed", newIp);
+                new TinyDB(getContext()).putString("localIp", newIp);
             }
         });
     }

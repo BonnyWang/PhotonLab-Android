@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -56,7 +57,13 @@ public class Fragment_Theme extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         context = getContext();
-        View view = inflater.inflate(R.layout.fragment__theme_layout, container, false);
+
+        return inflater.inflate(R.layout.fragment__theme_layout, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         rv = view.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rv.setLayoutManager(llm);
@@ -67,7 +74,6 @@ public class Fragment_Theme extends Fragment
         spinnerMenu = view.findViewById(R.id.spinnerThemes);
         SimpleCheckableAdapter spinnerAdapter = new SimpleCheckableAdapter(getResources().getStringArray(R.array.theme_Menu));
         spinnerMenu.setAdapter(spinnerAdapter);
-
         Session.getInstance().requestTheme(getContext());
         mtheme = Session.getInstance().getAllThemes();
 
@@ -125,9 +131,7 @@ public class Fragment_Theme extends Fragment
 
         Session.getInstance().addOnThemeChangeListener(this);
         initTheme(Session.getInstance().isDarkMode(getContext()));
-        return view;
     }
-
 
     private void updateButtonTypeForRv() {
         int count = Objects.requireNonNull(rv.getAdapter()).getItemCount();
@@ -157,6 +161,12 @@ public class Fragment_Theme extends Fragment
         }
     }
 
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.i("Theme Fragment", "onHiddenChanged: ");
+    }
 
     @Override
     public void Addavorite(MyTheme current) {

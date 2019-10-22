@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,8 @@ import androidx.fragment.app.FragmentTransaction;
 import org.json.JSONObject;
 
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -108,6 +111,14 @@ public class FragmentPair extends NormalStatusBarFragment {
         tv_help.setOnClickListener(v -> {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://photonlab.xyz/help.html"));
             startActivity(i);
+        });
+
+        et_wifi_password.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                et_wifi_password.setHint("");
+            } else {
+                et_wifi_password.setHint("Wifi Password");
+            }
         });
 
         next.setOnClickListener(v -> {
@@ -247,6 +258,8 @@ public class FragmentPair extends NormalStatusBarFragment {
         }
     }
 
+    private boolean secondTime = false;
+
     private void tellLightTheWifiInfo() {
         NetworkHelper helper = new NetworkHelper();
         Request request = new Request.Builder().url(" http://" + current_gateway_ip
@@ -268,7 +281,7 @@ public class FragmentPair extends NormalStatusBarFragment {
                         throw new RuntimeException();
                     String localIp = respObj.getString("ip");
                     String mac = respObj.getString("mac");
-                    Session.getInstance().setLocalIP(localIp);
+                    Session.getInstance().setLocalIP(getContext(), localIp);
                     new TinyDB(getContext()).putString("LocalIp", localIp);
                     Log.i("LocalIp", localIp);
                     new TinyDB(getContext()).putString("lightMac", mac);
@@ -284,7 +297,21 @@ public class FragmentPair extends NormalStatusBarFragment {
             @Override
             public void onFailed(String msg) {
                 Log.e("request failed", msg);
-                runOnUIThread(() -> toFail());
+                if (secondTime) {
+                    Log.i("SecondTime", "onFailed: ");
+                    secondTime = false;
+                    runOnUIThread(() -> toFail());
+                } else {
+                    //try again
+                    Log.i("SecondTime", "retry start");
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            secondTime = true;
+                            tellLightTheWifiInfo();
+                        }
+                    }, 2000);
+                }
             }
         });
     }
