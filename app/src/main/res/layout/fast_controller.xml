@@ -1,0 +1,171 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_widget"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:background="@drawable/widget_back"
+    android:backgroundTint="#88ffffff"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/photon_lab" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/element_light_controller"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/degree_brightness"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/round_btn_white"
+                android:gravity="center"
+                android:stateListAnimator="@null"
+                android:text="@string/sub"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_brightness"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="8"
+                android:gravity="center"
+                android:text="@string/_100"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/add_brightness"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/round_btn_white"
+                android:gravity="center"
+                android:stateListAnimator="@null"
+                android:text="@string/add"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="2dp"
+            android:background="#88eeeeee" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/bt_1"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name"
+                android:elevation="0dp"
+                android:src="@drawable/oval_selected"
+                android:stateListAnimator="@null" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/bt_2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name"
+                android:elevation="0dp"
+                android:src="@drawable/widget_oval"
+                android:stateListAnimator="@null" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/ib_power"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@color/colorWhite"
+                android:contentDescription="@string/app_name"
+                android:elevation="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/power_on"
+                android:stateListAnimator="@null" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/bt_3"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name"
+                android:elevation="0dp"
+                android:src="@drawable/widget_oval"
+                android:stateListAnimator="@null" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/bt_4"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name"
+                android:elevation="0dp"
+                android:src="@drawable/widget_oval"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

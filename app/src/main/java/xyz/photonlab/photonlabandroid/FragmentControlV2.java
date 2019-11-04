@@ -2,18 +2,20 @@ package xyz.photonlab.photonlabandroid;
 
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -46,6 +48,7 @@ import xyz.photonlab.photonlabandroid.utils.NetworkCallback;
 import xyz.photonlab.photonlabandroid.utils.NetworkHelper;
 import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 import xyz.photonlab.photonlabandroid.views.DynamicLightSymbol;
+import xyz.photonlab.photonlabandroid.views.FastController;
 import xyz.photonlab.photonlabandroid.views.Light;
 import xyz.photonlab.photonlabandroid.views.LightStage;
 import xyz.photonlab.photonlabandroid.views.WaveSeekBar;
@@ -55,7 +58,11 @@ import static android.content.Context.VIBRATOR_SERVICE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentControlV2 extends Fragment implements fragment_layout.OnSavedLayoutListener, Session.OnThemeChangeListener, dialog_colorpicker.colorPick_Listener, LightStage.OnLightCheckedChangeListener {
+public class FragmentControlV2 extends Fragment implements
+        fragment_layout.OnSavedLayoutListener,
+        Session.OnThemeChangeListener,
+        dialog_colorpicker.colorPick_Listener,
+        LightStage.OnLightCheckedChangeListener {
 
 
     private static final String TAG = "FragmentControlV2";
@@ -84,6 +91,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     LightStage lightStage;
     ViewGroup vg_radio_button_single_container;
     RadioGroup[] rg_single;
+    WidgetActionReceiver receiver;
 
     //animation
     Animation anim_slide_in_left, anim_slide_out_right, anim_slide_out_left, anim_slide_in_right, anim_pop_enter, anim_pop_out, anim_pop_enter2, anim_pop_out2;
@@ -99,6 +107,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     ArrayList<Integer> colorsQueueSingle = new ArrayList<>();
     int currentGroupColor = Color.TRANSPARENT;
     int sunUnselectedColor;
+    Intent widgetIntent;
     Vibrator vibrator;
     private FragmentActivity mActivity;
 
@@ -114,6 +123,9 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vibrator = (Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE);
+        widgetIntent = new Intent();
+        widgetIntent.setAction(FastController.ALL);
+        widgetIntent.setComponent(new ComponentName(mActivity.getPackageName(), FastController.className));
         initView(view);
         addViewEvent();
         initialize();
@@ -124,6 +136,13 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         } else {
             ll_conn_tip.setVisibility(View.INVISIBLE);
         }
+        receiver = new WidgetActionReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FastController.SWITCH_LIGHT);
+        intentFilter.addAction(FastController.ADD);
+        intentFilter.addAction(FastController.DEGREE);
+        intentFilter.addAction(FastController.COLORS);
+        mActivity.registerReceiver(receiver, intentFilter);
     }
 
     private void tryConn() {
@@ -161,6 +180,12 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     public void onAttach(Context context) {
         super.onAttach(context);
         this.mActivity = getActivity();
+    }
+
+    @Override
+    public void onDestroy() {
+        mActivity.unregisterReceiver(receiver);
+        super.onDestroy();
     }
 
     @SuppressLint("SetTextI18n")
@@ -269,6 +294,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             toggleGroup(tb_power.isChecked());
             toggleSingle(tb_power.isChecked());
             tinyDB.putInt("Power", tb_power.isChecked() ? 1 : 0);
+            notifyWidget();
             if (!tb_power.isChecked()) {
                 requestGroupColorChange(Color.BLACK, 0);
                 if (lightStage != null) {
@@ -303,6 +329,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         sb_brightness.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 Log.i(TAG, "Drag Over");
+                notifyWidget();
                 requestGroupColorChange(currentGroupColor, brightness);
                 if (lightStage != null) {
                     List<Light> lights = lightStage.getLights();
@@ -346,7 +373,9 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             @Override
             public void onMultiClick(View v) {
                 fragment_layout fragmentLayout = new fragment_layout();
-                FragmentTransaction ftl = getActivity().getSupportFragmentManager().beginTransaction();
+                if (mActivity == null)
+                    return;
+                FragmentTransaction ftl = mActivity.getSupportFragmentManager().beginTransaction();
                 ftl.setCustomAnimations(R.anim.pop_enter, R.anim.pop_out, R.anim.pop_enter, R.anim.pop_out);
                 ftl.replace(R.id.container, fragmentLayout).addToBackStack(null);
                 ftl.commit();
@@ -429,6 +458,10 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
         }
         if (tinyDB.getInt("colorGroupIndex") != -1) {
             int index = tinyDB.getInt("colorGroupIndex");
+            if (index > 3)
+                index = 3;
+            if (index < 0)
+                index = 0;
             //radioButtonsGroup[index].setChecked(true);
             currentGroupColor = colorsQueueGroup.get(index);
             tinyDB.putInt("colorGroup", currentGroupColor);
@@ -578,6 +611,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             colorsQueueGroup.add(rgbValue);
             radioButtonsGroup[3].setChecked(true);
             refreshGroupRadioButtons();
+            notifyWidget();
         } else {
             if (lightStage != null) {
                 beSet(rgbValue, which);
@@ -607,6 +641,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             currentGroupColor = rgbValue;
             tinyDB.putInt("colorGroup", rgbValue);
             tinyDB.remove("colorGroupIndex");
+            notifyWidget();
             if (lightStage != null) {
                 List<Light> lights = lightStage.getLights();
                 if (lights != null) {
@@ -628,11 +663,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     }
 
     private void refreshGroupRadioButtons() {
-        int px = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                32,
-                getResources().getDisplayMetrics()
-        );
         for (int i = 0; i < 4; i++) {
             tinyDB.putInt("color" + i, colorsQueueGroup.get(i));
             Objects.requireNonNull(radioButtonsGroup[i].getButtonDrawable())
@@ -641,11 +671,6 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
     }
 
     private void refreshSingleRadioButtons() {
-        int px = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                32,
-                getResources().getDisplayMetrics()
-        );
         for (int i = 0; i < 9; i++) {
             tinyDB.putInt("color0" + i, colorsQueueSingle.get(i));
             Objects.requireNonNull(radioButtonsSingle[i].getButtonDrawable())
@@ -771,7 +796,7 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
             iv_sun.setColor(currentGroupColor);
             requestGroupColorChange(currentGroupColor, brightness);
             vibrator.vibrate(50);
-
+            notifyWidget();
             if (lightStage != null) {
                 Log.i(TAG, lightStage + "|for");
                 List<Light> lights = lightStage.getLights();
@@ -806,6 +831,51 @@ public class FragmentControlV2 extends Fragment implements fragment_layout.OnSav
                 if (lightStage.getCurrentLight() != null) {
                     requestSingleColorChange(colorsQueueSingle.get(index), 100, lightStage.getCurrentLight().getNum());
                     vibrator.vibrate(50);
+                }
+            }
+        }
+    }
+
+    private void notifyWidget() {
+        if (mActivity == null)
+            return;
+        Log.i(TAG, "notifyWidget: FastController");
+        mActivity.sendBroadcast(widgetIntent);
+    }
+
+    public class WidgetActionReceiver extends BroadcastReceiver {
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "onReceive: ");
+            String action = intent.getAction();
+            if (getView() != null && action != null) {
+                Log.i(TAG, "onReceive: Update");
+                switch (action) {
+                    case FastController.SWITCH_LIGHT:
+                        cv_power_back.performClick();
+                        break;
+                    case FastController.ADD:
+                        brightness += 5;
+                        sb_brightness.setProgress(brightness);
+                        tv_brightness.setText(brightness + "%");
+                        break;
+                    case FastController.DEGREE:
+                        brightness -= 5;
+                        sb_brightness.setProgress(brightness);
+                        tv_brightness.setText(brightness + "%");
+                        break;
+                    case FastController.COLORS:
+                        int index = tinyDB.getInt("colorGroupIndex");
+                        try {
+                            radioButtonsGroup[index].performClick();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    default:
+                        Log.e(TAG, "onReceive: Unsupported action");
                 }
             }
         }

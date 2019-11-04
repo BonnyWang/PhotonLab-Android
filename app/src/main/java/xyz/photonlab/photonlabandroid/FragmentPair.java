@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,6 +81,7 @@ public class FragmentPair extends NormalStatusBarFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_pair_layout, container, false);
     }
 
@@ -310,7 +310,7 @@ public class FragmentPair extends NormalStatusBarFragment {
                             secondTime = true;
                             tellLightTheWifiInfo();
                         }
-                    }, 2000);
+                    }, 5000);
                 }
             }
         });

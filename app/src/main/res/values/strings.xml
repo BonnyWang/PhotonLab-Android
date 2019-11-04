@@ -112,4 +112,19 @@
     <string name="feedback">Feedback</string>
     <string name="add_to_fav">☆</string>
     <string name="connecting_device">Connecting Devices</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="element_light_controller">ELEMENT LIGHT CONTROLLER</string>
+    <string name="_100">100</string>
+    <string name="sub">-</string>
+    <string name="add">+</string>
+    <string name="e_mail_address">E-Mail Address</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login_in">Login</string>
+    <string name="password">Password</string>
+    <string name="forget_the_password"><u>Forget the password?</u></string>
+    <string name="or">OR</string>
+    <string name="username">Username</string>
+    <string name="create_and_login">Create And Login</string>
+    <string name="back_to_login"><u>Back to login</u></string>
 </resources>

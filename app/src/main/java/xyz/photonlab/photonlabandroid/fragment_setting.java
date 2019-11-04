@@ -1,19 +1,23 @@
 package xyz.photonlab.photonlabandroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -28,7 +32,7 @@ import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
 
 public class fragment_setting extends Fragment implements Session.OnThemeChangeListener {
 
-    Activity mActivity;
+    FragmentActivity mActivity;
     TextView tv_setting;
     Button person;
 
@@ -100,6 +104,12 @@ public class fragment_setting extends Fragment implements Session.OnThemeChangeL
 
         tv_setting = view.findViewById(R.id.Setting);
         person = view.findViewById(R.id.person);
+        person.setOnClickListener(v -> mActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.pop_enter, 0, 0, R.anim.pop_out)
+                .replace(R.id.container, new LoginFragment())
+                .addToBackStack(null)
+                .commit());
         Session.getInstance().addOnThemeChangeListener(this);
         initTheme(Session.getInstance().isDarkMode(getContext()));
         return view;
@@ -224,7 +234,37 @@ public class fragment_setting extends Fragment implements Session.OnThemeChangeL
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = getActivity();
+
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.i("setting", "onViewCreated: ");
+        animTitleBack();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            animTitleBack();
+        }
+    }
+
+    private void animTitleBack() {
+        Animation scaleAnim = new ScaleAnimation(4f, 1f, 0.2f, 1f);
+        scaleAnim.setDuration(1000);
+        scaleAnim.setInterpolator(new BounceInterpolator());
+        if (titleBack != null) {
+            titleBack.clearAnimation();
+            titleBack.startAnimation(scaleAnim);
+        }
+    }
 }
 
