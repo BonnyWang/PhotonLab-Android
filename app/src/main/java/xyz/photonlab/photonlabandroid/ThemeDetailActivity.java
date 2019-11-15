@@ -1,17 +1,16 @@
 package xyz.photonlab.photonlabandroid;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import xyz.photonlab.photonlabandroid.model.MyTheme;
 import xyz.photonlab.photonlabandroid.model.Session;
-import xyz.photonlab.photonlabandroid.model.Theme;
 
 public class ThemeDetailActivity extends AppCompatActivity implements fragement_theme_individual.themeIndivListener {
 
@@ -27,12 +26,16 @@ public class ThemeDetailActivity extends AppCompatActivity implements fragement_
         window.setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_theme_detail);
         int i = getIntent().getIntExtra("current", 0);
-        MyTheme theme_class = Session.getInstance().getAllThemes().get(i);
-        fragement_theme_individual theme_Individual = new fragement_theme_individual(theme_class, theme_class.isFavorite());
-        theme_Individual.setListener(this);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.main_container, theme_Individual);
-        ft.commit();
+        try {
+            MyTheme theme_class = Session.getInstance().getAllThemes().get(i);
+            fragement_theme_individual theme_Individual = new fragement_theme_individual(theme_class, theme_class.isFavorite());
+            theme_Individual.setListener(this);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.main_container, theme_Individual);
+            ft.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (Session.getInstance().isDarkMode(this))
             getWindow().setNavigationBarColor(0xff1f1f1f);
         else {

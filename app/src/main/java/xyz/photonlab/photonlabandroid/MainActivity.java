@@ -109,7 +109,11 @@ public class MainActivity extends AppCompatActivity implements Session.OnThemeCh
         Log.e(TAG, "onCreate: YES");
         overridePendingTransition(0, 0);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            try {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         setContentView(R.layout.activity_main);
         container = findViewById(R.id.MainContainer);

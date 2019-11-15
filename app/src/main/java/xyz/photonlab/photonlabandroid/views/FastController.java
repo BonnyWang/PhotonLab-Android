@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Vibrator;
 import android.util.Log;
 import android.widget.RemoteViews;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 
@@ -136,7 +137,8 @@ public class FastController extends AppWidgetProvider {
         int brightness = tinyDB.getInt("Brightness");
 
         Vibrator vibrator = ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE));
-        vibrator.vibrate(50);
+        if (!action.equals(ALL))
+            vibrator.vibrate(50);
 
         boolean power = tinyDB.getInt("Power") == 1;
 

@@ -1,5 +1,6 @@
 package xyz.photonlab.photonlabandroid.views;
 
+import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,6 +27,9 @@ public class WaveSeekBar extends View {
     private int mWidth, mHeight;
     private float time, frequency;
     private boolean touched = false;
+    private int destinationColor;
+    private long setColorTimeStamp;
+    private ArgbEvaluator argbEvaluator;
 
     public WaveSeekBar(Context context) {
         super(context);
@@ -43,7 +47,9 @@ public class WaveSeekBar extends View {
         frequency = 0.005f;
         mPath = new Path();
         mPaint = new Paint();
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(Color.TRANSPARENT);
+        setColorTimeStamp = -1;
+        this.argbEvaluator = new ArgbEvaluator();
     }
 
     @Override
@@ -62,6 +68,12 @@ public class WaveSeekBar extends View {
         mPath.lineTo(mWidth, mHeight);
         mPath.lineTo(0, mHeight);
         mPath.close();
+        float step = (System.currentTimeMillis() - setColorTimeStamp) / 2000f;
+        if (step > 1f)
+            step = 1f;
+        int currentColor = ((int) argbEvaluator.evaluate(step,
+                mPaint.getColor(), destinationColor));
+        mPaint.setColor(currentColor);
         canvas.drawPath(mPath, mPaint);
         update();
         invalidate();
@@ -115,7 +127,10 @@ public class WaveSeekBar extends View {
     }
 
     public void setColor(int color) {
-        mPaint.setColor(color);
+        if (setColorTimeStamp == -1)
+            mPaint.setColor(color);
+        this.destinationColor = color;
+        this.setColorTimeStamp = System.currentTimeMillis();
     }
 
     public int getProgress() {

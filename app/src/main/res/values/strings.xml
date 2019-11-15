@@ -65,7 +65,7 @@
     <string name="No_Device">No Device</string>
     <string name="Opps_Error"><font color="#fe9949">Oops!</font> Error occurred</string>
     <string name="error_Message">Please make sure your WiFi network\n is correctly configured.</string>
-    <string name="try_again">Try Again</string>
+    <string name="try_again">Try again</string>
     <string name="Help"><u>Help?</u></string>
     <string name="save_your_wifi_info">Save Your WIFI Info</string>
     <string name="pending">pending…</string>
@@ -127,4 +127,15 @@
     <string name="username">Username</string>
     <string name="create_and_login">Create And Login</string>
     <string name="back_to_login"><u>Back to login</u></string>
+    <string name="verifying_information">Verifying Information...</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="choose_wi_fi">Choose Wi-Fi</string>
+    <string name="continue_">Continue</string>
+    <string name="go_to_wifi_settings">Go to WiFi Settings</string>
+    <string name="connect_elementlight">Connect \"ElementLight\"</string>
+    <string name="connect_device">Connect Device</string>
+    <string name="paring">Paring</string>
+    <string name="let_s_start">Let\'s Start</string>
 </resources>

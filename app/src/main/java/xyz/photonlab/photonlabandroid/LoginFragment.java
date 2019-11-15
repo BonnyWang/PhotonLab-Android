@@ -2,6 +2,7 @@ package xyz.photonlab.photonlabandroid;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -10,9 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,25 +26,33 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 import xyz.photonlab.photonlabandroid.model.Session;
 import xyz.photonlab.photonlabandroid.model.Theme;
 import xyz.photonlab.photonlabandroid.utils.OnMultiClickListener;
+import xyz.photonlab.photonlabandroid.utils.ViewGroupDisableHelper;
 
 public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginFragment";
     private FirebaseAuth mAuth;
 
+    ImageView logo;
+
     TextInputEditText r_email, r_password, r_username, l_email, l_password;
+    TextInputLayout r_p_email, r_p_password, r_p_username, l_p_email, l_p_password;
     ConstraintLayout all, register, login;
     Button l_login, l_register, r_create;
     TextView forget, back;
     View view;
     Animation fadeIn, fadeOut;
+    ProgressBar loading;
     private FragmentActivity mActivity;
 
     @Override
@@ -66,6 +79,10 @@ public class LoginFragment extends Fragment {
         });
 
         l_login.setOnClickListener(v -> {
+            InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+            l_email.clearFocus();
+            l_password.clearFocus();
             String email = Objects.requireNonNull(l_email.getText()).toString().trim();
             String password = Objects.requireNonNull(l_password.getText()).toString().trim();
             if (email.equals("")) {
@@ -76,15 +93,24 @@ public class LoginFragment extends Fragment {
                 l_password.setError("Password is required");
                 return;
             }
-            l_login.setEnabled(false);
+            ViewGroupDisableHelper.disableViewGroup(all);
+            loading.setVisibility(View.VISIBLE);
+            view.setEnabled(true);
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 Log.i(TAG, "addViewEvent: " + task);
-                l_login.setEnabled(true);
+                ViewGroupDisableHelper.enableViewGroup(all);
+                loading.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
-                    Snackbar.make(all, "Login success", Snackbar.LENGTH_SHORT).show();
+                    showSnack(0xff88cc88, "Login Success");
                     mActivity.getSupportFragmentManager().popBackStack();
                 } else {
-                    Snackbar.make(all, "Login Failed:Please check your input", Snackbar.LENGTH_SHORT).show();
+                    String msg = "Unknown Error!";
+                    try {
+                        msg = Objects.requireNonNull(task.getException()).getMessage();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    showSnack(0xffff6666, "Login Failed:" + msg);
                 }
             });
         });
@@ -105,6 +131,11 @@ public class LoginFragment extends Fragment {
             String username = Objects.requireNonNull(r_username.getText()).toString().trim();
             String email = Objects.requireNonNull(r_email.getText()).toString().trim();
             String password = Objects.requireNonNull(r_password.getText()).toString().trim();
+            InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+            r_username.clearFocus();
+            r_password.clearFocus();
+            r_email.clearFocus();
             if (username.equals("")) {
                 r_username.setError("Username is required");
                 return;
@@ -117,16 +148,25 @@ public class LoginFragment extends Fragment {
                 r_password.setError("Password is required");
                 return;
             }
-            r_create.setEnabled(false);
+            ViewGroupDisableHelper.disableViewGroup(all);
+            loading.setVisibility(View.VISIBLE);
+            view.setEnabled(true);
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
-                        r_create.setEnabled(true);
+                        ViewGroupDisableHelper.enableViewGroup(all);
+                        loading.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            Snackbar.make(all, "Your account is set", Snackbar.LENGTH_SHORT).show();
+                            showSnack(0xff88cc88, "Your account is set");
                             mActivity.getSupportFragmentManager().popBackStack();
                         } else {
                             Log.w(TAG, "addViewEvent: ", task.getException());
-                            Snackbar.make(all, "Unable to create account", Snackbar.LENGTH_SHORT).show();
+                            String msg = "Unknown Error!";
+                            try {
+                                msg = Objects.requireNonNull(task.getException()).getMessage();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            showSnack(0xffff6666, "Create Failed:" + msg);
                         }
                     });
         });
@@ -140,6 +180,16 @@ public class LoginFragment extends Fragment {
 
         view.setOnClickListener(v -> mActivity.getSupportFragmentManager().popBackStack());
 
+    }
+
+    private void showSnack(@ColorInt int color, String tip) {
+        try {
+            Snackbar snackbar = Snackbar.make(all, tip, Snackbar.LENGTH_SHORT);
+            snackbar.getView().setBackgroundColor(color);
+            snackbar.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initView(@NonNull View contentView) {
@@ -157,6 +207,13 @@ public class LoginFragment extends Fragment {
         this.l_password = contentView.findViewById(R.id.l_in_password);
         this.all = contentView.findViewById(R.id.all);
         this.view = contentView.findViewById(R.id.view);
+        this.logo = contentView.findViewById(R.id.imageView3);
+        this.r_p_email = contentView.findViewById(R.id.r_e_mail);
+        this.r_p_username = contentView.findViewById(R.id.r_usr_name);
+        this.r_p_password = contentView.findViewById(R.id.r_pwd);
+        this.l_p_email = contentView.findViewById(R.id.l_email);
+        this.l_p_password = contentView.findViewById(R.id.l_password);
+        this.loading = contentView.findViewById(R.id.loading_l);
 
         l_password.setTransformationMethod(new PasswordTransformationMethod());
 
@@ -166,14 +223,50 @@ public class LoginFragment extends Fragment {
 
     private void initTheme() {
         if (Session.getInstance().isDarkMode(mActivity)) {
+            ColorStateList defaultHint = new ColorStateList(
+                    new int[][]{{android.R.attr.state_focused}, {}},
+                    new int[]{Theme.Dark.SELECTED_TEXT, Theme.Dark.UNSELECTED_TEXT});
             all.setBackgroundTintList(ColorStateList.valueOf(Theme.Dark.MAIN_BACKGROUND));
-            forget.setTextColor(Theme.Dark.SELECTED_TEXT);
-            back.setTextColor(Theme.Dark.SELECTED_TEXT);
+            forget.setTextColor(0xffcccccc);
+            back.setTextColor(0xffcccccc);
             r_email.setTextColor(Theme.Dark.SELECTED_TEXT);
+            r_p_email.setDefaultHintTextColor(defaultHint);
+            setDefaultBoxStrokeColor(r_p_email);
+            r_p_email.setBoxStrokeColor(Theme.Dark.SELECTED_TEXT);
+
             r_password.setTextColor(Theme.Dark.SELECTED_TEXT);
+            r_p_password.setDefaultHintTextColor(defaultHint);
+            setDefaultBoxStrokeColor(r_p_password);
+            r_p_password.setBoxStrokeColor(Theme.Dark.SELECTED_TEXT);
+
             r_username.setTextColor(Theme.Dark.SELECTED_TEXT);
+            r_p_username.setDefaultHintTextColor(defaultHint);
+            setDefaultBoxStrokeColor(r_p_username);
+            r_p_username.setBoxStrokeColor(Theme.Dark.SELECTED_TEXT);
+
             l_password.setTextColor(Theme.Dark.SELECTED_TEXT);
+            l_p_password.setDefaultHintTextColor(defaultHint);
+            l_password.setBackgroundTintList(defaultHint);
+
             l_email.setTextColor(Theme.Dark.SELECTED_TEXT);
+            l_p_email.setDefaultHintTextColor(defaultHint);
+            l_email.setBackgroundTintList(defaultHint);
+            l_email.setHighlightColor(Color.WHITE);
+
+            logo.setImageResource(R.drawable.photonlab_light);
+        }
+    }
+
+    private void setDefaultBoxStrokeColor(TextInputLayout target) {
+        try {
+            Field filed = target.getClass().getDeclaredField("defaultStrokeColor");
+            filed.setAccessible(true);
+            filed.set(target, Theme.Dark.UNSELECTED_TEXT);
+            Method method = target.getClass().getDeclaredMethod("updateTextInputBoxState");
+            method.setAccessible(true);
+            method.invoke(target);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

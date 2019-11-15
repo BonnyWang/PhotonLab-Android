@@ -119,7 +119,7 @@ public class fragment_setting extends Fragment implements Session.OnThemeChangeL
         switch (position) {
             case 0:
                 if (Session.getInstance().isPermissionFlag()) {
-                    FragmentPair fragment_pair = new FragmentPair();
+                    PairFragmentV2 fragment_pair = new PairFragmentV2();
                     FragmentTransaction ft0 = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                     ft0.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                     ft0.replace(R.id.container, fragment_pair).addToBackStack(null);
